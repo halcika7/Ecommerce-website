@@ -1,0 +1,68 @@
+.container.google-map{
+    padding: 40px 0;
+}
+
+.container.google-map #map-container{
+    border-radius: 20px;
+}
+
+.container.contactInfo{
+    margin-top: 50px;
+}
+
+.container.contactInfo .row .col12.colsm6.collg3 .col12{
+    border: 2px solid #d5d5d5;
+    border-radius: 10px;
+    position: relative;
+    text-align: center;
+    margin: 0 0 60px 0;
+    height: 157px;
+}
+
+.container.contactInfo .row .col12.colsm6.collg3 .col12 > i{
+    height: 60px;
+    width: 60px;
+    border: 2px solid #d5d5d5;
+    border-radius: 50%;
+    top: -30px;
+    margin-bottom: 15px;
+    margin-left: -27px;
+    padding: 13px 10px 10px 11px;
+    font-size: 30px;
+    color: #d5d5d5;
+    background-color: white;
+    z-index: 9999;
+    position: absolute;
+    transition: all .3s ease-in-out;
+}
+
+.container.contactInfo .row .col12.colsm6.collg3 .col12 > i:hover{
+    border: 2px solid rgb(234,120,50);
+}
+
+.container.contactInfo .row .col12.colsm6.collg3 .col12 > h5{
+    margin-top: 50px;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.container.contactInfo .row .col12.colsm6.collg3 .col12 > p{
+    font-size: 13px;
+    color: #5d5d5d;
+    margin: 0;
+}
+
+.container.contactInfo .row .col12.colsm6.collg3 .col12 > .footersocialicons{
+    margin-top: 10px;
+}
+
+.container.contactInfo .row .col12.colsm6.collg3 .col12 > .footersocialicons > a > i{
+    font-size: 13px;
+    margin-right: 10px;
+}
+
+/* contact message */
+.container.contactmessage{
+    margin-bottom: 60px;
+}

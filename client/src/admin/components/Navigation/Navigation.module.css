@@ -1,0 +1,215 @@
+.Sidebar {
+    background: linear-gradient(0deg, #3358f4 0%, #1d8cf8 100%);
+    height: calc(100vh - 90px);
+    width: 230px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background-size: cover;
+    background-position: center center;
+    display: block;
+    box-shadow: 0px 0px 45px 0px rgba(0, 0, 0, 0.6);
+    margin-top: 80px;
+    margin-left: 20px;
+    border-radius: 5px;
+    transition: 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
+}
+
+@media screen and (max-width: 991px) {
+    .Sidebar {
+        position: fixed;
+        display: block;
+        top: 0;
+        height: 100%;
+        width: 260px;
+        right: auto;
+        left: 0;
+        margin: 0;
+        border-radius: 0;
+        z-index: 1032;
+        visibility: visible;
+        overflow-y: visible;
+        padding: 0;
+        transition: 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
+        -webkit-transform: translate3d(-260px, 0, 0);
+        transform: translate3d(-260px, 0, 0);
+    }
+
+    .Sidebar.Open {
+        transform: translate3d(0px, 0, 0);
+        -webkit-transform: translate3d(0px, 0, 0);
+        -moz-transform: translate3d(0px, 0, 0);
+        -ms-transform: translate3d(0px, 0, 0);
+        -o-transform: translate3d(0px, 0, 0);
+}
+}
+
+.SidebarWrapper {
+    width: 100%;
+    min-height: 100%;
+    max-height: 100vh;
+    max-height: calc(100vh - 705px);
+    z-index: 4;
+    position: relative;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.Logo {
+    position: relative;
+    padding: 0.5rem 0.7rem;
+    z-index: 4;
+}
+
+.Logo::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 15px;
+    height: 1px;
+    width: calc(100% - 30px);
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.Logo a.LogoMini {
+    opacity: 1;
+    float: left;
+    width: 34px;
+    text-align: center;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.Logo a.LogoNormal {
+    display: block;
+    opacity: 1;
+    -webkit-transform: translate3d(0px, 0, 0);
+    transform: translate3d(0px, 0, 0);
+}
+
+.Logo .SimpleText {
+    text-transform: uppercase;
+    padding: 0.5rem 0;
+    display: block;
+    white-space: nowrap;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 400;
+    line-height: 30px;
+    overflow: hidden;
+}
+
+.Logo a.LogoMini img {
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    width: 30px;
+}
+
+.Nav {
+    margin-top: 20px;
+    display: block;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+.Nav li {
+    color: #ffffff;
+}
+
+.Nav li a {
+    margin: 10px 15px 0;
+    border-radius: 30px;
+    color: #ffffff;
+    display: block;
+    text-decoration: none;
+    position: relative;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-size: 0.62475rem;
+    padding: 10px 8px;
+    line-height: 1.625rem;
+}
+
+.Nav li:first-child > a {
+    margin: 0 15px;
+}
+
+.Active{
+    color:black;
+}
+
+.Active::before {
+    content: " ";
+    position: absolute;
+    height: 6px;
+    width: 6px;
+    top: 22px;
+    left: -4px;
+    background: #ffffff;
+    border-radius: 50%;
+}
+
+.Nav i {
+    font-size: 20px;
+    float: left;
+    margin-right: 12px;
+    line-height: 30px;
+    width: 34px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    position: relative;
+}
+
+.TimIcons {
+    display: inline-block;
+    font: normal normal normal 1em/1 myFirstFont;
+    vertical-align: middle;
+    speak: none;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.IconChartPie36::before {
+    content: "\EA19";
+}
+
+.IconAtom::before {
+    content: "\EA06";
+}
+
+.IconPin::before {
+    content: "\EA3E";
+}
+
+.IconBell::before {
+    content: "\EA0C";
+}
+
+.IconSingle02::before {
+    content: "\EA49";
+}
+
+.IconPuzzle10::before {
+    content: "\EA40";
+}
+
+.IconAlignCenter::before {
+    content: "\EA03";
+}
+
+.Nav p {
+    margin: 0;
+    line-height: 30px;
+    position: relative;
+    display: block;
+    height: auto;
+    white-space: nowrap;
+    font-weight: 300;
+}

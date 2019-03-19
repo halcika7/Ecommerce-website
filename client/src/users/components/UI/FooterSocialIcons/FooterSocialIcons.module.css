@@ -1,0 +1,26 @@
+.footersocialicons{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 100%;
+  }
+  
+  .footersocialicons > a{
+    cursor: default;
+  }
+  
+  .footersocialicons > a > i{
+    color: #d5d5d5;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+  .footersocialicons > a > i:hover{
+    color: #919191 !important;
+  }
+
+  .directors{
+    justify-content: space-between;
+    margin-top: 13px;
+  }

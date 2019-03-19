@@ -1,0 +1,23 @@
+.RessetPassword,
+.RessetPassword * {
+    opacity: 0;
+    visibility: hidden;
+    max-height: 0px;
+    transition: opacity .3s ease-in, max-height .3s cubic-bezier(0, .1, 0, .1);
+    -webkit-transition: opacity .3s ease-in, max-height .3s cubic-bezier(0, .1, 0, .1);
+    -moz-transition: opacity .3s ease-in, max-height .3s cubic-bezier(0, .1, 0, .1);
+    -ms-transition: opacity .3s ease-in, max-height .3s cubic-bezier(0, .1, 0, .1);
+    -o-transition: opacity .3s ease-in, max-height .3s cubic-bezier(0, .1, 0, .1);
+}
+
+.RessetPassword.Show,
+.RessetPassword.Show * {
+    opacity: 1;
+    visibility: visible;
+    max-height: 180px !important;
+    transition: opacity .3s ease-in, max-height .3s ease-in;
+    -webkit-transition: opacity .3s ease-in, max-height .3s ease-in;
+    -moz-transition: opacity .3s ease-in, max-height .3s ease-in;
+    -ms-transition: opacity .3s ease-in, max-height .3s ease-in;
+    -o-transition: opacity .3s ease-in, max-height .3s ease-in;
+}

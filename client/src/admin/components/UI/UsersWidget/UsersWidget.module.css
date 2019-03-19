@@ -1,0 +1,25 @@
+.counter {
+    position: relative;
+    color: #323232;
+    min-height: 60px;
+}
+
+.counter .timer {
+    display: block;
+    font-size: 1.858rem;
+    font-weight: 500;
+    line-height: 2.14rem;
+    margin: 0px 0 5px;
+}
+
+.counter label {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 10px 0 0;
+    position: relative;
+    text-transform: uppercase;
+}
+
+p{
+    margin-bottom: 0.25rem;
+}

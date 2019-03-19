@@ -1,0 +1,159 @@
+.container.checkout .row  .colmd7 > h5{
+    width: 100%;
+    font-size: 16px;
+    font-weight: 800;
+    color: #484848;
+    font-family: 'Open Sans';
+    padding-bottom: 22px;
+    margin-bottom: 17px;
+    margin-top: 17px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.container.checkout .row  .colmd7 label{
+    margin-bottom: 12px;
+    margin-left: 2px;
+    color: #484848;
+    font-size: 14px;
+}
+
+.container.checkout .row .colmd7 input, .container.checkout .row .colmd7 select{
+    border: 2px solid #e5e5e5;
+    height: 40px;
+    border-radius: 30px;
+    padding: 0 15px;
+    color: #919191;
+    width: 100%;
+}
+
+.container.checkout .row .colmd7 textarea{
+    resize: none;
+    border: 2px solid #e5e5e5;
+    padding: 15px;
+    color: #919191;
+    width: 100%;
+}
+
+.container.checkout .row .colmd7 .row div{
+    margin: 15px 0;
+}
+
+
+/* desni dio */
+.container.checkout .row .colmd5{
+    margin: 40px 0;
+    height: auto;
+}
+
+.container.checkout .row .colmd5 > .cart{
+    border-radius: 20px;
+    background-color: #f5f5f5;
+    width: 100%;
+    padding: 40px 15px;
+    box-shadow: 0px 2px 4px 0px rgb(0, 0, 0, 0.2);
+}
+
+.container.checkout .row .colmd5 > .cart > h4{
+    font-size: 20px;
+    font-family: 'Open Sans';
+    font-weight: bold;
+    color: #484848;
+    margin-bottom: 26px;
+}
+
+.subtotal {
+    display: flex;
+    font-size: 18px;
+    font-weight: 600;
+    color: #2d2d2d;
+    text-align: left;
+}
+
+.subtotal p:nth-child(2){
+    width: 100%;
+    text-align: end;
+}
+
+.pricetotal{
+    font-size: 24px;
+    font-weight: 500;
+    font-family: 'BloggerSans';
+    color: rgb(234, 120, 50);
+}
+.checkoutcart{
+    width: 100%;
+    text-align: center;
+    margin: 30px 0;
+}
+
+.checkoutcart > a{
+    padding: 15px 50px;
+    border-radius: 30px;
+    background-color: #3c3c3c;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all .3s ease-in-out;
+    white-space: nowrap;
+}
+
+.checkoutcart > a:hover{
+    background-color: rgb(234, 120, 50);
+    text-decoration: none;
+    color: #fff;
+}
+
+.products{
+    overflow-x: auto;
+    margin-bottom: 50px;
+}
+
+.products .heading{
+    padding-bottom: 30px;
+}
+
+.products .heading > div{
+    display: flex;
+    justify-content: space-between;
+    min-width: 400px;
+}
+
+.products .heading > div.options > p{
+    text-align: start;
+    width: 33%;
+}
+
+.products .heading > div.options > p{
+    color: #484848;
+    font-weight: 500;
+}
+
+.products .heading > div > p{
+    font-size: 14px;
+    color: #919191;
+}
+
+.products .heading > .details{
+    margin-bottom: 15px;
+}
+
+.products .heading > .details div{
+    max-width: 33%;
+    width: 33%;
+}
+
+.products .heading > .details > div > p{
+    width: 100%;
+    font-size: 14px;
+    color: #919191;
+    margin: 0;
+}
+/* kraj desni dio */
+
+@media (max-width: 1200px){
+    .container.checkout{
+      max-width: 100%;
+      margin: 0;
+    }
+}

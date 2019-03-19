@@ -1,0 +1,20 @@
+.col12:not(:last-child){
+    margin-bottom: 70px;
+}
+
+.col12 > h4{
+    color: #2d2d2d;
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: 500;
+    font-family: 'BloggerSans', sans-serif;
+}
+
+.col12 > p{
+    font-size: 14px;
+    color: #919191;
+    line-height: 22px;
+    font-weight: 500;
+    font-family: 'BloggerSans', sans-serif;
+    margin: 0;
+}

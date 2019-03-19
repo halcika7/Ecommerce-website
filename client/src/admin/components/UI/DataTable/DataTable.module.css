@@ -1,0 +1,27 @@
+.DataTable table td,
+.DataTable table th {
+    vertical-align: middle;
+    outline: none !important;
+}
+
+.DataTable table tbody tr td button {
+    margin-left: 10px;
+}
+
+.DataTable > div > div > div > div > div:nth-child(3) > div > div:nth-child(2) {
+    display: flex !important;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.DataTable > div > div > div > div > div:nth-child(3) > div > div:nth-child(2) ul {
+    margin: 0;
+}
+
+.DataTable > div > div {
+    min-width: 1000px;
+}
+
+.DataTable > div > div:nth-child(3) {
+    margin-bottom: 50px;
+}

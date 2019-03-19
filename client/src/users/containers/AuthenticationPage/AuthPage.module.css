@@ -1,0 +1,237 @@
+.flatAccount {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background-color: #f5f5f5;
+}
+
+.formLogin, .formRegister {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 2px 3px 0px rgba(234, 234, 234, 1);
+    padding: 44px 50px 50px 50px;
+}
+
+.formLogin .title, .formRegister .title {
+    text-align: center;
+    margin-bottom: 97px;
+}
+
+.formLogin .formBox, .formRegister .formBox {
+    margin-bottom: 22px;
+    padding-right: 4px;
+}
+
+.formLogin .formBox.Checkbox {
+    margin-top: 25px;
+    margin-bottom: 21px;
+    padding-right: 4px;
+    position: relative;
+}
+
+.formLogin .formBox.Checkbox input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    height: 20px;
+    cursor: pointer;
+}
+
+.formLogin .formBox.Checkbox label {
+    margin-bottom: 0px;
+}
+
+.Checkbox label {
+    position: relative;
+    cursor: pointer;
+    color: #484848;
+    padding-left: 30px;
+    display: flex;
+    align-items: center;
+    /* pointer-events: none; */
+}
+
+.Checkbox label:before {
+    content: '';
+    position: absolute;
+    left: -2px;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #e5e5e5;
+    background-color: #fff;
+    border-radius: 4px;
+    transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+    -webkit-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+    -moz-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+    -ms-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+    -o-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.Checkbox label:after {
+    content: '\f00c';
+    font-weight: 900;
+    font-family: "Font Awesome 5 Free";
+    position: absolute;
+    left: -2px;
+    top: 4px;
+    color: #fff;
+    font-size: 12px;
+    line-height: 17px;
+    width: 16px;
+    text-align: center;
+    height: 16px;
+    border-radius: 3px;
+    z-index: 3;
+}
+
+.Checkbox input[type="checkbox"]:checked + label:before {
+    background-color: #f28b00;
+    border-color: #f28b00;
+}
+
+.formLogin .formBox label, .formRegister .formBox label {
+    margin-bottom: 12px;
+    color: #484848;
+}
+
+.formBox input:not([type=checkbox]), .formRegister .formBox input {
+    height: 40px;
+    line-height: 40px;
+    font-size: 13px;
+    display: block;
+    font-family: 'Open Sans';
+    width: 100%;
+    padding: 8px 15px 8px 30px;
+    color: #222222;
+    border: 2px solid #e5e5e5;
+    border-radius: 30px;
+    background-color: transparent;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    outline: none;
+}
+
+.formLogin .formBox input.invalid,
+.formRegister .formBox input.invalid {
+    border-color: #f92400 !important;
+}
+
+.formLogin .formBox button {
+    background-color: rgb(234, 120, 50);
+    color: #fff;
+    font-size: 16px;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 64px;
+    border-radius: 25px;
+    margin-right: 30px;
+    font-weight: 600;
+    margin-left: -8px;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    color: #fff;
+    padding: 0px 27px 0 27px;
+    font-family: "BloggerSans", sans-serif;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    border: none;
+}
+
+.formLogin .formBox a {
+    color: #aaaaaa !important;
+    text-decoration: none;
+    color: #333333;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    font-family: inherit;
+    font-size: 100%;
+    font-weight: inherit;
+    font-style: inherit;
+    vertical-align: baseline;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+}
+
+.formRegister .formBox button {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: rgb(234, 120, 50);
+    height: 50px;
+    line-height: 50px;
+    border-radius: 25px;
+    padding: 0 56px 0 52px;
+    letter-spacing: 0.5px;
+    margin-top: 18px;
+    margin-left: 2px;
+    display: inline-block;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    border: none;
+    cursor: pointer;
+}
+
+.invalidFeedback {
+    display: none;
+    width: 100%;
+    margin-top: .25rem;
+    font-size: 80%;
+    color: #dc3545;
+}
+
+.invalid ~ .invalidFeedback {
+    display: block;
+}
+
+.formBoxActivation{
+    display: flex !important;
+    justify-content: center !important;
+}
+
+.formBoxActivation button {
+    margin: 0 !important;
+}
+
+@media (max-width: 992px) {
+    .container {
+        max-width: 100% !important;
+    }
+}
+
+@media (max-width: 992px) {
+    .formContainer {
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 417px) {
+    .formLogin .formBox a {
+        display: block;
+        margin-top: 13px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 816px) {
+    .formLogin .formBox a {
+        display: block;
+        margin-top: 13px;
+    }
+}

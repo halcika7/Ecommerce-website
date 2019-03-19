@@ -1,0 +1,39 @@
+.ecommerceWidget .totalNum {
+    font-family: Open Sans;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+@media only screen and (max-width: 1366px){
+    .ecommerceWidget .totalNum {
+        font-size: 23px;
+        letter-spacing: 0;
+    }
+}
+
+.ecommerceWidget span {
+    color: #777;
+    margin: 0;
+}
+
+.ecommerceWidget .icon {
+    color: #ddd;
+    font-size: 40px;
+}
+
+.ecommerceWidget .icon > i {
+    font-style: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+@media (min-width: 768px){
+    .textMdRight {
+        text-align: right!important;
+    }
+}

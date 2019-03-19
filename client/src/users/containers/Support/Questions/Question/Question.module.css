@@ -1,0 +1,44 @@
+.col12 {
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+.accordionlink{
+    width: 100%;
+    padding: 15px 0px 15px 20px;
+    border: 2px solid #e5e5e5;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.accordionlink.active{
+    background-color: #f5f5f5;
+    border: 2px solid transparent;
+}
+
+.accordionlink.active > a{
+    color: #f28b00;
+}
+
+.accordionlink > a{
+    width: 100%;
+    color: #484848;
+}
+
+.accordionlink > a:hover {
+    text-decoration: none;
+    color: #f28b00;
+}
+
+.answer{
+    padding: 30px;
+    font-size: 13px;
+    color: #919191;
+}
+
+.col12 > h4{
+    font-family: 'BloggerSans', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: #2d2d2d;
+}

@@ -1,0 +1,71 @@
+.heading{
+    text-align: center;
+    font-size: 1.4rem;
+}
+
+.text{
+    font-size: 13px;
+    line-height: 24px;
+    text-align: center;
+    color: #5d5d5d;
+    margin: 15px 0;
+}
+
+.inputgroup{
+    margin: 10px 0 20px 0;
+}
+
+.inputgroup > label{
+    width: 100%;
+    font-size: 13px;
+    color: #5d5d5d;
+}
+
+.inputgroup > input{
+    width: 100%;
+    border-radius: 30px;
+    border: 2px solid #d5d5d5;
+    padding: 5px 0 5px 15px;
+    color: #5d5d5d;
+}
+
+.inputgroup > input:focus {
+    border: 2px solid #919191;
+    box-shadow: none !important;
+    border-radius: 30px !important;
+    outline: none;
+}
+
+.inputgroup > input::placeholder {
+    color: #d5d5d5;
+}
+
+.inputgroup > textarea {
+    width: 100%;
+    border: 2px solid #d5d5d5;
+    border-radius: 10px;
+    resize: none;
+}
+
+.inputgroup > textarea:focus {
+    border: 2px solid #919191;
+    outline: none;
+    box-shadow: none;
+    color: #5d5d5d;
+    padding: 5px 0 0 5px;
+}
+
+button.btn.btnlg{
+    width: 200px !important;
+    border-radius: 30px !important;
+    border: 2px solid transparent !important;
+    background-color: red !important;
+    color: white;
+    transition: all .3s ease-in-out;
+}
+
+button.btn.btnlg:hover{
+    background-color: white !important;
+    color: black;
+    box-shadow: inset 0 0 0 2px rgba(234, 120, 50, 0.5) !important;
+}

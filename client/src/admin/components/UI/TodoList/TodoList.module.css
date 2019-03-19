@@ -1,0 +1,147 @@
+.heading {
+    color: #fff;
+}
+
+.infoDrop {
+    position: absolute;
+    right: 15px;
+    top: 16px;
+    font-size: 1.286rem;
+    cursor: pointer;
+}
+
+.infoDrop button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+ul.toDo {
+    margin: 0;
+}
+
+ul.toDo li {
+    padding: 0;
+    margin: 0;
+    margin-top: 2px;
+}
+
+.rememeberCheckbox {
+    color: #fff;
+    margin-bottom: 1.429rem !important;
+    position: relative;
+}
+
+.rememeberCheckbox label{
+    position: relative;
+    padding-left: 30px;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+}
+
+.rememeberCheckbox label:before {
+    font-size: 17px;
+    position: absolute;
+    left: 0;
+    padding-left: 2px;
+    border-radius: 3px;
+    border: 2px solid rgba(2555, 255, 255, 0.1);
+    content: "";
+    height: 20px;
+    width: 20px;
+    color: #84ba3f;
+}
+
+.rememeberCheckbox label:after {
+    font-size: 17px;
+    position: absolute;
+    left: 0;
+    padding-left: 2px;
+    border-radius: 3px;
+    font-weight: 900;
+    font-family: "Font Awesome 5 Free";
+    content: '\f00c';
+    max-width: 0;
+    overflow: hidden;
+    opacity: 0.5;
+    -webkit-transition: all 0.35s ease;
+    -moz-transition: all 0.35s ease;
+    -ms-transition: all 0.35s ease;
+    -o-transition: all 0.35s ease;
+    transition: all 0.35s ease;
+    color: #84ba3f;
+}
+
+.rememeberCheckbox input {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    height: 20px;
+    cursor: pointer;
+}
+
+.rememeberCheckbox input:checked + label:after {
+    max-width: 25px;
+    opacity: 1;
+}
+
+.rememeberCheckbox input:checked + label:before {
+    border: 2px solid #85ba3fc0;
+}
+
+ul.toDo li .rememeberCheckbox input:checked ~ label {
+    color: #eeeeee3d;
+    text-decoration: line-through;
+}
+
+.formControl {
+    border-radius: 3px;
+    font-size: 13px;
+    height: auto;
+    line-height: 1.33333;
+    padding: 15px 15px 15px 20px;
+    background: #f6f7f8;
+    color: #fff;
+    border: 0px solid transparent;
+    box-shadow: none;
+}
+
+.socialIcons > ul {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0;
+}
+
+.socialIcons li {
+    margin-bottom: 8px;
+}
+
+.socialIcons li:not(:last-child) {
+    margin-right: 8px;
+}
+
+.socialIcons li a {
+    display: block;
+    height: 32px;
+    width: 32px;
+    line-height: 2.14rem;
+    font-size: 1.143rem;
+    text-align: center;
+    margin: 0;
+    border-radius: 4px;
+    border: 0;
+    background: transparent;
+    color: #ffff;
+    overflow: hidden;
+    -webkit-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}

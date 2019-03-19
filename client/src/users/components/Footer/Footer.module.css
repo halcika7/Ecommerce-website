@@ -1,0 +1,154 @@
+/* footer */
+.footer{
+    padding-top: 40px;
+    background: url("../../assets/images/balck2.jpg") no-repeat;
+    background-size: cover;
+    bottom: 0;
+  }
+
+  @media (max-width: 576px){
+    .h5{
+      text-align: center;
+    }
+  }
+  
+  .h5{
+    margin: 20px 0 20px 0px;
+    color: #fff;
+  }
+  
+  .h5.signup{
+    margin: 20px 0 60px 0px;
+  }
+  
+  p.signup{
+    color: #919191;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 400;
+  }
+  
+  .contactFooter{
+    display: inline-flex;
+    margin-bottom: 40px;
+    padding-right: 15px;
+  }
+  
+  .contactFooter > .iconFooterCall{
+    font-size: 40px;
+    margin: auto 0;
+    padding-right: 20px;
+    color: #fff;
+  }
+  
+  .contactFooter > .infoFooter > p{
+    margin: 0;
+    width: 100%;
+  }
+  
+  .contactFooter > .infoFooter > .questions{
+    color: #919191;
+    font-size: 14px;
+    line-height: 18px;
+  }
+  
+  .contactFooter > .infoFooter > .phone{
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 5px -30px 5px 0; 
+  }
+  
+  .contactFooter > .infoFooter > .address{
+    color: #919191;;
+    font-size: 14px;
+    line-height: 18px;
+  }
+  
+  .inputGroup > input{
+    margin: 10px 0 20px 0;
+    border-radius: 30px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 5px 12px;
+    color: #919191;
+  }
+
+  @media(max-width:576px){
+    .inputGroup > input{
+      width: 100%;
+    }
+  }
+  
+  .inputGroup > input:focus{
+    box-shadow: none;
+  }
+  
+  .inputGroup > input::placeholder{
+    color: #919191 !important;
+  }
+  
+  .footerCards{
+    display: inline-flex;
+  }
+
+  
+  @media(max-width:576px){
+    .footerCards{
+      width: 100%;
+      justify-content: center;
+    }
+  }
+  
+  .footerCards > i {
+    font-size: 30px;
+    margin-right: 10px;
+  }
+  
+  .footerCards > i.fab.fa-cc-paypal{
+    color: #253b80;
+  }
+  
+  .footerCards > i.fab.fa-cc-discover{
+    color: rgba(234, 120, 50);
+  }
+  
+  .footerCards > i.fab.fa-cc-visa{
+    color: #faaa13;
+  }
+  
+  .footerCards > i.fab.fa-cc-mastercard{
+    color: #eb001b;
+  }
+  
+  .footerCards > i.fab.fa-cc-amex{
+    color: #6cc4ee;
+  }
+  
+  .footer > .containerFluid{
+    background-color: #151515 !important;
+    margin-bottom: 0;
+    z-index: 2;
+    color: #717171;
+  }
+  
+  .footer .containerFluid .container{
+    padding: 30px 0 30px 0;
+    position: relative;
+  }
+  
+  .footer .containerFluid .container .row > p{
+    margin: 0;
+    padding: 0 0 0 7px;
+    font-size: 14px;
+  }
+  
+  .footer .containerFluid .container .row > a{
+    position: absolute;
+    right: 0;
+  }
+  
+  .footer .containerFluid .container .row > a, footer .containerFluid .container .row > a:hover {
+    color: #717171;
+    text-decoration: none;
+  }
+  /* end footer */

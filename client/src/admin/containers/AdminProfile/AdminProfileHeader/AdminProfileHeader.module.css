@@ -1,0 +1,47 @@
+.userBg {
+    position: relative;
+    padding: 80px 0;
+    background: linear-gradient(0deg, #3358f4 0%, #1d8cf8 100%);
+}
+
+.userBg:before {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    content: "";
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0.9) 100%);
+    top: auto;
+    height: 20%;
+    -webkit-transition: all 0.35s ease;
+    -moz-transition: all 0.35s ease;
+    -ms-transition: all 0.35s ease;
+    -o-transition: all 0.35s ease;
+    transition: all 0.35s ease;
+}
+
+.userInfo {
+    bottom: 20px;
+    width: 100%;
+    padding: 0px 20px;
+}
+
+.userDp img {
+    width: auto;
+    max-width: 100%;
+    max-height: 120px;
+    border-radius: 50%;
+    margin: 0 auto;
+    border: 2px solid #ffffff;
+    -webkit-box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.1);
+    margin-right: 30px;
+}
+
+.userDetail h2 {
+    color: #fff;
+}
+
+.userDetail p {
+    color: #fff;
+}

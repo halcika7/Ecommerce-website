@@ -1,0 +1,43 @@
+.input {
+    display: none;
+}
+
+label.btn2 {
+    background-color: #1d8cf8;
+    border-radius: 50px;
+    overflow: hidden;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+      font-family: 'Poppins', sans-serif;
+      font-size: inherit;
+    font-weight: 600;
+    outline: none;
+    padding: 1rem 50px;
+    position: relative;
+    transition: all 0.3s;
+    vertical-align: middle;
+    margin: 1rem 0;
+}
+
+label.btn2:before{
+    color: #fff;
+    content: "\f382";
+    font-weight: 900;
+    font-family: "Font Awesome 5 Free";
+    height: 100%;
+    right: 130%;
+    line-height: 3.3;
+    position: absolute;
+    top: 0px;
+    transition: all 0.3s;
+}
+
+label.btn2:hover{
+    filter: brightness(60%);
+    -webkit-filter: brightness(60%);
+}
+
+label.btn2:hover::before {
+    right: 78%;
+}

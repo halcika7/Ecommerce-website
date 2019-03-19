@@ -1,0 +1,40 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const ProfileSchema = new Schema({
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+    },
+    handle: {
+        type: String,
+        required: true,
+        max: 40
+    },
+    wishlist: [
+        {
+           product: {
+               type: String,
+               required: true
+           } 
+        }
+    ],
+    notifications: [
+        {
+            notificationType: {
+                type: String,
+                required: true
+            },
+            isReaded: {
+                type: Boolean,
+                required: true
+            },
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: 'users'
+            }
+        }
+    ]
+});
+
+module.exports = Profile = mongoose.model('profile', ProfileSchema);

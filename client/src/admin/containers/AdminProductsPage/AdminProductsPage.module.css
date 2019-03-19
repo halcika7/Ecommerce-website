@@ -1,0 +1,25 @@
+.AdminProductsPage table tbody tr td {
+    vertical-align: middle;
+}
+
+.AdminProductsPage table tbody tr td button {
+    margin-left: 10px;
+}
+
+.AdminProductsPage > div > div > div > div > div:nth-child(3) > div > div:nth-child(2) {
+    display: flex !important;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.AdminProductsPage > div > div > div > div > div:nth-child(3) > div > div:nth-child(2) ul {
+    margin: 0;
+}
+
+.AdminProductsPage > div > div > div > div > div {
+    min-width: 1000px;
+}
+
+.AdminProductsPage > div > div > div > div > div:nth-child(3) {
+    margin-bottom: 50px;
+}
