@@ -63,7 +63,7 @@ exports.registerUser = async (req, res) => {
 
 }
 
-// catch
+// catch using $or
 exports.loginUser = async (req, res) => {
 
     const {errors, isValid} = validateLoginInput(req.body);
