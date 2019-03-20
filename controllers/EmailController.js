@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const UserModel = require('../models/User');
 const validateEmail = require('../validation/email');
 
-const secret = require('../config/keys').secretOrKey;
+const secret = require('../config/keys');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
 
 const resetEmail = require('../views/emails/ResetPassword').resetEmail;
@@ -11,14 +11,12 @@ const activationEmail = require('../views/emails/ConfimAccountEmail').confirmAcc
 
 const transporter = nodemailer.createTransport(sendgridTransport({
     auth: {
-        api_key: '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'
+        api_key: secret.sendgridKey
     }
 }));
 
 // catch
-exports.sendActivationEmail = async (email, token) => {
-        const user = await UserModel.findOne({ email });
-        
+exports.sendActivationEmail = async (user, token) => {
         const mail = await transporter.sendMail({
             to: user.email,
             from: 'halcikastore@customer.service.com',
@@ -55,7 +53,7 @@ exports.sendResetPasswordEmail = async (req, res) => {
             username: user.username
         }
 
-        const token = await jwt.sign(payload,secret,{ expiresIn: 86400 });
+        const token = await jwt.sign(payload,secret.secretOrKey,{ expiresIn: 86400 });
 
         const expiresIn = Date.now() + 86400000;
 

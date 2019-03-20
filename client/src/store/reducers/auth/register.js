@@ -52,12 +52,8 @@ const reducer = (state = initialStateRegister, action) => {
             return updateObject(state, {
                 ...action.User,
                 errors: {...action.errors},
+                failedMessage: action.failedMessage,
                 loading: false
-            });
-        case actionTypes.REGISTER_ERROR_CATCHED : 
-            return updateObject(state, {
-                ...initialStateRegister,
-                failedMessage: action.failedMessage
             });
         case actionTypes.REGISTERACTIVATION_FAILED :
             return updateObject(state, {

@@ -7,10 +7,10 @@ export const register = (UserObj) => async dispatch => {
 
         const response = await axios.post('/api/users/register', UserObj);
 
-        if(response.data.errorCatched) {
-            dispatch({ type: actionTypes.REGISTER_ERROR_CATCHED, failedMessage: response.data.failedMessage });
+        if(response.data.failedMessage) {
+            dispatch({ type: actionTypes.REGISTER_FAILED, errors: {}, failedMessage: response.data.failedMessage, User: UserObj });
         }else if(response.data.errors){
-            dispatch({type: actionTypes.REGISTER_FAILED, errors: response.data.errors, User: UserObj});
+            dispatch({type: actionTypes.REGISTER_FAILED, errors: response.data.errors, User: UserObj, failedMessage: false});
         }else {
             localStorage.setItem('activationToken', response.data.token);
             dispatch({

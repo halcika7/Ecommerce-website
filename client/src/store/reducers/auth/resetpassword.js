@@ -47,9 +47,10 @@ const reducer = (state = initialResetPasswordState, action) => {
         [actionTypes.PROFILE_PASSWORD_UPDATE_FAILED] : 
             updateObject(state, {
                 ...action.passwords,
-                errors: {...action.errors}
+                errors: {...action.errors},
+                failedMessage: action.failedMessage
             }),
-        [actionTypes.PROFILE_PASSWORD_UPDATE_RESET] : 
+        [actionTypes.PROFILE_PASSWORD_UPDATE_START] : 
             updateObject(state, {
                 ...initialResetPasswordState
             }),

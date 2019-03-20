@@ -23,10 +23,7 @@ const AdminNewPassword = props => {
     }, [props.updatePasswordState]);
 
     const passwordChange = (e) => {
-        setPasswords({
-            ...passwords,
-            [e.target.name]: e.target.value
-        });
+        setPasswords({...passwords,[e.target.name]: e.target.value});
     }
 
     const formSubmit = (e) => {

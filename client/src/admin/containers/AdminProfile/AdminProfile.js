@@ -12,28 +12,24 @@ import ResponseMessage from '../../../users/components/UI/ResponseMessages/Respo
 
 const AdminProfile = props => {
     const [user, setUser] = useState({});
+    const [resetPasswordState, setResetPasswordState] = useState({});
 
-    useEffect(() => {
-        setUser({
-            ...props.user
-        });
-    }, []);
+    useEffect(() => { setUser({...props.user}); setResetPasswordState({ ...props.resetPassword }); }, []);
 
-    useEffect(() => {
-        setUser({
-            ...user,
-            ...props.user
-        });
-    }, [props.user]);
+    useEffect(() => { setUser({ ...user, ...props.user }); }, [props.user]);
+
+    useEffect(() => { setResetPasswordState({ ...resetPasswordState, ...props.resetPassword }); }, [props.resetPassword]);
 
     if(! user.User){
         return <Spinner />;
     }
+
     return(
         <React.Fragment>
-            {props.user.failedMessage ? <ResponseMessage ClassName="Danger" message={props.user.failedMessage} /> : null}
-            {props.user.successMessage ? <ResponseMessage message={props.user.successMessage} /> : null}
-            {props.updatePasswordSuccessMessage ? <ResponseMessage message={props.updatePasswordSuccessMessage} /> : null}
+            {user.failedMessage ? <ResponseMessage ClassName="Danger" message={user.failedMessage} /> : null}
+            {user.successMessage ? <ResponseMessage message={user.successMessage} /> : null}
+            {resetPasswordState.successMessage ? <ResponseMessage message={resetPasswordState.successMessage } /> : null}
+            {resetPasswordState.failedMessage ? <ResponseMessage ClassName="Danger" message={resetPasswordState.failedMessage } /> : null}
             <div className={classes.AdminProfile + " row"}>
                 <AdminProfileHeader user={user.User}/>
             </div>
@@ -51,7 +47,7 @@ const AdminProfile = props => {
 const mapStateToProps = state => {
     return {
         user: state.login,
-        updatePasswordSuccessMessage: state.resetPassword.successMessage
+        resetPassword: state.resetPassword
     };
 };
 

@@ -23,7 +23,7 @@ const Footer = props => {
     return(
         <footer className={classes.footer}>
             <div className={classes.container + " container"}>
-                <div className="row justify-content-md-center">
+                <div className="row justify-content-center">
                     <div className="col-10 col-sm-6 col-lg-3">
                         <div className="store-img">
                             <Link to="/">

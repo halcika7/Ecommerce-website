@@ -21,59 +21,44 @@ exports.registerUser = async (req, res) => {
     if(!isValid) {return res.json(errors);}
 
     try{
-        let user = await UserModel.findOne({ email: 'req.body.email' });
+        const user = await UserModel.find({$or:[{ email: req.body.email}, {username: req.body.username }]})
 
-        if(user) {
-            errors.errors.email = 'Email already exists';
-            return res.json(errors);
-        }
-
-        user = await UserModel.findOne({ username: req.body.username });
-
-        if(user) {
-            errors.errors.username = 'Username is already taken';
+        if(user.length > 0) {
+            (user[0].email || user[1].email) === req.body.email ? errors.errors.email = 'Email already in use !' : null;
+            (user[0].username || user[1].username) === req.body.username ? errors.errors.username = 'Username already in use!' : null;
             return res.json(errors);
         }
 
         const token = await jwt.sign({email: req.body.email},secret,{ expiresIn: 86400 });
 
         const userRoles = await UserRolesModel.findOne({name: 'User'});
+
+        const hash = await bcrypt.hash(req.body.password,10);
         
-        bcrypt.genSalt(10, (err, salt) => {
-            bcrypt.hash(req.body.password, salt, async (err,hash) => {
-                if(err) throw err;
-                try{
-                    const addNewUser = new UserModel({
-                        name: req.body.name,
-                        email: req.body.email,
-                        role: userRoles._id,
-                        username: req.body.username,
-                        password: hash,
-                        emailConfirmation: {
-                            token: 'Bearer ' + token,
-                            tokenExparation: Date.now() + 86400000,
-                            confirmed: false
-                        }
-                    });
-
-                    await addNewUser.save();
-
-                    console.log(`Bearer ${token}`)
-
-                    sendActivationEmail(addNewUser.email, `Bearer ${token}`);
-    
-                    return res.json({ 
-                        message: `Please ${addNewUser.username} go to your Email and confirm your email address in order to log in.`, 
-                        addNewUser,
-                        token: 'Bearer ' + token
-                    })
-                }catch(err) {
-                    return res.json({ errorCatched: true, failedMessage: err.message });
-                }
-            });
+        const addNewUser = new UserModel({
+            name: req.body.name,
+            email: req.body.email,
+            role: userRoles._id,
+            username: req.body.username,
+            password: hash,
+            emailConfirmation: {
+                token: 'Bearer ' + token,
+                tokenExparation: Date.now() + 86400000,
+                confirmed: false
+            }
         });
+
+        await addNewUser.save();
+
+        sendActivationEmail(addNewUser, `Bearer ${token}`);
+
+        return res.json({ 
+            message: `Please ${addNewUser.username} go to your Email and confirm your email address in order to log in.`, 
+            addNewUser,
+            token: 'Bearer ' + token
+        })
     } catch(err) {
-        return res.json({ errorCatched: true, failedMessage: err.message });
+        return res.json({ failedMessage: err.message });
     }
 
 }
@@ -82,25 +67,18 @@ exports.registerUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
 
     const {errors, isValid} = validateLoginInput(req.body);
-
     if(!isValid) { return res.json(errors); }
 
     const usernameEmail = req.body.usernameEmail, password = req.body.password;
-    const criteria = (usernameEmail.indexOf('@') === -1) ? {username: usernameEmail} : {email: usernameEmail};
     const expiresIn = req.body.rememberMe ? null : { expiresIn: 3600 };
 
     try {
 
-        const user = await UserModel.findOne(criteria);
+        const user = await UserModel.findOne({$or:[{ email: usernameEmail}, {username: usernameEmail }]});
 
-        if(!user) {
-            errors.errors.usernameEmail = 'User not found with that Email or Username';
-            return res.json(errors);
-        }
+        if(!user) { errors.errors.usernameEmail = 'User not found with that Email or Username'; return res.json(errors);}
 
-        if(!user.emailConfirmation.confirmed) {
-            return res.json({ failedMessage: 'Please confirm your email address we have send you an email with activation link' });
-        }
+        if(!user.emailConfirmation.confirmed) return res.json({ failedMessage: 'Please confirm your email address we have send you an email with activation link' });
 
         const role = await UserRolesModel.findOne({ _id: user.role });
 
@@ -117,18 +95,11 @@ exports.loginUser = async (req, res) => {
 
         const byCrypt = await bcrypt.compare(password, user.password);
 
-        if(!byCrypt) {
-            errors.errors.password = 'Password is incorrect';
-            return res.json(errors);
-        }
+        if(!byCrypt) { errors.errors.password = 'Password is incorrect'; return res.json(errors); }
+
         const jwtToken = await jwt.sign(payload,secret,expiresIn);
 
-        return res.json({
-            success: true,
-            token: 'Bearer ' + jwtToken,
-            rememberMe: req.body.rememberMe,
-            successMessage: `You are successfully logged in as ${user.username}` 
-        });
+        return res.json({ success: true, token: 'Bearer ' + jwtToken, rememberMe: req.body.rememberMe, successMessage: `You are successfully logged in as ${user.username}` });
 
     } catch(err) {
         return res.json({ failedMessage: err.message });
@@ -178,6 +149,7 @@ exports.resetPassword = async (req, res) => {
 
 }
 
+// catch
 exports.updateProfilePicture = async (req, res) => {
     try{
 
@@ -235,13 +207,21 @@ exports.updatePassword = async (req, res) => {
     if(!isValid) { return res.json(errors); }
 
     try{
+
+        const user = await UserModel.findOne({ username: req.body.username });
+
+        const byCrypt = await bcrypt.compare(req.body.password, user.password);
+
+        if(byCrypt) {
+            return res.json({ failedMessage: 'Provided password is already in use'});
+        }
+
         const hashPwd = await bcrypt.hash(req.body.password,10);
         await UserModel.updateOne({username: req.body.username}, {password: hashPwd});
         return res.json({successMessage: 'Password has bees successfuly changed!'});
 
     }catch(err) {
-        console.log(err)
-        return res.json(errors);
+        return res.json({ failedMessage: err.message });
     }
 
 }

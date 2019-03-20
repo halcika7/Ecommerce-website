@@ -29,22 +29,16 @@ export const resetState = () => dispatch => {
 }
 
 export const updatePassword = passwords => async dispatch => {
-    try {
-        const response = await axios.put('/api/users/updatepassword', passwords);
 
-        if(response.data.errors) {
-            dispatch({type: actionTypes.PROFILE_PASSWORD_UPDATE_FAILED, errors: response.data.errors, passwords})
-        }else {
-            
-            dispatch({type: actionTypes.PROFILE_PASSWORD_UPDATE_SUCCESS, successMessage: response.data.successMessage});
+    dispatch({ type: actionTypes.PROFILE_PASSWORD_UPDATE_START });
 
-            setTimeout(() => {
-                dispatch({type: actionTypes.PROFILE_PASSWORD_UPDATE_RESET})
-            },4000);
-            
-        }
+    const response = await axios.put('/api/users/updatepassword', passwords);
 
-    }catch (err) {
-        console.log(err);
+    if(response.data.errors) {
+        dispatch({type: actionTypes.PROFILE_PASSWORD_UPDATE_FAILED, errors: response.data.errors, passwords, failedMessage: false})
+    }else if(response.data.failedMessage){
+        dispatch({ type: actionTypes.PROFILE_PASSWORD_UPDATE_FAILED, errors: {}, passwords, failedMessage: response.data.failedMessage });
+    }else {
+        dispatch({type: actionTypes.PROFILE_PASSWORD_UPDATE_SUCCESS, successMessage: response.data.successMessage});
     }
 }
