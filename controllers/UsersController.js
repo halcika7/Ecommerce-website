@@ -13,17 +13,15 @@ const validatePasswords = require('../validation/checkpassword');
 
 const sendActivationEmail = require('../controllers/EmailController').sendActivationEmail;
 
+//catch 
 exports.registerUser = async (req, res) => {
 
     const {errors, isValid} = validateRegisterInput(req.body);
     
-    if(!isValid) {
-        return res.json(errors);
-    }
+    if(!isValid) {return res.json(errors);}
 
     try{
-
-        let user = await UserModel.findOne({ email: req.body.email });
+        let user = await UserModel.findOne({ email: 'req.body.email' });
 
         if(user) {
             errors.errors.email = 'Email already exists';
@@ -44,41 +42,43 @@ exports.registerUser = async (req, res) => {
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(req.body.password, salt, async (err,hash) => {
                 if(err) throw err;
-                const addNewUser = new UserModel({
-                    name: req.body.name,
-                    email: req.body.email,
-                    role: userRoles._id,
-                    username: req.body.username,
-                    password: hash,
-                    emailConfirmation: {
-                        token: 'Bearer ' + token,
-                        tokenExparation: Date.now() + 86400000,
-                        confirmed: false
-                    }
-                });
-
                 try{
+                    const addNewUser = new UserModel({
+                        name: req.body.name,
+                        email: req.body.email,
+                        role: userRoles._id,
+                        username: req.body.username,
+                        password: hash,
+                        emailConfirmation: {
+                            token: 'Bearer ' + token,
+                            tokenExparation: Date.now() + 86400000,
+                            confirmed: false
+                        }
+                    });
+
                     await addNewUser.save();
 
-                    sendActivationEmail(addNewUser.email, 'Bearer ' + token);
+                    console.log(`Bearer ${token}`)
 
+                    sendActivationEmail(addNewUser.email, `Bearer ${token}`);
+    
                     return res.json({ 
                         message: `Please ${addNewUser.username} go to your Email and confirm your email address in order to log in.`, 
                         addNewUser,
                         token: 'Bearer ' + token
                     })
-                }catch(err){
-                    console.log(err)
+                }catch(err) {
+                    return res.json({ errorCatched: true, failedMessage: err.message });
                 }
             });
         });
     } catch(err) {
-        errors.errors.email = err;
-        return res.json(errors);
+        return res.json({ errorCatched: true, failedMessage: err.message });
     }
 
 }
 
+// catch
 exports.loginUser = async (req, res) => {
 
     const {errors, isValid} = validateLoginInput(req.body);
@@ -121,7 +121,6 @@ exports.loginUser = async (req, res) => {
             errors.errors.password = 'Password is incorrect';
             return res.json(errors);
         }
-            // Sign token
         const jwtToken = await jwt.sign(payload,secret,expiresIn);
 
         return res.json({
@@ -132,18 +131,18 @@ exports.loginUser = async (req, res) => {
         });
 
     } catch(err) {
-        console.log(err)
-        errors.errors.usernameEmail = err;
-        return res.json(errors);
+        return res.json({ failedMessage: err.message });
     }
 }
 
+// catch
 exports.resetPassword = async (req, res) => {
     const {errors, isValid} = validatePasswords(req.body);
 
     if(!isValid) { return res.json(errors); }
 
     try{
+        
         const user = await UserModel.findOne({ email: req.body.email });
     
         const expiresIn = new Date(user.resetPassword.expiresIn).getTime();
@@ -153,12 +152,18 @@ exports.resetPassword = async (req, res) => {
     
             return res.json(errors);
         }
+
+        const byCrypt = await bcrypt.compare(req.body.password, user.password);
+
+        if(byCrypt) {
+            return res.json({ successMessage: 'Provided password is already in use'});
+        }
     
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(req.body.password, salt, async (err,hash) => {
                 if(err) throw err;
     
-                const updateUsersPassword = await UserModel.updateOne({email: req.body.email}, {
+                await UserModel.updateOne({email: req.body.email}, {
                     resetPassword: {},
                     password: hash
                 });
@@ -168,9 +173,7 @@ exports.resetPassword = async (req, res) => {
         });
 
     }catch(err) {
-        errors.errors.expiredToken = err;
-    
-        return res.json(errors);
+        return res.json({ failedMessage: err.message });
     }
 
 }
@@ -179,13 +182,13 @@ exports.updateProfilePicture = async (req, res) => {
     try{
 
         if(!req.file){
-            return res.json({failedMessage: 'Attached file is not an image.'});
+            return res.json({ failedMessage: 'Attached file is not an image.' });
         }
 
         const user = await UserModel.findOne({username: req.body.username});
 
         if(user.profilePicture === req.file.path) {
-            return res.json({failedMessage: 'Selected picture is same as the one u already use !'});
+            return res.json({ failedMessage: 'Selected picture is same as the one u already use !' });
         }
 
         if(user.profilePicture !== ''){
@@ -193,7 +196,7 @@ exports.updateProfilePicture = async (req, res) => {
         }
 
 
-        const updateUserPicture = await UserModel.updateOne({username: req.body.username}, {
+        await UserModel.updateOne({username: req.body.username}, {
             profilePicture: req.file.path
         });
 
@@ -222,7 +225,7 @@ exports.updateProfilePicture = async (req, res) => {
         });
 
     }catch (err) {
-        console.log(err)
+        return res.json({ failedMessage: err.message })
     }
 }
 

@@ -8,6 +8,7 @@ export const checkLoggedInUser = () => {
     if(localStorage.jwtToken) {
         setAuthToken(localStorage.jwtToken);
         const decoded = jwt_decode(localStorage.jwtToken);
+        console.log(decoded);
         store.dispatch(actions.setCurrentUser(decoded));
 
         const currentTime = Date.now() / 1000;

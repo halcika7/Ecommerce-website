@@ -7,9 +7,7 @@ import image from '../../assets/images/imgJordan.jpg';
 
 const Cart = props => {
 
-    useEffect(() => {
-        document.title = "Cart";
-    }, []);
+    useEffect(() => document.title = "Cart", []);
 
     return(
         <React.Fragment>

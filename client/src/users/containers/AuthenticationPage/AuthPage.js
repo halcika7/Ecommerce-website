@@ -16,12 +16,12 @@ const AuthPage = props => {
         <React.Fragment>
             <div className={classes.formContainer + " col-md-6"}>
                 <div className={classes.formLogin}>
-                    {props.loginState.loading ? <SmallSpinner /> : <LoginForm {...props}/>}
+                    {props.loginState.loading ? <SmallSpinner /> : <LoginForm/>}
                 </div>
             </div>
             <div className="col-md-6">
                 <div className={classes.formRegister}>
-                    <RegisterForm {...props}/>
+                    {props.registerState.loading ? <SmallSpinner/> : <RegisterForm/>}
                 </div>
             </div>
         </React.Fragment>
@@ -54,7 +54,8 @@ const AuthPage = props => {
 
 const mapStateToProps = state => {
     return {
-        loginState: state.login
+        loginState: state.login,
+        registerState: state.register
     }
 }
 

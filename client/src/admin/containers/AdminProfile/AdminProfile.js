@@ -11,7 +11,6 @@ import AdminChangeProfilePicture from './AdminChangeProfilePicture/AdminChangePr
 import ResponseMessage from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 
 const AdminProfile = props => {
-    console.log(props.user)
     const [user, setUser] = useState({});
 
     useEffect(() => {

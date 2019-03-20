@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react'
 
 const Home = (props) => {
-  useEffect(() => {
-    document.title = "Home Page";
-  }, []);
+  useEffect(() => document.title = "Home Page", []);
   return (
     <div>
-      lorem34
+      lorem32
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;

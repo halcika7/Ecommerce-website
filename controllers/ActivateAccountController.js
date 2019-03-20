@@ -5,8 +5,10 @@ const UserModel = require('../models/User');
 
 const sendActivationEmail = require('../controllers/EmailController').sendActivationEmail;
 
+// catch
 exports.activateAccount = async (req, res) => {
     try {
+
         const user = await UserModel.findOne({ email: req.body.email });
 
         const expiresIn = new Date(user.emailConfirmation.tokenExparation).getTime();
@@ -25,7 +27,7 @@ exports.activateAccount = async (req, res) => {
         
         return res.json({ successMessage: `${user.username} you activated account successfully`});
     }catch(err) {
-        return res.json({ failedMessage:  `${err} Token has expired please go to authentication page and click on button "Send Activation Link"`});
+        return res.json({ failedMessage:  err.message });
     }
 }
 

@@ -19,11 +19,18 @@ const initialStateRegister = {
         successMessage: '',
         failedMessage: '',
         redirect: false
-    }
+    },
+    loading: false,
+    failedMessage: false
 }
 
 const reducer = (state = initialStateRegister, action) => {
     switch (action.type) {
+        case actionTypes.REGISTER_START :
+            return updateObject(state, {
+                ...initialStateRegister,
+                loading: true
+            });
         case actionTypes.REGISTER_SUCCESS : 
             return updateObject(state, {
                 name: '',
@@ -38,12 +45,19 @@ const reducer = (state = initialStateRegister, action) => {
                     password: '',
                     password2: ''
                 },
-                message: action.message
+                message: action.message,
+                loading: false
             });
         case actionTypes.REGISTER_FAILED :
             return updateObject(state, {
                 ...action.User,
-                errors: {...action.errors}
+                errors: {...action.errors},
+                loading: false
+            });
+        case actionTypes.REGISTER_ERROR_CATCHED : 
+            return updateObject(state, {
+                ...initialStateRegister,
+                failedMessage: action.failedMessage
             });
         case actionTypes.REGISTERACTIVATION_FAILED :
             return updateObject(state, {

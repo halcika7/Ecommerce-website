@@ -22,6 +22,7 @@ const reducer = (state = initialStateLogin, action) => {
     const actions = {
         [actionTypes.LOGIN_START] :
             updateObject(state, {
+                ...initialStateLogin,
                 loading: true
             }),
         [actionTypes.LOGIN_SUCCESS] : 

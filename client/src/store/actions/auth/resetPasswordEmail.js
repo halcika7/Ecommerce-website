@@ -1,20 +1,26 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
 
+// catch
 export const resetUserPasswordEmail = (email) => async dispatch => {
-    try {
-        dispatch({ type: actionTypes.RESETPASSWORDEMAIL_START });
 
-        const response = await axios.post('/api/users/resetpasswordemail', {email});
+    dispatch({ type: actionTypes.RESETPASSWORDEMAIL_START });
 
-        if(response.data.errors){
-            dispatch({type: actionTypes.RESETPASSWORDEMAIL_FAILED, errors: response.data.errors, email });
-        }else {
-            dispatch({ type: actionTypes.RESETPASSWORDEMAIL_SUCCESS , email, token: response.data.token});
-            localStorage.setItem('resetpasswordtoken', response.data.token);
-        }
+    const response = await axios.post('/api/users/resetpasswordemail', {email});
 
-    } catch (err) {
-        dispatch({ type: actionTypes.RESETPASSWORDEMAIL_FAILED, errors: err.response.data, email });
+    if(response.data.errors){
+        dispatch({type: actionTypes.RESETPASSWORDEMAIL_FAILED, errors: response.data.errors, email, failedMessage: false });
+    }else if(response.data.failedMessage){
+        dispatch({type: actionTypes.RESETPASSWORDEMAIL_FAILED, errors: {}, email, failedMessage: response.data.failedMessage });
+    }else {
+        dispatch({ 
+            type: actionTypes.RESETPASSWORDEMAIL_SUCCESS, 
+            email,
+            successMessage: response.data.successMessage,
+            token: response.data.token});
+        setTimeout(() => {
+            dispatch({ type: actionTypes.RESETPASSWORDEMAIL_CLEAR });
+        }, 4000);
+        localStorage.setItem('resetpasswordtoken', response.data.token);
     }
 }

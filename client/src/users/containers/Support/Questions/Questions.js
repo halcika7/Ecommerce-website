@@ -4,9 +4,7 @@ import Question from './Question/Question';
 import c from './Questions.module.css';
 
 const questions = (props) => {
-    const questions = props.questions.map( (question, index) => {
-        return <Question question={question} key={index} click={props.click}/>
-    });
+    const questions = props.questions.map( (question, index) => <Question question={question} key={index} click={props.click}/>);
     return (
         <div className={c.container + " container " + c.accordion}>
             <div>

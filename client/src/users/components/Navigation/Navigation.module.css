@@ -113,11 +113,11 @@
 .links a{
 white-space: nowrap;
 color: black;
-font-size: 14px;
+font-size: 12px;
 margin: 0;
 padding: 0 10px 0 10px;
 border-right: 1px solid rgb(0, 0, 0, 0.1);
-font-weight: 400;
+font-weight: 100;
 }
 
 .links:last-child a {
@@ -167,7 +167,11 @@ font-size: 12px;
 width: 100% !important;
 padding-left: 10px;
 padding-right: 10px;
-font-weight: 500;
+font-weight: 100;
+}
+
+.dropdownLinks ul li a.dropdownLink img{
+    margin-right: 5px;
 }
 
 .dropdownLinks:nth-child(2) ul li a.dropdownLink{

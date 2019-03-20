@@ -16,9 +16,7 @@ const Contact = props => {
         {link: '/', icon: 'fab fa-google'}
     ]);
 
-    useEffect(() => {
-        document.title = "Contact";
-    }, []);
+    useEffect(() => document.title = "Contact", []);
 
     const cols = [c.col12,c.colsm6,c.collg3].join(' ');
 

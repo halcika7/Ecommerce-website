@@ -4,35 +4,31 @@ import jwt_decode from 'jwt-decode';
 
 import setAuthToken from '../../../helpers/setAuthToken';
 
+// catch
 export const login = (UserObj) => async dispatch => {
-    try {
+    dispatch({ type: actionTypes.LOGIN_START });
 
-        dispatch({ type: actionTypes.LOGIN_START });
+    const response = await axios.post('/api/users/login', UserObj);
 
-        const response = await axios.post('/api/users/login', UserObj);
+    if(response.data.errors){
+        dispatch({type: actionTypes.LOGIN_FAILED, errors: response.data.errors, UserInfo: UserObj, failedMessage: false});
+    }else if(response.data.failedMessage) {
+        dispatch({type: actionTypes.LOGIN_FAILED, errors: response.data.errors, UserInfo: UserObj, failedMessage: response.data.failedMessage});
+    }else {
+        const { token } = response.data;
+        const { rememberMe } = response.data;
 
-        if(response.data.errors){
-            dispatch({type: actionTypes.LOGIN_FAILED, errors: response.data.errors, UserInfo: UserObj, failedMessage: false});
-        }else if(response.data.failedMessage) {
-            dispatch({type: actionTypes.LOGIN_FAILED, errors: response.data.errors, UserInfo: UserObj, failedMessage: response.data.failedMessage});
-        }else {
-            const { token } = response.data;
-            const { rememberMe } = response.data;
-    
-            localStorage.setItem('jwtToken', token);
-            // Set Token to Auth Header
-            setAuthToken(token);
-            // decode token
-            const decoded = jwt_decode(token);
+        localStorage.setItem('jwtToken', token);
+        // Set Token to Auth Header
+        setAuthToken(token);
+        // decode token
+        const decoded = jwt_decode(token);
 
-            dispatch(setCurrentUser(decoded, rememberMe, response.data.successMessage));
-        }
-
-    } catch (err) {
-        dispatch({type: actionTypes.LOGIN_FAILED, errors: err.response.data, UserInfo: UserObj});
+        dispatch(setCurrentUser(decoded, rememberMe, response.data.successMessage));
     }
 }
 
+// catch
 export const setCurrentUser = (decoded, rememberMe, message=false) => {
     return {
       type: actionTypes.LOGIN_SUCCESS,
@@ -42,6 +38,7 @@ export const setCurrentUser = (decoded, rememberMe, message=false) => {
     };
 };
 
+// catch
 export const logoutUser = () => dispatch => {
     localStorage.removeItem('jwtToken');
     setAuthToken(false);
@@ -52,28 +49,23 @@ export const logoutUser = () => dispatch => {
     });
 }
 
+// catch
 export const userUpdateProfilePicture = (formData, config) => async dispatch => {
 
-    try {
-        const response = await axios.put('/api/users/updateprofilepicture',formData, config);
+    const response = await axios.put('/api/users/updateprofilepicture',formData, config);
 
-        if(response.data.failedMessage){
-            dispatch({type: actionTypes.PROFILE_PICTURE_UPDATE_FAILED, failedMessage: response.data.failedMessage});
-            setTimeout(() => {
-                dispatch({type: actionTypes.PROFILE_PICTURE_CLEAR_MESSAGES});
-            }, 4000);
-        }else {
-            localStorage.setItem('jwtToken', response.data.token);
-    
-            dispatch({type: actionTypes.PROFILE_PICTURE_UPDATE_SUCCESS, User: response.data.user, successMessage: response.data.successMessage});
+    if(response.data.failedMessage){
+        dispatch({type: actionTypes.PROFILE_PICTURE_UPDATE_FAILED, failedMessage: response.data.failedMessage});
+        setTimeout(() => {
+            dispatch({type: actionTypes.PROFILE_PICTURE_CLEAR_MESSAGES});
+        }, 4000);
+    }else {
+        localStorage.setItem('jwtToken', response.data.token);
 
-            setTimeout(() => {
-                dispatch({type: actionTypes.PROFILE_PICTURE_CLEAR_MESSAGES});
-            }, 4000);
-        }
-    
-    }catch (err) {
-        console.log(err);
+        dispatch({type: actionTypes.PROFILE_PICTURE_UPDATE_SUCCESS, User: response.data.user, successMessage: response.data.successMessage});
+
+        setTimeout(() => {
+            dispatch({type: actionTypes.PROFILE_PICTURE_CLEAR_MESSAGES});
+        }, 4000);
     }
-
 }

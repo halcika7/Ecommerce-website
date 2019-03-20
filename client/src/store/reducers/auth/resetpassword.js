@@ -11,7 +11,8 @@ const initialResetPasswordState = {
         password2: '',
         expiredToken: false
     },
-    successMessage: '',
+    successMessage: false,
+    failedMessage: false,
     redirectTo: '/404'
 }
 
@@ -25,7 +26,8 @@ const reducer = (state = initialResetPasswordState, action) => {
         [actionTypes.RESETPASSWORD_FAILED] : 
             updateObject(state, {
                 ...action.passwords,
-                errors: {...action.errors}
+                errors: {...action.errors},
+                failedMessage: action.failedMessage
             }),
         [actionTypes.RESETPASSWORD_SUCCESS] : 
             updateObject(state, {

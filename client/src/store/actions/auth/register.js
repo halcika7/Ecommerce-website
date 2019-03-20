@@ -1,11 +1,15 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
 
+// catch
 export const register = (UserObj) => async dispatch => {
-    try {
+        dispatch({ type: actionTypes.REGISTER_START });
+
         const response = await axios.post('/api/users/register', UserObj);
 
-        if(response.data.errors){
+        if(response.data.errorCatched) {
+            dispatch({ type: actionTypes.REGISTER_ERROR_CATCHED, failedMessage: response.data.failedMessage });
+        }else if(response.data.errors){
             dispatch({type: actionTypes.REGISTER_FAILED, errors: response.data.errors, User: UserObj});
         }else {
             localStorage.setItem('activationToken', response.data.token);
@@ -15,33 +19,24 @@ export const register = (UserObj) => async dispatch => {
                 message: response.data.message
             });
         }
-
-
-    } catch (err) {
-        dispatch({type: actionTypes.REGISTER_FAILED, errors: err.response.data, User: UserObj});
-    }
 }
 
+// catch
 export const activateAccount = (activationObject) => async dispatch => {
-    try{
-        const response = await axios.post('/api/users/activateaccount', activationObject);
+    const response = await axios.post('/api/users/activateaccount', activationObject);
 
-        
-        if(response.data.failedMessage) {
-            dispatch({type: actionTypes.REGISTERACTIVATION_FAILED, failedMessage: response.data.failedMessage});
-        }else {
-            dispatch({
-                type: actionTypes.REGISTERACTIVATION_SUCCESS,
-                successMessage: response.data.successMessage
-            });
+    if(response.data.failedMessage) {
+        dispatch({type: actionTypes.REGISTERACTIVATION_FAILED, failedMessage: response.data.failedMessage});
+    }else {
+        dispatch({
+            type: actionTypes.REGISTERACTIVATION_SUCCESS,
+            successMessage: response.data.successMessage
+        });
 
-            setTimeout(() => {
-                localStorage.removeItem('activationToken');
-                dispatch({type: actionTypes.REGISTERACTIVATION_CLEAR });
-            }, 4000);
-        }
-    }catch(err){
-        dispatch({type: actionTypes.REGISTERACTIVATION_FAILED, errors: err.response.data});
+        setTimeout(() => {
+            localStorage.removeItem('activationToken');
+            dispatch({type: actionTypes.REGISTERACTIVATION_CLEAR });
+        }, 4000);
     }
 }
 

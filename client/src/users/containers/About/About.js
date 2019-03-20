@@ -149,9 +149,7 @@ const state = {
 }
 const About = (props) => {
 
-    useEffect(() => {
-        document.title = "About";
-    }, []);
+    useEffect(() => document.title = "About", []);
 
     return(
         <React.Fragment>

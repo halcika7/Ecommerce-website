@@ -39,10 +39,6 @@
     cursor: pointer;
 }
 
-.formLogin .formBox.Checkbox label {
-    margin-bottom: 0px;
-}
-
 .Checkbox label {
     position: relative;
     cursor: pointer;
@@ -50,7 +46,7 @@
     padding-left: 30px;
     display: flex;
     align-items: center;
-    /* pointer-events: none; */
+    pointer-events: none;
 }
 
 .Checkbox label:before {
@@ -88,7 +84,7 @@
 
 .Checkbox input[type="checkbox"]:checked + label:before {
     background-color: #f28b00;
-    border-color: #f28b00;
+    border: 2px solid #f28b00;
 }
 
 .formLogin .formBox label, .formRegister .formBox label {
