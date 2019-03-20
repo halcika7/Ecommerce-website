@@ -20,9 +20,9 @@ const RegisterForm = props => {
         {name: 'password2',placeholder: '*********',label: 'Confirm Password',type: 'password'}
     ]);
 
-    useEffect(() => setRegister({...props.registerState}), []);
+    useEffect(() => { setRegister({...props.registerState}) }, []);
 
-    useEffect(() => setRegister({...props.registerState}), [props.registerState]);
+    useEffect(() => { setRegister({...props.registerState}) }, [props.registerState]);
     
     const onChangeRegisterValue = (e) => setRegister({...register,[e.target.name]: e.target.value});
 

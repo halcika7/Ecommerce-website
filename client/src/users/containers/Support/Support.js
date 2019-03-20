@@ -14,7 +14,7 @@ const state = {
 
 const Support = (props) => {
 
-    useEffect(() => document.title = "Support", []);
+    useEffect(() => { document.title = "Support" }, []);
 
     const toggleAnswer = (event,classAct) => {
         event.preventDefault();

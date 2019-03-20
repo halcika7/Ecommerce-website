@@ -14,7 +14,7 @@ const AccountActivation = props => {
 
     useEffect(() => {setMessages({...props.activation}); checkToken(); }, []);
 
-    useEffect(() =>  { console.log(props.activation); setMessages({ ...props.activation });}, [props.activation]);
+    useEffect(() =>  { setMessages({ ...props.activation });}, [props.activation]);
 
     const checkToken = () => {
         const query = new URLSearchParams(props.location.search).get('token');

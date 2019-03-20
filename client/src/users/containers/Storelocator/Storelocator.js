@@ -7,7 +7,7 @@ import image from '../../assets/images/balck2.jpg';
 
 const StoreLocator = props => {
 
-    useEffect(() => document.title = "Storelocator", []);
+    useEffect(() => { document.title = "Storelocator" }, []);
 
     return(
         <React.Fragment>

@@ -7,7 +7,7 @@ import c from './Checkout.module.css';
 
 const Checkout = props => {
 
-    useEffect(() => document.title = "Checkout", []);
+    useEffect(() => { document.title = "Checkout" }, []);
 
     return(
         <React.Fragment>

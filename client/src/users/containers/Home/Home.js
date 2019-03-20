@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
 const Home = (props) => {
-  useEffect(() => document.title = "Home Page", []);
+  useEffect(() => { document.title = "Home Page" }, []);
   return (
     <div>
       lorem32

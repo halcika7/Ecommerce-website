@@ -14,7 +14,7 @@ const state = {
 
 const Terms = props => {
 
-    useEffect(() => document.title = "Terms", []);
+    useEffect(() => { document.title = "Terms" }, []);
 
     const terms = state.terms.map((term,index) => <Term term={term} key={index} />);
     

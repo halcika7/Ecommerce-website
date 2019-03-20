@@ -21,11 +21,11 @@ const LoginForm = props => {
         {name: 'password',placeholder: '*******',label: 'Password',type: 'password'}
     ]);
 
-    useEffect(() => { setLogin({...props.loginState}); setResetPassword({...props.resetPasswordState});}, []);
+    useEffect(() => { setLogin({...props.loginState}); setResetPassword({...props.resetPasswordState}); }, []);
     
-    useEffect(() => setLogin({...props.loginState}), [props.loginState]);
+    useEffect(() => { setLogin({...props.loginState}) }, [props.loginState]);
 
-    useEffect(() => setResetPassword({...props.resetPasswordState}), [props.resetPasswordState]);
+    useEffect(() => { setResetPassword({...props.resetPasswordState}) }, [props.resetPasswordState]);
     
     const onChangeLoginValue = (e) => {
         if(e.target.type === "checkbox"){
