@@ -3,7 +3,6 @@ const isEmpty = require('./is-empty');
 
 module.exports = function validateLoginInput(data) {
     let errors = {};
-
     data.usernameEmail = !isEmpty(data.usernameEmail) ? data.usernameEmail : '';
     data.password = !isEmpty(data.password) ? data.password : '';
 
@@ -15,10 +14,5 @@ module.exports = function validateLoginInput(data) {
         errors.password = 'Password field is required';
     }
 
-    return {
-        errors: {
-            errors
-        },
-        isValid: isEmpty(errors)
-    }
+    return { errors: { errors }, isValid: isEmpty(errors) }
 }

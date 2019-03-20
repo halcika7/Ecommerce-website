@@ -55,11 +55,15 @@ const reducer = (state = initialStateRegister, action) => {
                 failedMessage: action.failedMessage,
                 loading: false
             });
+        case actionTypes.REGISTERACTIVATION_START :
+            return updateObject(state, {
+                ...initialStateRegister,
+            });
         case actionTypes.REGISTERACTIVATION_FAILED :
             return updateObject(state, {
                 ...initialStateRegister,
                 activation: {
-                    ...initialStateRegister,
+                    ...initialStateRegister.activation,
                     failedMessage: action.failedMessage
                 }
             });
@@ -67,7 +71,7 @@ const reducer = (state = initialStateRegister, action) => {
             return updateObject(state, {
                 ...initialStateRegister,
                 activation: {
-                    ...initialStateRegister,
+                    ...initialStateRegister.activation,
                     successMessage: action.successMessage,
                     redirect: false
                 }
@@ -76,7 +80,7 @@ const reducer = (state = initialStateRegister, action) => {
             return updateObject(state, {
                 ...initialStateRegister,
                 activation: {
-                    ...initialStateRegister,
+                    ...initialStateRegister.activation,
                     redirect: true
                 }
             });

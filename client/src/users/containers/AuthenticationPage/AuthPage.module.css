@@ -199,11 +199,13 @@
 
 .formBoxActivation{
     display: flex !important;
+    flex-direction: column;
     justify-content: center !important;
 }
 
 .formBoxActivation button {
     margin: 0 !important;
+    margin-top: 1rem !important;
 }
 
 @media (max-width: 992px) {

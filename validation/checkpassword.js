@@ -28,10 +28,5 @@ module.exports = function validateNewPassword(data) {
         errors.password2 = 'Passwords must match';
     }
 
-    return {
-        errors: {
-            errors
-        },
-        isValid: isEmpty(errors)
-    }
+    return { errors: { errors }, isValid: isEmpty(errors) }
 }

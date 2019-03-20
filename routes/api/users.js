@@ -2,7 +2,6 @@ const express = require('express');
 const fs = require('fs');
 const multer = require('multer');
 const router = express.Router();
-
 const UserController = require('../../controllers/UsersController');
 const EmailController = require('../../controllers/EmailController');
 const UserRolesController = require('../../controllers/UserRolesController');
@@ -39,7 +38,6 @@ const multerProfilePicture = multer({
 });
 
 // User Routes
-
 router.post('/register', UserController.registerUser);
 
 router.post('/login', UserController.loginUser);
