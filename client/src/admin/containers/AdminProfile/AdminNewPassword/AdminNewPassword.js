@@ -7,32 +7,31 @@ import LoginRegisterInputs from '../../../../users/components/UI/LoginRegisterIn
 
 const AdminNewPassword = props => {
 
-    const [passwords, setPasswords] = useState({errors:{},password2: '',password: ''});
-
+    const [passwords, setPasswords] = useState({});
     const [inputs] = useState([
         {name: 'password',placeholder: '*******',label: 'New Password',type: 'password'},
         {name: 'password2',placeholder: '*******',label: 'Confirm Password',type: 'password'}
     ]);
 
-    useEffect(() => { 
-        setPasswords({...props.updatePasswordState}); 
-    }, []);
+    useEffect(() => { setPasswords({...props.updatePasswordState}); }, []);
     
-    useEffect(() => {
-        setPasswords({...props.updatePasswordState}); 
-    }, [props.updatePasswordState]);
+    useEffect(() => { setPasswords({...props.updatePasswordState}); }, [props.updatePasswordState]);
 
-    const passwordChange = (e) => {
-        setPasswords({...passwords,[e.target.name]: e.target.value});
-    }
+    const passwordChange = (e) => setPasswords({...passwords,[e.target.name]: e.target.value});
 
     const formSubmit = (e) => {
         e.preventDefault();
-        props.updatePassword({password: passwords.password, password2: passwords.password2, username: props.userName, rememberMe: props.rememberMe});
+        props.updatePassword({
+            password: passwords.password, 
+            password2: passwords.password2, 
+            username: props.userName, 
+            rememberMe: props.rememberMe
+        });
     }
 
     return (
         <div className="col-md-6 mb-30">
+            {!passwords.errors ? null : 
             <div className="card text-white h-100">
                 <div className="card-header">
                     <h5 className="title">Change Password</h5>
@@ -61,7 +60,7 @@ const AdminNewPassword = props => {
                         <button type="submit" className="btn-fill btn btn-primary">Change Password</button>
                     </form>
                 </div>
-            </div>
+            </div>}
         </div>
     );
 }

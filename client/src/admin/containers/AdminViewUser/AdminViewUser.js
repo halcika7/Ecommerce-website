@@ -2,24 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
 
+import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
+
 const AdminViewUser = props => {
 
     const [user, setUser] = useState({});
-
-    useEffect(() => {
-        props.getUser(props.match.params.id);
-    }, []);
-
-    useEffect(() => {
-        setUser({
-            ...user,
-            ...props.User
-        });
-    }, [props.User]);
+    useEffect(() => { props.getUser(props.match.params.id); }, []);
+    useEffect(() => { setUser({ ...user, ...props.User }); }, [props.User]);
 
     return (
         <div className="AdminProfile row">
+            {props.failedMessage ? <ResponseMessages message={props.failedMessage} ClassName="Danger"/> : null }
+            {props.successMessage ? <ResponseMessages message={props.successMessage} /> : null }
             <div className="col mb-30">
+                {props.failedMessage ? null : 
                 <div className="card text-white">
                     <div className="card-header">
                         <h5 className="title">User {user.name} Profile</h5>
@@ -83,7 +79,7 @@ const AdminViewUser = props => {
                     <div className="card-footer">
                         <button type="submit" className="btn-fill btn btn-primary">Save</button>
                     </div>
-                </div>
+                </div>}
             </div>
         </div>
     )
@@ -91,7 +87,9 @@ const AdminViewUser = props => {
 
 const mapStateToProps = state => {
     return {
-        User: state.allUsers.SingleUser
+        User: state.allUsers.SingleUser,
+        successMessage: state.allUsers.successMessage,
+        failedMessage: state.allUsers.failedMessage
     }
 }
 

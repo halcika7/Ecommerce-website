@@ -164,7 +164,7 @@ exports.updateProfilePicture = async (req, res) => {
         return res.json({ failedMessage: err.message })
     }
 }
-
+// catch
 exports.updatePassword = async (req, res) => {
     const {errors, isValid} = validatePasswords(req.body);
     if(!isValid) { return res.json(errors); }
@@ -183,25 +183,23 @@ exports.updatePassword = async (req, res) => {
         return res.json({ failedMessage: err.message });
     }
 }
-
+// catch
 exports.getAllUsers = async (req, res) => {
     try{
         const users = await UserModel.find().select('name _id username email profilePicture');
-        return res.json(users);
+        return res.json({ users, successMessage: "Users are loaded" });
     }catch (err){
-        console.log(err)
+        return res.json({ failedMessage: err.message });
     }
 }
-
+// catch
 exports.getSingleUser = async (req, res) => {
     try{
         const user = await UserModel.findOne({_id: new ObjectId(req.query.id)}).select('profilePicture name email role username userInfo -_id')
         const role = await UserRolesModel.findOne({ _id: user.role }).select('isAdmin name permissions -_id');
-        const payload = { ...user._doc, role: { ...role._doc } }
-
-        return res.json(payload)
+        return res.json({ user, role, successMessage: 'User Successfully loaded !' });
     }catch(err) {
-        console.log(err)
+        return res.json({ failedMessage: err.message });
     }
 }
 
