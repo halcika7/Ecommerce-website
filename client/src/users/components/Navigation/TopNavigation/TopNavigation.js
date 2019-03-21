@@ -72,7 +72,7 @@ const TopNavigation = props => {
                         <li className={c.dropdownMenuItems}>
                             <a href="/" aria-label="profile" target="_self" rel="noopener" className={c.dropdownLink + ' dropdown-link'}
                             onClick={showNotificationsMenu}>
-                                <img src={'\\' + user.profilePicture} width="20" height="20" alt="" />
+                                <img src={user.profilePicture} width="20" height="20" alt="" />
                                 {user.username}
                             </a>
                             <div className={c.profileMenu}>

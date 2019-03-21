@@ -4,6 +4,7 @@ import * as actions from '../../../store/actions';
 import DataTable from '../../components/UI/DataTable/DataTable';
 
 import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
+import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
 
 const AdminAllUsers = props => {
     const [users, setUsers] = useState([])
@@ -23,12 +24,11 @@ const AdminAllUsers = props => {
             <div className={"row"}>
                 {props.users.successMessage ? <ResponseMessages message={props.users.successMessage} /> : null}
                 {props.users.failedMessage ? <ResponseMessages ClassName="Danger" message={props.users.failedMessage} /> : null}
-                {props.users.failedMessage === false ?
                 <div className={'col-12 text-white'}>
                     <div className="card mb-30">
-                        <DataTable usersData={users} click={deleteUser}/>
+                        {props.users.loading ? <SmallSpinner /> : <DataTable usersData={users} click={deleteUser}/> }
                     </div>
-                </div> : null }
+                </div>
             </div>
         </React.Fragment>
     )

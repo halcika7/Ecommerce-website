@@ -149,6 +149,7 @@ exports.updateProfilePicture = async (req, res) => {
         const userInfo = {
             id: updatedUser.id,
             name: updatedUser.name,
+            email: updatedUser.email,
             username: updatedUser.username,
             isAdmin: role.isAdmin,
             role,
@@ -202,13 +203,13 @@ exports.getSingleUser = async (req, res) => {
         return res.json({ failedMessage: err.message });
     }
 }
-
+// catch
 exports.deleteUser = async (req, res) => {
     try{
-        const user = await UserModel.deleteOne({ _id: new ObjectId(req.query.id) });
-        return res.json({ successMessage: 'User has been deleted !!!' })
+        await UserModel.deleteOne({ _id: new ObjectId(req.query.id) });
+        return res.json({ successMessage: 'User successfully deleted !!!' });
     }catch(err) {
-        console.log(err);
+        return res.json({ failedMessage: err.message });
     }
 }
 

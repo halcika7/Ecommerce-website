@@ -5,7 +5,8 @@ const initialState = {
     Users: [],
     SingleUser: {},
     failedMessage: false,
-    successMessage: false
+    successMessage: false,
+    loading: true
 }
 
 const reducer = (state = initialState, action) => {
@@ -18,7 +19,8 @@ const reducer = (state = initialState, action) => {
             updateObject(state, {
                 ...initialState,
                 Users:{...action.Users},
-                successMessage: action.successMessage
+                successMessage: action.successMessage,
+                loading: false
             }),
         [actionTypes.GET_ALL_USERS_FAILED] : 
             updateObject(state, {
@@ -36,6 +38,21 @@ const reducer = (state = initialState, action) => {
             updateObject(state, {
                 ...initialState,
                 failedMessage: action.failedMessage
+            }),
+        [actionTypes.DELETE_SINGLE_USER_START] :
+            updateObject(state, {
+                failedMessage: false,
+                successMessage: false
+            }),
+        [actionTypes.DELETE_SINGLE_USER_SUCCESS] :
+            updateObject(state, {
+                successMessage: action.successMessage,
+                loading: true
+            }),
+        [actionTypes.DELETE_SINGLE_USER_FAILED] :
+            updateObject(state, {
+                failedMessage: action.failedMessage,
+                loading: true
             }),
         default: state
     }

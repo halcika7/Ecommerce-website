@@ -23,16 +23,16 @@ export const getSingleUser = (id) => async dispatch => {
         dispatch({type: actionTypes.GET_SINGLE_USER_SUCCESS, User: response.data.user, role: response.data.role, successMessage: response.data.successMessage});
     }
 }
-
+// catch
 export const deleteUser = (id) => async dispatch => {
-    try{
-        const response = await axios.delete('/api/users/deleteuser?id=' + id);
-
-        dispatch({type: actionTypes.DELETE_SINGLE_USER_SUCCESS, successMessage: response.data.successMessage});
-        
+    dispatch({ type: actionTypes.DELETE_SINGLE_USER_START });
+    const response = await axios.delete('/api/users/deleteuser?id=' + id);
+    if(response.data.failedMessage) {
+        dispatch({ type: actionTypes.DELETE_SINGLE_USER_FAILED, failedMessage: response.data.failedMessage });
         setTimeout(() => dispatch(getAllUsers()), 4000);
-
-    }catch(err) {
-        console.log(err);
+    }else {
+        console.log(response.data)
+        dispatch({type: actionTypes.DELETE_SINGLE_USER_SUCCESS, successMessage: response.data.successMessage});
+        setTimeout(() => dispatch(getAllUsers()), 4000);
     }
 }
