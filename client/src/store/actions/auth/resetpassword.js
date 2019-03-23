@@ -1,7 +1,6 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
 
-// catch
 export const resetPassword = (passwords) => async dispatch => {
     dispatch({type: actionTypes.RESETPASSWORD_START, passwords: passwords});
 
@@ -21,12 +20,12 @@ export const resetPassword = (passwords) => async dispatch => {
         }, 4000);
     }
 }
-// catch
+
 export const resetState = () => dispatch => {
     localStorage.removeItem('resetpasswordtoken');
     dispatch({ type: actionTypes.RESETPASSWORD_CLEAR });
 }
-// catch
+
 export const updatePassword = passwords => async dispatch => {
 
     dispatch({ type: actionTypes.PROFILE_PASSWORD_UPDATE_START });

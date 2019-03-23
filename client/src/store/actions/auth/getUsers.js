@@ -1,6 +1,6 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
-// catch
+
 export const getAllUsers = () => async dispatch => {
 
     dispatch({ type: actionTypes.GET_ALL_USERS_START });
@@ -12,7 +12,7 @@ export const getAllUsers = () => async dispatch => {
         dispatch({type: actionTypes.GET_ALL_USERS_SUCCESS, Users: response.data.users, successMessage: response.data.successMessage});
     }
 }
-// catch
+
 export const getSingleUser = (id) => async dispatch => {
 
     const response = await axios.get('/api/users/singleuser?id=' + id);
@@ -23,7 +23,7 @@ export const getSingleUser = (id) => async dispatch => {
         dispatch({type: actionTypes.GET_SINGLE_USER_SUCCESS, User: response.data.user, role: response.data.role, successMessage: response.data.successMessage});
     }
 }
-// catch
+
 export const deleteUser = (id) => async dispatch => {
     dispatch({ type: actionTypes.DELETE_SINGLE_USER_START });
     const response = await axios.delete('/api/users/deleteuser?id=' + id);

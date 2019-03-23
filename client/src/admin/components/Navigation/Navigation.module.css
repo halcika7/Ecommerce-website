@@ -100,13 +100,16 @@
     overflow: hidden;
 }
 
-.Logo a.LogoMini img {
-    border-radius: 50%;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -ms-border-radius: 50%;
-    -o-border-radius: 50%;
+.Logo a.LogoMini > div {
+    height: 30px;
     width: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.Logo a.LogoMini img {
+    width: 100%;
+    min-height: 30px;
 }
 
 .Nav {
@@ -124,16 +127,19 @@
 
 .Nav li a {
     margin: 10px 15px 0;
-    border-radius: 30px;
-    color: #ffffff;
-    display: block;
+    color: #ffffff9e;
+    display: flex;
     text-decoration: none;
-    position: relative;
     text-transform: uppercase;
     cursor: pointer;
-    font-size: 0.62475rem;
+    font-size: 0.56475rem;
     padding: 10px 8px;
-    line-height: 1.625rem;
+    font-weight: 100;
+    position: relative;
+}
+
+.Nav li a:hover {
+    color: #fff;
 }
 
 .Nav li:first-child > a {
@@ -141,7 +147,7 @@
 }
 
 .Active{
-    color:black;
+    color: #fff !important;
 }
 
 .Active::before {
@@ -149,28 +155,24 @@
     position: absolute;
     height: 6px;
     width: 6px;
-    top: 22px;
-    left: -4px;
     background: #ffffff;
     border-radius: 50%;
+    top: 50%;
+    transform: translate(-100%, -50%);
 }
 
 .Nav i {
     font-size: 20px;
-    float: left;
     margin-right: 12px;
-    line-height: 30px;
     width: 34px;
     text-align: center;
     color: rgba(255, 255, 255, 0.8);
-    position: relative;
 }
 
 .TimIcons {
     display: inline-block;
     font: normal normal normal 1em/1 myFirstFont;
     vertical-align: middle;
-    speak: none;
     text-transform: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -204,12 +206,48 @@
     content: "\EA03";
 }
 
+.IconBasket::before {
+    content: '\EA0B';
+}
+
+.IconBag::before {
+    content: '\EA09';
+}
+
 .Nav p {
-    margin: 0;
-    line-height: 30px;
-    position: relative;
-    display: block;
-    height: auto;
+    margin: auto 0;
     white-space: nowrap;
     font-weight: 300;
+    height: 100%;
+}
+
+.Sidebar .DropDown {
+    padding-left: 2rem;
+    background-color: #0033ff2b;
+    max-height: 0px;
+    transition: max-height .3s cubic-bezier(0,0,0,.1);
+    overflow: hidden;
+}
+
+.Sidebar .DropDown .DropDown {
+    padding-left: 1rem;
+}
+
+.Sidebar .DropDown .Active:before {
+    transform: translate(-150%, -70%);
+}
+
+.Sidebar .DropDown > a {
+    margin: 0;
+    padding: 5px;
+    width: auto;
+}
+
+.Sidebar .DropDown.DropDownActive {
+    max-height: 50px;
+    transition: max-height .3s cubic-bezier(0,0,0,.1);
+}
+
+.Sidebar .DropDown.DropDownActive.MaxHeight100 {
+    max-height: 100px !important;
 }

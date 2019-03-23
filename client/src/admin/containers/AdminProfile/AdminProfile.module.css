@@ -1,9 +1,7 @@
 .AdminProfile button {
-    background: #e14eca;
     background-image: linear-gradient(0deg, #3358f4 0%, #1d8cf8 100%);
     background-size: 210% 210%;
     background-position: 100% 0;
-    background-color: #e14eca;
     transition: all .15s ease;
     box-shadow: none;
     color: #fff;

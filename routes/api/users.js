@@ -6,6 +6,7 @@ const UserController = require('../../controllers/UsersController');
 const EmailController = require('../../controllers/EmailController');
 const UserRolesController = require('../../controllers/UserRolesController');
 const ActivateAccountController = require('../../controllers/ActivateAccountController');
+const PermissionController = require('../../controllers/PermissionController');
 
 const fileStorage = multer.diskStorage({
     destination: (req,file,cb) => {
@@ -61,5 +62,13 @@ router.get('/singleuser', UserController.getSingleUser);
 router.delete('/deleteuser', UserController.deleteUser);
 
 router.get('/userroles', UserRolesController.getRoles);
+
+router.post('/addpermission', PermissionController.addPermission);
+
+router.get('/getallpermissions', PermissionController.getAllPermissions);
+
+router.delete('/deletepermission', PermissionController.deletePermission);
+
+router.delete('/deleteallpermissions', PermissionController.deleteAllPermission);
 
 module.exports = router;

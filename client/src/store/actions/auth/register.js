@@ -1,6 +1,6 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
-// catch
+
 export const register = (UserObj) => async dispatch => {
         dispatch({ type: actionTypes.REGISTER_START });
 
@@ -19,7 +19,7 @@ export const register = (UserObj) => async dispatch => {
             });
         }
 }
-// catch
+
 export const activateAccount = (activationObject) => async dispatch => {
     const response = await axios.post('/api/users/activateaccount', activationObject);
 
@@ -39,7 +39,7 @@ export const activateAccount = (activationObject) => async dispatch => {
         }, 8000);
     }
 }
-// catch
+
 export const resendActivationLink = activationObject => async dispatch => {
 
     dispatch({ type: actionTypes.REGISTERACTIVATION_START });

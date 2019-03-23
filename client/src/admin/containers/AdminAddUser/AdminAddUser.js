@@ -22,10 +22,7 @@ const AdminAddUser = props => {
     }, []);
 
     useEffect(() => {
-        console.log(props.roles);
         setRoles(props.roles);
-
-        console.log(roles)
     }, [props.roles]);
 
     const dateChange = e => {

@@ -4,7 +4,6 @@ import jwt_decode from 'jwt-decode';
 
 import setAuthToken from '../../../helpers/setAuthToken';
 
-// catch
 export const login = (UserObj) => async dispatch => {
     dispatch({ type: actionTypes.LOGIN_START });
 
@@ -28,7 +27,6 @@ export const login = (UserObj) => async dispatch => {
     }
 }
 
-// catch
 export const setCurrentUser = (decoded, rememberMe, message=false) => {
     return {
       type: actionTypes.LOGIN_SUCCESS,
@@ -38,7 +36,6 @@ export const setCurrentUser = (decoded, rememberMe, message=false) => {
     };
 };
 
-// catch
 export const logoutUser = () => dispatch => {
     localStorage.removeItem('jwtToken');
     setAuthToken(false);
@@ -49,7 +46,6 @@ export const logoutUser = () => dispatch => {
     });
 }
 
-// catch
 export const userUpdateProfilePicture = (formData, config) => async dispatch => {
 
     const response = await axios.put('/api/users/updateprofilepicture',formData, config);

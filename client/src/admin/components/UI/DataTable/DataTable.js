@@ -52,6 +52,7 @@ const DataTable = props => {
 
     const buttonFormatter = (cell, row) => {
         const id = row._id;
+        console.log(row)
         return (
             <React.Fragment>
                 <Link className="btn btn-warning" to={`/admindashboard/adminViewUser/id=${id}`}>

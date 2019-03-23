@@ -10,6 +10,7 @@ const AdminViewUser = props => {
     useEffect(() => { props.getUser(props.match.params.id); }, []);
     useEffect(() => { setUser({ ...user, ...props.User }); }, [props.User]);
 
+    console.log(user)
     return (
         <div className="AdminProfile row">
             {props.failedMessage ? <ResponseMessages message={props.failedMessage} ClassName="Danger"/> : null }
@@ -18,7 +19,7 @@ const AdminViewUser = props => {
                 {props.failedMessage ? null : 
                 <div className="card text-white">
                     <div className="card-header">
-                        <h5 className="title">User {user.name} Profile</h5>
+                        <h5 className="title">{user.name} Profile</h5>
                     </div>
                     <div className="card-body">
                         <div className="row mb-10">

@@ -1,0 +1,47 @@
+const PermissionModel = require('../models/Permission');
+const validatePermission = require('../validation/permissionValidation');
+
+exports.addPermission = async (req, res) => {
+    try{
+        const {failedMessage, isValid} = validatePermission(req.body.permission);
+        if(!isValid) {return res.json(failedMessage);}
+
+        const slug = req.body.permission.split(' ').join('_');
+        const permission = req.body.permission;
+
+        const newPermission = new PermissionModel({ slug, permission });
+        await newPermission.save();
+        return res.json({ successMessage: 'New Permission Added !' });
+    }catch(err) {
+        return res.json({ failedMessage: err.errmsg });
+    }
+}
+
+exports.getAllPermissions = async (req, res) => {
+    try {
+        const permissions = await PermissionModel.find({});
+        return res.json({ permissions });
+    }catch(err) {
+        return res.json({ failedMessage: err.message });
+    }
+}
+
+exports.deletePermission = async (req, res) => {
+    try{
+        const response = await PermissionModel.deleteOne({ slug: req.query.slug });
+        if(response.n === 0) return res.json({ failedMessage: 'Permission is not deleted' });
+        return res.json({ successMessage: 'Permission deleted !' });
+    }catch(err) {
+        return res.json({ failedMessage: err.message });
+    }
+}
+
+exports.deleteAllPermission = async (req, res) => {
+    try{
+        const response = await PermissionModel.deleteMany({});
+        if(response.n === 0) return res.json({ failedMessage: 'No Permissions deleted !' });
+        return res.json({ successMessage: 'Permissions deleted !' });
+    }catch(err) {
+        return res.json({ failedMessage: err.message });
+    }
+}

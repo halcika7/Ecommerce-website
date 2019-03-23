@@ -1,11 +1,9 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
 
-// catch
 export const resetUserPasswordEmail = (email) => async dispatch => {
 
     dispatch({ type: actionTypes.RESETPASSWORDEMAIL_START });
-
     const response = await axios.post('/api/users/resetpasswordemail', {email});
 
     if(response.data.errors){

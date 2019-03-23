@@ -1,0 +1,171 @@
+.NoScroll {
+    overflow: hidden;
+}
+
+.ModalWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1051;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1051;
+    background-color: rgba(0, 0, 0, 0.283);
+}
+
+.Modal {
+    position: relative;
+    z-index: 1052;
+    min-width: 280px;
+    max-width: 100%;
+    min-height: 350px;
+    box-shadow: 0px 2px 12px 2px rgba(0, 0, 0, 0.372);
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 30px 50px;
+}
+
+.Modal.PermissionsModal {
+    padding: 0;
+    min-height: unset;
+    display: unset;
+}
+
+.Permissions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.Permissions .datalist {
+    height: 20px !important;
+    max-height: 50px !important;
+   overflow-y:auto;
+}
+
+input::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+.Modal .Form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.Modal label {
+    color: #3358f4;
+    display: block;
+}
+
+.Modal input {
+    border: 1px solid #3358f4;
+    border-radius: 10px;
+    padding: 5px 15px;
+    max-width: 100%;
+}
+
+.Modal input:disabled {
+    cursor: not-allowed;
+    background-color: rgba(220, 208, 208, 0.804);
+    border: none;
+}
+
+.Form button {
+    margin-top: 10px;
+    cursor: pointer;
+    outline: none;
+    background: linear-gradient(0deg, #3358f4 0%, #1d8cf8 100%);
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+
+.Form button:hover {
+    background: linear-gradient(0deg, #6080ff 0%, #055bb1 100%);
+}
+
+.Modal .close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.Invalid {
+    border: 1px solid red !important;
+}
+
+.invalidFeedback {
+    display: none;
+    width: 100%;
+    margin-top: .25rem;
+    font-size: 80%;
+    color: #dc3545;
+}
+
+.Invalid ~ .invalidFeedback {
+    display: block;
+}
+
+.Modal.PermissionsModal .close {
+    color: #fff;
+}
+
+.Modal.PermissionsModal h4 {
+    margin-bottom: 0;
+    color: #fff;
+    display: inline-block;
+}
+
+.Modal.PermissionsModal .Card {
+    height: 100%;
+    border-radius: 0px;
+}
+
+.Modal.PermissionsModal .Card button {
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+@media(max-width: 404px) {
+    .Modal.PermissionsModal h4 {
+        display: block;
+    }
+
+    .Modal.PermissionsModal .Card button {
+        margin-right: 0px;
+        margin-left: 0px;
+        margin-top: 10px;
+        float: none !important;
+    }
+}
+
+.Modal.PermissionsModal .tableResponsive {
+    max-height: 500px;
+}
+
+.Modal.PermissionsModal table{
+    min-width: 1000px;
+}
+
+.Modal.PermissionsModal tbody > tr > td{
+    vertical-align: middle;
+}

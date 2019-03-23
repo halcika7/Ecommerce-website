@@ -54,6 +54,10 @@ const App = props => {
     })
 
     useEffect(() => {
+        const mask = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@[]{}/\\|%&*()#$&'.split('').sort((a, b) => Math.random()>.5 ? -1: 1).join('');
+        let password = '';
+        for (var i = 15; i > 0; --i) password += mask[Math.round(Math.random() * (mask.length - 1))];
+        console.log(password);
         checkLoggedInUser();
         setTimeout(() => {
             setState({
@@ -64,18 +68,6 @@ const App = props => {
     }, []);
 
     if(props.isAdmin && props.location.pathname.includes('admindashboard')) {
-        const routes = (
-            <Switch>
-                <Route path='/admindashboard/dashboard' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminDashboard /></Suspense>}/>
-                <Route path='/admindashboard/profile' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminProfile /></Suspense>}/>
-                <Route path='/admindashboard/products' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminProductsPage /></Suspense>}/>
-                <Route path='/admindashboard/addproduct' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminAddProduct /></Suspense>}/>
-                <Route path='/admindashboard/adminAllUsers' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminAllUsers /></Suspense>}/>
-                <Route path='/admindashboard/adduser' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminAddUser /></Suspense>}/>
-                <Route path='/admindashboard/adminViewUser/id=:id'  render={(props) => <Suspense fallback={<Spinner />}><AdminViewUser {...props}/></Suspense>}/>
-                <Route render={() => <Suspense fallback={<Spinner />}><PageNotFound /></Suspense>}/>
-            </Switch>);
-
         return (
             <React.Fragment>
                 <section className='AdminWrapper' style={state.show ? null : {display: 'none'}}>
@@ -83,7 +75,16 @@ const App = props => {
                     <div className='main-panel'>
                         <NavBar />
                         <div className="content">
-                            {routes}
+                            <Switch>
+                                <Route path='/admindashboard/dashboard' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminDashboard /></Suspense>}/>
+                                <Route path='/admindashboard/profile' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminProfile /></Suspense>}/>
+                                <Route path='/admindashboard/products' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminProductsPage /></Suspense>}/>
+                                <Route path='/admindashboard/addproduct' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminAddProduct /></Suspense>}/>
+                                <Route path='/admindashboard/adminAllUsers' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminAllUsers /></Suspense>}/>
+                                <Route path='/admindashboard/adduser' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminAddUser /></Suspense>}/>
+                                <Route path='/admindashboard/adminViewUser/id=:id' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminViewUser {...props}/></Suspense>}/>
+                                <Route render={() => <Suspense fallback={<Spinner />}><PageNotFound /></Suspense>}/>
+                            </Switch>
                             <AdminFooter />
                         </div>
                     </div>

@@ -1,3 +1,18 @@
+  .activeBack{
+      color:black;
+  }
+  
+  .activeBack::before {
+      content: " ";
+      position: absolute;
+      height: 6px;
+      width: 6px;
+      top: 22px;
+      left: -4px;
+      background: #ffffff;
+      border-radius: 50%;
+  }
+    
     .AdminWrapper {
       background: linear-gradient(#1e1e2f, #1e1e24);
       min-height: 100vh;
@@ -82,14 +97,13 @@
     color: #9A9A9A; } }
 
   .navbar .photo {
-    display: inline-block;
     height: 30px;
     width: 30px;
     border-radius: 50%;
-    vertical-align: middle;
     overflow: hidden; }
     .navbar .photo img {
-      width: 100%; }
+      width: 100%;
+    min-height: 30px; }
 
 .navbar-nav li {
   padding: 0 10px;
@@ -11326,11 +11340,9 @@ body {
 
 
 .AdminProfile button {
-  background: #e14eca;
   background-image: linear-gradient(0deg, #3358f4 0%, #1d8cf8 100%);
   background-size: 210% 210%;
   background-position: 100% 0;
-  background-color: #e14eca;
   transition: all .15s ease;
   box-shadow: none;
   color: #fff;

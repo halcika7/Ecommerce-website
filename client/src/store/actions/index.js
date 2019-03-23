@@ -26,6 +26,13 @@ export {
     deleteUser
 } from './auth/getUsers';
 
+export { 
+    addNewPermission,
+    getAllPermissions,
+    deletePermission,
+    deleteAllPermissions
+ } from './auth/permissions';
+
 export {
     getRoles
 } from './roles/userRoles';

@@ -4,6 +4,7 @@ import registerReducer from './auth/register';
 import resetPasswordReducer from './auth/resetpassword';
 import resetPasswordEmailReducer from './auth/resetPasswordEmail';
 import getAllUsersReducer from './auth/getUsers';
+import permissionsReducer from './auth/permissions';
 import userRolesReducer from './roles/userRoles';
 
 export const combinedReducers = combineReducers({
@@ -12,5 +13,6 @@ export const combinedReducers = combineReducers({
     resetEmail: resetPasswordEmailReducer,
     resetPassword: resetPasswordReducer,
     allUsers: getAllUsersReducer,
+    permissions: permissionsReducer,
     roles: userRolesReducer
 });

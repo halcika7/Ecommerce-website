@@ -30,7 +30,7 @@ const reducer = (state = initialState, action) => {
             updateObject(state, {
                 SingleUser: {
                     ...action.User,
-                    ...action.role
+                    role: {...action.role}
                 },
                 successMessage: action.successMessage
             }),
