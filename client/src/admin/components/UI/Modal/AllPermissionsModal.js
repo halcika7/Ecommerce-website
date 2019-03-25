@@ -30,9 +30,7 @@ const AllPermissionsModal = props => {
                 </div>
                 {allPermission.length === 0 ? (
                     <div className={classes.Card + " card"}>
-                        <div className="card-header">
-                            <h4 className="card-title" style={{ marginRight: '20px' }}>There is no permissions</h4>
-                        </div>
+                        <div className="card-header" style={{ minHeight: '50px' }}></div>
                         <div className="card-body bg-white">
                             <SmallSpinner />
                         </div>

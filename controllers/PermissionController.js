@@ -6,7 +6,7 @@ exports.addPermission = async (req, res) => {
         const {failedMessage, isValid} = validatePermission(req.body.permission);
         if(!isValid) {return res.json(failedMessage);}
 
-        const slug = req.body.permission.split(' ').join('_');
+        const slug = req.body.permission.toLowerCase().split(' ').join('_');
         const permission = req.body.permission;
 
         const newPermission = new PermissionModel({ slug, permission });

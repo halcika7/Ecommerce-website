@@ -5,12 +5,14 @@ import { connect } from 'react-redux'
 import classes from './Navigation.module.css';
 import Modal from '../UI/Modal/Modal';
 import AllPermissionsModal from '../UI/Modal/AllPermissionsModal';
+import AddRoleModal from '../UI/Modal/AddRoleModal';
 
 const Navigation = props => {
 
     const [user, setUser] = useState({profilePicture: '', username: ''});
     const [permissionModal, setPermissionModal] = useState(false);
     const [allPermissionModal, setAllPermissionModal] = useState(false);
+    const [addRoleModal, setAddRoleModal] = useState(true);
 
     useEffect(() => {
         setUser({
@@ -42,6 +44,7 @@ const Navigation = props => {
         <React.Fragment>
             { permissionModal === true ? <Modal click={toggleModal} setModal={setPermissionModal} modal={permissionModal}/> : null }
             { allPermissionModal === true ? <AllPermissionsModal click={toggleModal} setModal={setAllPermissionModal} modal={setAllPermissionModal}/> : null }
+            { addRoleModal === true ? <AddRoleModal click={toggleModal} setModal={setAddRoleModal} modal={addRoleModal}/> : null }
             <div className={classes.Sidebar}>
                 <div className={classes.SidebarWrapper}>
                     <div className={classes.Logo}>
@@ -118,9 +121,10 @@ const Navigation = props => {
                                         onClick={(e) => toggleModal(e, setAllPermissionModal, allPermissionModal)}>
                                         <p>All Permissions</p>
                                     </a>
-                                    <Link to="/admindashboard/addroles">
-                                        <p>All Permissions</p>
-                                    </Link>
+                                    <a href="/" 
+                                        onClick={(e) => toggleModal(e, setAddRoleModal, addRoleModal)}>
+                                        <p>Add Role</p>
+                                    </a>
                                     <Link to="/admindashboard/addroles">
                                         <p>All Roles</p>
                                     </Link>

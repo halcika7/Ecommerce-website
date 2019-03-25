@@ -27,11 +27,18 @@ const Modal = props => {
         <div className={classes.ModalWrapper}>
             {props.permissions.successMessage ? <ResponseMessages message={props.permissions.successMessage} /> : null}
             {props.permissions.failedMessage ? <ResponseMessages ClassName="Danger" message={props.permissions.failedMessage} /> : null}
+            {props.permissions.loading ? (
+                <div className={classes.Modal + ' bg-white'}>
+                    <div className={classes.close + ' text-dark'} onClick={e => props.click(e, props.setModal, props.modal) }>
+                        <i className="fas fa-times"></i>
+                    </div>
+                    <SmallSpinner />
+                </div>
+            ) :
             <div className={classes.Modal}>
                 <div className={classes.close} onClick={e => props.click(e, props.setModal, props.modal) }>
                     <i className="fas fa-times"></i>
                 </div>
-                {props.permissions.loading ? <SmallSpinner /> :
                 <React.Fragment>
                     <div className={classes.Permissions}>
                         <label>All Permissions</label>
@@ -51,8 +58,8 @@ const Modal = props => {
                         {props.permissions.failedMessage && (<p className={classes.invalidFeedback}>{props.permissions.failedMessage}</p>)}
                         <button type="submit">Add new Permission</button>
                     </form>
-                </React.Fragment>}
-            </div>
+                </React.Fragment>
+            </div>}
             <div className={classes.Backdrop} onClick={e => props.click(e, props.setModal, props.modal) }></div>
         </div>
     );

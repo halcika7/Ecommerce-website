@@ -61,8 +61,6 @@ router.get('/singleuser', UserController.getSingleUser);
 
 router.delete('/deleteuser', UserController.deleteUser);
 
-router.get('/userroles', UserRolesController.getRoles);
-
 router.post('/addpermission', PermissionController.addPermission);
 
 router.get('/getallpermissions', PermissionController.getAllPermissions);
@@ -70,5 +68,9 @@ router.get('/getallpermissions', PermissionController.getAllPermissions);
 router.delete('/deletepermission', PermissionController.deletePermission);
 
 router.delete('/deleteallpermissions', PermissionController.deleteAllPermission);
+
+router.post('/adduserrole', UserRolesController.addUserRole);
+
+router.get('/userroles', UserRolesController.getRoles);
 
 module.exports = router;

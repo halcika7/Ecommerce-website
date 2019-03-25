@@ -161,12 +161,16 @@
     transform: translate(-100%, -50%);
 }
 
+.Active i {
+    color: #fff !important;
+}
+
 .Nav i {
     font-size: 20px;
     margin-right: 12px;
     width: 34px;
     text-align: center;
-    color: rgba(255, 255, 255, 0.8);
+    color: #ffffff7b;
 }
 
 .TimIcons {
@@ -176,6 +180,7 @@
     text-transform: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-weight: 100 !important;
 }
 
 .IconChartPie36::before {
@@ -246,6 +251,7 @@
 .Sidebar .DropDown.DropDownActive {
     max-height: 50px;
     transition: max-height .3s cubic-bezier(0,0,0,.1);
+    color: #fff;
 }
 
 .Sidebar .DropDown.DropDownActive.MaxHeight100 {

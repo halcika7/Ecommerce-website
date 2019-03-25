@@ -34,5 +34,6 @@ export {
  } from './auth/permissions';
 
 export {
+    addRole,
     getRoles
 } from './roles/userRoles';
