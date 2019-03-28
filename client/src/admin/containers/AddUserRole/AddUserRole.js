@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../../../store/actions/index';
+import * as actions from '../../../store/actions';
 
-import classes from './Modal.module.css';
-import TagsInput from '../TagsInput/TagsInput';
-import ToggleSwitchButton from '../Buttons/ToggleSwitchButton';
-import ResponseMessages from '../../../../users/components/UI/ResponseMessages/ResponseMessages';
-import SmallSpinner from '../../../../users/components/UI/SmallSpinner/SmallSpinner';
+import TagsInput from '../../components/UI/TagsInput/TagsInput';
+import ToggleSwitchButton from '../../components/UI/Buttons/ToggleSwitchButton';
+import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
+import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
 
 const AddRoleModal = props => {
     const [allPermissions, setAllPermissions] = useState([]);
@@ -15,10 +14,8 @@ const AddRoleModal = props => {
     const [roleName, setRoleName] = useState('');
     
     useEffect(() => {
-        document.body.classList.add(classes.NoScroll);
         props.getAllPermissions();
         setAllPermissions(props.allPermissions);
-        return () => document.body.classList.remove(classes.NoScroll);
     }, []);
 
     useEffect(() => { setAllPermissions(props.allPermissions); }, [props.allPermissions]);
@@ -34,16 +31,13 @@ const AddRoleModal = props => {
     } 
 
     return (
-        <div className={classes.ModalWrapper}>
+        <div className={'AdminProfile row'}>
             {props.roles.failedMessage ? <ResponseMessages ClassName="Danger" message={props.roles.failedMessage} /> : null}
             {props.roles.successMessage ? <ResponseMessages message={props.roles.successMessage} /> : null}
-            <div className={classes.Modal + " " + classes.AddRoleModal}>
+            <div className={'col-12 mb-30'}>
                 {props.roles.loading ? (
                     <React.Fragment>
-                        <div className={classes.close} onClick={e => props.click(e, props.setModal, props.modal) }>
-                            <i className="fas fa-times text-dark"></i>
-                        </div>
-                        <div className={classes.Card + " card bg-white"}>
+                        <div className={"card bg-white"}>
                             <div className="card-header">
                                 <h4 className="text-dark">Add Role</h4>
                             </div>
@@ -52,10 +46,7 @@ const AddRoleModal = props => {
                     </React.Fragment>
                 ) : 
                 <React.Fragment>
-                    <div className={classes.close} onClick={e => props.click(e, props.setModal, props.modal) }>
-                            <i className="fas fa-times text-white"></i>
-                    </div>
-                    <div className={classes.Card + " card"}>
+                    <div className={"card"}>
                         <div className="card-header">
                             <h4 className="text-white">Add Role</h4>
                         </div>
@@ -75,7 +66,8 @@ const AddRoleModal = props => {
                                                 className="w-100" 
                                                 placeholder="Enter Role Name"
                                                 value={roleName}
-                                                onChange={e => setRoleName(e.target.value)}/>
+                                                onChange={e => setRoleName(e.target.value)}
+                                                style={{ border: '1px solid rgba(255, 255, 255, 0.489)' }}/>
                                         </div>
                                         <div className="col-md-6">
                                             <ToggleSwitchButton value={isAdmin} setValue={setIsAdmin} name="Is Admin" />
@@ -88,7 +80,6 @@ const AddRoleModal = props => {
                     </div>
                 </React.Fragment>}
             </div>
-            <div className={classes.Backdrop} onClick={e => props.click(e, props.setModal, props.modal) }></div>
         </div>
     );
 }

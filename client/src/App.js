@@ -8,7 +8,6 @@ import './App.css';
 import Navigation from './users/components/Navigation/Navigation';
 import Footer from './users/components/Footer/Footer';
 import Spinner from './users/components/UI/Spinner/Spinner';
-
 import AdminNavigation from './admin/components/Navigation/Navigation';
 import NavBar from './admin/components/NavBar/Navbar';
 import AdminFooter from './admin/components/Footer/Footer';
@@ -33,6 +32,8 @@ const AdminAddProduct = lazy(() => import('./admin/containers/AdminAddProduct/Ad
 const AdminAllUsers = lazy(() => import('./admin/containers/AdminAllUsers/AdminAllUsers'));
 const AdminViewUser = lazy(() => import('./admin/containers/AdminViewUser/AdminViewUser'));
 const AdminAddUser = lazy(() => import('./admin/containers/AdminAddUser/AdminAddUser'));
+const UpdateUserRole = lazy(() => import('./admin/containers/UpdateUserRole/UpdateUserRole'));
+const AddUserRole = lazy(() => import('./admin/containers/AddUserRole/AddUserRole'));
 
 const App = props => {
 
@@ -54,10 +55,6 @@ const App = props => {
     })
 
     useEffect(() => {
-        const mask = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@[]{}/\\|%&*()#$&'.split('').sort((a, b) => Math.random()>.5 ? -1: 1).join('');
-        let password = '';
-        for (var i = 15; i > 0; --i) password += mask[Math.round(Math.random() * (mask.length - 1))];
-        console.log(password);
         checkLoggedInUser();
         setTimeout(() => {
             setState({
@@ -66,6 +63,10 @@ const App = props => {
             });
         },3500);
     }, []);
+
+    useEffect(() => {
+        checkLoggedInUser();
+    }, [props.location.pathname]);
 
     if(props.isAdmin && props.location.pathname.includes('admindashboard')) {
         return (
@@ -83,6 +84,8 @@ const App = props => {
                                 <Route path='/admindashboard/adminAllUsers' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminAllUsers /></Suspense>}/>
                                 <Route path='/admindashboard/adduser' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminAddUser /></Suspense>}/>
                                 <Route path='/admindashboard/adminViewUser/id=:id' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminViewUser {...props}/></Suspense>}/>
+                                <Route path='/admindashboard/addrole' render={(props) => <Suspense fallback={<Spinner />}><AddUserRole {...props}/></Suspense>}/>
+                                <Route path='/admindashboard/updateRole' render={(props) => <Suspense fallback={<Spinner />}><UpdateUserRole {...props}/></Suspense>}/>
                                 <Route render={() => <Suspense fallback={<Spinner />}><PageNotFound /></Suspense>}/>
                             </Switch>
                             <AdminFooter />

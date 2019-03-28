@@ -6,13 +6,15 @@ import classes from './Navigation.module.css';
 import Modal from '../UI/Modal/Modal';
 import AllPermissionsModal from '../UI/Modal/AllPermissionsModal';
 import AddRoleModal from '../UI/Modal/AddRoleModal';
+import AllRolesModal from '../UI/Modal/AllRoles';
 
 const Navigation = props => {
 
     const [user, setUser] = useState({profilePicture: '', username: ''});
     const [permissionModal, setPermissionModal] = useState(false);
     const [allPermissionModal, setAllPermissionModal] = useState(false);
-    const [addRoleModal, setAddRoleModal] = useState(true);
+    const [addRoleModal, setAddRoleModal] = useState(false);
+    const [allRolesModal, setAllRolesModal] = useState(false);
 
     useEffect(() => {
         setUser({
@@ -45,6 +47,7 @@ const Navigation = props => {
             { permissionModal === true ? <Modal click={toggleModal} setModal={setPermissionModal} modal={permissionModal}/> : null }
             { allPermissionModal === true ? <AllPermissionsModal click={toggleModal} setModal={setAllPermissionModal} modal={setAllPermissionModal}/> : null }
             { addRoleModal === true ? <AddRoleModal click={toggleModal} setModal={setAddRoleModal} modal={addRoleModal}/> : null }
+            { allRolesModal === true ? <AllRolesModal click={toggleModal} setModal={setAllRolesModal} modal={allRolesModal}/> : null }
             <div className={classes.Sidebar}>
                 <div className={classes.SidebarWrapper}>
                     <div className={classes.Logo}>
@@ -113,6 +116,7 @@ const Navigation = props => {
                                     <p>Permissions and Roles</p>
                                 </a>
                                 <div className={classes.DropDown + ' ' + classes.MaxHeight100}>
+                                    {/* {props.permissions['Create Permission'] ?  */}
                                     <a href="/" 
                                         onClick={(e) => toggleModal(e, setPermissionModal, permissionModal)}>
                                         <p>Add Permissions</p>
@@ -121,13 +125,13 @@ const Navigation = props => {
                                         onClick={(e) => toggleModal(e, setAllPermissionModal, allPermissionModal)}>
                                         <p>All Permissions</p>
                                     </a>
-                                    <a href="/" 
-                                        onClick={(e) => toggleModal(e, setAddRoleModal, addRoleModal)}>
+                                    <Link to="/admindashboard/addrole">
                                         <p>Add Role</p>
-                                    </a>
-                                    <Link to="/admindashboard/addroles">
-                                        <p>All Roles</p>
                                     </Link>
+                                    <a href="/" 
+                                        onClick={(e) => toggleModal(e, setAllRolesModal, allRolesModal)}>
+                                        <p>All Roles</p>
+                                    </a>
                                 </div>
                             </div>
                         </li>
@@ -140,7 +144,8 @@ const Navigation = props => {
 
 const mapStateToProps = state => {
     return {
-        userState: state.login.User
+        userState: state.login.User,
+        permissions: state.login.User.role.permissions
     }
 }
 

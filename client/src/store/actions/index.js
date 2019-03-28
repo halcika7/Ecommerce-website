@@ -35,5 +35,8 @@ export {
 
 export {
     addRole,
-    getRoles
+    getRoles,
+    deleteAllUserRoles,
+    deleteUserRole,
+    getUserRole
 } from './roles/userRoles';

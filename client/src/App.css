@@ -11341,6 +11341,7 @@ body {
 
 .AdminProfile button {
   background-image: linear-gradient(0deg, #3358f4 0%, #1d8cf8 100%);
+  background-color: transparent;
   background-size: 210% 210%;
   background-position: 100% 0;
   transition: all .15s ease;
@@ -11395,4 +11396,12 @@ body {
   background-color: initial;
   box-shadow: none;
   color: hsla(0,0%,100%,.8);
+}
+
+td, th{
+  vertical-align: middle !important;
+}
+
+ul{
+  margin: 0 !important;
 }

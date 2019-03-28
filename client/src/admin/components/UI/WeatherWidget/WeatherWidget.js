@@ -3,35 +3,20 @@ import SmallSpinner from '../../../../users/components/UI/SmallSpinner/SmallSpin
 
 const WeatherWidget = props => {
   const [positions, setPositions] = useState({});
-
   const [weatherData, setWeatherData] = useState({});
-
   const [dailyWeatherData, setDailyWeatherData] = useState({});
-
-  useEffect(() => {
-    getUserLocation();
-  }, []);
-
-  useEffect(() => {
-    if(positions && positions.longitude && positions.latitude) {
-      weatherApi(positions.longitude, positions.latitude);
-    }
-  }, [positions]);
+  useEffect(() => { getUserLocation(); }, []);
+  useEffect(() => { if(positions && positions.longitude && positions.latitude) weatherApi(positions.longitude, positions.latitude); }, [positions]);
 
   const getUserLocation = async () => {
     if(!localStorage.location){
       const user = await fetch('https://api.ipdata.co/?api-key=83a6049fdd6a9c358a1492180a87d5164e130b0162faca9627a7f782');
-      const {longitude, latitude, city, country_name} = await user.json();
-      setPositions({
-        longitude,
-        latitude,
-        city,
-        country_name
-      });
-      localStorage.setItem('location', JSON.stringify({longitude,latitude,city,country_name}));
+      const { longitude, latitude, city, country_name } = await user.json();
+      setPositions({ longitude, latitude, city, country_name });
+      localStorage.setItem('location', JSON.stringify({ longitude, latitude, city, country_name }));
     }else {
       const loc = JSON.parse(localStorage.getItem('location'));
-      setPositions({...loc});
+      setPositions({ ...loc });
     }
 
   }
@@ -40,39 +25,22 @@ const WeatherWidget = props => {
     const proxy = 'https://cors-anywhere.herokuapp.com/';
     const weather = await fetch(`${proxy}https://api.darksky.net/forecast/06776b9a1d887f4a3cb4543190b21c6b/${lat},${long}`);
     const {currently, daily} = await weather.json();
-
     const { temperature, summary, icon, time, apparentTemperature } = currently;
-
-    setWeatherData({
-      temperature: Math.floor((temperature - 32) * 5/9),
-      summary,
-      day: new Date(time * 1000).toLocaleDateString('en-US',{weekday: 'long'}),
-      datum: new Date(time * 1000).toLocaleDateString(),
-      tempFeels: Math.floor((apparentTemperature - 32) * 5/9),
-      icon
-    });
-
+    setWeatherData({ temperature: Math.floor((temperature - 32) * 5/9), summary, day: new Date(time * 1000).toLocaleDateString('en-US',{weekday: 'long'}), datum: new Date(time * 1000).toLocaleDateString(), tempFeels: Math.floor((apparentTemperature - 32) * 5/9), icon });
     const days = daily.data.slice(1,8);
     const daysData = [];
 
     for(let obj of days) {
       const { time, apparentTemperatureHigh, icon } = obj;
-
-      const dayData = {
-        temperature: Math.floor((apparentTemperatureHigh - 32) * 5/9),
-        day: new Date(time * 1000).toLocaleDateString('en-US',{weekday: 'long'}),
-        icon
-      }
-
+      const dayData = { temperature: Math.floor((apparentTemperatureHigh - 32) * 5/9), day: new Date(time * 1000).toLocaleDateString('en-US',{weekday: 'long'}), icon }
       daysData.push(dayData);
     }
-
     setDailyWeatherData(daysData);
   }
 
-  if(!weatherData.datum || !weatherData.icon || !weatherData.temperature || !weatherData.day || !dailyWeatherData.length) {
+  if(!weatherData.datum || !dailyWeatherData.length) {
     return (
-      <div className="col-xl-4 mb-30 bg-white">
+      <div className="col-xl-8 mb-30 bg-white">
         <SmallSpinner/>
       </div>
     );

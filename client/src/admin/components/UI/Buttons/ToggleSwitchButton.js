@@ -4,7 +4,7 @@ import classes from './Buttons.module.css';
 
 const ToggleSwitchButton = props => (
     <React.Fragment>
-        <label className="text-white">{props.name}</label>
+        <label className="text-white d-block">{props.name}</label>
         <label className={classes.toggleCheck + " text-white"}>
             <input
                 className={classes.toggleCheckbox}

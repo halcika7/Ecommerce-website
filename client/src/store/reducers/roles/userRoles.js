@@ -3,6 +3,7 @@ import { updateObject } from '../../../helpers/updateObject';
 
 const initialState = {
     Roles: [],
+    Role: {},
     failedMessage: false,
     successMessage: false,
     loading: false
@@ -10,9 +11,10 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     const actions = {
-        [actionTypes.ADD_USER_ROLE_START] :
+        [actionTypes.ROLE_START] :
             updateObject(state, {
-                ...initialState,
+                failedMessage:false,
+                successMessage: false,
                 loading: true
             }),
         [actionTypes.ADD_USER_ROLE_SUCCESS] :
@@ -27,8 +29,33 @@ const reducer = (state = initialState, action) => {
             }),
         [actionTypes.GET_USER_ROLES_SUCCESS] : 
             updateObject(state, {
+                Roles: action.Roles,
+                loading: false
+            }),
+        [actionTypes.GET_USER_ROLES_FAILED] : 
+            updateObject(state, {
+                failedMessage: action.failedMessage,
+                successMessage: false
+            }),
+        [actionTypes.DELETE_ALL_USER_ROLES_FAILED] :
+            updateObject(state, {
+                failedMessage: action.failedMessage,
+                loading: false
+            }),
+        [actionTypes.DELETE_USER_ROLE_FAILED] :
+            updateObject(state, {
+                failedMessage: action.failedMessage,
+                loading: false
+            }),
+        [actionTypes.GET_ROLE_FAILED] :
+            updateObject(state, {
                 ...initialState,
-                Roles: action.Roles
+                failedMessage: action.failedMessage
+            }),
+        [actionTypes.GET_ROLE_SUCCESS] :
+            updateObject(state, {
+                ...initialState,
+                Role: action.role
             }),
         default: state
     }

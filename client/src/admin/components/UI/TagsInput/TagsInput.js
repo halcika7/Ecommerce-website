@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import classes from './TagsInput.module.css';
 
 const TagsInput = props => {
-
     const [tags, setTags] = useState([]);
-    
     const [listItems, setListItems] = useState([]);
 
     useEffect(() => { 
@@ -13,7 +11,25 @@ const TagsInput = props => {
         return () => document.removeEventListener('click', handleDocumentClick);
     }, []);
 
-    useEffect(() => { setListItems(props.values); }, [props.values]);
+    useEffect(() => {
+        setListItems(props.values);
+    }, [props.values]);
+    
+    useEffect(() => {
+        const loadTags = [];
+        const newListItems = [...props.values];
+        let i = 0;
+        for(const obj in props.choosenValues) {
+            loadTags.push({ name: obj, index: i });
+            const tagIndex = newListItems.findIndex(tag => tag.permission === obj);
+            if(tagIndex !== -1) {
+                newListItems[tagIndex].disabled = true;
+            }
+            i++;
+        }
+        setListItems([ ...newListItems ]);
+        setTags(loadTags);
+    }, [props.choosenValues]);
 
     const listItemOnClick = e => {
         e.preventDefault();
@@ -64,7 +80,7 @@ const TagsInput = props => {
     }
 
     return (
-        <label className={"modalLabel " + classes.modalLabel}>
+        <label className={"modalLabel d-block " + classes.modalLabel}>
             <ul className={classes.Ul + " Ul"}>
                 {tags.map((tag, index) => (
                     <li key={index} 

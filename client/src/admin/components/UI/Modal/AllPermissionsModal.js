@@ -39,8 +39,8 @@ const AllPermissionsModal = props => {
                 <div className={classes.Card + " card"}>
                     <div className="card-header">
                         <h4 className="card-title">All Permissions</h4>
-                        <button className="btn btn-sm btn-danger float-right"
-                                onClick={(e) => props.deleteAllPermissions()}>Delete All Permissions</button>
+                        {props.deletePermissionState ? <button className="btn btn-sm btn-danger float-right"
+                                onClick={(e) => props.deleteAllPermissions()}>Delete All Permissions</button> : null }
                     </div>
                     <div className="card-body">
                         <div className={classes.tableResponsive + " table-responsive"}>
@@ -59,13 +59,14 @@ const AllPermissionsModal = props => {
                                             <td>{perm._id}</td>
                                             <td>{perm.slug}</td>
                                             <td>{perm.permission}</td>
+                                            {props.deletePermissionState ? 
                                             <td className="text-center">
                                                 <button 
                                                 className="btn btn-danger" type="button"
                                                 onClick={e => props.deletePermission(perm.slug)}>
                                                     <i className="far fa-trash-alt"></i>
                                                 </button>
-                                            </td>
+                                            </td> : null }
                                         </tr>)) : null}
                                 </tbody>
                             </table>
@@ -80,7 +81,8 @@ const AllPermissionsModal = props => {
 
 const mapStateToProps = state => {
     return {
-        permissions: state.permissions
+        permissions: state.permissions,
+        deletePermissionState: state.login.User.role.permissions['Delete Permission']
     };
 }
 
