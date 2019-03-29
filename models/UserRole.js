@@ -13,10 +13,10 @@ const UserRolesSchema = new Schema({
         default: false,
     },
     permissions: {
-        type: Object,
+        type: Schema.Types.Mixed,
         required: true,
-        default: null
+        default: {}
     }
-});
+}, { minimize: false });
 
 module.exports = Roles = mongoose.model('roles', UserRolesSchema);

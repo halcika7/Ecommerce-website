@@ -79,4 +79,6 @@ router.delete('/deleterole', UserRolesController.deleteUserRole);
 
 router.post('/getrole', UserRolesController.getRole);
 
+router.patch('/updaterole', UserRolesController.updateRole);
+
 module.exports = router;

@@ -10,7 +10,7 @@ import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner
 const AddRoleModal = props => {
     const [allPermissions, setAllPermissions] = useState([]);
     const [isAdmin, setIsAdmin] = useState(false);
-    const [choosenPermissions, setChoosenPermissions] = useState({});
+    const [choosenPermissions, setChoosenPermissions] = useState([]);
     const [roleName, setRoleName] = useState('');
     
     useEffect(() => {
@@ -19,8 +19,6 @@ const AddRoleModal = props => {
     }, []);
 
     useEffect(() => { setAllPermissions(props.allPermissions); }, [props.allPermissions]);
-
-    useEffect(() => { setChoosenPermissions({}); }, [props.roles.failedMessage, props.roles.successMessage]);
 
     const onFormSubmit = (e) => {
         e.preventDefault();

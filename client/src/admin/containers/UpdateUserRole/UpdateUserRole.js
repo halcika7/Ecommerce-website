@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import * as actions from '../../../store/actions';
+import classnames from 'classnames';
+
 import ToggleSwitchButton from '../../components/UI/Buttons/ToggleSwitchButton';
 import Spinner from '../../../users/components/UI/Spinner/Spinner';
-
 import TagsInput from '../../components/UI/TagsInput/TagsInput';
+import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 
 const UpdateUserRole = props => {
     const [role, setRole] = useState({});
     const [isAdmin, setIsAdmin] = useState(false);
+    const [roleName, setRoleName] = useState('');
     const [choosenPermissions, setChoosenPermissions] = useState({});
     const [allPermissions, setAllPermissions] = useState([]);
     useEffect(() => { 
@@ -17,26 +20,28 @@ const UpdateUserRole = props => {
         props.getRole(id);
         props.getPermissions();
     }, []);
+
     useEffect(() => { 
         setRole({ ...props.roleState }); 
+        setRoleName(props.roleState.name);
         setIsAdmin(props.roleState.isAdmin);
         setChoosenPermissions({...props.roleState.permissions});
+        setAllPermissions(props.allPermissions);
     }, [props.roleState]);
+
     useEffect(() => {
         setAllPermissions(props.allPermissions);
     }, [props.allPermissions]);
 
-    const nameOnChange = e => {
-        e.preventDefault();
-        setRole({
-            ...role,
-            name: e.target.value
-        });
-    }
-
     const onFormSubmit = e => {
         e.preventDefault();
-        console.log(role._id);
+        const roleData = {
+            id: role._id,
+            name: roleName,
+            isAdmin,
+            permissions: choosenPermissions
+        }
+        props.updateRole(roleData);
     }
 
     if(props.failedMessage === true) {
@@ -47,9 +52,10 @@ const UpdateUserRole = props => {
         )
     }
 
-    if(isAdmin !== undefined || !Object.keys(role)) {
+    if( isAdmin !== undefined && roleName !== undefined ) {
         return (
             <div className="AdminProfile row">
+            {props.successMessage ? <ResponseMessages message={props.successMessage} /> : null}
                 <div className='col-12'>
                     <div className="card mb-30 text-white">
                         <div className="card-header">
@@ -57,25 +63,26 @@ const UpdateUserRole = props => {
                         </div>
                         <div className='card-body'>
                             <form onSubmit={onFormSubmit}>
-                                <div className=''>
+                                <div className='mb-20'>
                                     <label className='d-block'>Role Name</label>
-                                    <input 
-                                        className='w-100' 
-                                        type="text" 
-                                        placeholder="Enter Role Name" 
-                                        value={role.name}
-                                        onChange={nameOnChange}
-                                        style={{ outline: '0px', boxShadow: 'none', border: '1px solid rgba(255, 255, 255, 0.489)' }} />
+                                    <input type="text" placeholder="Enter Role Name" 
+                                        value={roleName}
+                                        onChange={e => setRoleName(e.target.value)}
+                                        style={{ outline: '0px', boxShadow: 'none', border: '1px solid rgba(255, 255, 255, 0.489)', marginBottom: '0px' }} 
+                                        className={classnames( 'w-100 d-block', {
+                                            'invalid': props.failedMessage
+                                        })}/>
+                                        {props.failedMessage && (<div className='invalid-feedback'>{props.failedMessage}</div>)}
                                 </div>
-                                <div className=''>
-                                    {isAdmin !== undefined ? <ToggleSwitchButton value={isAdmin} setValue={setIsAdmin} name="Is Admin" /> : null }
+                                <div className='mb-20'>
+                                    <ToggleSwitchButton value={isAdmin} setValue={setIsAdmin} name="Is Admin" />
                                 </div>
                                 <div className="mb-30">
                                     <label>Permissions</label>
-                                    {allPermissions.length < 1 ? null : <TagsInput 
+                                    <TagsInput 
                                         values={allPermissions}
                                         choosenValues={choosenPermissions}
-                                        setChoosenValues={setChoosenPermissions} />}
+                                        setChoosenValues={setChoosenPermissions} />
                                 </div>
                                 <button className="btn">Update Role</button>
                             </form>
@@ -94,6 +101,7 @@ const UpdateUserRole = props => {
 const mapStateToProps = state => {
     return {
         roleState: state.roles.Role,
+        successMessage: state.roles.successMessage,
         failedMessage: state.roles.failedMessage,
         allPermissions: state.permissions.allPermissions
     };
@@ -102,7 +110,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         getRole: (id) => dispatch(actions.getUserRole(id)),
-        getPermissions: () => dispatch(actions.getAllPermissions())
+        getPermissions: () => dispatch(actions.getAllPermissions()),
+        updateRole: data => dispatch(actions.updateUserRole(data))
     };
 };
 

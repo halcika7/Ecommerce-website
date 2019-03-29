@@ -57,6 +57,21 @@ const reducer = (state = initialState, action) => {
                 ...initialState,
                 Role: action.role
             }),
+        [actionTypes.UPDATE_ROLE_START] : 
+            updateObject(state, {
+                Role: {},
+                successMessage: false,
+                failedMessage: false
+            }),
+        [actionTypes.UPDATE_ROLE_FAILED] : 
+            updateObject(state, {
+                failedMessage: action.failedMessage
+            }),
+        [actionTypes.UPDATE_ROLE_SUCCESS] :
+            updateObject(state, {
+                successMessage: action.successMessage,
+                Role: action.role
+            }),
         default: state
     }
 

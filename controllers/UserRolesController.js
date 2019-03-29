@@ -54,6 +54,30 @@ exports.getRole = async (req, res) => {
     }
 }
 
+exports.updateRole = async (req, res) => {
+    const {failedMessage, isValid} = validateRole(req.body.name);
+    if(!isValid) {return res.json(failedMessage);}
+    try{
+        const findByName = await UserRolesModel.findOne({ name: req.body.name });
+        const findById = await UserRolesModel.findById(req.body.id);
+        if(findByName && !findByName._id.equals(findById._id) && findByName.name !== findById.name) {
+            return res.json({ failedMessage: 'Name Already in use' });
+        }
+
+        await UserRolesModel.updateOne({ _id: req.body.id }, {
+            name: req.body.name,
+            isAdmin: req.body.isAdmin,
+            permissions: req.body.permissions
+        });
+
+        const updatedRole = await UserRolesModel.findById(req.body.id);
+
+        return res.json({ successMessage: 'Role updated!' , role: updatedRole});
+    }catch(err) {
+        const message = err.message ? err.message : err.CastError;
+        return res.json({ failedMessage: message });
+    }
+}
 // const mask = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@[]{}/\\|%&*()#$&'.split('').sort((a, b) => Math.random()>.5 ? -1: 1).join('');
 // let password = '';
 // for (var i = 15; i > 0; --i) password += mask[Math.round(Math.random() * (mask.length - 1))];

@@ -47,3 +47,13 @@ export const getUserRole = id => async dispatch => {
         dispatch({ type: actionTypes.GET_ROLE_SUCCESS, role: response.data });
     }
 }
+
+export const updateUserRole = data => async dispatch => {
+    dispatch({ type: actionTypes.UPDATE_ROLE_START });
+    const response = await axios.patch('/api/users/updaterole', data);
+    if(response.data.failedMessage) {
+        dispatch({ type: actionTypes.UPDATE_ROLE_FAILED, failedMessage: response.data.failedMessage });
+    }else {
+        dispatch({ type: actionTypes.UPDATE_ROLE_SUCCESS, successMessage: response.data.successMessage, role: response.data.role });
+    }
+}

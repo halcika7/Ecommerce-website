@@ -46,10 +46,15 @@ const TagsInput = props => {
 
     const tagOnClick = e => {
         e.preventDefault();
-        const tagIndex = tags.findIndex(tag => tag.name === e.currentTarget.getAttribute('data-name'));
-        delete listItems[tags[tagIndex].index].disabled;
-        tags.splice(tagIndex,1);
-        setTags([...tags]);
+        const targetName = e.currentTarget.getAttribute('data-name');
+        const newTags = [...tags];
+        const newListItems = [...listItems];
+        const tagIndex = newTags.findIndex(tag => tag.name === targetName);
+        const listItemIndex = newListItems.findIndex(tag => tag.permission === targetName);
+        delete newListItems[listItemIndex].disabled;
+        setListItems([...newListItems]);
+        newTags.splice(tagIndex,1);
+        setTags([...newTags]);
         const newChoosenValues = { ...props.choosenValues };
         delete newChoosenValues[e.target.getAttribute('data-name')];
         props.setChoosenValues({ ...newChoosenValues });

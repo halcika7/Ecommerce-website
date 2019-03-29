@@ -11405,3 +11405,12 @@ td, th{
 ul{
   margin: 0 !important;
 }
+
+input.invalid,
+input.invalid {
+    border-color: #f92400 !important;
+}
+
+.invalid ~ .invalid-feedback {
+  display: block;
+}
