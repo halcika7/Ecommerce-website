@@ -6,22 +6,28 @@ const TagsInput = props => {
     const [listItems, setListItems] = useState([]);
 
     useEffect(() => { 
-        setListItems(props.values);
+        setValues();
         document.addEventListener('click', e => handleDocumentClick(e));
-        return () => document.removeEventListener('click', handleDocumentClick);
+        return () => {
+            document.removeEventListener('click', handleDocumentClick)
+            setTags([]);
+            setListItems([]);
+        }
     }, []);
-
-    useEffect(() => {
-        setListItems(props.values);
-    }, [props.values]);
     
     useEffect(() => {
+        setValues();
+    }, [props.choosenValues, props.values]);
+
+    const setValues = () => {
         const loadTags = [];
         const newListItems = [...props.values];
         let i = 0;
         for(const obj in props.choosenValues) {
             loadTags.push({ name: obj, index: i });
-            const tagIndex = newListItems.findIndex(tag => tag.permission === obj);
+            const tagIndex = newListItems.findIndex(tag => {
+                return tag.permission === obj;
+            });
             if(tagIndex !== -1) {
                 newListItems[tagIndex].disabled = true;
             }
@@ -29,7 +35,7 @@ const TagsInput = props => {
         }
         setListItems([ ...newListItems ]);
         setTags(loadTags);
-    }, [props.choosenValues]);
+    }
 
     const listItemOnClick = e => {
         e.preventDefault();

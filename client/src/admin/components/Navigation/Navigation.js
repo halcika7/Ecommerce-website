@@ -13,8 +13,6 @@ const Navigation = props => {
     const [user, setUser] = useState({profilePicture: '', username: ''});
     const [permissionModal, setPermissionModal] = useState(false);
     const [allPermissionModal, setAllPermissionModal] = useState(false);
-    const [addRoleModal, setAddRoleModal] = useState(false);
-    const [allRolesModal, setAllRolesModal] = useState(false);
 
     useEffect(() => {
         setUser({
@@ -46,8 +44,6 @@ const Navigation = props => {
         <React.Fragment>
             { permissionModal === true ? <Modal click={toggleModal} setModal={setPermissionModal} modal={permissionModal}/> : null }
             { allPermissionModal === true ? <AllPermissionsModal click={toggleModal} setModal={setAllPermissionModal} modal={setAllPermissionModal}/> : null }
-            { addRoleModal === true ? <AddRoleModal click={toggleModal} setModal={setAddRoleModal} modal={addRoleModal}/> : null }
-            { allRolesModal === true ? <AllRolesModal click={toggleModal} setModal={setAllRolesModal} modal={allRolesModal}/> : null }
             <div className={classes.Sidebar}>
                 <div className={classes.SidebarWrapper}>
                     <div className={classes.Logo}>
@@ -128,10 +124,9 @@ const Navigation = props => {
                                     <Link to="/admindashboard/addrole">
                                         <p>Add Role</p>
                                     </Link>
-                                    <a href="/" 
-                                        onClick={(e) => toggleModal(e, setAllRolesModal, allRolesModal)}>
+                                    <Link to="/admindashboard/allroles">
                                         <p>All Roles</p>
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </li>

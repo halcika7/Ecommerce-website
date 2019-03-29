@@ -16,6 +16,7 @@ const UpdateUserRole = props => {
     const [choosenPermissions, setChoosenPermissions] = useState({});
     const [allPermissions, setAllPermissions] = useState([]);
     useEffect(() => { 
+        console.log('fired');
         const id = new URLSearchParams(props.location.search).get('id'); 
         props.getRole(id);
         props.getPermissions();

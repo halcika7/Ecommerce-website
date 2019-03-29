@@ -34,6 +34,7 @@ const AdminViewUser = lazy(() => import('./admin/containers/AdminViewUser/AdminV
 const AdminAddUser = lazy(() => import('./admin/containers/AdminAddUser/AdminAddUser'));
 const UpdateUserRole = lazy(() => import('./admin/containers/UpdateUserRole/UpdateUserRole'));
 const AddUserRole = lazy(() => import('./admin/containers/AddUserRole/AddUserRole'));
+const AllUserRoles = lazy(() => import('./admin/containers/AllUserRoles/AllUserRoles'));
 
 const App = props => {
 
@@ -86,6 +87,7 @@ const App = props => {
                                 <Route path='/admindashboard/adminViewUser/id=:id' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminViewUser {...props}/></Suspense>}/>
                                 <Route path='/admindashboard/addrole' render={(props) => <Suspense fallback={<Spinner />}><AddUserRole {...props}/></Suspense>}/>
                                 <Route path='/admindashboard/updateRole' render={(props) => <Suspense fallback={<Spinner />}><UpdateUserRole {...props}/></Suspense>}/>
+                                <Route path='/admindashboard/allroles' render={(props) => <Suspense fallback={<Spinner />}><AllUserRoles {...props}/></Suspense>}/>
                                 <Route render={() => <Suspense fallback={<Spinner />}><PageNotFound /></Suspense>}/>
                             </Switch>
                             <AdminFooter />

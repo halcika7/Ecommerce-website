@@ -7,7 +7,10 @@ exports.addUserRole = async (req, res) => {
     try{
         const {failedMessage, isValid} = validateRole(req.body.name);
         if(!isValid) {return res.json(failedMessage);}
-        const newRole = new UserRolesModel({ name: req.body.name, isAdmin: req.body.isAdmin, permissions: req.body.permissions });
+        const newRole = new UserRolesModel({ 
+            name: req.body.name, 
+            isAdmin: req.body.isAdmin, 
+            permissions: Object.keys(req.body.permissions).length > 0 ? req.body.permissions : {} });
         await newRole.save();
         return res.json({ successMessage: 'New Role Added !' });
     }catch(err) {
