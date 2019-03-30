@@ -63,7 +63,7 @@ const AllPermissionsModal = props => {
                                             <td className="text-center">
                                                 <button 
                                                 className="btn btn-danger" type="button"
-                                                onClick={e => props.deletePermission(perm.slug)}>
+                                                onClick={e => props.deletePermission(perm.permission)}>
                                                     <i className="far fa-trash-alt"></i>
                                                 </button>
                                             </td> : null }

@@ -1,4 +1,5 @@
 const PermissionModel = require('../models/Permission');
+const UserRoleModel = require('../models/UserRole');
 const validatePermission = require('../validation/permissionValidation');
 
 exports.addPermission = async (req, res) => {
@@ -28,8 +29,15 @@ exports.getAllPermissions = async (req, res) => {
 
 exports.deletePermission = async (req, res) => {
     try{
-        const response = await PermissionModel.deleteOne({ slug: req.query.slug });
+        const response = await PermissionModel.deleteOne({ permission: req.query.permission });
         if(response.n === 0) return res.json({ failedMessage: 'Permission is not deleted' });
+        const roles = await UserRoleModel.find({ });
+        roles.forEach(async (role, index) => {
+            if(role.permissions[req.query.permission] === true){
+                delete role.permissions[req.query.permission];
+                await UserRoleModel.updateOne({ name: role.name }, { permissions: role.permissions });
+            }
+        });
         return res.json({ successMessage: 'Permission deleted !' });
     }catch(err) {
         return res.json({ failedMessage: err.message });
@@ -39,7 +47,10 @@ exports.deletePermission = async (req, res) => {
 exports.deleteAllPermission = async (req, res) => {
     try{
         const response = await PermissionModel.deleteMany({});
-        if(response.n === 0) return res.json({ failedMessage: 'No Permissions deleted !' });
+        if(response.n === 0) {
+            return res.json({ failedMessage: 'No Permissions deleted !' })
+        }
+        await UserRoleModel.updateMany({}, { $set: { permissions: {} } });
         return res.json({ successMessage: 'Permissions deleted !' });
     }catch(err) {
         return res.json({ failedMessage: err.message });

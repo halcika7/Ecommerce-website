@@ -41,3 +41,7 @@ export {
     getUserRole,
     updateUserRole
 } from './roles/userRoles';
+
+export {
+    addNewUser
+} from './auth/addNewUser'

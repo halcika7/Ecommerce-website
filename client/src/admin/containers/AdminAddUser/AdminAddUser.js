@@ -1,164 +1,115 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import classes from './AdminAddUser.module.css';
 import * as actions from '../../../store/actions';
-import UploadPicture from '../../components/UI/UploadPicture/UploadPicture';
+import LoginRegisterInputs from '../../../users/components/UI/LoginRegisterInputs/LoginRegisterInputs';
 
 const AdminAddUser = props => {
 
     const [roles, setRoles] = useState([]);
     const [inputs] = useState([
-        {
-            label: 'Date of Birth',
-            type: 'date',
-            classInout: 'form-control',
-            name: 'bod',
-            change: () => dateChange,
-            placeholder: 'Date of Birth'
-        }
-    ])
+        { label: 'Date of Birth', type: 'date', name: 'bod', placeholder: 'Date of Birth' },
+        { label: 'Date of Employment', type: 'date', name: 'doe', placeholder: '' },
+        { label: 'Name', type: 'text', name: 'name', placeholder: 'Name' },
+        { label: 'User Name', type: 'text', name: 'username', placeholder: 'User Name' },
+        { label: 'Email', type: 'email', name: 'email', placeholder: 'Email' },
+        { label: 'Password', type: 'password', name: 'password', placeholder: '***********' },
+        { label: 'Facebook Link', type: 'text', name: 'facebook', placeholder: 'Facebook Link' },
+        { label: 'Instagram Link', type: 'text', name: 'instagram', placeholder: 'Instagram Link' },
+        { label: 'Github Link', type: 'text', name: 'github', placeholder: 'Github Link' },
+        { label: 'Twitter Link', type: 'text', name: 'twitter', placeholder: 'Twitter Link' },
+        { label: 'Salary', type: 'text', name: 'salary', placeholder: 'Salary' },
+        { label: 'Telephone', type: 'phone', name: 'telephone', placeholder: 'Telephone Number' },
+        { label: 'Country', type: 'text', name: 'country', placeholder: 'Country' },
+        { label: 'Address', type: 'text', name: 'address', placeholder: 'Home Address' },
+        { label: 'City', type: 'text', name: 'city', placeholder: 'City' },
+        { label: 'Postal Code', type: 'text', name: 'postal', placeholder: 'Postal Code' }
+    ]);
+    const [inputValues, setInputValues] = useState({bod: '', doe: '', name: '', username: '', email: '', password: '', facebook: '', instagram: '', github: '', twitter: '', salary: '', telephone: '', country: '', address: '', city: '', postal: ''});
 
-    useEffect(() => {
-        props.getRoles();
+    useEffect(() => { 
+        props.getRoles(); 
     }, []);
-
-    useEffect(() => {
-        setRoles(props.roles);
+    useEffect(() => { 
+        setRoles(props.roles); 
     }, [props.roles]);
 
-    const dateChange = e => {
+    const inputChange = e => {
         e.preventDefault();
+        setInputValues({
+            ...inputValues,
+            [e.target.name]: e.target.value
+        });
+    }
 
-        console.log(e.target.value)
+    const onFormSubmit = e => {
+        e.preventDefault();
+        const userData = {
+            bod: inputValues.bod,
+            doe: inputValues.doe,
+            name: inputValues.name,
+            username: inputValues.username,
+            email: inputValues.email,
+            password: inputValues.password,
+            facebook: inputValues.facebook,
+            instagram: inputValues.instagram,
+            github: inputValues.github,
+            twitter: inputValues.twitter,
+            salary: inputValues.salary,
+            telephone: inputValues.telephone,
+            country: inputValues.country,
+            address: inputValues.address,
+            city: inputValues.city,
+            postal: inputValues.postal,
+            role: inputValues.role
+        }
+
+        props.addUser(userData);
     }
 
     return (
         <div className="AdminProfile row">
             <div className="col mb-30">
-                <form className="">
+                <form className="" onSubmit={onFormSubmit}>
                     <div className="card text-white">
                         <div className="card-header">
                             <h5 className="title">Add New Employee</h5>
                         </div>
                         <div className="card-body row">
-                            <div className="col-md-6 mb-10">
-                                <div className="form-group">
-                                    <label>Date of Birth</label>
-                                    <input type="date" className="form-control" name="bod" onChange={dateChange}/>
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-10">
-                                <div className="form-group">
-                                    <label>Date of Employment</label>
-                                    <input type="date" className="form-control" name="doe" onChange={dateChange}/>
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-10">
-                                <div className="form-group">
-                                    <label>Name</label>
-                                    <input placeholder="Name" name="name" type="text" className="form-control" />
-                                </div>
-                            </div>
+                            {inputs.map((input,index) => {
+                                return (
+                                <div className="col-md-6 mb-10" key={index}>
+                                    <LoginRegisterInputs 
+                                                formBox="form-group"
+                                                label={input.label}
+                                                type={input.type}
+                                                name={input.name}
+                                                placeholder={input.placeholder}
+                                                inputClass='form-control'
+                                                invalidInput='invalid'
+                                                invalidFeedback='invalid-feedback'
+                                                value={inputValues[input.name]}
+                                                onChange={inputChange} />
+                                </div>)
+                            })}
                             <div className="col-md-6 mb-10">
                                 <div className="form-group">
                                     <label>Role</label>
-                                    <input placeholder="Name" name="name" type="text" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-10">
-                                <div className="form-group">
-                                    <label>User Name</label>
-                                    <input placeholder="User Name" type="text" name="username" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-10">
-                                <div className="form-group">
-                                    <label>Email</label>
-                                    <input placeholder="Email" type="email" name="email" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-10">
-                                <div className="form-group">
-                                    <label>Password</label>
-                                    <input placeholder="**********" type="password" name="password" className="form-control" />
-                                </div>
-                            </div>
-                            {/* <div className="col-12 mb-10">
-                                <div className="form-group">
-                                    <label className="d-block">Profile Picture</label>
-                                    <UploadPicture name="profilePicture" />
-                                </div>
-                            </div> */}
-                            <div className="col-md-6 mb-10">
-                                <div className="form-group">
-                                    <label>Facebook Link</label>
-                                    <input placeholder="Home Address" type="text" className="form-control" name="f-link" />
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-10">
-                                <div className="form-group">
-                                    <label>Instagram Link</label>
-                                    <input placeholder="Home Address" type="text" name="i-link" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-10">
-                                <div className="form-group">
-                                    <label>Github Link</label>
-                                    <input placeholder="Home Address" type="text" name="g-link" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-10">
-                                <div className="form-group">
-                                    <label>Twitter Link</label>
-                                    <input placeholder="Home Address" type="text" name="t-link" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-10">
-                                <div className="form-group">
-                                    <label>Salary</label>
-                                    <input placeholder="Home Address" type="number" name="salary" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-10">
-                                <div className="form-group">
-                                    <label>Telephone</label>
-                                    <input placeholder="Home Address" type="text" name="phone" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-10">
-                                <div className="form-group">
-                                    <label>Country</label>
-                                    <input placeholder="Home Address" type="text" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-10">
-                                <div className="form-group">
-                                    <label>Address</label>
-                                    <input placeholder="Home Address" type="text" name="address" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-10">
-                                <div className="form-group">
-                                    <label>City</label>
-                                    <input placeholder="Home Address" type="text" name="city" className="form-control" />
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-10">
-                                <div className="form-group">
-                                    <label>Postal Code</label>
-                                    <input placeholder="Home Address" type="text" name="zipCode" className="form-control" />
+                                    <select name="role" onChange={inputChange} className={classes.select + ' d-block'}>
+                                        {roles.Roles ? roles.Roles.map((role, index) => 
+                                                <option key={index}
+                                                        value={role._id}>{role.name}</option>)
+                                        : null}
+                                    </select>
                                 </div>
                             </div>
                         </div>
                         <div className="card-footer">
-                            <button type="submit" className="btn-fill btn btn-primary">Save</button>
+                            <button type="submit" className="btn-fill btn btn-primary">Add User</button>
                         </div>
                     </div>
                 </form>
             </div>
-            {/* {roles.Roles ? roles.Roles.map( (item, index) => {
-                console.log(item)
-                return <div key={index}>jfoiaf</div>
-            }) : null} */}
         </div>
     );
 }
@@ -171,7 +122,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        getRoles: () => dispatch(actions.getRoles())
+        getRoles: () => dispatch(actions.getRoles()),
+        addUser: (userData) => dispatch(actions.addNewUser(userData))
     }
 }
 

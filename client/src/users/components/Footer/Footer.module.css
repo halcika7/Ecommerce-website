@@ -104,23 +104,23 @@
     margin-right: 10px;
   }
   
-  .footerCards > i.fab.fa-cc-paypal{
+  .footerCards > i:first-child{
     color: #253b80;
   }
   
-  .footerCards > i.fab.fa-cc-discover{
+  .footerCards > i:nth-child(2){
     color: rgba(234, 120, 50);
   }
   
-  .footerCards > i.fab.fa-cc-visa{
+  .footerCards > i:nth-child(3){
     color: #faaa13;
   }
   
-  .footerCards > i.fab.fa-cc-mastercard{
+  .footerCards > i:nth-child(4) {
     color: #eb001b;
   }
   
-  .footerCards > i.fab.fa-cc-amex{
+  .footerCards > i:nth-child(5){
     color: #6cc4ee;
   }
   

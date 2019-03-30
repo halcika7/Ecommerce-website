@@ -470,6 +470,14 @@ input[type="month"] {
   -webkit-appearance: listbox;
 }
 
+input[type="date"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: block;
+}
+
 textarea {
   overflow: auto;
   resize: vertical;

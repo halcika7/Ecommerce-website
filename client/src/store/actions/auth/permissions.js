@@ -35,7 +35,7 @@ export const getAllPermissions = () => async dispatch => {
 export const deletePermission = slug => async dispatch => {
     dispatch({ type: actionTypes.PERMISSION_START });
 
-    const response = await axios.delete('/api/users/deletepermission?slug=' + slug);
+    const response = await axios.delete('/api/users/deletepermission?permission=' + slug);
 
     helperResponse(dispatch, response);
 }

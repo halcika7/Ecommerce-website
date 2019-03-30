@@ -43,6 +43,8 @@ router.post('/register', UserController.registerUser);
 
 router.post('/login', UserController.loginUser);
 
+router.post('/adduser', UserController.addNewUser);
+
 router.post('/resetpasswordemail', EmailController.sendResetPasswordEmail);
 
 router.post('/resetpassword', UserController.resetPassword);

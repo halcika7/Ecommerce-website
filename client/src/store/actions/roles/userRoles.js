@@ -35,8 +35,10 @@ export const deleteUserRole = name => async dispatch => {
     const response = await axios.delete(`/api/users/deleterole?name=${name}`);
     if(response.data.failedMessage) {
         dispatch({ type: actionTypes.DELETE_USER_ROLE_FAILED, failedMessage: response.data.failedMessage });
+    }else {
+        dispatch({ type: actionTypes.DELETE_USER_ROLE_SUCCESS, successMessage: 'Role deleted !' });
+        setTimeout(() => dispatch(getRoles()), 4000);
     }
-    setTimeout(() => dispatch(getRoles()), 4000);
 }
 
 export const getUserRole = id => async dispatch => {

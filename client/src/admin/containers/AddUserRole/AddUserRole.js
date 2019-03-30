@@ -12,19 +12,9 @@ const AddRoleModal = props => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [choosenPermissions, setChoosenPermissions] = useState([]);
     const [roleName, setRoleName] = useState('');
-    
-    useEffect(() => {
-        props.getAllPermissions();
-        setAllPermissions(props.allPermissions);
-    }, []);
-
+    useEffect(() => { props.getAllPermissions(); setAllPermissions(props.allPermissions); }, []);
     useEffect(() => { setAllPermissions(props.allPermissions); }, [props.allPermissions]);
-
-    useEffect(() => {
-        setRoleName('');
-        setIsAdmin(false);
-        setChoosenPermissions([]);
-    }, [props.roles.successMessage]);
+    useEffect(() => { setRoleName(''); setIsAdmin(false); setChoosenPermissions([]); }, [props.roles.successMessage]);
 
     const onFormSubmit = (e) => {
         e.preventDefault();

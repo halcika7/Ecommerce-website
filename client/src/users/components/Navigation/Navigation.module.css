@@ -110,6 +110,12 @@
     align-items: center;
 }
 
+@media(max-width: 991px) {
+    .links{
+        margin-top: .5rem;
+    }
+}
+
 .links a{
 white-space: nowrap;
 color: black;
@@ -1098,6 +1104,7 @@ nav.navbar.navbarexpandlg.navbarDark.bgDark{
     z-index: 10;
     background-color: #343a40;
     color: white;
+    overflow: hidden;
 }
 
 .navbarNav{

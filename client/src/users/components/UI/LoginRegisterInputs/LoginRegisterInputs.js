@@ -17,7 +17,7 @@ const LoginRegisterInputs = ({
 }) => {
     return (
     <div className={formBox}>
-        <label >{label} * </label>
+        <label>{label}</label>
         <input 
             type={type} 
             name={name} 

@@ -5,8 +5,6 @@ import { connect } from 'react-redux'
 import classes from './Navigation.module.css';
 import Modal from '../UI/Modal/Modal';
 import AllPermissionsModal from '../UI/Modal/AllPermissionsModal';
-import AddRoleModal from '../UI/Modal/AddRoleModal';
-import AllRolesModal from '../UI/Modal/AllRoles';
 
 const Navigation = props => {
 

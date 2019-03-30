@@ -20,8 +20,8 @@ const AllRolesModal = props => {
         <div className={classes.Role + ' AdminProfile row'}>
             {props.roles.successMessage ? <ResponseMessages message={props.roles.successMessage} /> : null}
             {props.roles.failedMessage ? <ResponseMessages ClassName="Danger" message={props.roles.failedMessage} /> : null}
-            <div className='col-12'>
-                {allRoles.length === 0 ? (
+            <div className='col-12 mb-30'>
+                {allRoles.length === 0 || props.roles.loading ? (
                     <div className="card">
                         <div className="card-header text-white" style={{ minHeight: '50px' }}>No Roles Found</div>
                         <div className="card-body bg-white">
@@ -54,7 +54,7 @@ const AllRolesModal = props => {
                                             <td>{perm.isAdmin.toString()}</td>
                                             <td>{perm.name}</td>
                                             <td className={classes.TdPermissionSpans}>
-                                                {perm.permissions ? Object.keys(perm.permissions).map((permission, index) => 
+                                                {Object.keys(perm.permissions).length > 0 ? Object.keys(perm.permissions).map((permission, index) => 
                                                     (<span key={index} className={classes.PermissionTableSpan}>
                                                         {permission}
                                                     </span>)) : 'No Permissions'}

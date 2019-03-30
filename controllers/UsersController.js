@@ -213,39 +213,8 @@ exports.deleteUser = async (req, res) => {
     }
 }
 
-exports.addEmployeeUser = async (req, res) => {
-    const {errors, isValid} = validateRegisterInput(req.body);
-    if(!isValid) return res.json(errors);
-
-    try{
-        const user = await UserModel.find({$or:[{ email: req.body.email}, {username: req.body.username }]})
-
-        if(user.length > 0) {
-            (user[0].email || user[1].email) === req.body.email ? errors.errors.email = 'Email already in use !' : null;
-            (user[0].username || user[1].username) === req.body.username ? errors.errors.username = 'Username already in use!' : null;
-            return res.json(errors);
-        }
-
-        const userRoles = await UserRolesModel.findOne({name: 'User'});
-        const hash = await bcrypt.hash(req.body.password,10);
-
-        const addNewUser = new UserModel({
-            name: req.body.name,
-            email: req.body.email,
-            role: userRoles._id,
-            username: req.body.username,
-            password: hash,
-            emailConfirmation: {
-                token: "",
-                tokenExparation: null,
-                confirmed: true
-            }
-        });
-
-        await addNewUser.save();
-        return res.json({ message: `Please ${addNewUser.username} go to your Email and confirm your email address in order to log in.` });
-    } catch(err) {
-        errors.errors.email = err;
-        return res.json({ failedMessage: err.message });
-    }
+exports.addNewUser = async (req, res) => {
+    console.log(req.body);
+    const date = Date(req.body.bod);
+    console.log(date);
 }
