@@ -6,6 +6,7 @@ import resetPasswordEmailReducer from './auth/resetPasswordEmail';
 import getAllUsersReducer from './auth/getUsers';
 import permissionsReducer from './auth/permissions';
 import userRolesReducer from './roles/userRoles';
+import addUserReducer from './auth/addNewUser';
 
 export const combinedReducers = combineReducers({
     login: loginReducer,
@@ -14,5 +15,6 @@ export const combinedReducers = combineReducers({
     resetPassword: resetPasswordReducer,
     allUsers: getAllUsersReducer,
     permissions: permissionsReducer,
-    roles: userRolesReducer
+    roles: userRolesReducer,
+    addUser: addUserReducer
 });

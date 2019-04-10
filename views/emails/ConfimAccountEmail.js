@@ -1,4 +1,4 @@
-exports.confirmAccountEmail = (username, token) => `<!DOCTYPE html>
+exports.confirmAccountEmail = (username, token, email, password) => `<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -6,57 +6,6 @@ exports.confirmAccountEmail = (username, token) => `<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <style>
-    .form-control {
-        margin: 1rem 0;
-      }
-      
-      .form-control label,
-      .form-control input,
-      .form-control textarea {
-        display: block;
-        width: 100%;
-        margin-bottom: 0.25rem;
-      }
-      
-      .form-control label {
-        margin-bottom: 12px;
-        color: #484848;
-        display: inline-block;
-      }
-      
-      .form-control input,
-      .form-control textarea {
-        height: 40px;
-        line-height: 40px;
-        font-size: 13px;
-        position: relative;
-        display: block;
-        font-family: 'Open Sans';
-        width: 100%;
-        padding: 8px 15px 8px 30px;
-        color: #222222;
-        border: 2px solid #e5e5e5;
-        border-radius: 30px;
-        background-color: #fff;
-        -webkit-transition: all 0.3s ease-in-out;
-        transition: all 0.3s ease-in-out;
-        outline: none;
-      }
-      
-      .product-form {
-        width: 300px;
-        max-width: 90%;
-        display: block;
-      }
-      
-      .product-form h1 {
-        margin-bottom: 0.5rem;
-        font-family: inherit;
-        font-weight: 500;
-        line-height: 1.2;
-        color: inherit;
-        font-size: 1.75rem;
-      }
       @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
 
 * {
@@ -79,32 +28,6 @@ main {
 
 form {
   display: inline;
-}
-
-.grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: stretch;
-}
-
-.btn {
-  border: 1px solid #00695c;
-  background-color: #f92400;
-  font-size: 16px;
-  height: 50px;
-  line-height: 50px;
-  padding: 0 64px;
-  border-radius: 25px;
-  margin-right: 30px;
-  font-weight: 600;
-  margin-left: -8px;
-  letter-spacing: 0.5px;
-  display: inline-block;
-  color: #fff;
-  font-family: "BloggerSans", sans-serif;
-  position: relative;
-  cursor: pointer;
 }
 
 .footer {
@@ -194,13 +117,6 @@ table {
 a {
   color: #1a82e2;
 }
-img {
-  height: auto;
-  line-height: 100%;
-  text-decoration: none;
-  border: 0;
-  outline: none;
-}
 
 .navigation {
     display: flex;
@@ -231,7 +147,7 @@ img {
   padding: 16px 36px; 
   font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; 
   font-size: 16px; 
-  color: #ffffff; 
+  color: #fff !important; 
   text-decoration: none; 
   border-radius: 6px;
 }
@@ -276,57 +192,6 @@ td.beforeHeading > h1 {
   padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;
 }
 
-.formBox {
-  margin-bottom: 22px;
-  padding-right: 4px;
-}
-
-.formBox label {
-  margin-bottom: 12px;
-  color: #484848;
-  display: inline-block;
-}
-
-.formBox input {
-  height: 40px;
-  line-height: 40px;
-  font-size: 13px;
-  position: relative;
-  display: block;
-  font-family: 'Open Sans';
-  width: 100%;
-  padding: 8px 15px 8px 30px;
-  color: #222222;
-  border: 2px solid #e5e5e5;
-  border-radius: 30px;
-  background-color: transparent;
-  -webkit-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
-  outline: none;
-}
-
-.formBox button {
-  background-color: #f92400;
-  color: #fff;
-  font-size: 16px;
-  height: 50px;
-  line-height: 50px;
-  padding: 0 64px;
-  border-radius: 25px;
-  margin-right: 30px;
-  font-weight: 600;
-  margin-left: -8px;
-  letter-spacing: 0.5px;
-  display: inline-block;
-  color: #fff;
-  font-family: "BloggerSans", sans-serif;
-  position: relative;
-  -webkit-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
-  cursor: pointer;
-  border: none;
-}
-
     </style>
 </head>
 
@@ -334,7 +199,7 @@ td.beforeHeading > h1 {
 
 <div class="navigation">
     <a href="http://localhost:3000" >
-        <img src="imageIcon" alt="Halc Store"/>
+      Halc Store
     </a>
 
     <p>Activate Account Email</p>
@@ -349,7 +214,7 @@ td.beforeHeading > h1 {
             <tr>
                 <td align="center" valign="top" style="padding: 36px 24px;">
                 <a href="https://sendgrid.com" target="_blank" style="display: inline-block;">
-                    <img src="imageIcon" alt="Logo" border="0" width="120">
+                  Halc Store
                 </a>
                 </td>
             </tr>
@@ -365,6 +230,22 @@ td.beforeHeading > h1 {
             <tr>
                 <td align="left" bgcolor="#ffffff" class="beforeHeading">
                 <h1 >Activate your account</h1>
+                </td>
+            </tr>
+            </table>
+        </td>
+        </tr>
+        <!-- end hero -->
+
+        <!-- start hero -->
+        <tr>
+        <td align="center" bgcolor="#e9ecef">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+            <tr>
+                <td align="left" bgcolor="#ffffff" class="beforeHeading">
+                  <p>Email: ${email}</p>
+                  <p>Username: ${username}</p>
+                    ${password === null ? `` : `<p>Password: ${password}</p>` }
                 </td>
             </tr>
             </table>
@@ -394,7 +275,7 @@ td.beforeHeading > h1 {
                         <table border="0" cellpadding="0" cellspacing="0">
                         <tr>
                             <td align="center" bgcolor="#1a82e2" class="td3">
-                            <a class="reset-open" href="http://localhost:3000/confirmationaccount?token=${token}">Click here to confirm account!!!</a>
+                            <a style="color: #fff" class="reset-open" href="http://localhost:3000/confirmationaccount?token=${token}">Click here to confirm account!!!</a>
                             </td>
                         </tr>
                         </table>

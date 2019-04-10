@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import { getLoggedInUserPhoto } from '../../../store/actions';
 
 import classes from './Navigation.module.css';
 import Modal from '../UI/Modal/Modal';
@@ -8,24 +9,16 @@ import AllPermissionsModal from '../UI/Modal/AllPermissionsModal';
 
 const Navigation = props => {
 
-    const [user, setUser] = useState({profilePicture: '', username: ''});
     const [permissionModal, setPermissionModal] = useState(false);
     const [allPermissionModal, setAllPermissionModal] = useState(false);
 
     useEffect(() => {
-        setUser({
-            profilePicture: props.userState.profilePicture,
-            username: props.userState.username
-        });
+        props.getUserPhoto(props.userId);
     }, []);
 
     useEffect(() => {
-        setUser({
-            ...user,
-            profilePicture: props.userState.profilePicture,
-            username: props.userState.username
-        });
-    }, [props.userState]);
+        props.getUserPhoto(props.userId);
+    }, [props.SingleUser, props.AllUsers]);
 
     const toggleActiveClass = e => {
         e.preventDefault();
@@ -47,10 +40,10 @@ const Navigation = props => {
                     <div className={classes.Logo}>
                         <Link to="/admindashboard/dasboard" className={classes.SimpleText + ' ' + classes.LogoMini}>
                             <div className="logo-img">
-                                <img src={'/' + user.profilePicture} alt="react-logo" />
+                                {!props.profilePicture ? null : <img src={'/' + props.profilePicture} alt="react-logo" />}
                             </div>
                         </Link>
-                        <Link to="/admindashboard/dasboard" className={classes.SimpleText + ' ' + classes.LogoNormal}>{user.username}</Link>
+                        <Link to="/admindashboard/dasboard" className={classes.SimpleText + ' ' + classes.LogoNormal}>{props.username}</Link>
                     </div>
                     <ul className={classes.Nav}>
                         <li className={"nav-item"}>
@@ -60,7 +53,7 @@ const Navigation = props => {
                             </NavLink>
                         </li>
                         <li className={"nav-item"}>
-                            <NavLink className="" to="/admindashboard/profile" exact activeClassName={classes.Active}>
+                            <NavLink className="" to={`/admindashboard/profile/id=${props.userId}`} exact activeClassName={classes.Active}>
                                 <i className={classes.TimIcons + ' ' + classes.IconSingle02}></i>
                                 <p>Profile</p>
                             </NavLink>
@@ -137,9 +130,19 @@ const Navigation = props => {
 
 const mapStateToProps = state => {
     return {
-        userState: state.login.User,
-        permissions: state.login.User.role.permissions
+        userId: state.login.User.id,
+        username: state.login.User.username,
+        profilePicture: state.allUsers.profilePicture,
+        permissions: state.login.User.role.permissions,
+        SingleUser: state.allUsers.SingleUser,
+        AllUsers: state.allUsers.Users
     }
 }
 
-export default withRouter(connect(mapStateToProps)(Navigation));
+const dispatchMapToProps = dispatch => {
+    return {
+        getUserPhoto: (id) => dispatch(getLoggedInUserPhoto(id))
+    }
+}
+
+export default withRouter(connect(mapStateToProps, dispatchMapToProps)(Navigation));

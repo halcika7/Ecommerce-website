@@ -55,7 +55,11 @@ router.post('/resendactivateaccount', ActivateAccountController.resendActivation
 
 router.put('/updateprofilepicture', multerProfilePicture.single('profilePicture') , UserController.updateProfilePicture);
 
+router.get('/getuserphoto', UserController.getProfilePicture);
+
 router.put('/updatepassword', UserController.updatePassword);
+
+router.patch('/updateuser', UserController.updateUser);
 
 router.get('/allusers', UserController.getAllUsers);
 

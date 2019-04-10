@@ -24,8 +24,7 @@ const AdminNewPassword = props => {
         props.updatePassword({
             password: passwords.password, 
             password2: passwords.password2, 
-            username: props.userName, 
-            rememberMe: props.rememberMe
+            username: props.userName
         });
     }
 

@@ -11383,7 +11383,10 @@ body {
 }
 
 .AdminProfile input,
-.AdminProfile input:disabled {
+.AdminProfile input:disabled,
+.AdminProfile input:active,
+.AdminProfile input:enabled,
+.AdminProfile input:focus {
   margin-bottom: 20px;
   padding: 10px 18px;
   border-color: #4f9ae6;
@@ -11391,7 +11394,8 @@ body {
   font-size: .75rem;
   transition: color .3s ease-in-out,border-color .3s ease-in-out,background-color .3s ease-in-out;
   height: calc(2.25rem + 2px);
-  background-color: transparent;
+  background-color: transparent !important;
+  background: none !important;
   color: hsla(0,0%,100%,.8);
 }
 
@@ -11415,10 +11419,29 @@ ul{
 }
 
 input.invalid,
-input.invalid {
+input:invalid {
     border-color: #f92400 !important;
+    background: transparent;
 }
 
 .invalid ~ .invalid-feedback {
   display: block;
+}
+
+.select {
+  padding: 10px 18px;
+  border-color: #4f9ae6;
+  border-radius: .4285rem;
+  font-size: .75rem;
+  transition: color .3s ease-in-out,border-color .3s ease-in-out,background-color .3s ease-in-out;
+  height: calc(2.25rem + 2px);
+  color: hsla(0,0%,100%,.8);
+  background: transparent;
+  -webkit-appearance: none;
+  outline: none;
+  width: 100%;
+}
+
+.select:focus {
+  border-color: #3358f4;
 }

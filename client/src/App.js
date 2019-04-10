@@ -79,7 +79,7 @@ const App = props => {
                         <div className="content">
                             <Switch>
                                 <Route path='/admindashboard/dashboard' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminDashboard /></Suspense>}/>
-                                <Route path='/admindashboard/profile' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminProfile /></Suspense>}/>
+                                <Route path='/admindashboard/profile/id=:id' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminViewUser profile={true} {...props} /></Suspense>}/>
                                 <Route path='/admindashboard/products' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminProductsPage /></Suspense>}/>
                                 <Route path='/admindashboard/addproduct' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminAddProduct /></Suspense>}/>
                                 <Route path='/admindashboard/adminAllUsers' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminAllUsers /></Suspense>}/>

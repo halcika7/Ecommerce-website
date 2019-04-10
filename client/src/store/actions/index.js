@@ -23,7 +23,8 @@ export {
 export {
     getAllUsers,
     getSingleUser,
-    deleteUser
+    deleteUser,
+    getLoggedInUserPhoto
 } from './auth/getUsers';
 
 export { 
@@ -43,5 +44,6 @@ export {
 } from './roles/userRoles';
 
 export {
-    addNewUser
+    addNewUser,
+    updateUser
 } from './auth/addNewUser'

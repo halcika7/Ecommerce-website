@@ -4,10 +4,10 @@ import * as actions from '../../../store/actions';
 
 import classes from './AdminProfile.module.css';
 import Spinner from '../../../users/components/UI/Spinner/Spinner';
-import AdminProfileHeader from './AdminProfileHeader/AdminProfileHeader';
+import AdminProfileHeader from '../AdminViewUser/AdminProfileHeader/AdminProfileHeader';
 import AdminProfileEdit from './AdminProfileEdit/AdminProfileEdit';
-import AdminNewPassword from './AdminNewPassword/AdminNewPassword';
-import AdminChangeProfilePicture from './AdminChangeProfilePicture/AdminChangeProfilePicture';
+import AdminNewPassword from '../AdminViewUser/AdminNewPassword/AdminNewPassword';
+import AdminChangeProfilePicture from '../AdminViewUser/AdminChangeProfilePicture/AdminChangeProfilePicture';
 import ResponseMessage from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 
 const AdminProfile = props => {
@@ -20,7 +20,7 @@ const AdminProfile = props => {
 
     useEffect(() => { setResetPasswordState({ ...resetPasswordState, ...props.resetPassword }); }, [props.resetPassword]);
 
-    if(! user.User){
+    if(!user.User){
         return <Spinner />;
     }
 

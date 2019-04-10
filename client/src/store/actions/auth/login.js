@@ -1,7 +1,6 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
-
 import setAuthToken from '../../../helpers/setAuthToken';
 
 export const login = (UserObj) => async dispatch => {
@@ -48,17 +47,15 @@ export const logoutUser = () => dispatch => {
 
 export const userUpdateProfilePicture = (formData, config) => async dispatch => {
 
+    dispatch({ type: actionTypes.PROFILE_PICTURE_UPDATE_START });
     const response = await axios.put('/api/users/updateprofilepicture',formData, config);
-
     if(response.data.failedMessage){
         dispatch({type: actionTypes.PROFILE_PICTURE_UPDATE_FAILED, failedMessage: response.data.failedMessage});
         setTimeout(() => {
             dispatch({type: actionTypes.PROFILE_PICTURE_CLEAR_MESSAGES});
         }, 4000);
     }else {
-        localStorage.setItem('jwtToken', response.data.token);
-
-        dispatch({type: actionTypes.PROFILE_PICTURE_UPDATE_SUCCESS, User: response.data.user, successMessage: response.data.successMessage});
+        dispatch({type: actionTypes.PROFILE_PICTURE_UPDATE_SUCCESS, successMessage: response.data.successMessage});
 
         setTimeout(() => {
             dispatch({type: actionTypes.PROFILE_PICTURE_CLEAR_MESSAGES});

@@ -33,10 +33,14 @@ const reducer = (state = initialStateLogin, action) => {
                 isAuthenticated: true,
                 successMessage: action.successMessage
             }),
+        [actionTypes.PROFILE_PICTURE_UPDATE_START] : 
+            updateObject(state, {
+                loading: true
+            }),
         [actionTypes.PROFILE_PICTURE_UPDATE_SUCCESS] : 
             updateObject(state, {
-                User:{...action.User},
-                successMessage: action.successMessage
+                successMessage: action.successMessage,
+                loading: false
             }),
         [actionTypes.LOGIN_FAILED] : 
             updateObject(state, {
@@ -48,7 +52,8 @@ const reducer = (state = initialStateLogin, action) => {
             }),
         [actionTypes.PROFILE_PICTURE_UPDATE_FAILED] : 
             updateObject(state, {
-                failedMessage: action.failedMessage
+                failedMessage: action.failedMessage,
+                loading: false
             }),
         [actionTypes.PROFILE_PICTURE_CLEAR_MESSAGES] :
             updateObject(state, {

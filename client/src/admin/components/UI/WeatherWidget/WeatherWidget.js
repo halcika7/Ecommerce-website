@@ -63,7 +63,7 @@ const WeatherWidget = props => {
             <div className="row no-gutters">
               {dailyWeatherData.map((day, index) => {
                 return(
-                  <div key={index} className="col-6 col-md-3 col-sm-6">
+                  <div key={index} className="col-6 col-md-3 col-sm-3">
                     <div className="weather-icon icon2 mb-20 text-white"> 
                       <i className={`wi wi-forecast-io-${day.icon}`}></i>
                       <h4 className="mt-20 text-white">{day.temperature}° C</h4>

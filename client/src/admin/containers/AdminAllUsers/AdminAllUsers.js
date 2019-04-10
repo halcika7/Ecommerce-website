@@ -25,9 +25,13 @@ const AdminAllUsers = props => {
                 {props.users.successMessage ? <ResponseMessages message={props.users.successMessage} /> : null}
                 {props.users.failedMessage ? <ResponseMessages ClassName="Danger" message={props.users.failedMessage} /> : null}
                 <div className={'col-12 text-white'}>
+                    {props.users.loading ? 
+                    <div className="card mb-30 bg-white">
+                        <SmallSpinner /> 
+                    </div> : 
                     <div className="card mb-30">
-                        {props.users.loading ? <SmallSpinner /> : <DataTable usersData={users} click={deleteUser}/> }
-                    </div>
+                        <DataTable usersData={users} click={deleteUser}/>
+                    </div> }
                 </div>
             </div>
         </React.Fragment>

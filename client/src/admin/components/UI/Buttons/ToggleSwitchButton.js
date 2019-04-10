@@ -10,7 +10,8 @@ const ToggleSwitchButton = props => (
                 className={classes.toggleCheckbox}
                 type="checkbox"
                 checked={props.value}
-                onChange={() => props.setValue(!props.value)}/>
+                onChange={() => props.setValue(!props.value)}
+                disabled={props.disabled}/>
             <span className={classes.toggleCheckText}></span>
         </label>
     </React.Fragment>

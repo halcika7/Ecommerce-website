@@ -13,7 +13,8 @@ const LoginRegisterInputs = ({
     formBox,
     invalidFeedback,
     invalidInput,
-    inputClass
+    inputClass,
+    disabled
 }) => {
     return (
     <div className={formBox}>
@@ -26,7 +27,8 @@ const LoginRegisterInputs = ({
                 [invalidInput]: error
             })}
             value={value}
-            onChange={onChange}/>
+            onChange={onChange}
+            disabled={disabled}/>
 
             {error && (<div className={invalidFeedback}>{error}</div>)}
     </div>

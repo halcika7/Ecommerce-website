@@ -16,7 +16,11 @@ const DataTable = props => {
     useEffect(() => {
         const data = [];
         for(let user in props.usersData) {
-            data.push(props.usersData[user])
+            const object = {
+                ...props.usersData[user],
+                ...props.usersData[user].emailConfirmation
+            }
+            data.push(object)
         }
         setLength(data.length)
         setData(data);
@@ -52,7 +56,6 @@ const DataTable = props => {
 
     const buttonFormatter = (cell, row) => {
         const id = row._id;
-        console.log(row)
         return (
             <React.Fragment>
                 <Link className="btn btn-warning" to={`/admindashboard/adminViewUser/id=${id}`}>
@@ -83,6 +86,7 @@ const DataTable = props => {
                 <TableHeaderColumn dataField='name' dataSort>User Name</TableHeaderColumn>
                 <TableHeaderColumn dataField='email' dataSort>User Email</TableHeaderColumn>
                 <TableHeaderColumn dataField='username' dataSort>User Username</TableHeaderColumn>
+                <TableHeaderColumn dataField='confirmed' dataSort>Account Confirmed</TableHeaderColumn>
                 <TableHeaderColumn dataField='profilePicture' dataFormat={imgFormatter.bind(this)}>User Picture</TableHeaderColumn>
                 <TableHeaderColumn dataField='button' dataFormat={buttonFormatter.bind(this)}>Actions</TableHeaderColumn>
             </BootstrapTable>}

@@ -1,87 +1,175 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
-
 import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
+import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
+import LoginRegisterInputs from '../../../users/components/UI/LoginRegisterInputs/LoginRegisterInputs';
+import ToggleSwitch from '../../components/UI/Buttons/ToggleSwitchButton';
+import AdminProfileHeader from './AdminProfileHeader/AdminProfileHeader';
+import AdminNewPassword from './AdminNewPassword/AdminNewPassword';
+import AdminChangeProfilePicture from './AdminChangeProfilePicture/AdminChangeProfilePicture';
 
 const AdminViewUser = props => {
 
     const [user, setUser] = useState({});
-    useEffect(() => { props.getUser(props.match.params.id); }, []);
-    useEffect(() => { setUser({ ...user, ...props.User }); }, [props.User]);
+    const [roles, setRoles] = useState([]);
+    const [inputValues, setInputValues] = useState({ 
+        dob: '', doe: '', facebook: '', instagram: '', github: '', twitter: '', salary: '', telephone: '', country: '', address: '', city: '', postal: '', role: '', confirmed: false, name: '', username: '', email: '' 
+    });
+    const [inputsCol12] = useState([ 
+        { label: 'Name', type: 'text', name: 'name', placeholder: 'Name' },{ label: 'User Name', type: 'text', name: 'username', placeholder: 'User Name' },{ label: 'Email', type: 'email', name: 'email', placeholder: 'Email' } 
+    ]);
 
-    console.log(user)
+    const [inputsCol4] = useState([ 
+        { label: 'Country', type: 'text', name: 'country', placeholder: 'Country' },{ label: 'City', type: 'text', name: 'city', placeholder: 'City' },{ label: 'Postal Code', type: 'text', name: 'postal', placeholder: 'Postal Code' } ]);
+
+    const [inputsCol6] = useState([ 
+        { label: 'Salary', type: 'text', name: 'salary', placeholder: 'Salary' }, { label: 'Telephone', type: 'phone', name: 'telephone', placeholder: 'Telephone Number' } ]);
+
+    const [inputsCol3] = useState([ 
+        { label: 'Facebook Link', type: 'text', name: 'facebook', placeholder: 'Facebook Link' }, { label: 'Instagram Link', type: 'text', name: 'instagram', placeholder: 'Instagram Link' }, { label: 'Github Link', type: 'text', name: 'github', placeholder: 'Github Link' }, { label: 'Twitter Link', type: 'text', name: 'twitter', placeholder: 'Twitter Link' }, ]);
+
+    const [inputsCol6S] = useState([ 
+        { label: 'Date of Birth', type: 'date', name: 'dob', placeholder: 'Date of Birth' }, { label: 'Date of Employment', type: 'date', name: 'doe', placeholder: '' } ]);
+
+    useEffect(() => { props.getUser(props.match.params.id); props.getRoles(); }, [props.match.params.id]);
+    useEffect(() => { props.getUser(props.match.params.id); props.getRoles(); }, []);
+    useEffect(() => { setUser({ ...user, ...props.User }); setInputValues({ ...inputValues, ...props.User.userInfo, role: props.User.role, ...props.User.emailConfirmation, name: props.User.name, username: props.User.username, email: props.User.email }); }, [props.User]);
+    useEffect(() => { setRoles(props.roles); }, [props.roles]);
+
+    const inputChange = e => {
+        e.preventDefault();
+        setInputValues({ ...inputValues, [e.target.name]: e.target.value });
+    }
+
+    const onFormSubmit = e => {
+        e.preventDefault();
+        const userData = {
+            userInfo: {
+                dob: inputValues.dob, doe: inputValues.doe, facebook: inputValues.facebook, instagram: inputValues.instagram, github: inputValues.github, twitter: inputValues.twitter, salary: inputValues.salary, telephone: inputValues.telephone, country: inputValues.country, address: inputValues.address, city: inputValues.city, postal: inputValues.postal
+            },role: inputValues.role, id: props.User._id, confirmed: inputValues.confirmed, name: inputValues.name, username: inputValues.username, email: inputValues.email
+        }
+        for(const data in userData.userInfo) { 
+            if(userData.userInfo[data] === '') { delete userData.userInfo[data]; } 
+        }
+        props.updateUser(userData);
+    }
+
+    const setAccountConfirmed = value => setInputValues({ ...inputValues, confirmed: value });
+
     return (
         <div className="AdminProfile row">
             {props.failedMessage ? <ResponseMessages message={props.failedMessage} ClassName="Danger"/> : null }
+            {props.updateFailedMessage ? <ResponseMessages message={props.updateFailedMessage} ClassName="Danger"/> : null }
+            {props.updatePasswordFailedMessage ? <ResponseMessages message={props.updatePasswordFailedMessage} ClassName="Danger"/> : null }
             {props.successMessage ? <ResponseMessages message={props.successMessage} /> : null }
-            <div className="col mb-30">
-                {props.failedMessage ? null : 
-                <div className="card text-white">
+            {props.updateSuccessMessage ? <ResponseMessages message={props.updateSuccessMessage} /> : null }
+            {props.updatePasswordSuccessMessage ? <ResponseMessages message={props.updatePasswordSuccessMessage} /> : null }
+            <div className="col-12 mb-30">
+                {props.failedMessage ? 
+                <div className='card text-white'>
                     <div className="card-header">
-                        <h5 className="title">{user.name} Profile</h5>
+                        <h5 className="title">User not found</h5>
                     </div>
-                    <div className="card-body">
-                        <div className="row mb-10">
-                            <div className="col-12">
-                                <div className="form-group">
-                                    <label>{user.name} Picture</label>
-                                    <img className="d-block" src={user.profilePicture ? `/${user.profilePicture}` : ''} alt={user.profilePicture ? `${user.profilePicture}` : ''} height="200"/>
+                </div> : 
+                <React.Fragment>
+                    {(Object.keys(user).length < 1 || Object.keys(props.User).length < 1 || props.loadingPicture || props.loading || !props.User.emailConfirmation || !inputValues.name) ? 
+                    <div className='card bg-white'>
+                        <SmallSpinner />
+                    </div>  : 
+                    <div className="card text-white">
+                        {props.profile !== true ? 
+                        <div className="card-header">
+                            <h5 className="title">{user.username} Profile</h5>
+                        </div> : null }
+                        <div className="card-body">
+                        {props.profile !== true ? 
+                            <div className="row mb-10">
+                                <div className="col-12">
+                                    <div className="form-group">
+                                        <label>{user.username} Picture</label>
+                                        <img className="d-block" src={user.profilePicture ? `/${user.profilePicture}` : ''} alt={user.profilePicture ? `${user.profilePicture}` : ''} height="200"/>
+                                    </div>
                                 </div>
-                            </div>
+                            </div> : <AdminProfileHeader user={props.User} />}
+                            <form onSubmit={onFormSubmit}>
+                                <div className="row mb-10">
+                                    {inputsCol12.map((input,index) => {
+                                        return (
+                                        <div className="col-12" key={index}>
+                                            <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name} placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} />
+                                        </div>)
+                                    })}
+                                </div>
+                                <div className="row mb-10">
+                                    <h4 className='col mb-20'>User Info</h4>
+                                    <div className="col-12">
+                                        <div className="form-group">
+                                            <label>Address</label>
+                                            <input placeholder="Home Address" name="address" value={inputValues.address} onChange={inputChange} type="text" className="form-control" />
+                                        </div>
+                                    </div>
+                                    {inputsCol4.map((input,index) => {
+                                        return (
+                                        <div className="col-md-4" key={index}>
+                                            <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name}
+                                                placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} />
+                                        </div>)
+                                    })}
+                                    {inputsCol6.map((input,index) => 
+                                        <div className="col-md-6" key={index}>
+                                            <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name}
+                                                placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} disabled={props.profile === true && input.name === 'salary' ? true : false}/>
+                                        </div>
+                                    )}
+                                    {inputsCol3.map((input,index) => {
+                                        return (
+                                        <div className="col-md-3" key={index}>
+                                            <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name}
+                                                placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} />
+                                        </div>)
+                                    })}
+                                    {inputsCol6S.map((input,index) => {
+                                        return (
+                                        <div className="col-md-6" key={index}>
+                                            <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name}
+                                                placeholder={input.placeholder} inputClass='form-control'
+                                                value={inputValues[input.name]} onChange={inputChange} disabled={props.profile === true && input.name === 'doe' ? true : false}/>
+                                        </div>)
+                                    })}
+                                    {props.profile !== true ? 
+                                    <React.Fragment >
+                                        <div className="col-md-6 mb-10">
+                                            <div className="form-group">
+                                                <label>Role</label>
+                                                <select name="role" value={inputValues.role} onChange={inputChange} className='select d-block'>
+                                                    {roles.Roles ? roles.Roles.map((role, index) => 
+                                                        <option key={index} value={role._id}>{role.name}</option>)
+                                                    : null}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <ToggleSwitch name="Account Confirmed" 
+                                                value={inputValues.confirmed} 
+                                                setValue={setAccountConfirmed} 
+                                                disabled={props.User.emailConfirmation.confirmed}/>
+                                        </div>
+                                    </React.Fragment> : null }
+                                </div>
+                                <button type="submit" className="btn-fill btn btn-primary">Save</button>
+                            </form>
                         </div>
-                        <form className="">
-                            <div className="row mb-10">
-                                <div className="col">
-                                    <div className="form-group">
-                                        <label>Name</label>
-                                        <input value={user.name || ''} disabled type="text" className="form-control"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row mb-10">
-                                <div className="col">
-                                    <div className="form-group">
-                                        <label>User Name</label>
-                                        <input value={user.username || ''} disabled type="text" className="form-control" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row mb-10">
-                                <div className="col-md-12">
-                                    <div className="form-group">
-                                        <label>Address</label>
-                                        <input placeholder="Home Address" type="text" className="form-control" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row mb-10">
-                                <div className="pr-md-1 col-md-4">
-                                    <div className="form-group">
-                                        <label>Country</label>
-                                        <input placeholder="Country" type="text" className="form-control" />
-                                    </div>
-                                </div>
-                                <div className="px-md-1 col-md-4">
-                                    <div className="form-group">
-                                        <label>City</label>
-                                        <input placeholder="City" type="text" className="form-control" />
-                                    </div>
-                                </div>
-                                <div className="pl-md-1 col-md-4">
-                                    <div className="form-group">
-                                        <label>Postal Code</label>
-                                        <input placeholder="ZIP Code" type="number" className="form-control" />
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div className="card-footer">
-                        <button type="submit" className="btn-fill btn btn-primary">Save</button>
-                    </div>
-                </div>}
+                    </div>}
+                </React.Fragment>}
             </div>
+            {!props.failedMessage && !Object.keys(user).length < 1 ? 
+            <React.Fragment>
+                    {props.profile === true && props.User !== undefined ? 
+                    <AdminNewPassword userName={props.User.username} /> : null}
+                    {props.profile === true && props.User !== undefined ? 
+                    <AdminChangeProfilePicture submit={props.updateUserPicture} username={user.username} getUserData={props.getUser} id={user._id}/> : null}
+            </React.Fragment> : null}
         </div>
     )
 }
@@ -89,14 +177,24 @@ const AdminViewUser = props => {
 const mapStateToProps = state => {
     return {
         User: state.allUsers.SingleUser,
+        roles: state.roles,
         successMessage: state.allUsers.successMessage,
-        failedMessage: state.allUsers.failedMessage
+        failedMessage: state.allUsers.failedMessage,
+        updateSuccessMessage: state.addUser.successMessage,
+        updateFailedMessage: state.addUser.failedMessage,
+        updatePasswordFailedMessage: state.resetPassword.failedMessage,
+        updatePasswordSuccessMessage: state.resetPassword.successMessage,
+        loading: state.addUser.loading,
+        loadingPicture: state.login.loading
     }
 }
 
 const dispatchMapToProps = dispatch => {
     return {
-        getUser: (id) => dispatch(actions.getSingleUser(id))
+        getRoles: () => dispatch(actions.getRoles()),
+        getUser: (id) => dispatch(actions.getSingleUser(id)),
+        updateUser: userData => dispatch(actions.updateUser(userData)),
+        updateUserPicture: (formData,config) => dispatch(actions.userUpdateProfilePicture(formData,config))
     }
 }
 

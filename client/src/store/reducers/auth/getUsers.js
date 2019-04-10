@@ -4,6 +4,7 @@ import { updateObject } from '../../../helpers/updateObject';
 const initialState = {
     Users: [],
     SingleUser: {},
+    profilePicture: false,
     failedMessage: false,
     successMessage: false,
     loading: true
@@ -19,7 +20,6 @@ const reducer = (state = initialState, action) => {
             updateObject(state, {
                 ...initialState,
                 Users:{...action.Users},
-                successMessage: action.successMessage,
                 loading: false
             }),
         [actionTypes.GET_ALL_USERS_FAILED] : 
@@ -29,10 +29,8 @@ const reducer = (state = initialState, action) => {
         [actionTypes.GET_SINGLE_USER_SUCCESS] : 
             updateObject(state, {
                 SingleUser: {
-                    ...action.User,
-                    role: {...action.role}
-                },
-                successMessage: action.successMessage
+                    ...action.User
+                }
             }),
         [actionTypes.GET_SINGLE_USER_FAILED] : 
             updateObject(state, {
@@ -54,9 +52,21 @@ const reducer = (state = initialState, action) => {
                 failedMessage: action.failedMessage,
                 loading: true
             }),
+        [actionTypes.GET_USER_PHOTO_FAILED] : 
+            updateObject(state, {
+                failedMessage: action.failedMessage
+            }),
+        [actionTypes.GET_USER_PHOTO_SUCCESS] : 
+            updateObject(state, {
+                profilePicture: action.photo
+            }),
+        [actionTypes.CLEAR_MESSAGES] :
+            updateObject(state, {
+                failedMessage: false,
+                successMessage: false
+            }),
         default: state
     }
-
     return actions[action.type] || actions.default;
 }
 

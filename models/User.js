@@ -22,28 +22,7 @@ const UserSchema = new Schema({
         type: String,
         default: 'public\\images\\placeholder.jpg'
     },
-    userInfo: {
-        telephone: {
-            type: String,
-            default: ''
-        },
-        country: {
-            type: String,
-            default: ''
-        },
-        address: {
-            type: String,
-            default: ''
-        },
-        city: {
-            type: String,
-            default: ''
-        },
-        postal: {
-            type: String,
-            default: ''
-        }
-    },
+    userInfo: {},
     role: {
         type: Schema.Types.ObjectId,
         required: true

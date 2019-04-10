@@ -1104,7 +1104,12 @@ nav.navbar.navbarexpandlg.navbarDark.bgDark{
     z-index: 10;
     background-color: #343a40;
     color: white;
-    overflow: hidden;
+}
+
+@media(max-width: 991px) {
+    nav.navbar.navbarexpandlg.navbarDark.bgDark {
+        overflow: hidden;
+    }
 }
 
 .navbarNav{

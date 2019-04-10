@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classes from './Navbar.module.css';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -9,17 +9,19 @@ import { toggleSearchModal, toggleNav } from '../../utility/openDropdown';
 
 const Navbar = props => {
 
-    const logout = (e) => {
-        e.preventDefault();
-        props.logoutUser();
-    }
+    useEffect(() => { props.getUserPhoto(props.userId); }, []);
+
+    useEffect(() => {
+        props.getUserPhoto(props.userId);
+    }, [props.SingleUser, props.AllUsers]);
+
+    const logout = (e) => { e.preventDefault(); props.logoutUser(); }
 
     const toggleSidebar = e => {
         e.preventDefault();
         const mainPanel = document.querySelector('.main-panel');
         const sidebar = document.querySelector('.Navigation_Sidebar__1GyzL');
         const navbartoggler = document.querySelector('.'+classes.NavbarToggler);
-        // Navigation_Open__30NiR
         mainPanel.classList.toggle('open');
         sidebar.classList.toggle('Navigation_Open__3hrcz');
         navbartoggler.classList.toggle(''+classes.Open);
@@ -68,7 +70,7 @@ const Navbar = props => {
                             <li className="nav-item dropdown">
                                 <a className="nav-link dropdown-toggle" href="/" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <div className="photo">
-                                        <img alt="..." src={'\\' + props.image}/>
+                                        {!props.profilePicture ? null : <img src={'/' + props.profilePicture} alt="react-logo" />}
                                     </div>
                                     <b className="caret d-none d-lg-block d-xl-block"></b>
                                     <p className="d-lg-none">Log out</p>
@@ -108,13 +110,17 @@ const Navbar = props => {
 
 const mapStateToProps = state => {
     return {
-        image: state.login.User.profilePicture
+        userId: state.login.User.id,
+        profilePicture: state.allUsers.profilePicture,
+        SingleUser: state.allUsers.SingleUser,
+        AllUsers: state.allUsers.Users
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        logoutUser: () => dispatch(actions.logoutUser())
+        logoutUser: () => dispatch(actions.logoutUser()),
+        getUserPhoto: (id) => dispatch(actions.getLoggedInUserPhoto(id))
     }
 }
 

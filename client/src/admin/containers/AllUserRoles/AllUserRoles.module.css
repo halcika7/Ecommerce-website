@@ -10,7 +10,7 @@
 .TdPermissionSpans {
     display: flex;
     flex-wrap: wrap;
-    height: 58px;
+    height: 73px;
     overflow-y: auto;
     align-items: center;
 }

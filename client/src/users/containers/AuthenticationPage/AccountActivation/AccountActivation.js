@@ -19,16 +19,12 @@ const AccountActivation = props => {
 
     const checkToken = () => {
         const query = new URLSearchParams(props.location.search).get('token');
-        const localStorageToken = localStorage.getItem('activationToken');
-
-        if(!query || !localStorageToken) {
-            setMessages({...messages, redirect: true });
-        }else if(localStorageToken !== query) {
-            setMessages({ ...messages, redirect: true });
-        }else {
-            const decoded = jwt_decode(localStorageToken);
+        const decoded = jwt_decode(query);
+        if(decoded) {
             const user = { email: decoded.email }
             props.activateAccount(user);
+        }else {
+            setMessages({ ...messages, redirect: true });
         }
     }
 
