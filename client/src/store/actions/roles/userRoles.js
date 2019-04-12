@@ -21,15 +21,6 @@ export const getRoles = () => async dispatch => {
     }
 }
 
-export const deleteAllUserRoles = () => async dispatch => {
-    dispatch({ type: actionTypes.ROLE_START });
-    const response = await axios.delete('/api/users/deleteallroles');
-    if(response.data.failedMessage) {
-        dispatch({ type: actionTypes.DELETE_ALL_USER_ROLES_FAILED, failedMessage: response.data.failedMessage });
-    }
-    setTimeout(() => dispatch(getRoles()), 4000);
-}
-
 export const deleteUserRole = name => async dispatch => {
     dispatch({ type: actionTypes.ROLE_START });
     const response = await axios.delete(`/api/users/deleterole?name=${name}`);

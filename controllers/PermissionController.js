@@ -43,16 +43,3 @@ exports.deletePermission = async (req, res) => {
         return res.json({ failedMessage: err.message });
     }
 }
-
-exports.deleteAllPermission = async (req, res) => {
-    try{
-        const response = await PermissionModel.deleteMany({});
-        if(response.n === 0) {
-            return res.json({ failedMessage: 'No Permissions deleted !' })
-        }
-        await UserRoleModel.updateMany({}, { $set: { permissions: {} } });
-        return res.json({ successMessage: 'Permissions deleted !' });
-    }catch(err) {
-        return res.json({ failedMessage: err.message });
-    }
-}

@@ -6,6 +6,7 @@ import TagsInput from '../../components/UI/TagsInput/TagsInput';
 import ToggleSwitchButton from '../../components/UI/Buttons/ToggleSwitchButton';
 import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
+import { CLEAR_MESSAGES } from '../../../store/actions/actionTypes';
 
 const AddRoleModal = props => {
     const [allPermissions, setAllPermissions] = useState([]);
@@ -38,7 +39,7 @@ const AddRoleModal = props => {
                     </React.Fragment>
                 ) : 
                 <React.Fragment>
-                    <div className={"card"}>
+                    <div className="Card card">
                         <div className="card-header">
                             <h4 className="text-white">Add Role</h4>
                         </div>

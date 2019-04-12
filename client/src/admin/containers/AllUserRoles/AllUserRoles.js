@@ -29,11 +29,9 @@ const AllRolesModal = props => {
                         </div>
                     </div>
                 ) :
-                <div className="card">
+                <div className="Card card">
                     <div className="card-header">
                         <h4 className="card-title text-white">All Roles</h4>
-                        <button className="btn btn-sm btn-danger float-right"
-                                onClick={(e) => props.deleteAllRoles()}>Delete All Roles</button>
                     </div>
                     <div className="card-body">
                         <div className="table-responsive">
@@ -44,7 +42,7 @@ const AllRolesModal = props => {
                                         <th>IsAdmin</th>
                                         <th>Name</th>
                                         <th>Permissions</th>
-                                        <th></th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -60,14 +58,18 @@ const AllRolesModal = props => {
                                                     </span>)) : 'No Permissions'}
                                             </td>
                                             <td className="text-center" style={{  minWidth: '220px'}}>
+                                                <Link className="btn btn-warning" to={`/admindashboard/viewRole?id=${perm._id}`}>
+                                                    <i className="far fa-eye"></i>
+                                                </Link>
+                                                <Link to={`/admindashboard/updateRole?id=${perm._id}`} className="btn btn-primary">
+                                                    <i className="far fa-edit"></i>
+                                                </Link>
                                                 <button 
-                                                    className={classes.button + " btn"}
+                                                    className="btn btn-danger"
+                                                    type="button"
                                                     onClick={e => props.deleteRole(perm.name)}>
                                                     <i className="far fa-trash-alt"></i>
                                                 </button>
-                                                <Link to={`/admindashboard/updateRole?id=${perm._id}`} className="btn btn-primary link-close-modal">
-                                                    <i className="far fa-edit"></i>
-                                                </Link>
                                             </td>
                                         </tr>)) : null}
                                 </tbody>
@@ -89,7 +91,6 @@ const mapStateToProps = state => {
 const dispatchMapToProps = dispatch => {
     return {
         getAllRoles: () => dispatch(actions.getRoles()),
-        deleteAllRoles: () => dispatch(actions.deleteAllUserRoles()),
         deleteRole: (name) => dispatch(actions.deleteUserRole(name))
     };
 }

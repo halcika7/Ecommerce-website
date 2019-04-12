@@ -30,14 +30,12 @@ export {
 export { 
     addNewPermission,
     getAllPermissions,
-    deletePermission,
-    deleteAllPermissions
+    deletePermission
  } from './auth/permissions';
 
 export {
     addRole,
     getRoles,
-    deleteAllUserRoles,
     deleteUserRole,
     getUserRole,
     updateUserRole
@@ -46,4 +44,13 @@ export {
 export {
     addNewUser,
     updateUser
-} from './auth/addNewUser'
+} from './auth/addNewUser';
+
+export { 
+    addCategory,
+    getAllCategories,
+    getCategory,
+    editCategory,
+    deleteCategory,
+    clearState
+ } from './products/category';

@@ -82,9 +82,6 @@ const AdminProductsPage = props => {
         <div className={classes.AdminProductsPage + " row"}>
             <div className={'col-12 text-white'}>
                 <div className="card mb-30">
-                    <div className='col-12 mt-4 pr-5 mb-4'>
-                        <Link to="/admindashboard/addproduct" className="btn btn-warning float-right">Add new Product</Link>
-                    </div>
                     <div className="card-body">
                         <BootstrapTable data={data.data} options={options} bordered={false} pagination version='4' striped hover search={ true } multiColumnSearch={ true }
                         containerClass='table-responsive col-12'>

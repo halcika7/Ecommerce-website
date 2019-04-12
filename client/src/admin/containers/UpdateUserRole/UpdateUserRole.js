@@ -16,7 +16,6 @@ const UpdateUserRole = props => {
     const [choosenPermissions, setChoosenPermissions] = useState({});
     const [allPermissions, setAllPermissions] = useState([]);
     useEffect(() => { 
-        console.log('fired');
         const id = new URLSearchParams(props.location.search).get('id'); 
         props.getRole(id);
         props.getPermissions();
@@ -72,20 +71,22 @@ const UpdateUserRole = props => {
                                         style={{ outline: '0px', boxShadow: 'none', border: '1px solid rgba(255, 255, 255, 0.489)', marginBottom: '0px' }} 
                                         className={classnames( 'w-100 d-block', {
                                             'invalid': props.failedMessage
-                                        })}/>
+                                        })}
+                                        disabled={props.view}/>
                                         {props.failedMessage && (<div className='invalid-feedback'>{props.failedMessage}</div>)}
                                 </div>
                                 <div className='mb-20'>
-                                    <ToggleSwitchButton value={isAdmin} setValue={setIsAdmin} name="Is Admin" />
+                                    <ToggleSwitchButton value={isAdmin} setValue={setIsAdmin} name="Is Admin" disabled={props.view}/>
                                 </div>
                                 <div className="mb-30">
                                     <label>Permissions</label>
                                     <TagsInput 
                                         values={allPermissions}
                                         choosenValues={choosenPermissions}
-                                        setChoosenValues={setChoosenPermissions} />
+                                        setChoosenValues={setChoosenPermissions} 
+                                        disabled={props.view}/>
                                 </div>
-                                <button className="btn">Update Role</button>
+                                {!props.view && <button className="btn">Update Role</button>}
                             </form>
                         </div>
                     </div>

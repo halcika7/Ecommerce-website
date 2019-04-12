@@ -15,9 +15,7 @@ const TagsInput = props => {
         }
     }, []);
     
-    useEffect(() => {
-        setValues();
-    }, [props.choosenValues, props.values]);
+    useEffect(() => { setValues(); }, [props.choosenValues, props.values]);
 
     const setValues = () => {
         const loadTags = [];
@@ -25,12 +23,8 @@ const TagsInput = props => {
         let i = 0;
         for(const obj in props.choosenValues) {
             loadTags.push({ name: obj, index: i });
-            const tagIndex = newListItems.findIndex(tag => {
-                return tag.permission === obj;
-            });
-            if(tagIndex !== -1) {
-                newListItems[tagIndex].disabled = true;
-            }
+            const tagIndex = newListItems.findIndex(tag => tag.permission === obj );
+            if(tagIndex !== -1) { newListItems[tagIndex].disabled = true; }
             i++;
         }
         setListItems([ ...newListItems ]);
@@ -52,6 +46,8 @@ const TagsInput = props => {
 
     const tagOnClick = e => {
         e.preventDefault();
+        const targetDisabled = e.currentTarget.getAttribute('data-disabled');
+        if(targetDisabled) { return ; }
         const targetName = e.currentTarget.getAttribute('data-name');
         const newTags = [...tags];
         const newListItems = [...listItems];
@@ -96,7 +92,8 @@ const TagsInput = props => {
                 {tags.map((tag, index) => (
                     <li key={index} 
                         data-name={tag.name}
-                        onClick={tagOnClick}>
+                        onClick={tagOnClick} 
+                        data-disabled={props.disabled}>
                         {tag.name}
                         <i className="fas fa-times"></i>
                     </li>
@@ -105,7 +102,8 @@ const TagsInput = props => {
                 <input className={classes.Input} 
                         onFocus={e => e.currentTarget.parentElement.classList.add(classes.Focused)}
                         onChange={onInputChange}
-                        placeholder="Search for"/>}
+                        placeholder="Search for"
+                        disabled={props.disabled}/>}
             </ul>
             <div className={classes.List}>
                 {listItems.map((val,index) => {

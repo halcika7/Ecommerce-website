@@ -3,7 +3,6 @@
     padding-top: 40px;
     background: url("../../assets/images/balck2.jpg") no-repeat;
     background-size: cover;
-    bottom: 0;
   }
 
   @media (max-width: 576px){

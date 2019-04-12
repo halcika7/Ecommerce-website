@@ -40,12 +40,6 @@ export const deletePermission = slug => async dispatch => {
     helperResponse(dispatch, response);
 }
 
-export const deleteAllPermissions = () => async dispatch => {
-    dispatch({ type: actionTypes.PERMISSION_START });
-    const response = await axios.delete('/api/users/deleteallpermissions');
-    helperResponse(dispatch, response);
-}
-
 const helperResponse = (dispatch, response) => {
     if(response.data.failedMessage) {
         dispatch({ type: actionTypes.DELETE_PERMISSION_FAILED, failedMessage: response.data.failedMessage });

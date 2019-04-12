@@ -10,8 +10,8 @@ import classes from './DataTable.module.css';
 const DataTable = props => {
 
     const [data, setData] = useState([]);
-
     const [length, setLength] = useState(false);
+    const [categoriesLength, setCategoriesLength] = useState(false);
 
     useEffect(() => {
         const data = [];
@@ -26,9 +26,21 @@ const DataTable = props => {
         setData(data);
     }, [props.usersData]);
 
+    useEffect(() => {
+        const data = [];
+        for(let category in props.categoriesData) {
+            const object = {
+                ...props.categoriesData[category]
+            }
+            data.push(object);
+        }
+        setCategoriesLength(data.length)
+        setData(data);
+    }, [props.categoriesData]);
+
     const [options] = useState({
         page: 1,  // which page you want to show as default
-        sizePerPageList: [ {
+        sizePerPageList: ((props.userData && props.userData.length < 11) || (props.categoriesData && props.categoriesData.length < 11)) ? [] : [ {
           text: '10', value: 10
         }, {
           text: '15', value: 15
@@ -52,14 +64,17 @@ const DataTable = props => {
           }, 
         paginationPosition: 'bottom', 
         withFirstAndLast: false
-      });
+    });
 
     const buttonFormatter = (cell, row) => {
         const id = row._id;
         return (
             <React.Fragment>
-                <Link className="btn btn-warning" to={`/admindashboard/adminViewUser/id=${id}`}>
+                <Link className="btn btn-warning" to={`/admindashboard/adminViewUser?id=${id}`}>
                     <i className="far fa-eye"></i>
+                </Link>
+                <Link className="btn btn-primary" to={`/admindashboard/adminEditUser?id=${id}`}>
+                    <i className="far fa-edit"></i>
                 </Link>
                 <button className="btn btn-danger" type="button" 
                     onClick={(e) => props.click(e,id)}>
@@ -68,6 +83,26 @@ const DataTable = props => {
             </React.Fragment>
         )
     }
+
+    const categoryButtonFormatter = (cell, row) => {
+        const id = row._id;
+        return (
+            <React.Fragment>
+                <Link className="btn btn-warning" to={`/admindashboard/viewcategory?id=${id}`}>
+                    <i className="far fa-eye"></i>
+                </Link>
+                <Link className="btn btn-primary" to={`/admindashboard/editcategory?id=${id}`}>
+                    <i className="far fa-edit"></i>
+                </Link>
+                <button className="btn btn-danger" type="button" 
+                    onClick={(e) => props.click(e,id)}>
+                       <i className="far fa-trash-alt"></i>
+                </button>
+            </React.Fragment>
+        )
+    }
+
+    const subcategoriesFormatter = (cell, row) => row.subcategories.map((sub, index) => `<span class=${classes.SPAN}>${sub.name}</span>`).join('');
 
     const imgFormatter = (cell, row) => {
         return (
@@ -79,17 +114,32 @@ const DataTable = props => {
 
     return (
         <div className={classes.DataTable + " card-body"}>
-            {(!length || length === 0) ? <SmallSpinner /> :
-            <BootstrapTable data={data} options={options} bordered={false} pagination version='4' striped hover search={ true } multiColumnSearch={ true }
-            containerClass='table-responsive col-12'>
-                <TableHeaderColumn isKey dataField='_id' dataSort>ID</TableHeaderColumn>
-                <TableHeaderColumn dataField='name' dataSort>User Name</TableHeaderColumn>
-                <TableHeaderColumn dataField='email' dataSort>User Email</TableHeaderColumn>
-                <TableHeaderColumn dataField='username' dataSort>User Username</TableHeaderColumn>
-                <TableHeaderColumn dataField='confirmed' dataSort>Account Confirmed</TableHeaderColumn>
-                <TableHeaderColumn dataField='profilePicture' dataFormat={imgFormatter.bind(this)}>User Picture</TableHeaderColumn>
-                <TableHeaderColumn dataField='button' dataFormat={buttonFormatter.bind(this)}>Actions</TableHeaderColumn>
-            </BootstrapTable>}
+            {props.usersData && 
+            <React.Fragment>
+                {(!length || length === 0) ? <SmallSpinner /> :
+                <BootstrapTable data={data} options={options} bordered={false} pagination version='4' striped hover search={ true } multiColumnSearch={ true }
+                containerClass='table-responsive col-12'>
+                    <TableHeaderColumn isKey dataField='_id' dataSort>ID</TableHeaderColumn>
+                    <TableHeaderColumn dataField='name' dataSort>User Name</TableHeaderColumn>
+                    <TableHeaderColumn dataField='email' dataSort>User Email</TableHeaderColumn>
+                    <TableHeaderColumn dataField='username' dataSort>User Username</TableHeaderColumn>
+                    <TableHeaderColumn dataField='confirmed' dataSort>Account Confirmed</TableHeaderColumn>
+                    <TableHeaderColumn dataField='profilePicture' dataFormat={imgFormatter.bind(this)}>User Picture</TableHeaderColumn>
+                    <TableHeaderColumn dataField='button' dataFormat={buttonFormatter.bind(this)}>Actions</TableHeaderColumn>
+                </BootstrapTable>}}
+            </React.Fragment>}
+
+            {props.categoriesData && 
+            <React.Fragment>
+            {props.categoriesData && (!categoriesLength || categoriesLength === 0) ? <SmallSpinner /> :
+                <BootstrapTable data={data} options={options} bordered={false} pagination version='4' striped hover search={ true } multiColumnSearch={ true }
+                containerClass='table-responsive col-12'>
+                    <TableHeaderColumn isKey dataField='_id' dataSort>ID</TableHeaderColumn>
+                    <TableHeaderColumn dataField='name' dataSort>Category Name</TableHeaderColumn>
+                    <TableHeaderColumn dataFormat={subcategoriesFormatter}>Subcategories</TableHeaderColumn>
+                    <TableHeaderColumn dataField='button' dataFormat={categoryButtonFormatter.bind(this)}>Actions</TableHeaderColumn>
+                </BootstrapTable>}
+            </React.Fragment>}
         </div>
     );
 }

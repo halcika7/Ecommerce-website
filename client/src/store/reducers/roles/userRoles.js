@@ -37,11 +37,6 @@ const reducer = (state = initialState, action) => {
                 failedMessage: action.failedMessage,
                 successMessage: false
             }),
-        [actionTypes.DELETE_ALL_USER_ROLES_FAILED] :
-            updateObject(state, {
-                failedMessage: action.failedMessage,
-                loading: false
-            }),
         [actionTypes.DELETE_USER_ROLE_SUCCESS] :
             updateObject(state, {
                 successMessage: action.successMessage

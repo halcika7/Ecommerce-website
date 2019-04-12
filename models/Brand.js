@@ -4,16 +4,15 @@ const Schema = mongoose.Schema;
 const BrandSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     categories: [
         {
-            id: {
-                type: Schema.Types.ObjectId,
-                required: true
-            }
+            type: Array,
+            required: true
         }
     ]
 });
 
-module.exports = User = mongoose.model('brands', BrandSchema);
+module.exports = Brand = mongoose.model('brands', BrandSchema);

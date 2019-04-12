@@ -14,34 +14,54 @@ const LoginRegisterInputs = ({
     invalidFeedback,
     invalidInput,
     inputClass,
-    disabled
+    disabled,
+    onFocus,
+    onKeyDown
 }) => {
     return (
-    <div className={formBox}>
-        <label>{label}</label>
-        <input 
-            type={type} 
-            name={name} 
-            placeholder={placeholder}
-            className={classnames(inputClass ? inputClass : '', {
-                [invalidInput]: error
-            })}
-            value={value}
-            onChange={onChange}
-            disabled={disabled}/>
+        <React.Fragment>
+            { formBox ? 
+            <div className={formBox}>
+                {label && <label>{label}</label>}
+                <input 
+                    type={type} 
+                    name={name} 
+                    placeholder={placeholder}
+                    className={classnames(inputClass ? inputClass : '', {
+                        [invalidInput]: error
+                    })}
+                    value={value}
+                    onChange={onChange}
+                    onKeyDown={onKeyDown}
+                    onFocus={onFocus}
+                    disabled={disabled}/>
 
-            {error && (<div className={invalidFeedback}>{error}</div>)}
-    </div>
+                    {error && <div className={invalidFeedback}>{error}</div>}
+            </div> : 
+            <React.Fragment>
+                <input 
+                    type={type} 
+                    name={name} 
+                    placeholder={placeholder}
+                    className={classnames(inputClass ? inputClass : '', {
+                        [invalidInput]: error
+                    })}
+                    value={value}
+                    onChange={onChange}
+                    onKeyDown={onKeyDown}
+                    onFocus={onFocus}
+                    disabled={disabled}/>
+
+                    {error && <div className={invalidFeedback}>{error}</div>}
+            </React.Fragment>}
+    </React.Fragment>
   )
 }
 
 LoginRegisterInputs.propTypes = {
-    name: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
-    value: PropTypes.string.isRequired,
     error: PropTypes.string,
     type: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
     formBox: PropTypes.string,
     invalidFeedback: PropTypes.string,
     invalidInput: PropTypes.string,

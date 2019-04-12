@@ -7,6 +7,7 @@ import getAllUsersReducer from './auth/getUsers';
 import permissionsReducer from './auth/permissions';
 import userRolesReducer from './roles/userRoles';
 import addUserReducer from './auth/addNewUser';
+import categoryReducer from './products/category';
 
 export const combinedReducers = combineReducers({
     login: loginReducer,
@@ -16,5 +17,6 @@ export const combinedReducers = combineReducers({
     allUsers: getAllUsersReducer,
     permissions: permissionsReducer,
     roles: userRolesReducer,
-    addUser: addUserReducer
+    addUser: addUserReducer,
+    category: categoryReducer
 });

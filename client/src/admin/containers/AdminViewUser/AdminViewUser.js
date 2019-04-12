@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
+
 import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
 import LoginRegisterInputs from '../../../users/components/UI/LoginRegisterInputs/LoginRegisterInputs';
@@ -10,7 +11,8 @@ import AdminNewPassword from './AdminNewPassword/AdminNewPassword';
 import AdminChangeProfilePicture from './AdminChangeProfilePicture/AdminChangeProfilePicture';
 
 const AdminViewUser = props => {
-
+    const userID = props.match.params.id ? props.match.params.id : new URLSearchParams(props.location.search).get('id'); 
+    
     const [user, setUser] = useState({});
     const [roles, setRoles] = useState([]);
     const [inputValues, setInputValues] = useState({ 
@@ -32,8 +34,11 @@ const AdminViewUser = props => {
     const [inputsCol6S] = useState([ 
         { label: 'Date of Birth', type: 'date', name: 'dob', placeholder: 'Date of Birth' }, { label: 'Date of Employment', type: 'date', name: 'doe', placeholder: '' } ]);
 
-    useEffect(() => { props.getUser(props.match.params.id); props.getRoles(); }, [props.match.params.id]);
-    useEffect(() => { props.getUser(props.match.params.id); props.getRoles(); }, []);
+    useEffect(() => {
+        props.getUser(userID); props.getRoles(); 
+    }, [props.location.search, props.match.params]);
+    useEffect(() => { 
+        props.getUser(userID); props.getRoles(); }, []);
     useEffect(() => { setUser({ ...user, ...props.User }); setInputValues({ ...inputValues, ...props.User.userInfo, role: props.User.role, ...props.User.emailConfirmation, name: props.User.name, username: props.User.username, email: props.User.email }); }, [props.User]);
     useEffect(() => { setRoles(props.roles); }, [props.roles]);
 
@@ -78,10 +83,7 @@ const AdminViewUser = props => {
                         <SmallSpinner />
                     </div>  : 
                     <div className="card text-white">
-                        {props.profile !== true ? 
-                        <div className="card-header">
-                            <h5 className="title">{user.username} Profile</h5>
-                        </div> : null }
+                        {props.profile !== true ? <div className="card-header"><h5 className="title">{user.username} Profile</h5></div> : null }
                         <div className="card-body">
                         {props.profile !== true ? 
                             <div className="row mb-10">
@@ -94,70 +96,55 @@ const AdminViewUser = props => {
                             </div> : <AdminProfileHeader user={props.User} />}
                             <form onSubmit={onFormSubmit}>
                                 <div className="row mb-10">
-                                    {inputsCol12.map((input,index) => {
-                                        return (
+                                    {inputsCol12.map((input,index) => 
                                         <div className="col-12" key={index}>
-                                            <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name} placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} />
-                                        </div>)
-                                    })}
+                                            <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name} placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} disabled={props.view}/>
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="row mb-10">
                                     <h4 className='col mb-20'>User Info</h4>
                                     <div className="col-12">
-                                        <div className="form-group">
-                                            <label>Address</label>
-                                            <input placeholder="Home Address" name="address" value={inputValues.address} onChange={inputChange} type="text" className="form-control" />
-                                        </div>
+                                        <LoginRegisterInputs formBox="form-group" label="Address" type="text" name="address" placeholder="Home Address" inputClass='form-control' value={inputValues.address} onChange={inputChange} disabled={props.view}/>
                                     </div>
-                                    {inputsCol4.map((input,index) => {
-                                        return (
+                                    {inputsCol4.map((input,index) => 
                                         <div className="col-md-4" key={index}>
-                                            <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name}
-                                                placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} />
-                                        </div>)
-                                    })}
+                                            <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name} placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} disabled={props.view}/>
+                                        </div>
+                                    )}
                                     {inputsCol6.map((input,index) => 
                                         <div className="col-md-6" key={index}>
                                             <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name}
-                                                placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} disabled={props.profile === true && input.name === 'salary' ? true : false}/>
+                                                placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} disabled={(props.profile === true && input.name === 'salary') || props.view ? true : false}/>
                                         </div>
                                     )}
-                                    {inputsCol3.map((input,index) => {
-                                        return (
+                                    {inputsCol3.map((input,index) =>
                                         <div className="col-md-3" key={index}>
-                                            <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name}
-                                                placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} />
-                                        </div>)
-                                    })}
-                                    {inputsCol6S.map((input,index) => {
-                                        return (
+                                            <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name} placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} disabled={props.view}/>
+                                        </div>
+                                    )}
+                                    {inputsCol6S.map((input,index) => 
                                         <div className="col-md-6" key={index}>
                                             <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name}
-                                                placeholder={input.placeholder} inputClass='form-control'
-                                                value={inputValues[input.name]} onChange={inputChange} disabled={props.profile === true && input.name === 'doe' ? true : false}/>
-                                        </div>)
-                                    })}
+                                                placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} disabled={(props.profile === true && input.name === 'doe') || props.view ? true : false}/>
+                                        </div>
+                                    )}
                                     {props.profile !== true ? 
                                     <React.Fragment >
                                         <div className="col-md-6 mb-10">
                                             <div className="form-group">
                                                 <label>Role</label>
-                                                <select name="role" value={inputValues.role} onChange={inputChange} className='select d-block'>
-                                                    {roles.Roles ? roles.Roles.map((role, index) => 
-                                                        <option key={index} value={role._id}>{role.name}</option>)
-                                                    : null}
+                                                <select name="role" value={inputValues.role} onChange={inputChange} className='select d-block' disabled={props.view}>
+                                                    {roles.Roles ? roles.Roles.map((role, index) => <option key={index} value={role._id}>{role.name}</option>) : null}
                                                 </select>
                                             </div>
                                         </div>
                                         <div className="col-md-6">
-                                            <ToggleSwitch name="Account Confirmed" 
-                                                value={inputValues.confirmed} 
-                                                setValue={setAccountConfirmed} 
-                                                disabled={props.User.emailConfirmation.confirmed}/>
+                                            <ToggleSwitch name="Account Confirmed" value={inputValues.confirmed} setValue={setAccountConfirmed} disabled={props.User.emailConfirmation.confirmed || props.view ? true : false}/>
                                         </div>
                                     </React.Fragment> : null }
                                 </div>
-                                <button type="submit" className="btn-fill btn btn-primary">Save</button>
+                                {!props.view && <button type="submit" className="btn-fill btn btn-primary">Save</button>}
                             </form>
                         </div>
                     </div>}
@@ -165,10 +152,8 @@ const AdminViewUser = props => {
             </div>
             {!props.failedMessage && !Object.keys(user).length < 1 ? 
             <React.Fragment>
-                    {props.profile === true && props.User !== undefined ? 
-                    <AdminNewPassword userName={props.User.username} /> : null}
-                    {props.profile === true && props.User !== undefined ? 
-                    <AdminChangeProfilePicture submit={props.updateUserPicture} username={user.username} getUserData={props.getUser} id={user._id}/> : null}
+                {props.profile === true && props.User !== undefined ? <AdminNewPassword userName={props.User.username} /> : null}
+                {props.profile === true && props.User !== undefined ? <AdminChangeProfilePicture submit={props.updateUserPicture} username={user.username} getUserData={props.getUser} id={user._id}/> : null}
             </React.Fragment> : null}
         </div>
     )

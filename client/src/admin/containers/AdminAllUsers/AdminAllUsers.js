@@ -21,7 +21,7 @@ const AdminAllUsers = props => {
 
     return (
         <React.Fragment>
-            <div className={"row"}>
+            <div className="AdminProfile row">
                 {props.users.successMessage ? <ResponseMessages message={props.users.successMessage} /> : null}
                 {props.users.failedMessage ? <ResponseMessages ClassName="Danger" message={props.users.failedMessage} /> : null}
                 <div className={'col-12 text-white'}>

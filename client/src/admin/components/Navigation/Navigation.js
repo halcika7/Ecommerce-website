@@ -11,14 +11,8 @@ const Navigation = props => {
 
     const [permissionModal, setPermissionModal] = useState(false);
     const [allPermissionModal, setAllPermissionModal] = useState(false);
-
-    useEffect(() => {
-        props.getUserPhoto(props.userId);
-    }, []);
-
-    useEffect(() => {
-        props.getUserPhoto(props.userId);
-    }, [props.SingleUser, props.AllUsers]);
+    useEffect(() => { props.getUserPhoto(props.userId); }, []);
+    useEffect(() => { props.getUserPhoto(props.userId); }, [props.SingleUser, props.AllUsers]);
 
     const toggleActiveClass = e => {
         e.preventDefault();
@@ -38,12 +32,12 @@ const Navigation = props => {
             <div className={classes.Sidebar}>
                 <div className={classes.SidebarWrapper}>
                     <div className={classes.Logo}>
-                        <Link to="/admindashboard/dasboard" className={classes.SimpleText + ' ' + classes.LogoMini}>
+                        <Link to="/admindashboard/dashboard" className={classes.SimpleText + ' ' + classes.LogoMini}>
                             <div className="logo-img">
                                 {!props.profilePicture ? null : <img src={'/' + props.profilePicture} alt="react-logo" />}
                             </div>
                         </Link>
-                        <Link to="/admindashboard/dasboard" className={classes.SimpleText + ' ' + classes.LogoNormal}>{props.username}</Link>
+                        <Link to="/admindashboard/dashboard" className={classes.SimpleText + ' ' + classes.LogoNormal}>{props.username}</Link>
                     </div>
                     <ul className={classes.Nav}>
                         <li className={"nav-item"}>
@@ -53,7 +47,7 @@ const Navigation = props => {
                             </NavLink>
                         </li>
                         <li className={"nav-item"}>
-                            <NavLink className="" to={`/admindashboard/profile/id=${props.userId}`} exact activeClassName={classes.Active}>
+                            <NavLink className="" to={`/admindashboard/profile/id=${props.userId}`} activeClassName={classes.Active}>
                                 <i className={classes.TimIcons + ' ' + classes.IconSingle02}></i>
                                 <p>Profile</p>
                             </NavLink>
@@ -117,6 +111,38 @@ const Navigation = props => {
                                     </Link>
                                     <Link to="/admindashboard/allroles">
                                         <p>All Roles</p>
+                                    </Link>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div className="btn-group-vertical d-flex ">
+                                <a href='/' onClick={toggleActiveClass} className="dropdown-toggle-split" >
+                                    <i className="fas fa-layer-group"></i>
+                                    <p>Categories</p>
+                                </a>
+                                <div className={classes.DropDown + ' ' + classes.MaxHeight100}>
+                                    <Link to="/admindashboard/addcategory">
+                                        <p>Add Category</p>
+                                    </Link>
+                                    <Link to="/admindashboard/allcategories">
+                                        <p>All Categories</p>
+                                    </Link>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div className="btn-group-vertical d-flex ">
+                                <a href='/' onClick={toggleActiveClass} className="dropdown-toggle-split" >
+                                    <i className="fas fa-globe-europe"></i>
+                                    <p>Brands</p>
+                                </a>
+                                <div className={classes.DropDown + ' ' + classes.MaxHeight100}>
+                                    <Link to="/admindashboard/addbrand">
+                                        <p>Add Brand</p>
+                                    </Link>
+                                    <Link to="/admindashboard/allcategories">
+                                        <p>All Brands</p>
                                     </Link>
                                 </div>
                             </div>

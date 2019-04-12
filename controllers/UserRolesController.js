@@ -28,16 +28,6 @@ exports.getRoles = async (req,res) => {
     }
 }
 
-exports.deleteAllRoles = async (req, res) => {
-    try{
-        const response = await UserRolesModel.deleteMany({});
-        if(response.n === 0) return res.json({ failedMessage: 'No Permissions deleted !' });
-        return res.json({ successMessage: 'Permissions deleted !' });
-    }catch(err) {
-        return res.json({ failedMessage: err.message });
-    }
-}
-
 exports.deleteUserRole = async (req, res) => {
     try {
         const response = await UserRolesModel.deleteOne({ name: req.query.name });

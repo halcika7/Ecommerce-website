@@ -39,8 +39,6 @@ const AllPermissionsModal = props => {
                 <div className={classes.Card + " card"}>
                     <div className="card-header">
                         <h4 className="card-title">All Permissions</h4>
-                        {props.deletePermissionState ? <button className="btn btn-sm btn-danger float-right"
-                                onClick={(e) => props.deleteAllPermissions()}>Delete All Permissions</button> : null }
                     </div>
                     <div className="card-body">
                         <div className={classes.tableResponsive + " table-responsive"}>
@@ -89,8 +87,7 @@ const mapStateToProps = state => {
 const dispatchMapToProps = dispatch => {
     return {
         getAllPermissions: () => dispatch(actions.getAllPermissions()),
-        deletePermission: (slug) => dispatch(actions.deletePermission(slug)),
-        deleteAllPermissions: () => dispatch(actions.deleteAllPermissions())
+        deletePermission: (slug) => dispatch(actions.deletePermission(slug))
     };
 }
 
