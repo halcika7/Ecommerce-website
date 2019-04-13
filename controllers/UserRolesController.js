@@ -1,6 +1,4 @@
 const UserRolesModel = require('../models/UserRole');
-const UserModel = require('../models/User');
-const ObjectId = require('mongoose').Types.ObjectId;
 const validateRole = require('../validation/roleValidation');
 
 exports.addUserRole = async (req, res) => {
