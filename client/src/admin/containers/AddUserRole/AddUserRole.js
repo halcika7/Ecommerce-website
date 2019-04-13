@@ -6,7 +6,6 @@ import TagsInput from '../../components/UI/TagsInput/TagsInput';
 import ToggleSwitchButton from '../../components/UI/Buttons/ToggleSwitchButton';
 import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
-import { CLEAR_MESSAGES } from '../../../store/actions/actionTypes';
 
 const AddRoleModal = props => {
     const [allPermissions, setAllPermissions] = useState([]);

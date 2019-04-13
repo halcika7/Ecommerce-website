@@ -835,10 +835,7 @@ ul.searchResults > li > .productInfo > .price > p:last-child{
 
 .navbar.navbarexpandlg.navbarDark.bgDark .container{
 padding: 0;
-}
-
-.navbar.navbarexpandlg.navbarDark.bgDark .container > .dropdown {
-    position: relative;
+position: relative;
 }
 
 .col-12.col-md-6 .btn.btn-light{
@@ -883,24 +880,12 @@ outline:none;
 box-shadow: none;
 }
 
-.dropdown .container > .dropdownMenu:after{
-content: '';
-display: block;
-border-color: transparent transparent #919191 transparent;
-border-style: solid;
-border-width: 10px;  /* The border on the drop down box  */ 
-position: absolute;
-top: -20px;
-left:-webkit-calc(100% - 65%);
-left:-moz-calc(100% - 65%);
-left:calc(100% - 65%);
-}
-
-.dropdown .container > .dropdownMenu {
+.dropdown .dropdownMenu {
     display: block;
-    width: 200px;
     opacity: 0;
     z-index: -1;
+    max-height: 300px;
+    overflow-y: auto;
     transition:all .3s ease-in ;
     -webkit-transition:all .3s ease-in ;
     -moz-transition:all .3s ease-in ;
@@ -913,93 +898,65 @@ left:calc(100% - 65%);
     -o-transform:translateY(35px) ;
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23) ;
     pointer-events: none;
+    left: 0;
+    right: 0;
 }
 
-.dropdown .container > .dropdownMenu.active{
+.dropdown .dropdownMenu.active{
     opacity: 1;
     z-index: 1;
     pointer-events: all;
-    transform: translateY(17px);
-    -webkit-transform: translateY(17px);
-    -moz-transform: translateY(17px);
-    -ms-transform: translateY(17px);
-    -o-transform: translateY(17px);
+    transform: translateY(10px);
 }
 
-.dropdown .container .dropdownMenu ul{
+.dropdown .dropdownMenu ul{
 padding: 0;
 margin-bottom: 0px;
 }
 
-.dropdown .container .dropdownMenu ul li {
+.dropdown .dropdownMenu ul li {
 list-style: none;
 transition: all 0.3s ease-in-out;
 left: 0;
 right: 0;
-width: 100%;
 padding: 15px;
 font-size: 100%;
 white-space: nowrap;
 border-bottom: 1px solid rgb(0, 0, 0, 0.1);
-position: relative;
-}
-
-.dropdown .container .dropdownMenu ul li:last-child{
-border-bottom: none;
-}
-
-.dropdown .container .dropdownMenu ul li > i {
-font-size: 18px;
-}
-
-.dropdown .container .dropdownMenu ul li:hover{
-color: rgb(234, 120, 50);
 cursor: pointer;
 }
 
-.dropdown .container .dropdownMenu ul li:hover > .container.megamenu1{
+.dropdown .dropdownMenu ul li:last-child{
+border-bottom: none;
+}
+
+.dropdown .dropdownMenu ul li > i {
+font-size: 18px;
+}
+
+.dropdown .dropdownMenu ul li.active{
+color: rgb(234, 120, 50);
+width: 100%;
+}
+
+.dropdown .dropdownMenu ul li.active > .megamenu1{
     visibility: visible;
     opacity: 1;
-    transform: translateX(22px);
+    height: 100%;
     cursor: auto;
     padding: inherit;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-    border: 1px solid rgb(0, 0, 0, 0.1);
-    -webkit-transform: translateX(22px);
-    -moz-transform: translateX(22px);
-    -ms-transform: translateX(22px);
-    -o-transform: translateX(22px);
+    transition: transform .3s cubic-bezier(0,0,0,.1);
+    transform: scaleY(1);
+    transform-origin: top center;
 }
 
-.container.megamenu1 {
-position: absolute;
-top: -7px;
-right: 0;
-left: 100%;
-transform: translateX(-20px);
-border-radius: 10px;
-width: 800px;
-max-height: auto;
+.megamenu1 {
+height: 0px;
 background-color: white;
 color: black;
-z-index: -1;
 visibility: hidden;
 opacity: 0;
--webkit-transition: all 0.3s ease-in-out;
--moz-transition: all 0.3s ease-in-out;
--ms-transition: all 0.3s ease-in-out;
--o-transition: all 0.3s ease-in-out;
-transition: all 0.3s ease-in-out;
-}
-
-.container.megamenu1:before {
-    content: "";
-    position: absolute;
-    top: 24px;
-    left: -20px;
-    border-color: transparent rgb(234, 120, 50) transparent transparent;
-    border-style: solid;
-    border-width: 10px;
+transform: scaleY(0);
 }
 
 .dropdownMenu.show {
@@ -1010,13 +967,13 @@ padding-bottom: 0px;
 padding-top: 0px;
 }
 
-.dropdownMenu ul li .container.megamenu1 .row ul{
+.dropdownMenu ul li .megamenu1 .row ul{
 padding: 15px;
 color: rgb(234, 120, 50);
 cursor: default;
 }
 
-.container.megamenu1 .row ul li {
+.megamenu1 .row ul li {
 font-size: 12px;
 width: 0px;
 padding: 0px;
@@ -1026,7 +983,7 @@ white-space: nowrap;
 cursor: default;
 }
 
-.container.megamenu1 .row ul li:not(:first-child):before{
+.megamenu1 .row ul li:not(:first-child):before{
 content:'\f105';
     position:inline-block;
     font-family:'Font Awesome 5 Free';
@@ -1038,23 +995,23 @@ margin-right: 10px;
 padding-left: 10px;
 }
 
-.container.megamenu1 .row ul li:not(:first-child):after{
+.megamenu1 .row ul li:not(:first-child):after{
 content:'';
 }
 
-.container.megamenu1 .row ul li a {
+.megamenu1 .row ul li a {
 color: rgb(0, 0, 0, 0.6);
 transition: all 0.3s ease-in-out;
 cursor: pointer;
 }
 
-.container.megamenu1 .row ul li a:hover{
+.megamenu1 .row ul li a:hover{
 color: rgb(234, 120, 50);
 text-decoration: none;
 transition: all .3 ease-in-out;
 }
 
-.container.megamenu1 .row .col.banner{
+.megamenu1 .row .col.banner{
 padding: 15px;
 background-color: #f5f5f5;
 border: none;
@@ -1062,36 +1019,36 @@ margin: 30px;
 border-radius: 10px;
 }
 
-.container.megamenu1 .row .col.banner:hover {
+.megamenu1 .row .col.banner:hover {
 background-color: white; 
 box-shadow: inset 0 0 0 2px rgba(234, 120, 50, 0.5);
 transition: all .3s ease-in-out;
 }
 
-.container.megamenu1 .row .col.banner .banner-text{
+.megamenu1 .row .col.banner .banner-text{
 float: left;
 padding-right: 10px;
 }
 
-.container.megamenu1 .row .col.banner .banner-text a{
+.megamenu1 .row .col.banner .banner-text a{
 color:black;
 text-decoration: none;
 font-size: 100%;
 }
 
-.container.megamenu1 .row .col.banner .banner-text .heading{
+.megamenu1 .row .col.banner .banner-text .heading{
 color:rgba(234, 120, 50);
 font-size: 22px;
 }
 
-.container.megamenu1 .row .col.banner .banner-text a:hover{
+.megamenu1 .row .col.banner .banner-text a:hover{
 color:rgba(234, 120, 50);
 padding-left: 10px;
 font-size: 100%;
 transition: all .3s ease-in-out;
 }
 
-.container.megamenu1 .row .col.banner .banner-image{
+.megamenu1 .row .col.banner .banner-image{
 float: right;
 }
 
@@ -1115,6 +1072,11 @@ nav.navbar.navbarexpandlg.navbarDark.bgDark{
 .navbarNav{
     position: relative;
     width: 100%;
+}
+
+.navbarNav .navItemm {
+    flex-direction: column;
+    align-items: unset;
 }
 
 .navbarNav .navItem .navLink{
@@ -1220,11 +1182,6 @@ color: rgb(234, 120, 50) !important;
     .container-fluid.breadcrum .container{
         max-width: 100%;
         margin: 0;
-    }
-
-    .megamenu1{
-        width: 730px !important;
-        max-width: 730px !important;
     }
 
     .dropdownLinks.notifications .profileMenu{

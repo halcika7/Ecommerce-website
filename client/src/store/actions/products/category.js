@@ -10,6 +10,7 @@ export const addCategory = categoryData => async dispatch => {
         dispatch({ type: actionTypes.ADD_EDIT_DELETE_CATEGORY_FAILED_OR_ERROR, failedMessage: response.data.failedMessage, data: categoryData });
     }else {
         dispatch({ type: actionTypes.ADD_EDIT_DELETE_CATEGORY_SUCESS, successMessage: response.data.successMessage });
+        setTimeout(() => clearState(), 4000);
     }
 }
 

@@ -229,10 +229,10 @@
 .Sidebar .DropDown {
     padding-left: 2rem;
     background-color: #0033ff2b;
-    transform-origin: 0% 0%;
+    transform-origin: top center;
     max-height: 0px;
     transform: scaleY(0);
-    transition: transform .2s cubic-bezier(0,0,0,.1), max-height .2s cubic-bezier(0,0,0,.1);
+    transition: transform .3s cubic-bezier(0,0,0,.1), max-height .2s cubic-bezier(0,0,0,.1);
     overflow: hidden;
 }
 
@@ -255,5 +255,5 @@
     transition: transform .2s cubic-bezier(0,0,0,.1);
     color: #fff;
     max-height: 100%;
-    transform-origin: 0% 0%;
+    transform-origin: top center;
 }

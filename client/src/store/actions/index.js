@@ -54,3 +54,12 @@ export {
     deleteCategory,
     clearState
  } from './products/category';
+
+ export { 
+     addCategoryIcon,
+     getAllCategoryIcons,
+     getCategoryIcon,
+     editCategoryIcon,
+     deleteCategoryIcon,
+     clearStateIcons
+  } from './products/categoryicon';

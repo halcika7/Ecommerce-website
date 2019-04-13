@@ -6,7 +6,7 @@ exports.addCategory = async (req, res) => {
         if(req.body.subcategories.length < 1) {
             return res.json({ error: 'At least one subcategory required!' });
         }
-        const category = new CategoryModel({ name: req.body.name, subcategories: req.body.subcategories });
+        const category = new CategoryModel({ name: req.body.name, icon: req.body.icon, subcategories: req.body.subcategories });
         await category.save();
         return res.json({ successMessage: 'Category Added !' });
     }catch (err) {
@@ -28,7 +28,7 @@ exports.getAllCategories = async (req, res) => {
 
 exports.getCategory = async (req, res) => {
     try{
-        const category = await CategoryModel.findOne({ _id: new ObjectId(req.query.id) }).select('name subcategories -_id');
+        const category = await CategoryModel.findOne({ _id: new ObjectId(req.query.id) }).select('name icon subcategories -_id');
 
         return res.json({ category });
 

@@ -119,7 +119,7 @@ const Navigation = props => {
                             <div className="btn-group-vertical d-flex ">
                                 <a href='/' onClick={toggleActiveClass} className="dropdown-toggle-split" >
                                     <i className="fas fa-layer-group"></i>
-                                    <p>Categories</p>
+                                    <p>Categories & Category Icons</p>
                                 </a>
                                 <div className={classes.DropDown + ' ' + classes.MaxHeight100}>
                                     <Link to="/admindashboard/addcategory">
@@ -127,6 +127,12 @@ const Navigation = props => {
                                     </Link>
                                     <Link to="/admindashboard/allcategories">
                                         <p>All Categories</p>
+                                    </Link>
+                                    <Link to="/admindashboard/addcategoryicon">
+                                        <p>Add Category Icon</p>
+                                    </Link>
+                                    <Link to="/admindashboard/allcategoryicons">
+                                        <p>All Category Icons</p>
                                     </Link>
                                 </div>
                             </div>

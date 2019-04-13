@@ -7,6 +7,11 @@ const CategorySchema = new Schema({
         required: true,
         unique: true
     },
+    icon: {
+        type: String,
+        required: true,
+        unique: true
+    },
     subcategories: [
         {
             name: {

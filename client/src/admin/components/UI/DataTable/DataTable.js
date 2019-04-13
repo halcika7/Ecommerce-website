@@ -12,6 +12,7 @@ const DataTable = props => {
     const [data, setData] = useState([]);
     const [length, setLength] = useState(false);
     const [categoriesLength, setCategoriesLength] = useState(false);
+    const [iconsLength, setIconsLength] = useState(false);
 
     useEffect(() => {
         const data = [];
@@ -37,6 +38,18 @@ const DataTable = props => {
         setCategoriesLength(data.length)
         setData(data);
     }, [props.categoriesData]);
+
+    useEffect(() => {
+        const data = [];
+        for(let icon in props.iconsData) {
+            const object = {
+                ...props.iconsData[icon]
+            }
+            data.push(object);
+        }
+        setIconsLength(data.length)
+        setData(data);
+    }, [props.iconsData]);
 
     const [options] = useState({
         page: 1,  // which page you want to show as default
@@ -68,35 +81,21 @@ const DataTable = props => {
 
     const buttonFormatter = (cell, row) => {
         const id = row._id;
+        let view = '/admindashboard/', edit = '/admindashboard/';
+        if(props.userData) { view += 'adminViewUser?id='; edit += 'adminEditUser?id=' }
+        if(props.categoriesData) { view = 'viewcategory?id='; edit += 'editcategory?id=' }
+        if(props.iconsData) { view = 'viewcategoryicon?id='; edit += 'editcategoryicon?id=' }
         return (
             <React.Fragment>
-                <Link className="btn btn-warning" to={`/admindashboard/adminViewUser?id=${id}`}>
+                <Link className="btn btn-warning" to={`${view}${id}`}>
                     <i className="far fa-eye"></i>
                 </Link>
-                <Link className="btn btn-primary" to={`/admindashboard/adminEditUser?id=${id}`}>
+                <Link className="btn btn-primary" to={`${edit}${id}`}>
                     <i className="far fa-edit"></i>
                 </Link>
                 <button className="btn btn-danger" type="button" 
                     onClick={(e) => props.click(e,id)}>
-                       <i className="far fa-trash-alt"></i>
-                </button>
-            </React.Fragment>
-        )
-    }
-
-    const categoryButtonFormatter = (cell, row) => {
-        const id = row._id;
-        return (
-            <React.Fragment>
-                <Link className="btn btn-warning" to={`/admindashboard/viewcategory?id=${id}`}>
-                    <i className="far fa-eye"></i>
-                </Link>
-                <Link className="btn btn-primary" to={`/admindashboard/editcategory?id=${id}`}>
-                    <i className="far fa-edit"></i>
-                </Link>
-                <button className="btn btn-danger" type="button" 
-                    onClick={(e) => props.click(e,id)}>
-                       <i className="far fa-trash-alt"></i>
+                        <i className="far fa-trash-alt"></i>
                 </button>
             </React.Fragment>
         )
@@ -105,9 +104,12 @@ const DataTable = props => {
     const subcategoriesFormatter = (cell, row) => row.subcategories.map((sub, index) => `<span class=${classes.SPAN}>${sub.name}</span>`).join('');
 
     const imgFormatter = (cell, row) => {
+        let src = '', width = '30', height = '30';
+        if(props.usersData) { src = `/${row.profilePicture}`; width = '80'; height = '80';}
+        if(props.categoriesData || props.iconsData) { src = row.icon ? row.icon : row.name }
         return (
             <React.Fragment>
-                <img src={'/' + row.profilePicture} alt={row.name} width="80" height="80" />
+                <img src={src} alt={row.name} width={width} height={height} />
             </React.Fragment>
         )
     }
@@ -136,8 +138,21 @@ const DataTable = props => {
                 containerClass='table-responsive col-12'>
                     <TableHeaderColumn isKey dataField='_id' dataSort>ID</TableHeaderColumn>
                     <TableHeaderColumn dataField='name' dataSort>Category Name</TableHeaderColumn>
+                    <TableHeaderColumn dataField='icon' dataFormat={imgFormatter}>Category Icon</TableHeaderColumn>
                     <TableHeaderColumn dataFormat={subcategoriesFormatter}>Subcategories</TableHeaderColumn>
-                    <TableHeaderColumn dataField='button' dataFormat={categoryButtonFormatter.bind(this)}>Actions</TableHeaderColumn>
+                    <TableHeaderColumn dataField='button' dataFormat={buttonFormatter.bind(this)}>Actions</TableHeaderColumn>
+                </BootstrapTable>}
+            </React.Fragment>}
+
+            {props.iconsData && 
+            <React.Fragment>
+            {props.iconsData && (!iconsLength || iconsLength === 0) ? <SmallSpinner /> :
+                <BootstrapTable data={data} options={options} bordered={false} pagination version='4' striped hover search={ true } multiColumnSearch={ true }
+                containerClass='table-responsive col-12'>
+                    <TableHeaderColumn isKey dataField='_id' dataSort>ID</TableHeaderColumn>
+                    <TableHeaderColumn dataField='name' dataSort>Icon Name</TableHeaderColumn>
+                    <TableHeaderColumn dataField='name' dataFormat={imgFormatter}>Category Icon</TableHeaderColumn>
+                    <TableHeaderColumn dataField='button' dataFormat={buttonFormatter.bind(this)}>Actions</TableHeaderColumn>
                 </BootstrapTable>}
             </React.Fragment>}
         </div>

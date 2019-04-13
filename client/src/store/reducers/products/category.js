@@ -4,6 +4,7 @@ import { updateObject } from '../../../helpers/updateObject';
 const initialState = {
     categoryData: {
         name: '',
+        icon: false,
         subcategories: []
     },
     allCategories: [],

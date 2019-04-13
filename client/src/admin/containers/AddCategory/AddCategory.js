@@ -5,10 +5,12 @@ import classes from './AddCategory.module.css';
 import TagsInput2 from '../../components/UI/TagsInput/TagsInput2';
 import LoginRegisterInputs from '../../../users/components/UI/LoginRegisterInputs/LoginRegisterInputs';
 import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
+import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 
 const AddCategory = props => {
     const [catName, setCatName] = useState('');
     const [subCatName, setSubCatName] = useState('');
+    const [iconName, setIconName] = useState(false);
     const [subCategories, setSubCategories] = useState([]);
     const [allSubCategories, setAllSubCategories] = useState([]);
     const [catNameError, setCatNameError] = useState('');
@@ -21,6 +23,7 @@ const AddCategory = props => {
 
     useEffect(() => {
         setCatName(props.category.categoryData.name);
+        setIconName(props.category.categoryData.icon);
         setAllSubCategories(props.category.categoryData.subcategories);
     }, [props.category.categoryData]);
 
@@ -52,7 +55,7 @@ const AddCategory = props => {
         }else {
             setCatNameError('');
         }
-        const catData = { name: catName, subcategories: allSubCategories };
+        const catData = { name: catName, icon: iconName, subcategories: allSubCategories };
         setCatName('');
         setSubCatName('');
         setSubCategories([]);
@@ -104,14 +107,18 @@ const AddCategory = props => {
         if(!props.addcategory) {
             const id = new URLSearchParams(props.location.search).get('id'); 
             props.getCategory(id);
+            props.getAllCategoryIcons()
         }
         if(props.addcategory) {
             props.clearState();
+            props.getAllCategoryIcons();
         }
     }
 
     return (
         <div className='AdminProfile row'>
+            {props.category.failedMessage && <ResponseMessages message={props.category.failedMessage} ClassName="Danger" />}
+            {props.category.successMessage && <ResponseMessages message={props.category.successMessage} />}
             <div className='col-12 mb-30'>
                 {props.category.loading ? 
                 <div className="card bg-white">
@@ -131,6 +138,21 @@ const AddCategory = props => {
                                 <LoginRegisterInputs formBox="col-md-6" label="Category Name" type="text" name="catName"
                                     placeholder="Enter Category Name" inputClass='form-control' invalidInput='invalid' invalidFeedback='invalid-feedback' value={catName} onChange={e => setCatName(e.target.value)}
                                     error={catNameError ? catNameError : ''} disabled={props.viewcategory}/>
+                                {(iconName && props.viewcategory) && 
+                                <div className='col-md-6'>
+                                    <label className="d-block mb-10">Category Icon</label>
+                                    <img width="48" height="48" src={iconName} alt={iconName} />
+                                </div>}
+                                {!props.viewcategory && 
+                                <div className={classes.ICONS + " col-12 mt-20 mb-20"}>
+                                    <label className="d-block mb-10">Select Icon for Category</label>
+                                    {props.allIcons && props.allIcons.map(icon => 
+                                    <label key={icon._id} className={classes.radioLabel}>
+                                        <input type="radio" name="icon" value={icon.name} onChange={e => setIconName(e.target.value)} checked={icon.name === iconName ? true : false}/>
+                                        <img src={icon.name} alt={icon._id} />
+                                    </label>
+                                    )}
+                                </div>}
                             </div>
                             {(props.addcategory || props.editcategory) && <div className="row">
                                 <LoginRegisterInputs formBox="col-md-6" label=" Sub Category Name" type="text" name="subCatName"
@@ -169,7 +191,8 @@ const AddCategory = props => {
 
 const mapStateToProps = state => {
     return {
-        category: state.category
+        category: state.category,
+        allIcons: state.categoryIcon.allCategoryIcons
     }
 }
 
@@ -178,7 +201,8 @@ const dispatchMapToProps = dispatch => {
         addCategory: (data) => dispatch(actions.addCategory(data)),
         getCategory: (id) => dispatch(actions.getCategory(id)),
         editCategory: (id, data) => dispatch(actions.editCategory(id, data)),
-        clearState: () => dispatch(actions.clearState())
+        clearState: () => dispatch(actions.clearState()),
+        getAllCategoryIcons: () => dispatch(actions.getAllCategoryIcons())
     }
 }
 

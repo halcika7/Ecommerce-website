@@ -65,7 +65,7 @@ class CategorySearchList extends Component {
                 return <SubCategory categ={categ} key={categ.index}/>
             })
             return(
-                <li key={Date.now() * Math.random()}>
+                <li className={c.navItemm} key={Date.now() * Math.random()}>
                     <span className={c.dropdownNavCategoryLinks}><i className="fas fa-angle-right"></i>{category.name} ({category.subCategories.length})</span>
                     <div className={c.categoryNavSearchList + " " +c.sub}>
                         <ul className={c.catChild}>
