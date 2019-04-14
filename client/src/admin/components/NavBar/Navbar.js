@@ -9,12 +9,6 @@ import { toggleSearchModal, toggleNav } from '../../utility/openDropdown';
 
 const Navbar = props => {
 
-    useEffect(() => { props.getUserPhoto(props.userId); }, []);
-
-    useEffect(() => {
-        props.getUserPhoto(props.userId);
-    }, [props.SingleUser, props.AllUsers]);
-
     const logout = (e) => { e.preventDefault(); props.logoutUser(); }
 
     const toggleSidebar = e => {
@@ -120,7 +114,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         logoutUser: () => dispatch(actions.logoutUser()),
-        getUserPhoto: (id) => dispatch(actions.getLoggedInUserPhoto(id))
     }
 }
 

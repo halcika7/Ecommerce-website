@@ -27,7 +27,9 @@ export const getAllCategories = () => async dispatch => {
 export const getCategory = (id) => async dispatch => {
     dispatch({ type: actionTypes.CATEGORY_START });
     const response = await axios.get('/products/category/getcategory?id=' + id);
-    if(response.data.failedMessage) {
+    if(response.data.error) {
+        dispatch({ type: actionTypes.GET_ALL_OR_SINGLE_CATEGORIES_FAILED, errorId: response.data.error });
+    }else if(response.data.failedMessage) {
         dispatch({ type: actionTypes.GET_ALL_OR_SINGLE_CATEGORIES_FAILED, failedMessage: response.data.failedMessage });
     }else {
         dispatch({ type: actionTypes.GET_ALL_OR_SINGLE_CATEGORIES_SUCCESS, data: response.data.category });

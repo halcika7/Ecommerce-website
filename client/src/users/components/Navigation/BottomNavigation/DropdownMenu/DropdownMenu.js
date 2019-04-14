@@ -3,8 +3,8 @@ import c from '../../Navigation.module.css';
 
 const dropdownMenu = (props) => {
     return(
-        <div className={c.megamenu1 + " megamenu1 d-none d-lg-block"}>
-            <div className={c.row + " row"}>
+        <div className={c.megamenu1 + " megamenu1 d-none d-lg-block"} style={{ height: `${props.height}px` }}>
+            <div className={c.row + " row"} >
                 {props.data.map((category, index) => 
                     <ul key={index} className={c.col + " col-3"}>
                         <li><h5>{category.name}</h5></li>

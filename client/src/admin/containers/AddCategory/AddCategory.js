@@ -21,6 +21,12 @@ const AddCategory = props => {
 
     useEffect(() => { startFunction(); }, [props.addcategory, props.viewcategory, props.editcategory]);
 
+    useEffect(() => { 
+        if(props.category.errorId) { 
+            setTimeout(() => props.history.goBack(), 6000); 
+        } 
+    }, [props.category.errorId]);
+
     useEffect(() => {
         setCatName(props.category.categoryData.name);
         setIconName(props.category.categoryData.icon);
@@ -118,9 +124,10 @@ const AddCategory = props => {
     return (
         <div className='AdminProfile row'>
             {props.category.failedMessage && <ResponseMessages message={props.category.failedMessage} ClassName="Danger" />}
+            {props.category.errorId && <ResponseMessages message={props.category.errorId} ClassName="Danger" />}
             {props.category.successMessage && <ResponseMessages message={props.category.successMessage} />}
             <div className='col-12 mb-30'>
-                {props.category.loading ? 
+                {props.category.loading || props.category.errorId ? 
                 <div className="card bg-white">
                     <div className="card-body">
                         <SmallSpinner />

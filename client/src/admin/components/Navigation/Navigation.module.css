@@ -221,7 +221,8 @@
 
 .Nav p {
     margin: auto 0;
-    white-space: nowrap;
+    /* white-space: nowrap; */
+    word-break: normal;
     font-weight: 300;
     height: 100%;
 }

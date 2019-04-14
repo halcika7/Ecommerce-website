@@ -30,6 +30,8 @@ exports.getCategory = async (req, res) => {
     try{
         const category = await CategoryModel.findOne({ _id: new ObjectId(req.query.id) }).select('name icon subcategories -_id');
 
+        if(!category) { return res.json({ error: `Category with id=${req.query.id} was not found !` }) }
+
         return res.json({ category });
 
     }catch (err) {

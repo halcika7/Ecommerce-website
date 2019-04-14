@@ -9,7 +9,7 @@ const BrandSchema = new Schema({
     },
     categories: [
         {
-            type: Array,
+            type: String,
             required: true
         }
     ]

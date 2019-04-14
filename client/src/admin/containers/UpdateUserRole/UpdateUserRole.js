@@ -5,9 +5,9 @@ import * as actions from '../../../store/actions';
 import classnames from 'classnames';
 
 import ToggleSwitchButton from '../../components/UI/Buttons/ToggleSwitchButton';
-import Spinner from '../../../users/components/UI/Spinner/Spinner';
 import TagsInput from '../../components/UI/TagsInput/TagsInput';
 import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
+import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
 
 const UpdateUserRole = props => {
     const [role, setRole] = useState({});
@@ -33,6 +33,8 @@ const UpdateUserRole = props => {
         setAllPermissions(props.allPermissions);
     }, [props.allPermissions]);
 
+    useEffect(() => { if(props.errorId) { setTimeout(() => props.history.goBack(), 6000); } }, [props.errorId]);
+
     const onFormSubmit = e => {
         e.preventDefault();
         const roleData = {
@@ -52,52 +54,54 @@ const UpdateUserRole = props => {
         )
     }
 
-    if( isAdmin !== undefined && roleName !== undefined ) {
-        return (
-            <div className="AdminProfile row">
-            {props.successMessage ? <ResponseMessages message={props.successMessage} /> : null}
-                <div className='col-12'>
-                    <div className="card mb-30 text-white">
-                        <div className="card-header">
-                            <h4>Update {props.roleState.name} Role</h4>
+    return (
+        <div className="AdminProfile row">
+        {props.successMessage ? <ResponseMessages message={props.successMessage} /> : null}
+        {props.errorId ? <ResponseMessages ClassName="Danger" message={props.errorId} /> : null}
+            <div className='col-12'>
+                {props.errorId || ! roleName ? (
+                    <React.Fragment>
+                        <div className="card bg-white">
+                            <SmallSpinner />
                         </div>
-                        <div className='card-body'>
-                            <form onSubmit={onFormSubmit}>
-                                <div className='mb-20'>
-                                    <label className='d-block'>Role Name</label>
-                                    <input type="text" placeholder="Enter Role Name" 
-                                        value={roleName}
-                                        onChange={e => setRoleName(e.target.value)}
-                                        style={{ outline: '0px', boxShadow: 'none', border: '1px solid rgba(255, 255, 255, 0.489)', marginBottom: '0px' }} 
-                                        className={classnames( 'w-100 d-block', {
-                                            'invalid': props.failedMessage
-                                        })}
-                                        disabled={props.view}/>
-                                        {props.failedMessage && (<div className='invalid-feedback'>{props.failedMessage}</div>)}
-                                </div>
-                                <div className='mb-20'>
-                                    <ToggleSwitchButton value={isAdmin} setValue={setIsAdmin} name="Is Admin" disabled={props.view}/>
-                                </div>
-                                <div className="mb-30">
-                                    <label>Permissions</label>
-                                    <TagsInput 
-                                        values={allPermissions}
-                                        choosenValues={choosenPermissions}
-                                        setChoosenValues={setChoosenPermissions} 
-                                        disabled={props.view}/>
-                                </div>
-                                {!props.view && <button className="btn">Update Role</button>}
-                            </form>
-                        </div>
+                    </React.Fragment>
+                ) : 
+                <div className="card mb-30 text-white">
+                    <div className="card-header">
+                        <h4>Update {props.roleState.name} Role</h4>
                     </div>
-                </div>
+                    <div className='card-body'>
+                        <form onSubmit={onFormSubmit}>
+                            <div className='mb-20'>
+                                <label className='d-block'>Role Name</label>
+                                <input type="text" placeholder="Enter Role Name" 
+                                    value={roleName}
+                                    onChange={e => setRoleName(e.target.value)}
+                                    style={{ outline: '0px', boxShadow: 'none', border: '1px solid rgba(255, 255, 255, 0.489)', marginBottom: '0px' }} 
+                                    className={classnames( 'w-100 d-block', {
+                                        'invalid': props.failedMessage
+                                    })}
+                                    disabled={props.view}/>
+                                    {props.failedMessage && (<div className='invalid-feedback'>{props.failedMessage}</div>)}
+                            </div>
+                            <div className='mb-20'>
+                                <ToggleSwitchButton value={isAdmin} setValue={setIsAdmin} name="Is Admin" disabled={props.view}/>
+                            </div>
+                            <div className="mb-30">
+                                <label>Permissions</label>
+                                <TagsInput 
+                                    values={allPermissions}
+                                    choosenValues={choosenPermissions}
+                                    setChoosenValues={setChoosenPermissions} 
+                                    disabled={props.view}/>
+                            </div>
+                            {!props.view && <button className="btn">Update Role</button>}
+                        </form>
+                    </div>
+                </div>}
             </div>
-        );
-    }else {
-        return (
-            <Spinner />
-        );
-    }
+        </div>
+    );
 }
 
 const mapStateToProps = state => {
@@ -105,7 +109,8 @@ const mapStateToProps = state => {
         roleState: state.roles.Role,
         successMessage: state.roles.successMessage,
         failedMessage: state.roles.failedMessage,
-        allPermissions: state.permissions.allPermissions
+        allPermissions: state.permissions.allPermissions,
+        errorId: state.roles.errorId
     };
 };
 

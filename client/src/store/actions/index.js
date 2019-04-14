@@ -63,3 +63,12 @@ export {
      deleteCategoryIcon,
      clearStateIcons
   } from './products/categoryicon';
+
+  export {
+      addBrand,
+      getAllBrands,
+      getBrand,
+      editBrand,
+      deleteBrand,
+      clearBrandState
+  } from './products/brand';

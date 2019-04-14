@@ -15,8 +15,8 @@ const BottomNavigation = props => {
         {name: 'Weekly Deals', link: '/weeklydeals',classes: {first:c.navItem, second:c.navLink, third: c.active}},
         {name: 'Daily Deals', link: '/dailydeals',classes: {first:c.navItem, second:c.navLink, third: c.active}}
     ]);
-
     const [categories, setCategories] = useState([]);
+    const [menuHeight, setMenuHeight] = useState('');
 
     useEffect(() => {
         props.getAllCategories();
@@ -62,11 +62,20 @@ const BottomNavigation = props => {
         }
     }
 
-    const categoryDrop = (event) => {
-        event.currentTarget.parentElement.children[1].classList.toggle(c.active)
+    const categoryDrop = (e) => {
+        const dropdownMenu = e.currentTarget.parentElement.children[1];
+        dropdownMenu.classList.toggle(c.active);
+        setMenuHeight(dropdownMenu.children[0].clientHeight);
     }
     
     const liOnClick = (e) => {
+        const dropdownLi = document.querySelectorAll('.dropdownLi');
+        dropdownLi.forEach(li => {
+            if(li.classList.contains(c.active)) {
+                li.classList.toggle(c.active);
+            }
+        });
+        console.log(e.currentTarget.parentElement.clientHeight)
         e.currentTarget.classList.toggle(c.active)
     }
 
@@ -86,9 +95,9 @@ const BottomNavigation = props => {
                             <div className={c.dropdownMenu + " dropdown-menu"}>
                                 <ul>
                                     {categories.map((category, index) => 
-                                        <li onClick={liOnClick} key={index}>
+                                        <li className="dropdownLi" onClick={liOnClick} key={index}>
                                             <img src={category.icon} alt=""/> {category.name}
-                                            <DropdownMenu data={category.subcategories}/>
+                                            <DropdownMenu data={category.subcategories} height={menuHeight}/>
                                         </li>
                                     )}
                                 </ul>

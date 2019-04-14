@@ -34,7 +34,9 @@ export const deleteUserRole = name => async dispatch => {
 
 export const getUserRole = id => async dispatch => {
     const response = await axios.post('/api/users/getrole', {id});
-    if(response.data.failedMessage){
+    if(response.data.error) {
+        dispatch({ type: actionTypes.GET_ROLE_FAILED, errorId: response.data.error });
+    }else if(response.data.failedMessage){
         dispatch({ type: actionTypes.GET_ROLE_FAILED, failedMessage: response.data.failedMessage });
     }else {
         dispatch({ type: actionTypes.GET_ROLE_SUCCESS, role: response.data });

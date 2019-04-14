@@ -4,6 +4,7 @@ import { updateObject } from '../../../helpers/updateObject';
 const initialState = {
     Roles: [],
     Role: {},
+    errorId: false,
     failedMessage: false,
     successMessage: false,
     loading: false
@@ -34,7 +35,7 @@ const reducer = (state = initialState, action) => {
             }),
         [actionTypes.GET_USER_ROLES_FAILED] : 
             updateObject(state, {
-                failedMessage: action.failedMessage,
+                failedMessage: action.failedMessage ? action.failedMessage : false,
                 successMessage: false
             }),
         [actionTypes.DELETE_USER_ROLE_SUCCESS] :
@@ -49,7 +50,8 @@ const reducer = (state = initialState, action) => {
         [actionTypes.GET_ROLE_FAILED] :
             updateObject(state, {
                 ...initialState,
-                failedMessage: action.failedMessage
+                failedMessage: action.failedMessage ? action.failedMessage : false,
+                errorId: action.errorId ? action.errorId : false
             }),
         [actionTypes.GET_ROLE_SUCCESS] :
             updateObject(state, {

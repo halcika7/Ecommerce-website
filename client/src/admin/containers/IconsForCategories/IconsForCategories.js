@@ -22,6 +22,7 @@ const IconsForCategories = props => {
     }, [props.iconState]);
 
     useEffect(() => { startFunction(); }, [props.addicon, props.viewicon, props.editicon]);
+    useEffect(() => { if(props.iconState.errorID) { setTimeout(() => props.history.goBack(), 6000); } }, [props.iconState.errorID]);
 
     const onSubmit = e => {
         e.preventDefault();
@@ -67,8 +68,9 @@ const IconsForCategories = props => {
         <div className={'AdminProfile row'}>
             {props.iconState.successMessage && <ResponseMessage message={props.iconState.successMessage} />}
             {props.iconState.failedMessage && <ResponseMessage ClassName="Danger" message={props.iconState.failedMessage} />}
+            {props.iconState.errorID && <ResponseMessage ClassName="Danger" message={props.iconState.errorID} />}
             <div className={'col-12 mb-30'}>
-                {props.iconState.loading ? (
+                {props.iconState.loading || props.iconState.errorID ? (
                     <React.Fragment>
                         <div className={"card bg-white"}>
                             <SmallSpinner />
@@ -101,7 +103,7 @@ const IconsForCategories = props => {
                                                 error={error ? error : ''} 
                                                 disabled={props.viewicon && true}/>
                                         </div>
-                                        {imgSrc && 
+                                        {(imgSrc && !props.viewicon)&& 
                                         <div className="col-sm-4">
                                             <label className="d-block">Category Icon Image</label>
                                             <img src={imgSrc} alt="imgPerview" onError={(e) => {

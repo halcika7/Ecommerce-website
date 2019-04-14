@@ -168,6 +168,11 @@ exports.getAllUsers = async (req, res) => {
 }
 
 exports.getSingleUser = async (req, res) => {
+    if(req.query.profile !== 'false') {
+        if(req.query.id !== req.query.id2) {
+            return res.json({ error: `Please do not use other id's` });
+        }
+    }
     try{
         const user = await UserModel.findOne({_id: new ObjectId(req.query.id)}).select('profilePicture name email role username userInfo emailConfirmation.confirmed');
         if(!user) {

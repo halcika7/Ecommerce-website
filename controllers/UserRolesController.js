@@ -39,6 +39,7 @@ exports.deleteUserRole = async (req, res) => {
 exports.getRole = async (req, res) => {
     try{
         const response = await UserRolesModel.findById(req.body.id).select('isAdmin permissions name');
+        if(!response) { return res.json({ error: `Role with id = ${req.body.id} was not found !` }) }
         return res.json(response);
     }catch (err) {
         return res.json({ failedMessage: true });

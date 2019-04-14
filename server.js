@@ -7,6 +7,7 @@ const path = require('path');
 const users = require('./routes/api/users');
 const productsCategory = require('./routes/products/category');
 const categoryIcon = require('./routes/products/categoryicon');
+const brand = require('./routes/products/brand');
 
 const app = express();
 
@@ -29,6 +30,7 @@ require('./config/passport')(passport);
 app.use('/api/users', users);
 app.use('/products/category', productsCategory);
 app.use('/products/categoryicon', categoryIcon);
+app.use('/products/brand', brand);
 
 const port = process.env.PORT || 5000;
 

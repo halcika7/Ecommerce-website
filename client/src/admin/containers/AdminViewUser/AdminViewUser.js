@@ -12,7 +12,8 @@ import AdminChangeProfilePicture from './AdminChangeProfilePicture/AdminChangePr
 
 const AdminViewUser = props => {
     const userID = props.match.params.id ? props.match.params.id : new URLSearchParams(props.location.search).get('id'); 
-    
+    const profile = props.profile ? true : false;
+
     const [user, setUser] = useState({});
     const [roles, setRoles] = useState([]);
     const [inputValues, setInputValues] = useState({ 
@@ -34,12 +35,18 @@ const AdminViewUser = props => {
     const [inputsCol6S] = useState([ 
         { label: 'Date of Birth', type: 'date', name: 'dob', placeholder: 'Date of Birth' }, { label: 'Date of Employment', type: 'date', name: 'doe', placeholder: '' } ]);
 
-    useEffect(() => {
-        props.getUser(userID); props.getRoles(); 
-    }, [props.location.search, props.match.params]);
     useEffect(() => { 
-        props.getUser(userID); props.getRoles(); }, []);
-    useEffect(() => { setUser({ ...user, ...props.User }); setInputValues({ ...inputValues, ...props.User.userInfo, role: props.User.role, ...props.User.emailConfirmation, name: props.User.name, username: props.User.username, email: props.User.email }); }, [props.User]);
+        props.getUser(userID, props.UserID, profile);
+        if(!(props.profile && (userID !== props.UserID))) { props.getRoles(); }
+    }, []);
+    useEffect(() => {
+        props.getUser(userID, props.UserID, profile);
+        if(!(props.profile && (userID !== props.UserID))) {props.getRoles(); }
+    }, [props.location.search, props.match.params]);
+    useEffect(() => { if(props.errorID) { props.history.goBack(); } }, [props.errorID]);
+    useEffect(() => { 
+        setUser({ ...user, ...props.User }); setInputValues({ ...inputValues, ...props.User.userInfo, role: props.User.role, ...props.User.emailConfirmation, name: props.User.name, username: props.User.username, email: props.User.email });
+    }, [props.User]);
     useEffect(() => { setRoles(props.roles); }, [props.roles]);
 
     const inputChange = e => {
@@ -71,7 +78,7 @@ const AdminViewUser = props => {
             {props.updateSuccessMessage ? <ResponseMessages message={props.updateSuccessMessage} /> : null }
             {props.updatePasswordSuccessMessage ? <ResponseMessages message={props.updatePasswordSuccessMessage} /> : null }
             <div className="col-12 mb-30">
-                {props.failedMessage ? 
+                {props.failedMessage || (props.profile && (userID !== props.UserID)) ? 
                 <div className='card text-white'>
                     <div className="card-header">
                         <h5 className="title">User not found</h5>
@@ -150,7 +157,7 @@ const AdminViewUser = props => {
                     </div>}
                 </React.Fragment>}
             </div>
-            {!props.failedMessage && !Object.keys(user).length < 1 ? 
+            {(!props.failedMessage && !Object.keys(user).length < 1) && !(props.profile && (userID !== props.UserID)) ? 
             <React.Fragment>
                 {props.profile === true && props.User !== undefined ? <AdminNewPassword userName={props.User.username} /> : null}
                 {props.profile === true && props.User !== undefined ? <AdminChangeProfilePicture submit={props.updateUserPicture} username={user.username} getUserData={props.getUser} id={user._id}/> : null}
@@ -162,6 +169,8 @@ const AdminViewUser = props => {
 const mapStateToProps = state => {
     return {
         User: state.allUsers.SingleUser,
+        errorID: state.allUsers.errorID,
+        UserID: state.login.User.id,
         roles: state.roles,
         successMessage: state.allUsers.successMessage,
         failedMessage: state.allUsers.failedMessage,
@@ -177,7 +186,7 @@ const mapStateToProps = state => {
 const dispatchMapToProps = dispatch => {
     return {
         getRoles: () => dispatch(actions.getRoles()),
-        getUser: (id) => dispatch(actions.getSingleUser(id)),
+        getUser: (id, id2, profile) => dispatch(actions.getSingleUser(id, id2, profile)),
         updateUser: userData => dispatch(actions.updateUser(userData)),
         updateUserPicture: (formData,config) => dispatch(actions.userUpdateProfilePicture(formData,config))
     }

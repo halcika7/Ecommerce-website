@@ -9,6 +9,7 @@ import userRolesReducer from './roles/userRoles';
 import addUserReducer from './auth/addNewUser';
 import categoryReducer from './products/category';
 import categoryIconReducer from './products/categoryicon';
+import brandReducer from './products/brand';
 
 export const combinedReducers = combineReducers({
     login: loginReducer,
@@ -20,5 +21,6 @@ export const combinedReducers = combineReducers({
     roles: userRolesReducer,
     addUser: addUserReducer,
     category: categoryReducer,
-    categoryIcon: categoryIconReducer
+    categoryIcon: categoryIconReducer,
+    brand: brandReducer
 });

@@ -12,15 +12,17 @@ export const getAllUsers = () => async dispatch => {
     setTimeout(() => dispatch({ type: actionTypes.CLEAR_MESSAGES }), 4000);
 }
 
-export const getSingleUser = (id) => async dispatch => {
+export const getSingleUser = (id, id2 = false, profile = false) => async dispatch => {
     dispatch({ type: actionTypes.GET_ALL_USERS_START });
-    const response = await axios.get('/api/users/singleuser?id=' + id);
-    if(response.data.failedMessage) {
+    const response = await axios.get(`/api/users/singleuser?id=${id}&id2=${id2}&profile=${profile}`);
+    if(response.data.error) {
+        dispatch({ type: actionTypes.GET_SINGLE_USER_FAILED, errorID: response.data.error });
+    }else if(response.data.failedMessage) {
         dispatch({ type: actionTypes.GET_SINGLE_USER_FAILED, failedMessage: response.data.failedMessage });
     }else {
         dispatch({type: actionTypes.GET_SINGLE_USER_SUCCESS, User: response.data.user})
     }
-    // setTimeout(() => dispatch({ type: actionTypes.CLEAR_MESSAGES }), 4000);
+    setTimeout(() => dispatch(getLoggedInUserPhoto(id2)), 200);
 }
 
 export const deleteUser = (id) => async dispatch => {

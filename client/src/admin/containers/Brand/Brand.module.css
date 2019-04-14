@@ -1,0 +1,80 @@
+.checkBoxWrapper {
+    max-height: 215px;
+    min-height: 215px;
+    overflow-y: auto;
+}
+
+.checkbox {
+    color: #fff;
+    position: relative;
+    margin: 1rem 1rem 0 0;
+    height: 19px !important;
+}
+
+.checkbox label{
+    position: relative;
+    padding-left: 30px;
+    margin: 0;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+}
+
+.checkbox label:before {
+    font-size: 17px;
+    position: absolute;
+    left: 0;
+    padding-left: 2px;
+    border-radius: 3px;
+    border: 2px solid rgba(2555, 255, 255, 0.1);
+    content: "";
+    height: 20px;
+    width: 20px;
+}
+
+.checkbox label:after {
+    font-size: 17px;
+    position: absolute;
+    left: 0;
+    padding-left: 2px;
+    border-radius: 3px;
+    font-weight: 900;
+    font-family: "Font Awesome 5 Free";
+    content: '\f00c';
+    max-width: 0;
+    overflow: hidden;
+    opacity: 0.5;
+    -webkit-transition: all 0.35s ease;
+    -moz-transition: all 0.35s ease;
+    -ms-transition: all 0.35s ease;
+    -o-transition: all 0.35s ease;
+    transition: all 0.35s ease;
+    color: #4f9ae6;
+}
+
+.checkbox input {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0 !important;
+    height: 19px !important;
+    cursor: pointer;
+}
+
+.checkbox input:checked + label:after {
+    max-width: 25px;
+    opacity: 1;
+}
+
+.checkbox input:checked + label:before {
+    border: 2px solid #4f9ae6;
+}
+
+ul.toDo li .checkbox input:checked ~ label {
+    color: #eeeeee3d;
+    text-decoration: line-through;
+}

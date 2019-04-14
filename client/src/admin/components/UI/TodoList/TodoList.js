@@ -22,8 +22,7 @@ const TodoList = props => {
                             <li>
                                 <div className={classes.rememeberCheckbox}>
                                     <input type="checkbox" className={classes.formControl + ' form-control'} name="one" id="one" />
-                                    <label>
-                                    Prepare Docs For today's Presentation</label>
+                                    <label>Prepare Docs For today's Presentation</label>
                                 </div>
                             </li>
                         </ul>

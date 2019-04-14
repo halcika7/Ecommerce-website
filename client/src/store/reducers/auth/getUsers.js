@@ -4,6 +4,7 @@ import { updateObject } from '../../../helpers/updateObject';
 const initialState = {
     Users: [],
     SingleUser: {},
+    errorID: false,
     profilePicture: false,
     failedMessage: false,
     successMessage: false,
@@ -35,7 +36,8 @@ const reducer = (state = initialState, action) => {
         [actionTypes.GET_SINGLE_USER_FAILED] : 
             updateObject(state, {
                 ...initialState,
-                failedMessage: action.failedMessage
+                failedMessage: action.failedMessage ? action.failedMessage : false,
+                errorID: action.errorID ? action.errorID : false
             }),
         [actionTypes.DELETE_SINGLE_USER_START] :
             updateObject(state, {

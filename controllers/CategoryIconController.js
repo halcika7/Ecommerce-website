@@ -28,6 +28,7 @@ exports.getAllCategoryIcons = async (req, res) => {
 exports.getCategoryIcon = async (req, res) => {
     try{
         const icon = await CategoryIconModel.findOne({ _id: new ObjectId(req.query.id) }).select('name -_id');
+        if(!icon) { return res.json({ error: `Category Icon with id = ${req.query.id} was not found` }); }
         return res.json({ icon });
     }catch (err) {
         return res.json({ failedMessage: err.message });

@@ -40,6 +40,7 @@ const AllCategories = lazy(() => import('./admin/containers/AdminAllCategories/A
 const CategoryIcon = lazy(() => import('./admin/containers/IconsForCategories/IconsForCategories'));
 const AllCategoryIcons = lazy(() => import('./admin/containers/IconsForCategories/AllIconsForCategories'));
 const Brand = lazy(() => import('./admin/containers/Brand/Brand'));
+const AllBrands = lazy(() => import('./admin/containers/Brand/AllBrands'));
 
 const App = props => {
 
@@ -86,7 +87,7 @@ const App = props => {
                                 <Route path='/admindashboard/dashboard' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminDashboard /></Suspense>}/>
                                 <Route path='/admindashboard/profile/id=:id' exact render={(props) => <Suspense fallback={<Spinner />}><AdminViewUser profile={true} {...props} /></Suspense>}/>
                                 <Route path='/admindashboard/adminViewUser' exact render={(props) => <Suspense fallback={<Spinner />}><AdminViewUser view={true} {...props}/></Suspense>}/>
-                                <Route path='/admindashboard/adminEditUser' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminViewUser {...props}/></Suspense>}/>
+                                <Route path='/admindashboard/adminEditUser' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminViewUser edit={true} {...props}/></Suspense>}/>
                                 <Route path='/admindashboard/products' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminProductsPage /></Suspense>}/>
                                 <Route path='/admindashboard/addproduct' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminAddProduct /></Suspense>}/>
                                 <Route path='/admindashboard/adminAllUsers' exact  render={(props) => <Suspense fallback={<Spinner />}><AdminAllUsers /></Suspense>}/>
@@ -103,7 +104,10 @@ const App = props => {
                                 <Route path='/admindashboard/viewcategoryicon' render={(props) => <Suspense fallback={<Spinner />}><CategoryIcon viewicon={true} {...props}/></Suspense>}/>
                                 <Route path='/admindashboard/editcategoryicon' render={(props) => <Suspense fallback={<Spinner />}><CategoryIcon editicon={true} {...props}/></Suspense>}/>
                                 <Route path='/admindashboard/allcategoryicons' render={(props) => <Suspense fallback={<Spinner />}><AllCategoryIcons /></Suspense>}/>
-                                <Route path='/admindashboard/addbrand' render={(props) => <Suspense fallback={<Spinner />}><Brand addbrand={true} /></Suspense>}/>
+                                <Route path='/admindashboard/addbrand' render={(props) => <Suspense fallback={<Spinner />}><Brand addbrand={true} {...props} /></Suspense>}/>
+                                <Route path='/admindashboard/viewbrand' render={(props) => <Suspense fallback={<Spinner />}><Brand viewbrand={true} {...props} /></Suspense>}/>
+                                <Route path='/admindashboard/editbrand' render={(props) => <Suspense fallback={<Spinner />}><Brand editbrand={true} {...props} /></Suspense>}/>
+                                <Route path='/admindashboard/allbrands' render={(props) => <Suspense fallback={<Spinner />}><AllBrands /></Suspense>}/>
                                 <Route render={() => <Suspense fallback={<Spinner />}><PageNotFound /></Suspense>}/>
                             </Switch>
                             <AdminFooter />
@@ -150,9 +154,4 @@ const mapStateToProps = state => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-    }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default withRouter(connect(mapStateToProps)(App));

@@ -11,8 +11,6 @@ const Navigation = props => {
 
     const [permissionModal, setPermissionModal] = useState(false);
     const [allPermissionModal, setAllPermissionModal] = useState(false);
-    useEffect(() => { props.getUserPhoto(props.userId); }, []);
-    useEffect(() => { props.getUserPhoto(props.userId); }, [props.SingleUser, props.AllUsers]);
 
     const toggleActiveClass = e => {
         e.preventDefault();
@@ -94,7 +92,7 @@ const Navigation = props => {
                                     onClick={toggleActiveClass}
                                     className="dropdown-toggle-split" >
                                     <i className={classes.TimIcons + ' ' + classes.IconBasket}></i>
-                                    <p>Permissions and Roles</p>
+                                    <p>Permissions & Roles</p>
                                 </a>
                                 <div className={classes.DropDown + ' ' + classes.MaxHeight100}>
                                     {/* {props.permissions['Create Permission'] ?  */}
@@ -119,7 +117,7 @@ const Navigation = props => {
                             <div className="btn-group-vertical d-flex ">
                                 <a href='/' onClick={toggleActiveClass} className="dropdown-toggle-split" >
                                     <i className="fas fa-layer-group"></i>
-                                    <p>Categories & Category Icons</p>
+                                    <p>Categories & Icons</p>
                                 </a>
                                 <div className={classes.DropDown + ' ' + classes.MaxHeight100}>
                                     <Link to="/admindashboard/addcategory">
@@ -147,7 +145,7 @@ const Navigation = props => {
                                     <Link to="/admindashboard/addbrand">
                                         <p>Add Brand</p>
                                     </Link>
-                                    <Link to="/admindashboard/allcategories">
+                                    <Link to="/admindashboard/allbrands">
                                         <p>All Brands</p>
                                     </Link>
                                 </div>

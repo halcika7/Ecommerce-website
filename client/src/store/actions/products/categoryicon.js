@@ -27,7 +27,9 @@ export const getAllCategoryIcons = () => async dispatch => {
 export const getCategoryIcon = (id) => async dispatch => {
     dispatch({ type: actionTypes.CATEGORY_ICON_START });
     const response = await axios.get('/products/categoryicon/getcategoryicon?id=' + id);
-    if(response.data.failedMessage) {
+    if(response.data.error) {
+        dispatch({ type: actionTypes.CATEGORY_ICON_FAILED, errorID: response.data.error });
+    }else if(response.data.failedMessage) {
         dispatch({ type: actionTypes.CATEGORY_ICON_FAILED, failedMessage: response.data.failedMessage });
     }else {
         dispatch({ type: actionTypes.CATEGORY_ICON_SUCCESS, name: response.data.icon.name });

@@ -9,6 +9,7 @@ const initialState = {
     },
     allCategories: [],
     error: false,
+    errorId: false,
     failedMessage: false,
     successMessage: false,
     loading: false
@@ -46,7 +47,8 @@ const reducer = (state = initialState, action) => {
         [actionTypes.GET_ALL_OR_SINGLE_CATEGORIES_FAILED] :
             updateObject(state, {
                 ...initialState,
-                failedMessage: action.failedMessage
+                failedMessage: action.failedMessage,
+                errorId: action.errorId ? action.errorId : false,
             }),
         default: state
     }

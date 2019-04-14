@@ -30,9 +30,6 @@ const AddRoleModal = props => {
                 {props.roles.loading ? (
                     <React.Fragment>
                         <div className={"card bg-white"}>
-                            <div className="card-header">
-                                <h4 className="text-dark">Add Role</h4>
-                            </div>
                             <SmallSpinner />
                         </div>
                     </React.Fragment>

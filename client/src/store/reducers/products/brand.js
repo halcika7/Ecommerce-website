@@ -2,8 +2,11 @@ import * as actionTypes from '../../actions/actionTypes';
 import { updateObject } from '../../../helpers/updateObject';
 
 const initialState = {
-    name: '',
-    allCategoryIcons: [],
+    brandData: {
+        name: '',
+        categories: []
+    },
+    allBrands: [],
     error: false,
     errorID: false,
     failedMessage: false,
@@ -13,28 +16,29 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     const actions = {
-        [actionTypes.CATEGORY_ICON_START] :
+        [actionTypes.BRAND_START] :
             updateObject(state, {
                 ...initialState,
                 loading: true
             }),
-        [actionTypes.CLEAR_CATEGORY_ICON_STATE] :
+        [actionTypes.CLEAR_BRAND_STATE] :
             updateObject(state, {
                 ...initialState
             }),
-        [actionTypes.CATEGORY_ICON_FAILED] :
+        [actionTypes.BRAND_FAILED] :
             updateObject(state, {
                 failedMessage: action.failedMessage ? action.failedMessage : false,
                 error: action.error ? action.error : false,
                 errorID: action.errorID ? action.errorID : false,
-                name: action.name ? action.name : initialState.name,
+                brandData: action.data ? action.data : initialState.brandData,
                 loading: action.loading ? action.loading : false
             }),
-        [actionTypes.CATEGORY_ICON_SUCCESS] :
+        [actionTypes.BRAND_SUCCESS] :
             updateObject(state, {
                 successMessage: action.successMessage,
                 allCategoryIcons: action.categoryIcons ? action.categoryIcons : [],
-                name: action.name ? action.name : '',
+                allBrands: action.brands ? action.brands : [],
+                brandData: action.data ? action.data : initialState.brandData,
                 loading: action.loading ? action.loading : false
             }),
         default: state

@@ -2,6 +2,7 @@ import * as actionTypes from '../actionTypes';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../../../helpers/setAuthToken';
+import { getLoggedInUserPhoto } from '../index';
 
 export const login = (UserObj) => async dispatch => {
     dispatch({ type: actionTypes.LOGIN_START });
@@ -23,6 +24,7 @@ export const login = (UserObj) => async dispatch => {
         const decoded = jwt_decode(token);
 
         dispatch(setCurrentUser(decoded, rememberMe, response.data.successMessage));
+        dispatch(getLoggedInUserPhoto(decoded.id));
     }
 }
 
