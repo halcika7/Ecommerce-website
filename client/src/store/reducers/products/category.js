@@ -31,12 +31,14 @@ const reducer = (state = initialState, action) => {
                 ...initialState,
                 failedMessage: action.failedMessage ? action.failedMessage : false,
                 error: action.error ? action.error : false,
-                categoryData: action.data ? action.data : initialState.categoryData
+                categoryData: action.data ? action.data : initialState.categoryData,
+                loading: action.loading ? action.loading : false
             }),
         [actionTypes.ADD_EDIT_DELETE_CATEGORY_SUCESS] :
             updateObject(state, {
                 ...initialState,
-                successMessage: action.successMessage
+                successMessage: action.successMessage,
+                loading: action.loading ? action.loading : false
             }),
         [actionTypes.GET_ALL_OR_SINGLE_CATEGORIES_SUCCESS] :
             updateObject(state, {

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
-import classes from './AddCategory.module.css';
+import classes from './Category.module.css';
 import TagsInput2 from '../../components/UI/TagsInput/TagsInput2';
 import LoginRegisterInputs from '../../../users/components/UI/LoginRegisterInputs/LoginRegisterInputs';
 import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
 import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 
-const AddCategory = props => {
+const Category = props => {
     const [catName, setCatName] = useState('');
     const [subCatName, setSubCatName] = useState('');
     const [iconName, setIconName] = useState(false);
@@ -213,4 +213,4 @@ const dispatchMapToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, dispatchMapToProps)(AddCategory);
+export default connect(mapStateToProps, dispatchMapToProps)(Category);

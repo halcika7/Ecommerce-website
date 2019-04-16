@@ -59,19 +59,13 @@ const AdminProductsPage = props => {
           setData({ data });
     }, []);
 
-    const onClickProductSelected = (row) => {
-        console.log('Product #', row);
-    }
-
     const buttonFormatter = (cell, row) => {
         return (
             <React.Fragment>
                 <Link className="btn btn-warning" to='/admindashboard/dashboard'>
                     <i className="far fa-eye"></i>
                 </Link>
-                <button className="btn btn-danger" type="button" 
-                    onClick={() => 
-                    onClickProductSelected(row)}>
+                <button className="btn btn-danger" type="button">
                        <i className="far fa-trash-alt"></i>
                 </button>
             </React.Fragment>

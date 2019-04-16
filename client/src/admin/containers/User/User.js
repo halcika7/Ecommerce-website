@@ -10,7 +10,7 @@ import AdminProfileHeader from './AdminProfileHeader/AdminProfileHeader';
 import AdminNewPassword from './AdminNewPassword/AdminNewPassword';
 import AdminChangeProfilePicture from './AdminChangeProfilePicture/AdminChangeProfilePicture';
 
-const AdminViewUser = props => {
+const User = props => {
     const userID = props.match.params.id ? props.match.params.id : new URLSearchParams(props.location.search).get('id'); 
     const profile = props.profile ? true : false;
 
@@ -192,4 +192,4 @@ const dispatchMapToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, dispatchMapToProps)(AdminViewUser);
+export default connect(mapStateToProps, dispatchMapToProps)(User);

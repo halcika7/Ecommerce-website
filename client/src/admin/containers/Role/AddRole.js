@@ -7,7 +7,7 @@ import ToggleSwitchButton from '../../components/UI/Buttons/ToggleSwitchButton';
 import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
 
-const AddRoleModal = props => {
+const AddRole = props => {
     const [allPermissions, setAllPermissions] = useState([]);
     const [isAdmin, setIsAdmin] = useState(false);
     const [choosenPermissions, setChoosenPermissions] = useState([]);
@@ -87,4 +87,4 @@ const dispatchMapToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, dispatchMapToProps)(AddRoleModal);
+export default connect(mapStateToProps, dispatchMapToProps)(AddRole);

@@ -6,7 +6,7 @@ import DataTable from '../../components/UI/DataTable/DataTable';
 import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
 
-const AdminAllUsers = props => {
+const AllUsers = props => {
     const [users, setUsers] = useState([])
     useEffect(() => { 
         setUsers({...props.users.Users}); 
@@ -51,4 +51,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminAllUsers);
+export default connect(mapStateToProps, mapDispatchToProps)(AllUsers);

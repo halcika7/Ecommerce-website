@@ -5,22 +5,22 @@ import DataTable from '../../components/UI/DataTable/DataTable';
 import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
 import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 
-const AdminAllCategories = props => {
+const AllCategoryIcons = props => {
 
-    const [allCategories, setAllCategories] = useState([]);
+    const [allCategoryIcons, setAllCategoryIcons] = useState([]);
 
     useEffect(() => {
-        setAllCategories(props.categories);
-        props.getAllCategories();
+        setAllCategoryIcons(props.icons);
+        props.getAllCategoryIcons();
     }, []);
 
     useEffect(() => {
-        setAllCategories(props.categories);
-    }, [props.categories]);
+        setAllCategoryIcons(props.icons);
+    }, [props.icons]);
 
-    const deleteCategory = (e, id) => {
+    const deleteCategoryIcon = (e, id) => {
         e.preventDefault();
-        props.deleteCategory(id);
+        props.deleteCategoryIcon(id);
     }
 
     return(
@@ -36,9 +36,9 @@ const AdminAllCategories = props => {
                 </div> :
                 <div className={props.successMessage ? "Card card bg-white" : "Card card text-white"}>
                     <div className="card-header">
-                        <h4>All Categories</h4>
+                        <h4>All Category Icons</h4>
                     </div>
-                    <DataTable categoriesData={allCategories} click={deleteCategory}/>
+                    <DataTable iconsData={allCategoryIcons} click={deleteCategoryIcon}/>
                 </div>}
             </div>
         </div>
@@ -47,20 +47,18 @@ const AdminAllCategories = props => {
 
 const mapStateToProps = state => {
     return {
-        categories: state.category.allCategories,
-        loading: state.category.loading,
-        failedMessage: state.category.failedMessage,
-        successMessage: state.category.successMessage
+        icons: state.categoryIcon.allCategoryIcons,
+        loading: state.categoryIcon.loading,
+        successMessage: state.categoryIcon.successMessage,
+        failedMessage: state.categoryIcon.failedMessage
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        getAllCategories: () => dispatch(actions.getAllCategories()),
-        deleteCategory: (id) => dispatch(actions.deleteCategory(id))
+        getAllCategoryIcons: () => dispatch(actions.getAllCategoryIcons()),
+        deleteCategoryIcon: (id) => dispatch(actions.deleteCategoryIcon(id))
     }
 }
 
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(AdminAllCategories);
+export default connect(mapStateToProps, mapDispatchToProps)(AllCategoryIcons);

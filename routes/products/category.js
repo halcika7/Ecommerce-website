@@ -9,5 +9,6 @@ router.get('/getallcategories', CategoryController.getAllCategories);
 router.get('/getcategory', CategoryController.getCategory);
 router.put('/editcategory', CategoryController.editCategory);
 router.delete('/deletecategory', CategoryController.deleteCategory);
+router.delete('/deletemanycategories', CategoryController.deleteManyCategories);
 
 module.exports = router;

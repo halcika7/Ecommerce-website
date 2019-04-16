@@ -67,3 +67,23 @@ exports.deleteCategoryIcon = async (req, res) => {
         return res.json({ failedMessage: err.message });
     }
 }
+
+exports.deleteManyCategoryIcons = async (req, res) => {
+    const ids = Object.keys(req.query).map(id => req.query[id]);
+    try {
+        let responseMessage = '';
+        const findIcons = await CategoryIconModel.find({ _id: {$in: ids} });
+        const iconNames = findIcons.map(icon => icon.name);
+        const categoryWithIcon = await CategoryModel.find({ icon: {$in: iconNames} });
+        const notDeletedIconNames = categoryWithIcon.map(cat => cat.icon);
+        if(categoryWithIcon.length === 1) { responseMessage += `Icon with name = ${notDeletedIconNames[0].icon} is not deleted.` }
+        if(categoryWithIcon.length > 1) { responseMessage += `Icons with names = ${notDeletedIconNames} are not deleted.`}
+        const categoryIcons = await CategoryIconModel.deleteMany({ _id: { $in: ids }, name: { $nin: notDeletedIconNames }});
+        if(categoryIcons.n === 0) { return res.json({ failedMessage: responseMessage + 'No category icons deleted !' }); }
+        if(categoryIcons.n === 1) { return res.json({ successMessage: responseMessage + 'One category icon deleted !' }); }
+        if(categoryIcons.n > 1) { return res.json({ successMessage: responseMessage + `${categoryIcons.n} category icons deleted !` }); }
+    }catch(err) {
+        if(err.errmsg) return res.json({ error: err.errmsg });
+        return res.json({ failedMessage: err.message });
+    }
+}

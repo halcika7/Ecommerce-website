@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as actions from '../../../store/actions/index';
 import { connect } from 'react-redux';
-import classes from './AllUserRoles.module.css'
+import classes from './AllRoles.module.css'
 import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
 
-const AllRolesModal = props => {
+const AllRoles = props => {
 
     const [allRoles, setAllRoles] = useState([]);
 
@@ -95,4 +95,4 @@ const dispatchMapToProps = dispatch => {
     };
 }
 
-export default connect(mapStateToProps, dispatchMapToProps)(AllRolesModal);
+export default connect(mapStateToProps, dispatchMapToProps)(AllRoles);

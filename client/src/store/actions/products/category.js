@@ -15,6 +15,7 @@ export const addCategory = categoryData => async dispatch => {
 }
 
 export const getAllCategories = () => async dispatch => {
+    console.log('fired');
     dispatch({ type: actionTypes.CATEGORY_START });
     const response = await axios.get('/products/category/getallcategories');
     if(response.data.failedMessage) {
@@ -56,8 +57,21 @@ export const deleteCategory = (id) => async dispatch => {
         dispatch({ type: actionTypes.ADD_EDIT_DELETE_CATEGORY_FAILED_OR_ERROR, failedMessage: response.data.failedMessage });
     }else {
         dispatch({ type: actionTypes.ADD_EDIT_DELETE_CATEGORY_SUCESS, successMessage: response.data.successMessage });
-        setTimeout(() => dispatch(getAllCategories()) , 4000);
     }
+    setTimeout(() => dispatch(getAllCategories()) , 4000);
+}
+
+export const deleteManyCategories = (ids) => async dispatch => {
+    let queryString = '/products/category/deletemanycategories?';
+    ids.forEach((id,index) => { queryString += `id${index}=${id}&` });
+    dispatch({ type: actionTypes.CATEGORY_START });
+    const response = await axios.delete(queryString);
+    if(response.data.failedMessage) {
+        dispatch({ type: actionTypes.ADD_EDIT_DELETE_CATEGORY_FAILED_OR_ERROR, failedMessage: response.data.failedMessage, loading: true });
+    }else {
+        dispatch({ type: actionTypes.ADD_EDIT_DELETE_CATEGORY_SUCESS, successMessage: response.data.successMessage, loading: true });
+    }
+    setTimeout(() => dispatch(getAllCategories()) , 4000);
 }
 
 export const clearState = () => async dispatch => dispatch({ type: actionTypes.CLEAR_CATEGORY_STATE })

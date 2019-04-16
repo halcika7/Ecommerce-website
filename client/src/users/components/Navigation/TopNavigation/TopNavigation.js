@@ -83,6 +83,10 @@ const TopNavigation = props => {
                                     <li>
                                         <a href="/">Visit Profile</a>
                                     </li>
+                                    {user.isAdmin && 
+                                    <li>
+                                        <Link to="/admindashboard/dashboard">Go to Dashboard</Link>
+                                    </li>}
                                     <li>
                                         <a href="/" onClick={logout}>Logout</a>
                                     </li>

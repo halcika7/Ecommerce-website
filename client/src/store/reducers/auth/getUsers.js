@@ -19,7 +19,6 @@ const reducer = (state = initialState, action) => {
             }),
         [actionTypes.GET_ALL_USERS_SUCCESS] : 
             updateObject(state, {
-                ...initialState,
                 Users:{...action.Users},
                 loading: false
             }),

@@ -65,3 +65,16 @@ exports.deleteCategory = async (req, res) => {
         return res.json({ failedMessage: err.message });
     }
 }
+
+exports.deleteManyCategories = async (req, res) => {
+    const ids = Object.keys(req.query).map(id => req.query[id]);
+    try {
+        const categories = await CategoryModel.deleteMany({ _id: {$in: ids}});
+        if(categories.n === 0) { return res.json({ failedMessage: 'No categories deleted !' }); }
+        if(categories.n === 1) { return res.json({ successMessage: 'One category deleted !' }); }
+        if(categories.n > 1) { return res.json({ successMessage: `${categories.n} categories deleted !` }); }
+    }catch(err) {
+        if(err.errmsg) return res.json({ error: err.errmsg });
+        return res.json({ failedMessage: err.message });
+    }
+}

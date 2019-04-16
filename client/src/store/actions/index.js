@@ -52,6 +52,7 @@ export {
     getCategory,
     editCategory,
     deleteCategory,
+    deleteManyCategories,
     clearState
  } from './products/category';
 
@@ -61,6 +62,7 @@ export {
      getCategoryIcon,
      editCategoryIcon,
      deleteCategoryIcon,
+     deleteManyCategoryIcons,
      clearStateIcons
   } from './products/categoryicon';
 
@@ -70,5 +72,6 @@ export {
       getBrand,
       editBrand,
       deleteBrand,
+      deleteManyBrands,
       clearBrandState
   } from './products/brand';

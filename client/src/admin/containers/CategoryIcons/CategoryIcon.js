@@ -5,7 +5,7 @@ import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner
 import ResponseMessage from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 import LoginRegisterInputs from '../../../users/components/UI/LoginRegisterInputs/LoginRegisterInputs';
 
-const IconsForCategories = props => {
+const CategoryIcon = props => {
     const [iconName, setIconName] = useState('');
     const [imgSrc, setImgSrc] = useState(false);
     const [error, setError] = useState(false);
@@ -144,4 +144,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(IconsForCategories);
+export default connect(mapStateToProps, mapDispatchToProps)(CategoryIcon);

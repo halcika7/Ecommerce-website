@@ -9,7 +9,7 @@ import TagsInput from '../../components/UI/TagsInput/TagsInput';
 import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
 
-const UpdateUserRole = props => {
+const UpdateRole = props => {
     const [role, setRole] = useState({});
     const [isAdmin, setIsAdmin] = useState(false);
     const [roleName, setRoleName] = useState('');
@@ -122,4 +122,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateUserRole);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateRole);

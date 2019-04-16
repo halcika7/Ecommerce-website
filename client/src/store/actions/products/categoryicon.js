@@ -62,4 +62,17 @@ export const deleteCategoryIcon = (id) => async dispatch => {
     }
 }
 
+export const deleteManyCategoryIcons = (ids) => async dispatch => {
+    let queryString = '/products/categoryicon/deletemanycategoryicons?';
+    ids.forEach((id,index) => { queryString += `id${index}=${id}&` });
+    dispatch({ type: actionTypes.CATEGORY_ICON_START });
+    const response = await axios.delete(queryString);
+    if(response.data.failedMessage) {
+        dispatch({ type: actionTypes.CATEGORY_ICON_FAILED, failedMessage: response.data.failedMessage, loading: true });
+    }else {
+        dispatch({ type: actionTypes.CATEGORY_ICON_SUCCESS, successMessage: response.data.successMessage, loading: true });
+    }
+    setTimeout(() => dispatch(getAllCategoryIcons()) , 4000);
+}
+
 export const clearStateIcons = () => async dispatch => dispatch({ type: actionTypes.CLEAR_CATEGORY_ICON_STATE })

@@ -54,8 +54,21 @@ export const deleteBrand = (id) => async dispatch => {
         dispatch({ type: actionTypes.BRAND_FAILED, failedMessage: response.data.failedMessage });
     }else {
         dispatch({ type: actionTypes.BRAND_SUCCESS, successMessage: response.data.successMessage, loading: true });
-        setTimeout(() => dispatch(getAllBrands()) , 4000);
     }
+    setTimeout(() => dispatch(getAllBrands()) , 4000);
+}
+
+export const deleteManyBrands = (ids) => async dispatch => {
+    let queryString = '/products/brand/deletemanybrands?';
+    ids.forEach((id,index) => { queryString += `id${index}=${id}&` });
+    dispatch({ type: actionTypes.BRAND_START });
+    const response = await axios.delete(queryString);
+    if(response.data.failedMessage) {
+        dispatch({ type: actionTypes.BRAND_FAILED, failedMessage: response.data.failedMessage });
+    }else {
+        dispatch({ type: actionTypes.BRAND_SUCCESS, successMessage: response.data.successMessage, loading: true });
+    }
+    setTimeout(() => dispatch(getAllBrands()) , 4000);
 }
 
 export const clearBrandState = () => async dispatch => dispatch({ type: actionTypes.CLEAR_BRAND_STATE })

@@ -58,3 +58,16 @@ exports.deleteBrand = async (req, res) => {
         return res.json({ failedMessage: err.message });
     }
 }
+
+exports.deleteManyBrands = async (req, res) => {
+    const ids = Object.keys(req.query).map(id => req.query[id]);
+    try {
+        const brands = await BrandModel.deleteMany({ _id: {$in: ids}});
+        if(brands.n === 0) { return res.json({ failedMessage: 'No bradns deleted !' }); }
+        if(brands.n === 1) { return res.json({ successMessage: 'One brand deleted !' }); }
+        if(brands.n > 1) { return res.json({ successMessage: `${brands.n} bradns deleted !` }); }
+    }catch(err) {
+        if(err.errmsg) return res.json({ error: err.errmsg });
+        return res.json({ failedMessage: err.message });
+    }
+}
