@@ -4,9 +4,7 @@ const multer = require('multer');
 const router = express.Router();
 const UserController = require('../../controllers/UsersController');
 const EmailController = require('../../controllers/EmailController');
-const UserRolesController = require('../../controllers/UserRolesController');
 const ActivateAccountController = require('../../controllers/ActivateAccountController');
-const PermissionController = require('../../controllers/PermissionController');
 
 const fileStorage = multer.diskStorage({
     destination: (req,file,cb) => {
@@ -66,23 +64,5 @@ router.get('/allusers', UserController.getAllUsers);
 router.get('/singleuser', UserController.getSingleUser);
 
 router.delete('/deleteuser', UserController.deleteUser);
-
-router.post('/addpermission', PermissionController.addPermission);
-
-router.get('/getallpermissions', PermissionController.getAllPermissions);
-
-router.delete('/deletepermission', PermissionController.deletePermission);
-
-router.post('/adduserrole', UserRolesController.addUserRole);
-
-router.get('/userroles', UserRolesController.getRoles);
-
-router.delete('/deleterole', UserRolesController.deleteUserRole);
-
-router.delete('/deletemanyroles', UserRolesController.deleteManyUserRoles);
-
-router.post('/getrole', UserRolesController.getRole);
-
-router.patch('/updaterole', UserRolesController.updateRole);
 
 module.exports = router;

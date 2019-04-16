@@ -5,12 +5,10 @@ import { getLoggedInUserPhoto } from '../../../store/actions';
 
 import classes from './Navigation.module.css';
 import Modal from '../UI/Modal/Modal';
-import AllPermissionsModal from '../UI/Modal/AllPermissionsModal';
 
 const Navigation = props => {
 
     const [permissionModal, setPermissionModal] = useState(false);
-    const [allPermissionModal, setAllPermissionModal] = useState(false);
 
     const toggleActiveClass = e => {
         e.preventDefault();
@@ -26,7 +24,6 @@ const Navigation = props => {
     return(
         <React.Fragment>
             { permissionModal === true ? <Modal click={toggleModal} setModal={setPermissionModal} modal={permissionModal}/> : null }
-            { allPermissionModal === true ? <AllPermissionsModal click={toggleModal} setModal={setAllPermissionModal} modal={setAllPermissionModal}/> : null }
             <div className={classes.Sidebar}>
                 <div className={classes.SidebarWrapper}>
                     <div className={classes.Logo}>
@@ -100,10 +97,9 @@ const Navigation = props => {
                                         onClick={(e) => toggleModal(e, setPermissionModal, permissionModal)}>
                                         <p>Add Permissions</p>
                                     </a>
-                                    <a href="/" 
-                                        onClick={(e) => toggleModal(e, setAllPermissionModal, allPermissionModal)}>
-                                        <p>All Permissions</p>
-                                    </a>
+                                    <Link to="/admindashboard/all-permissions">
+                                        <p>ALL Permissions</p>
+                                    </Link>
                                     <Link to="/admindashboard/add-role">
                                         <p>Add Role</p>
                                     </Link>
@@ -170,9 +166,7 @@ const mapStateToProps = state => {
 }
 
 const dispatchMapToProps = dispatch => {
-    return {
-        getUserPhoto: (id) => dispatch(getLoggedInUserPhoto(id))
-    }
+    return {}
 }
 
 export default withRouter(connect(mapStateToProps, dispatchMapToProps)(Navigation));

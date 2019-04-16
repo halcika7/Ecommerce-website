@@ -38,7 +38,6 @@ exports.getCategoryIcon = async (req, res) => {
 exports.editCategoryIcon = async (req, res) => {
     const resValidation = validateIcon(req.body.name);
     if(resValidation) { return res.json(resValidation); }
-
     try {
         const findIcon = await CategoryIconModel.findOne({ _id: new ObjectId(req.body.id) });
         const iconUpdate = await CategoryIconModel.updateOne({ _id: new ObjectId(req.body.id) }, { name: req.body.name });
@@ -49,7 +48,6 @@ exports.editCategoryIcon = async (req, res) => {
         if(err.errmsg) return res.json({ error: err.errmsg });
         return res.json({ failedMessage: err.message });
     }
-
 }
 
 exports.deleteCategoryIcon = async (req, res) => {
@@ -58,9 +56,7 @@ exports.deleteCategoryIcon = async (req, res) => {
         const categoryWithIcon = await CategoryModel.findOne({ icon: findIcon.name });
         if(categoryWithIcon) { return res.json({ failedMessage: `Icon can't be deleted because it is in use in category with id= ${categoryWithIcon._id}` }) }
         const deletedCategoryIcon = await CategoryIconModel.deleteOne({ _id: new ObjectId(req.query.id) });
-        if(deletedCategoryIcon.n !== 1) {
-            return res.json({ failedMessage: 'Something happened and category was not deleted' });
-        }
+        if(deletedCategoryIcon.n !== 1) { return res.json({ failedMessage: 'Something happened and category was not deleted' }); }
         return res.json({ successMessage: 'Icon successfully deleted !' });
     }catch(err) {
         if(err.errmsg) return res.json({ error: err.errmsg });

@@ -10,19 +10,14 @@ const TagsInput2 = props => {
     useEffect(() => { 
         setValues();
         document.addEventListener('click', e => handleDocumentClick(e));
-        return () => {
-            document.removeEventListener('click', handleDocumentClick)
-            setTags([]);
-        }
+        return () => { document.removeEventListener('click', handleDocumentClick); setTags([]); }
     }, []);
     
     useEffect(() => { setValues(); setError(false)}, [props.choosenValues, props.values]);
 
     const setValues = () => {
         const loadTags = [];
-        for(const obj in props.choosenValues) { 
-            loadTags.push(props.choosenValues[obj]); 
-        }
+        for(const obj in props.choosenValues) { loadTags.push(props.choosenValues[obj]); }
         setTags(loadTags);
     }
 
@@ -36,21 +31,13 @@ const TagsInput2 = props => {
         props.setChoosenValues(newTags);
     }
 
-    const handleInputChange = e => {
-        setTagValue(e.target.value);
-    }
+    const handleInputChange = e => setTagValue(e.target.value);
 
     const onkeydown = e => {
         if(e.key === "Enter") {
-            if(e.target.value.length < 5) { 
-                setError('Name must be atleast 5 charactes !');
-                return;
-            }
+            if(e.target.value.length < 5) { setError('Name must be atleast 5 charactes !'); return; }
             const findValue = tags.find(tag => tag === e.target.value);
-            if(findValue) { 
-                setError('No duplicats allowed !');
-                return;
-            }
+            if(findValue) { setError('No duplicats allowed !'); return; }
             const newTags = [...tags];
             newTags.push(tagValue );
             setTagValue('');
@@ -58,35 +45,20 @@ const TagsInput2 = props => {
         }
     }
 
-    const onFocused = e => {
-        e.currentTarget.parentElement.classList.add(classes.Focused)
-    }
+    const onFocused = e => e.currentTarget.parentElement.classList.add(classes.Focused);
 
     const handleDocumentClick = e => {
         if(!e.target.closest('.modalLabel')){
             const list = document.querySelector('.Ul');
-            if(list) {
-                if(list.classList.contains(classes.Focused)) 
-                    list.classList.remove(classes.Focused);
-            }
+            if(list) { if(list.classList.contains(classes.Focused)) { list.classList.remove(classes.Focused); } }
         }
     }
 
     return (
         <label className="modalLabel d-block">
             <ul className={classes.Ul2 + " Ul"}>
-                {tags.map((tag, index) => (
-                    <li key={index} 
-                        data-name={tag}
-                        onClick={tagOnClick}
-                        data-disabled={props.disabled}>
-                        {tag}
-                        <i className="fas fa-times"></i>
-                    </li>
-                ))}
-                <LoginRegisterInputs type="text" name="tags"
-                    placeholder="Add Sub Category" inputClass={classes.Input} invalidInput='invalid' invalidFeedback='invalid-feedback' value={tagValue} onChange={handleInputChange}
-                    error={error ? error : ''} onKeyDown={onkeydown} onFocus={onFocused} disabled={props.disabled}/>
+                {tags.map((tag, index) => <li key={index} data-name={tag} onClick={tagOnClick} data-disabled={props.disabled}>{tag}<i className="fas fa-times"></i></li>)}
+                <LoginRegisterInputs type="text" name="tags" placeholder="Add Sub Category" inputClass={classes.Input} invalidInput='invalid' invalidFeedback='invalid-feedback' value={tagValue} onChange={handleInputChange} error={error ? error : ''} onKeyDown={onkeydown} onFocus={onFocused} disabled={props.disabled}/>
             </ul>
         </label>
     );

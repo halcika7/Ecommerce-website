@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import classes from './Modal.module.css';
 import ResponseMessages from '../../../../users/components/UI/ResponseMessages/ResponseMessages';
 import SmallSpinner from '../../../../users/components/UI/SmallSpinner/SmallSpinner';
+import DataTable from '../DataTable/DataTable';
 
 const AllPermissionsModal = props => {
 
@@ -16,9 +17,12 @@ const AllPermissionsModal = props => {
         setAllPermissions(props.permissions.allPermissions);
         return () => document.body.classList.remove(classes.NoScroll);
     }, []);
-    useEffect(() => { 
-        setAllPermissions(props.permissions.allPermissions); 
-    }, [props.permissions]);
+    useEffect(() => { setAllPermissions(props.permissions.allPermissions); }, [props.permissions]);
+
+    const deleteOne = (e, id) => {
+        e.preventDefault();
+        props.deletePermission(id)
+    }
 
     return (
         <div className={classes.ModalWrapper}>
@@ -36,39 +40,12 @@ const AllPermissionsModal = props => {
                         </div>
                     </div>
                 ) :
-                <div className={classes.Card + " card"}>
+                <div className={classes.Card + " card text-white"}>
                     <div className="card-header">
                         <h4 className="card-title">All Permissions</h4>
                     </div>
                     <div className="card-body">
-                        <div className={classes.tableResponsive + " table-responsive"}>
-                            <table className="table table-hover text-white">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Slug</th>
-                                        <th>Name</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {allPermission.length > 0 ? allPermission.map(perm => (
-                                        <tr key={perm._id}>
-                                            <td>{perm._id}</td>
-                                            <td>{perm.slug}</td>
-                                            <td>{perm.permission}</td>
-                                            {props.deletePermissionState ? 
-                                            <td className="text-center">
-                                                <button 
-                                                className="btn btn-danger" type="button"
-                                                onClick={e => props.deletePermission(perm.permission)}>
-                                                    <i className="far fa-trash-alt"></i>
-                                                </button>
-                                            </td> : null }
-                                        </tr>)) : null}
-                                </tbody>
-                            </table>
-                        </div>
+                        <DataTable permissionsData={allPermission} click={deleteOne} loading={props.permissions.loading} />
                     </div>
                 </div>}
             </div>
@@ -79,8 +56,7 @@ const AllPermissionsModal = props => {
 
 const mapStateToProps = state => {
     return {
-        permissions: state.permissions,
-        deletePermissionState: state.login.User.role.permissions['Delete Permission']
+        permissions: state.permissions
     };
 }
 

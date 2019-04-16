@@ -11,6 +11,7 @@ const TableContainer = props => {
     const [allUsers, setAllUsers] = useState(false);
     const [allCategoryIcons, setAllCategoryIcons] = useState(false);
     const [allCategories, setAllCategories] = useState(false);
+    const [allPermissions, setAllPermissions] = useState(false);
     const [allRoles, setAllRoles] = useState(false);
 
     const [failedMessage, setFailedMessage] = useState(false);
@@ -20,29 +21,34 @@ const TableContainer = props => {
 
     useEffect(() => { setBrands(props.brand.allBrands);  props.getBrands(); },[props.Brands]);
     useEffect(() => { setAllRoles(props.roles.Roles);  props.getRoles(); },[props.Roles]);
+    useEffect(() => { setAllPermissions(props.permissions.allPermissions);  props.getAllPermissions(); },[props.Permissions]);
     useEffect(() => { setAllUsers(props.users.Users);  props.getUsers(); },[props.Users]);
     useEffect(() => { setAllCategories(props.categories.allCategories);  props.getAllCategories(); },[props.Categories]);
     useEffect(() => { setAllCategoryIcons(props.icons.allCategoryIcons); props.getAllCategoryIcons(); },[props.Icons]);
 
     useEffect(() => { if(props.Brands) { setBrands(props.brand.allBrands); } }, [props.brand.allBrands]);
+    useEffect(() => { if(props.Permissions) { setAllPermissions(props.permissions.allPermissions); } }, [props.permissions.allPermissions]);
     useEffect(() => { if(props.Roles) { setAllRoles(props.roles.Roles); } }, [props.roles.Roles]);
     useEffect(() => { if(props.Users) { setAllUsers(props.users.Users); } }, [props.users.Users]);
     useEffect(() => { if(props.Categories) { setAllCategories(props.categories.allCategories); } }, [props.categories.allCategories]);
     useEffect(() => { if(props.Icons) { setAllCategoryIcons(props.icons.allCategoryIcons); } }, [props.icons.allCategoryIcons]);
 
     useEffect(() => { setFailedMessage(props.brand.failedMessage); },[props.brand.failedMessage]);
+    useEffect(() => { setFailedMessage(props.permissions.failedMessage); },[props.permissions.failedMessage]);
     useEffect(() => { setFailedMessage(props.roles.failedMessage); },[props.roles.failedMessage]);
     useEffect(() => { setFailedMessage(props.users.failedMessage); },[props.users.failedMessage]);
     useEffect(() => { setFailedMessage(props.categories.failedMessage); },[props.categories.failedMessage]);
     useEffect(() => { setFailedMessage(props.icons.failedMessage); },[props.icons.failedMessage]);
 
     useEffect(() => { setSuccessMessage(props.brand.successMessage); },[props.brand.successMessage]);
+    useEffect(() => { setSuccessMessage(props.permissions.successMessage); },[props.permissions.successMessage]);
     useEffect(() => { setSuccessMessage(props.roles.successMessage); },[props.roles.successMessage]);
     useEffect(() => { setSuccessMessage(props.users.successMessage); },[props.users.successMessage]);
     useEffect(() => { setSuccessMessage(props.categories.successMessage); },[props.categories.successMessage]);
     useEffect(() => { setSuccessMessage(props.icons.successMessage); },[props.icons.successMessage]);
 
     useEffect(() => { setLoading(props.brand.loading); },[props.brand.loading]);
+    useEffect(() => { setLoading(props.permissions.loading); },[props.permissions.loading]);
     useEffect(() => { setLoading(props.roles.loading); },[props.roles.loading]);
     useEffect(() => { setLoading(props.users.loading); },[props.users.loading]);
     useEffect(() => { setLoading(props.categories.loading); },[props.categories.loading]);
@@ -55,6 +61,7 @@ const TableContainer = props => {
         if(props.Categories) { props.deleteCategory(id); }
         if(props.Icons) { props.deleteCategoryIcon(id); }
         if(props.Roles) { props.deleteRole(id); }
+        if(props.Permissions) { props.deletePermission(id); }
     }
 
     const manyDelete = (e, ids) => {
@@ -80,6 +87,7 @@ const TableContainer = props => {
                             {props.Categories && <h4>All Categories</h4>}
                             {props.Icons && <h4>All Icons</h4>}
                             {props.Roles && <h4>All Roles</h4>}
+                            {props.Permissions && <h4>All Permissions</h4>}
                         </div>
                         {(deleteManyRecords.length > 0 && !props.Users ) && 
                         <div className="col-12">
@@ -92,6 +100,7 @@ const TableContainer = props => {
                         {props.Categories && <DataTable categoriesData={allCategories} click={singleDelete} setDeleteData={setDeleteManyRecords} selectedDeleteData={deleteManyRecords} loading={loading} />}
                         {props.Roles && <DataTable rolesData={allRoles} click={singleDelete} loading={loading} setDeleteData={setDeleteManyRecords} selectedDeleteData={deleteManyRecords}/>}
                         {props.Users && <DataTable usersData={allUsers} click={singleDelete} loading={loading} />}
+                        {props.Permissions && <DataTable permissionsData={allPermissions} click={singleDelete} loading={loading} />}
                     </div> }
                 </div>
             </div>
@@ -105,7 +114,8 @@ const mapStateToProps = state => {
         users: state.allUsers,
         categories: state.category,
         icons: state.categoryIcon,
-        roles: state.roles
+        roles: state.roles,
+        permissions: state.permissions
     }
 }
 
@@ -124,7 +134,9 @@ const mapDispatchToProps = dispatch => {
         deleteUser: (id) => dispatch(actions.deleteUser(id)),
         getRoles: () => dispatch(actions.getRoles()),
         deleteRole: (id) => dispatch(actions.deleteUserRole(id)),
-        dleteManyRoles: (ids) => dispatch(actions.deleteManyUserRoles(ids))
+        dleteManyRoles: (ids) => dispatch(actions.deleteManyUserRoles(ids)),
+        getAllPermissions: () => dispatch(actions.getAllPermissions()),
+        deletePermission: (permission) => dispatch(actions.deletePermission(permission))
     }
 }
 

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const addRole = (role) => async dispatch => {
     dispatch({ type: actionTypes.ROLE_START });
-    const response = await axios.post('/api/users/adduserrole', role);
+    const response = await axios.post('/rolespermissions/roles/adduserrole', role);
     if(response.data.failedMessage) {
         dispatch({ type: actionTypes.ROLE_FAILED, failedMessage: response.data.failedMessage });
     }else {
@@ -13,7 +13,7 @@ export const addRole = (role) => async dispatch => {
 
 export const getRoles = () => async dispatch => {
     dispatch({ type: actionTypes.ROLE_START });
-    const response = await axios.get('/api/users/userroles');
+    const response = await axios.get('/rolespermissions/roles/userroles');
     if(response.data.failedMessage){
         dispatch({ type: actionTypes.ROLE_FAILED, failedMessage: response.data.failedMessage });
     }else {
@@ -23,7 +23,7 @@ export const getRoles = () => async dispatch => {
 
 export const deleteUserRole = id => async dispatch => {
     dispatch({ type: actionTypes.ROLE_START });
-    const response = await axios.delete(`/api/users/deleterole?id=${id}`);
+    const response = await axios.delete(`/rolespermissions/roles/deleterole?id=${id}`);
     if(response.data.failedMessage) {
         dispatch({ type: actionTypes.ROLE_FAILED, failedMessage: response.data.failedMessage });
     }else {
@@ -33,7 +33,7 @@ export const deleteUserRole = id => async dispatch => {
 }
 
 export const deleteManyUserRoles = ids => async dispatch => {
-    let queryString = '/api/users/deletemanyroles?';
+    let queryString = '/rolespermissions/roles/deletemanyroles?';
     ids.forEach((id,index) => { queryString += `id${index}=${id}&` });
     dispatch({ type: actionTypes.ROLE_START });
     const response = await axios.delete(queryString);
@@ -47,7 +47,7 @@ export const deleteManyUserRoles = ids => async dispatch => {
 
 export const getUserRole = id => async dispatch => {
     dispatch({ type: actionTypes.ROLE_START });
-    const response = await axios.post('/api/users/getrole', {id});
+    const response = await axios.post('/rolespermissions/roles/getrole', {id});
     if(response.data.error) {
         dispatch({ type: actionTypes.ROLE_FAILED, errorId: response.data.error });
     }else if(response.data.failedMessage){
@@ -59,7 +59,7 @@ export const getUserRole = id => async dispatch => {
 
 export const updateUserRole = data => async dispatch => {
     dispatch({ type: actionTypes.ROLE_START });
-    const response = await axios.patch('/api/users/updaterole', data);
+    const response = await axios.patch('/rolespermissions/roles/updaterole', data);
     if(response.data.failedMessage) {
         dispatch({ type: actionTypes.ROLE_FAILED, failedMessage: response.data.failedMessage });
     }else {

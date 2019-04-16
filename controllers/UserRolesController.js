@@ -71,18 +71,9 @@ exports.updateRole = async (req, res) => {
     try{
         const findByName = await UserRolesModel.findOne({ name: req.body.name });
         const findById = await UserRolesModel.findById(req.body.id);
-        if(findByName && !findByName._id.equals(findById._id) && findByName.name !== findById.name) {
-            return res.json({ failedMessage: 'Name Already in use' });
-        }
-
-        await UserRolesModel.updateOne({ _id: req.body.id }, {
-            name: req.body.name,
-            isAdmin: req.body.isAdmin,
-            permissions: req.body.permissions
-        });
-
+        if(findByName && !findByName._id.equals(findById._id) && findByName.name !== findById.name) { return res.json({ failedMessage: 'Name Already in use' }); }
+        await UserRolesModel.updateOne({ _id: req.body.id }, { name: req.body.name, isAdmin: req.body.isAdmin, permissions: req.body.permissions });
         const updatedRole = await UserRolesModel.findById(req.body.id);
-
         return res.json({ successMessage: 'Role updated!' , role: updatedRole});
     }catch(err) {
         const message = err.message ? err.message : err.CastError;

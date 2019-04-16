@@ -31,7 +31,7 @@ export {
     addNewPermission,
     getAllPermissions,
     deletePermission
- } from './auth/permissions';
+ } from './roles&permissions/permissions';
 
 export {
     addRole,
@@ -40,7 +40,7 @@ export {
     getUserRole,
     deleteManyUserRoles,
     updateUserRole
-} from './roles/userRoles';
+} from './roles&permissions/userRoles';
 
 export {
     addNewUser,

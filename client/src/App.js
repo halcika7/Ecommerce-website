@@ -31,8 +31,8 @@ const ProductsPage = lazy(() => import('./admin/containers/ProductsPage/Products
 const AddProduct = lazy(() => import('./admin/containers/AddProduct/AddProduct'));
 const ViewUser = lazy(() => import('./admin/containers/User/User'));
 const AddUser = lazy(() => import('./admin/containers/AddUser/AddUser'));
-const UpdateUserRole = lazy(() => import('./admin/containers/Role/UpdateRole'));
-const AddUserRole = lazy(() => import('./admin/containers/Role/AddRole'));
+const UpdateRole = lazy(() => import('./admin/containers/Role/UpdateRole'));
+const AddRole = lazy(() => import('./admin/containers/Role/AddRole'));
 const AddCategory = lazy(() => import('./admin/containers/Category/Category'));
 const CategoryIcon = lazy(() => import('./admin/containers/CategoryIcons/CategoryIcon'));
 const Brand = lazy(() => import('./admin/containers/Brand/Brand'));
@@ -98,6 +98,7 @@ const App = props => {
                             <Switch>
                                 <Route path='/admindashboard/dashboard' exact  render={(props) => <Suspense fallback={<Spinner />}><Dashboard /></Suspense>}/>
                                 <Route path='/admindashboard/profile' exact render={(props) => <Suspense fallback={<Spinner />}><ViewUser profile={true} {...props} /></Suspense>}/>
+                                <Route path='/admindashboard/add-user' exact  render={(props) => <Suspense fallback={<Spinner />}><AddUser /></Suspense>}/>
                                 <Route path='/admindashboard/view-user' exact render={(props) => <Suspense fallback={<Spinner />}><ViewUser view={true} {...props}/></Suspense>}/>
                                 <Route path='/admindashboard/edit-user' exact  render={(props) => <Suspense fallback={<Spinner />}><ViewUser edit={true} {...props}/></Suspense>}/>
                                 <Route path='/admindashboard/all-users' exact  render={(props) => <Suspense fallback={<Spinner />}><TableContainer Users={true} /></Suspense>}/>
@@ -105,10 +106,11 @@ const App = props => {
                                 <Route path='/admindashboard/products' exact  render={(props) => <Suspense fallback={<Spinner />}><ProductsPage /></Suspense>}/>
                                 <Route path='/admindashboard/add-product' exact  render={(props) => <Suspense fallback={<Spinner />}><AddProduct /></Suspense>}/>
 
-                                <Route path='/admindashboard/add-user' exact  render={(props) => <Suspense fallback={<Spinner />}><AddUser /></Suspense>}/>
-                                <Route path='/admindashboard/add-role' exact render={(props) => <Suspense fallback={<Spinner />}><AddUserRole {...props}/></Suspense>}/>
-                                <Route path='/admindashboard/edit-role' exact render={(props) => <Suspense fallback={<Spinner />}><UpdateUserRole {...props}/></Suspense>}/>
-                                <Route path='/admindashboard/view-role' exact render={(props) => <Suspense fallback={<Spinner />}><UpdateUserRole view={true} {...props}/></Suspense>}/>
+                                <Route path='/admindashboard/all-permissions' exact render={(props) => <Suspense fallback={<Spinner />}><TableContainer Permissions={true} /></Suspense>}/>
+
+                                <Route path='/admindashboard/add-role' exact render={(props) => <Suspense fallback={<Spinner />}><AddRole {...props}/></Suspense>}/>
+                                <Route path='/admindashboard/edit-role' exact render={(props) => <Suspense fallback={<Spinner />}><UpdateRole {...props}/></Suspense>}/>
+                                <Route path='/admindashboard/view-role' exact render={(props) => <Suspense fallback={<Spinner />}><UpdateRole view={true} {...props}/></Suspense>}/>
                                 <Route path='/admindashboard/all-roles' exact render={(props) => <Suspense fallback={<Spinner />}><TableContainer Roles={true} /></Suspense>}/>
 
                                 <Route path='/admindashboard/add-category' exact render={(props) => <Suspense fallback={<Spinner />}><AddCategory addcategory={true} {...props}/></Suspense>}/>

@@ -28,7 +28,7 @@ const AddUser = props => {
     const [inputValues, setInputValues] = useState({dob: '', doe: '', name: '', username: '', email: '', facebook: '', instagram: '', github: '', twitter: '', salary: '', telephone: '', country: '', address: '', city: '', postal: ''});
     const [errors, setErrors] = useState({ name: '', username: '', email: '' });
     useEffect(() => { props.getRoles(); setErrors({ ...props.addUserState.errors }); }, []);
-    useEffect(() => { setRoles(props.roles); if(props.roles.Roles[0]); setInputValues({ ...inputValues, role: props.roles.Roles[0]._id }); }, [props.roles]);
+    useEffect(() => { setRoles(props.roles); if(props.roles.Roles[0]) {setInputValues({ ...inputValues, role: props.roles.Roles[0]._id }); } }, [props.roles]);
     useEffect(() => { setErrors({ ...props.addUserState.errors }); }, [props.addUserState.errors]);
     useEffect(() => { setInputValues({dob: '', doe: '', name: '', username: '', email: '', facebook: '', instagram: '', github: '', twitter: '', salary: '', telephone: '', country: '', address: '', city: '', postal: ''}); setErrors({ name: '', username: '', email: '' }); }, [props.addUserState.successMessage]);
 
@@ -49,7 +49,7 @@ const AddUser = props => {
                     {props.addUserState.loading ? <div className="card bg-white"><SmallSpinner /></div> : 
                     <div className="card text-white">
                         <div className="card-header">
-                            <h5 className="title">Add New Employee</h5>
+                            <h5 className="title">Add New User</h5>
                         </div>
                         <div className="card-body row">
                             {inputs.map((input,index) => 

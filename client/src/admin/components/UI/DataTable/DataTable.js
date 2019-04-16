@@ -14,9 +14,9 @@ const DataTable = props => {
     useEffect(() => { if(props.iconsData) { setFunction(props.iconsData, setLength); } }, [props.iconsData]);
     useEffect(() => { if(props.brandsData) { setFunction(props.brandsData, setLength); } }, [props.brandsData]);
     useEffect(() => { if(props.rolesData) { setFunction(props.rolesData, setLength); } }, [props.rolesData]);
+    useEffect(() => { if(props.permissionsData) { setFunction(props.permissionsData, setLength); } }, [props.permissionsData]);
 
     const setFunction = (Data, setDataLength) => {
-        console.log(Data);
         let data = [];
         for(let obj in Data) {
             let object = { ...Data[obj] };
@@ -51,13 +51,14 @@ const DataTable = props => {
     }
 
     const buttonFormatter = (cell, row) => {
-        const id = row._id;
+        let id = row._id;
         let view = '/admindashboard/', edit = '/admindashboard/';
         if(props.usersData) { view += 'view-user?id='; edit += 'edit-user?id=' }
         if(props.categoriesData) { view = 'view-category?id='; edit += 'edit-category?id=' }
         if(props.iconsData) { view = 'view-category-icon?id='; edit += 'edit-category-icon?id=' }
         if(props.brandsData) { view = 'view-brand?id='; edit += 'edit-brand?id=' }
         if(props.rolesData) { view = 'view-role?id='; edit += 'edit-role?id=' }
+        if(props.permissionsData) { id = row.permission; view = 'view-role?id='; edit += 'edit-role?id=' }
         return (
             <React.Fragment>
                 <Link className="btn btn-warning" to={`${view}${id}`}>
@@ -107,7 +108,8 @@ const DataTable = props => {
                 <BootstrapTable data={data} options={options} bordered={false} pagination version='4' striped hover search={ true } multiColumnSearch={ true }
                 containerClass={!props.usersData ? 'table-responsive col-12 ' + classes.Spans : 'table-responsive col-12'} exportCSV selectRow={!props.usersData ? {mode: 'checkbox', onSelectAll: selectAllDataCheckbox, onSelect: selectOneDataCheckbox, bgColor: '#F08080'} : {}} >
                     <TableHeaderColumn isKey dataField='_id' dataSort>ID</TableHeaderColumn>
-                    <TableHeaderColumn dataField='name' dataSort>Name</TableHeaderColumn>
+                    {props.permissionsData && <TableHeaderColumn dataField='permission' dataSort>Permission</TableHeaderColumn>}
+                    {!props.permissionsData && <TableHeaderColumn dataField='name' dataSort>Name</TableHeaderColumn>}
                     {props.usersData && <TableHeaderColumn dataField='email' dataSort>Email</TableHeaderColumn>}
                     {props.usersData && <TableHeaderColumn dataField='username' dataSort>Username</TableHeaderColumn>}
                     {props.usersData && <TableHeaderColumn dataField='emailConfirmation' dataSort>Account Confirmed</TableHeaderColumn>}

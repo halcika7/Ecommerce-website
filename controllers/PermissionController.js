@@ -1,5 +1,6 @@
 const PermissionModel = require('../models/Permission');
 const UserRoleModel = require('../models/UserRole');
+const ObjectId = require('mongoose').Types.ObjectId;
 const validatePermission = require('../validation/permissionValidation');
 
 exports.addPermission = async (req, res) => {
@@ -29,15 +30,21 @@ exports.getAllPermissions = async (req, res) => {
 
 exports.deletePermission = async (req, res) => {
     try{
-        const response = await PermissionModel.deleteOne({ permission: req.query.permission });
-        if(response.n === 0) return res.json({ failedMessage: 'Permission is not deleted' });
-        const roles = await UserRoleModel.find({ });
-        roles.forEach(async (role, index) => {
-            if(role.permissions[req.query.permission] === true){
-                delete role.permissions[req.query.permission];
-                await UserRoleModel.updateOne({ name: role.name }, { permissions: role.permissions });
-            }
-        });
+        const permission = await PermissionModel.deleteOne({ permission: req.query.permission  });
+        if(permission.n === 0) { return res.json({ failedMessage: 'Permission is not deleted' }); }
+        await UserRoleModel.updateMany({},{ $pull: { permissions: req.query.permission }  });
+        return res.json({ successMessage: 'Permission deleted !' });
+    }catch(err) {
+        return res.json({ failedMessage: err.message });
+    }
+}
+
+exports.deleteManyPermissions = async (req, res) => {
+    const permissions = Object.keys(req.query).map(permission => req.query[permission]);
+    try{
+        const deletedPermissions = await PermissionModel.deleteOne({ permission: {$in: permissions}  });
+        if(deletedPermissions.n === 0) { return res.json({ failedMessage: 'Permission is not deleted' }); }
+        await UserRoleModel.updateMany({},{ $pull: { permissions: {$in: permissions} }  });
         return res.json({ successMessage: 'Permission deleted !' });
     }catch(err) {
         return res.json({ failedMessage: err.message });

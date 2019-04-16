@@ -8,16 +8,10 @@ const TagsInput = props => {
     useEffect(() => { 
         setValues();
         document.addEventListener('click', e => handleDocumentClick(e));
-        return () => {
-            document.removeEventListener('click', handleDocumentClick)
-            setTags([]);
-            setListItems([]);
-        }
+        return () => { document.removeEventListener('click', handleDocumentClick); setTags([]); setListItems([]); }
     }, []);
 
-    useEffect(() => { 
-        setValues();
-    }, [props]);
+    useEffect(() => { setValues(); }, [props]);
     
     const setValues = () => {
         const loadTags = [];
@@ -72,51 +66,28 @@ const TagsInput = props => {
         listItems.forEach(item => {
             const name = item.getAttribute('data-name').toLowerCase();
             const searchValue = e.target.value.toLowerCase();
-            if(! name.includes(searchValue)) {
-                item.style.display = 'none';
-            }else{
-                item.removeAttribute('style');
-            }
+            if(! name.includes(searchValue)) { item.style.display = 'none'; }
+            else{ item.removeAttribute('style'); }
         });
     }
 
     const handleDocumentClick = e => {
         if(!e.target.closest('.modalLabel')){
             const list = document.querySelector('.Ul');
-            if(list) {
-                if(list.classList.contains(classes.Focused)) 
-                    list.classList.remove(classes.Focused);
-            }
+            if(list) { if(list.classList.contains(classes.Focused)) { list.classList.remove(classes.Focused); } }
         }
     }
 
     return (
         <label className={"modalLabel d-block " + classes.modalLabel}>
             <ul className={classes.Ul + " Ul"}>
-                {tags.map((tag, index) => (
-                    <li key={index} 
-                        data-name={tag.name}
-                        onClick={tagOnClick} 
-                        data-disabled={props.disabled}>
-                        {tag.name}
-                        <i className="fas fa-times"></i>
-                    </li>
-                ))}
-                {tags.length === listItems.length ? null : 
-                <input className={classes.Input} 
-                        onFocus={e => e.currentTarget.parentElement.classList.add(classes.Focused)}
-                        onChange={onInputChange}
-                        placeholder="Search for"
-                        disabled={props.disabled}/>}
+                {tags.map((tag, index) => <li key={index} data-name={tag.name} onClick={tagOnClick} data-disabled={props.disabled}>{tag.name}<i className="fas fa-times"></i></li> )}
+                {(tags.length === listItems.length) || props.disabled ? null : <input className={classes.Input} onFocus={e => e.currentTarget.parentElement.classList.add(classes.Focused)} onChange={onInputChange} placeholder="Search for" disabled={props.disabled}/>}
             </ul>
             <div className={classes.List}>
                 {listItems.map((val,index) => {
                     if(val.disabled === true) return null;
-                    return (<label
-                        key={val._id} 
-                        data-name={val.permission}
-                        data-index={index}
-                        onClick={listItemOnClick}>{val.permission}</label>)
+                    return (<label key={val._id} data-name={val.permission} data-index={index} onClick={listItemOnClick}>{val.permission}</label>)
                 })}
             </div>
         </label>
