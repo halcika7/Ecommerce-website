@@ -38,6 +38,7 @@ export {
     getRoles,
     deleteUserRole,
     getUserRole,
+    deleteManyUserRoles,
     updateUserRole
 } from './roles/userRoles';
 

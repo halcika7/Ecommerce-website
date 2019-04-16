@@ -11,6 +11,7 @@ const TableContainer = props => {
     const [allUsers, setAllUsers] = useState(false);
     const [allCategoryIcons, setAllCategoryIcons] = useState(false);
     const [allCategories, setAllCategories] = useState(false);
+    const [allRoles, setAllRoles] = useState(false);
 
     const [failedMessage, setFailedMessage] = useState(false);
     const [successMessage, setSuccessMessage] = useState(false);
@@ -18,40 +19,34 @@ const TableContainer = props => {
     const [deleteManyRecords, setDeleteManyRecords] = useState([]);
 
     useEffect(() => { setBrands(props.brand.allBrands);  props.getBrands(); },[props.Brands]);
+    useEffect(() => { setAllRoles(props.roles.Roles);  props.getRoles(); },[props.Roles]);
     useEffect(() => { setAllUsers(props.users.Users);  props.getUsers(); },[props.Users]);
     useEffect(() => { setAllCategories(props.categories.allCategories);  props.getAllCategories(); },[props.Categories]);
     useEffect(() => { setAllCategoryIcons(props.icons.allCategoryIcons); props.getAllCategoryIcons(); },[props.Icons]);
 
     useEffect(() => { if(props.Brands) { setBrands(props.brand.allBrands); } }, [props.brand.allBrands]);
+    useEffect(() => { if(props.Roles) { setAllRoles(props.roles.Roles); } }, [props.roles.Roles]);
     useEffect(() => { if(props.Users) { setAllUsers(props.users.Users); } }, [props.users.Users]);
     useEffect(() => { if(props.Categories) { setAllCategories(props.categories.allCategories); } }, [props.categories.allCategories]);
     useEffect(() => { if(props.Icons) { setAllCategoryIcons(props.icons.allCategoryIcons); } }, [props.icons.allCategoryIcons]);
 
     useEffect(() => { setFailedMessage(props.brand.failedMessage); },[props.brand.failedMessage]);
+    useEffect(() => { setFailedMessage(props.roles.failedMessage); },[props.roles.failedMessage]);
     useEffect(() => { setFailedMessage(props.users.failedMessage); },[props.users.failedMessage]);
     useEffect(() => { setFailedMessage(props.categories.failedMessage); },[props.categories.failedMessage]);
     useEffect(() => { setFailedMessage(props.icons.failedMessage); },[props.icons.failedMessage]);
 
     useEffect(() => { setSuccessMessage(props.brand.successMessage); },[props.brand.successMessage]);
+    useEffect(() => { setSuccessMessage(props.roles.successMessage); },[props.roles.successMessage]);
     useEffect(() => { setSuccessMessage(props.users.successMessage); },[props.users.successMessage]);
     useEffect(() => { setSuccessMessage(props.categories.successMessage); },[props.categories.successMessage]);
     useEffect(() => { setSuccessMessage(props.icons.successMessage); },[props.icons.successMessage]);
 
     useEffect(() => { setLoading(props.brand.loading); },[props.brand.loading]);
+    useEffect(() => { setLoading(props.roles.loading); },[props.roles.loading]);
     useEffect(() => { setLoading(props.users.loading); },[props.users.loading]);
     useEffect(() => { setLoading(props.categories.loading); },[props.categories.loading]);
     useEffect(() => { setLoading(props.icons.loading); },[props.icons.loading]);
-
-    const onUnmount = () => {
-        console.log('fired unmount');
-        setBrands(false);
-        setAllCategoryIcons(false);
-        setAllCategories(false);
-        setFailedMessage(false);
-        setSuccessMessage(false);
-        setLoading(false);
-        setDeleteManyRecords(false);
-    }
 
     const singleDelete = (e, id) => {
         e.preventDefault();
@@ -59,6 +54,7 @@ const TableContainer = props => {
         if(props.Users) { props.deleteUser(id); }
         if(props.Categories) { props.deleteCategory(id); }
         if(props.Icons) { props.deleteCategoryIcon(id); }
+        if(props.Roles) { props.deleteRole(id); }
     }
 
     const manyDelete = (e, ids) => {
@@ -66,6 +62,7 @@ const TableContainer = props => {
         if(props.Brands) { props.deleteManyBrands(ids); }
         if(props.Categories) { props.deleteManyCategories(ids); }
         if(props.Icons) { props.deleteManyCategoryIcons(ids); }
+        if(props.Roles) { props.dleteManyRoles(ids); }
         setDeleteManyRecords([]);
     }
 
@@ -75,44 +72,26 @@ const TableContainer = props => {
                 {successMessage ? <ResponseMessages message={successMessage} /> : null}
                 {failedMessage ? <ResponseMessages ClassName="Danger" message={failedMessage} /> : null}
                 <div className={'col-12 text-white'}>
-                    {loading ? 
-                    <div className="card mb-30 bg-white">
-                        <SmallSpinner /> 
-                    </div> : 
+                    {loading ? <div className="card mb-30 bg-white"><SmallSpinner /></div> : 
                     <div className="card mb-30">
                         <div className="card-header">
                             {props.Brands && <h4>All Brands</h4>}
                             {props.Users && <h4>All Users</h4>}
                             {props.Categories && <h4>All Categories</h4>}
                             {props.Icons && <h4>All Icons</h4>}
+                            {props.Roles && <h4>All Roles</h4>}
                         </div>
-                        {(deleteManyRecords.length > 0 && !props.Users ) && <div className="col-12">
+                        {(deleteManyRecords.length > 0 && !props.Users ) && 
+                        <div className="col-12">
                             <div className="ButtonWrapper col-12 mt-20">
                                 <button className='ButtonDanger' onClick={e => manyDelete(e, deleteManyRecords)}>Delete Selected Records</button>
                             </div>
                         </div>}
-                        {props.Brands && <DataTable 
-                            brandsData={brands} 
-                            click={singleDelete} 
-                            setDeleteData={setDeleteManyRecords} 
-                            selectedDeleteData={deleteManyRecords} 
-                            loading={loading} />}
-                        {props.Icons && <DataTable 
-                            iconsData={allCategoryIcons}
-                            click={singleDelete} 
-                            setDeleteData={setDeleteManyRecords} 
-                            selectedDeleteData={deleteManyRecords} 
-                            loading={loading} />}
-                        {props.Categories && <DataTable 
-                            categoriesData={allCategories}
-                            click={singleDelete} 
-                            setDeleteData={setDeleteManyRecords} 
-                            selectedDeleteData={deleteManyRecords} 
-                            loading={loading} />}
-                        {props.Users && <DataTable 
-                            usersData={allUsers}
-                            click={singleDelete} 
-                            loading={loading} />}
+                        {props.Brands && <DataTable brandsData={brands} click={singleDelete} setDeleteData={setDeleteManyRecords} selectedDeleteData={deleteManyRecords} loading={loading} />}
+                        {props.Icons && <DataTable iconsData={allCategoryIcons} click={singleDelete} setDeleteData={setDeleteManyRecords} selectedDeleteData={deleteManyRecords} loading={loading} />}
+                        {props.Categories && <DataTable categoriesData={allCategories} click={singleDelete} setDeleteData={setDeleteManyRecords} selectedDeleteData={deleteManyRecords} loading={loading} />}
+                        {props.Roles && <DataTable rolesData={allRoles} click={singleDelete} loading={loading} setDeleteData={setDeleteManyRecords} selectedDeleteData={deleteManyRecords}/>}
+                        {props.Users && <DataTable usersData={allUsers} click={singleDelete} loading={loading} />}
                     </div> }
                 </div>
             </div>
@@ -125,7 +104,8 @@ const mapStateToProps = state => {
         brand: state.brand,
         users: state.allUsers,
         categories: state.category,
-        icons: state.categoryIcon
+        icons: state.categoryIcon,
+        roles: state.roles
     }
 }
 
@@ -141,7 +121,10 @@ const mapDispatchToProps = dispatch => {
         deleteCategoryIcon: (id) => dispatch(actions.deleteCategoryIcon(id)),
         deleteManyCategoryIcons: (ids) => dispatch(actions.deleteManyCategoryIcons(ids)),
         getUsers: () => dispatch(actions.getAllUsers()),
-        deleteUser: (id) => dispatch(actions.deleteUser(id))
+        deleteUser: (id) => dispatch(actions.deleteUser(id)),
+        getRoles: () => dispatch(actions.getRoles()),
+        deleteRole: (id) => dispatch(actions.deleteUserRole(id)),
+        dleteManyRoles: (ids) => dispatch(actions.deleteManyUserRoles(ids))
     }
 }
 

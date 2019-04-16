@@ -28,23 +28,15 @@ const AddUser = props => {
     const [inputValues, setInputValues] = useState({dob: '', doe: '', name: '', username: '', email: '', facebook: '', instagram: '', github: '', twitter: '', salary: '', telephone: '', country: '', address: '', city: '', postal: ''});
     const [errors, setErrors] = useState({ name: '', username: '', email: '' });
     useEffect(() => { props.getRoles(); setErrors({ ...props.addUserState.errors }); }, []);
-    useEffect(() => { setRoles(props.roles); if(props.roles.Roles[0]) setInputValues({ ...inputValues, role: props.roles.Roles[0]._id }); }, [props.roles]);
+    useEffect(() => { setRoles(props.roles); if(props.roles.Roles[0]); setInputValues({ ...inputValues, role: props.roles.Roles[0]._id }); }, [props.roles]);
     useEffect(() => { setErrors({ ...props.addUserState.errors }); }, [props.addUserState.errors]);
-    useEffect(() => {
-        setInputValues({dob: '', doe: '', name: '', username: '', email: '', facebook: '', instagram: '', github: '', twitter: '', salary: '', telephone: '', country: '', address: '', city: '', postal: ''});
-        setErrors({ name: '', username: '', email: '' });
-    }, [props.addUserState.successMessage]);
+    useEffect(() => { setInputValues({dob: '', doe: '', name: '', username: '', email: '', facebook: '', instagram: '', github: '', twitter: '', salary: '', telephone: '', country: '', address: '', city: '', postal: ''}); setErrors({ name: '', username: '', email: '' }); }, [props.addUserState.successMessage]);
 
-    const inputChange = e => {
-        e.preventDefault();
-        setInputValues({ ...inputValues, [e.target.name]: e.target.value });
-    }
+    const inputChange = e => { e.preventDefault(); setInputValues({ ...inputValues, [e.target.name]: e.target.value }); }
 
     const onFormSubmit = e => {
         e.preventDefault();
-        const userData = {
-            dob: inputValues.dob, doe: inputValues.doe, name: inputValues.name, username: inputValues.username,email: inputValues.email, password: inputValues.password, facebook: inputValues.facebook, instagram: inputValues.instagram, github: inputValues.github, twitter: inputValues.twitter, salary: inputValues.salary, telephone: inputValues.telephone, country: inputValues.country, address: inputValues.address, city: inputValues.city, postal: inputValues.postal, role: inputValues.role
-        }
+        const userData = { dob: inputValues.dob, doe: inputValues.doe, name: inputValues.name, username: inputValues.username,email: inputValues.email, password: inputValues.password, facebook: inputValues.facebook, instagram: inputValues.instagram, github: inputValues.github, twitter: inputValues.twitter, salary: inputValues.salary, telephone: inputValues.telephone, country: inputValues.country, address: inputValues.address, city: inputValues.city, postal: inputValues.postal, role: inputValues.role }
         for(const data in userData) { if(userData[data] === '') { delete userData[data]; } }
         props.addUser(userData);
     }
@@ -54,39 +46,21 @@ const AddUser = props => {
             {props.addUserState.successMessage ? <ResponseMessages message={props.addUserState.successMessage} /> : null}
             <div className="col-12 mb-30">
                 <form className="" onSubmit={onFormSubmit}>
-                    {props.addUserState.loading ? 
-                    <div className="card bg-white">
-                        <SmallSpinner />
-                    </div> : 
+                    {props.addUserState.loading ? <div className="card bg-white"><SmallSpinner /></div> : 
                     <div className="card text-white">
                         <div className="card-header">
                             <h5 className="title">Add New Employee</h5>
                         </div>
                         <div className="card-body row">
-                            {inputs.map((input,index) => {
-                                return (
+                            {inputs.map((input,index) => 
                                 <div className="col-md-6 mb-10" key={index}>
-                                    <LoginRegisterInputs 
-                                        formBox="form-group"
-                                        label={input.label}
-                                        type={input.type}
-                                        name={input.name}
-                                        placeholder={input.placeholder}
-                                        inputClass='form-control'
-                                        invalidInput='invalid'
-                                        invalidFeedback='invalid-feedback'
-                                        value={inputValues[input.name]}
-                                        onChange={inputChange}
-                                        error={errors[input.name] ? errors[input.name] : ''} />
-                                </div>)
-                            })}
+                                    <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name} placeholder={input.placeholder} inputClass='form-control' invalidInput='invalid' invalidFeedback='invalid-feedback' value={inputValues[input.name]} onChange={inputChange} error={errors[input.name] ? errors[input.name] : ''} />
+                                </div>)}
                             <div className="col-md-6 mb-10">
                                 <div className="form-group">
                                     <label>Role</label>
                                     <select name="role" onChange={inputChange} className='select d-block'>
-                                        {roles.Roles ? roles.Roles.map((role, index) => 
-                                            <option key={index} value={role._id}>{role.name}</option>)
-                                        : null}
+                                        {roles.Roles ? roles.Roles.map((role, index) => <option key={index} value={role._id}>{role.name}</option>) : null}
                                     </select>
                                 </div>
                             </div>

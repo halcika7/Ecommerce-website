@@ -13,8 +13,10 @@ const DataTable = props => {
     useEffect(() => { if(props.categoriesData) { setFunction(props.categoriesData, setLength); } }, [props.categoriesData]);
     useEffect(() => { if(props.iconsData) { setFunction(props.iconsData, setLength); } }, [props.iconsData]);
     useEffect(() => { if(props.brandsData) { setFunction(props.brandsData, setLength); } }, [props.brandsData]);
+    useEffect(() => { if(props.rolesData) { setFunction(props.rolesData, setLength); } }, [props.rolesData]);
 
     const setFunction = (Data, setDataLength) => {
+        console.log(Data);
         let data = [];
         for(let obj in Data) {
             let object = { ...Data[obj] };
@@ -55,6 +57,7 @@ const DataTable = props => {
         if(props.categoriesData) { view = 'view-category?id='; edit += 'edit-category?id=' }
         if(props.iconsData) { view = 'view-category-icon?id='; edit += 'edit-category-icon?id=' }
         if(props.brandsData) { view = 'view-brand?id='; edit += 'edit-brand?id=' }
+        if(props.rolesData) { view = 'view-role?id='; edit += 'edit-role?id=' }
         return (
             <React.Fragment>
                 <Link className="btn btn-warning" to={`${view}${id}`}>
@@ -71,8 +74,9 @@ const DataTable = props => {
         )
     }
 
-    const subcategoriesFormatter = (cell, row) => row.subcategories.map((sub, index) => `<span class=${classes.SPAN}>${sub.name}</span>`).join('');
-    const categoriesFormatter = (cell, row) => row.categories.map((cat, index) => `<span class=${classes.SPAN}>${cat}</span>`).join('');
+    const roleSubcategoriesFormatter = (cell, row) => row.permissions.length > 0 ? row.permissions.map((permission, index) => `<span class=${classes.SPAN}>${permission}</span>`).join('') : 'No Permissions'
+    const subcategoriesFormatter = (cell, row) => row.subcategories.length > 0 ? row.subcategories.map((sub, index) => `<span class=${classes.SPAN}>${sub.name}</span>`).join('') : 'No Subcategories';
+    const categoriesFormatter = (cell, row) => row.categories.length ? row.categories.map((cat, index) => `<span class=${classes.SPAN}>${cat}</span>`).join('') : 'No categories';
 
     const imgFormatter = (cell, row) => {
         let src = '', width = '30', height = '30';
@@ -99,26 +103,19 @@ const DataTable = props => {
     return (
         <div className={classes.DataTable + " card-body"}>
             <React.Fragment>
-                {(length === false || props.loading || props.usersData) ? null :
+                {(length === false || props.loading) ? null :
                 <BootstrapTable data={data} options={options} bordered={false} pagination version='4' striped hover search={ true } multiColumnSearch={ true }
-                containerClass='table-responsive col-12' exportCSV selectRow={!props.usersData ? {mode: 'checkbox', onSelectAll: selectAllDataCheckbox, onSelect: selectOneDataCheckbox, bgColor: '#F08080'} : {}} >
+                containerClass={!props.usersData ? 'table-responsive col-12 ' + classes.Spans : 'table-responsive col-12'} exportCSV selectRow={!props.usersData ? {mode: 'checkbox', onSelectAll: selectAllDataCheckbox, onSelect: selectOneDataCheckbox, bgColor: '#F08080'} : {}} >
                     <TableHeaderColumn isKey dataField='_id' dataSort>ID</TableHeaderColumn>
                     <TableHeaderColumn dataField='name' dataSort>Name</TableHeaderColumn>
+                    {props.usersData && <TableHeaderColumn dataField='email' dataSort>Email</TableHeaderColumn>}
+                    {props.usersData && <TableHeaderColumn dataField='username' dataSort>Username</TableHeaderColumn>}
+                    {props.usersData && <TableHeaderColumn dataField='emailConfirmation' dataSort>Account Confirmed</TableHeaderColumn>}
+                    {props.usersData && <TableHeaderColumn dataField='profilePicture' dataFormat={imgFormatter.bind(this)} export={false}>User Picture</TableHeaderColumn>}
+                    {props.categoriesData && <TableHeaderColumn dataFormat={subcategoriesFormatter}>Subcategories</TableHeaderColumn>}
                     {(props.categoriesData || props.iconsData )&& <TableHeaderColumn dataField='icon' dataFormat={imgFormatter}>Category Icon</TableHeaderColumn>}
-                    {(props.categoriesData && length > 0) && <TableHeaderColumn dataFormat={subcategoriesFormatter}>Subcategories</TableHeaderColumn>}
-                    {(props.brandsData && length > 0) && <TableHeaderColumn className={classes.Categories} dataField='categories' dataFormat={categoriesFormatter}>Categories</TableHeaderColumn>}
-                    <TableHeaderColumn dataField='actions' dataFormat={buttonFormatter.bind(this)} export={false}>Actions</TableHeaderColumn>
-                </BootstrapTable>}
-
-                {(length === false || !props.usersData || props.loading) ? null :
-                <BootstrapTable data={data} options={options} bordered={false} pagination version='4' striped hover search={ true } multiColumnSearch={ true }
-                containerClass='table-responsive col-12' exportCSV selectRow={!props.usersData ? {mode: 'checkbox', onSelectAll: selectAllDataCheckbox, onSelect: selectOneDataCheckbox, bgColor: '#F08080'} : {}} >
-                    <TableHeaderColumn isKey dataField='_id' dataSort>ID</TableHeaderColumn>
-                    <TableHeaderColumn dataField='name' dataSort>Name</TableHeaderColumn>
-                    <TableHeaderColumn dataField='email' dataSort>Email</TableHeaderColumn>
-                    <TableHeaderColumn dataField='username' dataSort>Username</TableHeaderColumn>
-                    <TableHeaderColumn dataField='emailConfirmation' dataSort>Account Confirmed</TableHeaderColumn>
-                    <TableHeaderColumn dataField='profilePicture' dataFormat={imgFormatter.bind(this)} export={false}>User Picture</TableHeaderColumn>
+                    {props.rolesData && <TableHeaderColumn dataFormat={roleSubcategoriesFormatter}>Subcategories</TableHeaderColumn>}
+                    {props.brandsData && <TableHeaderColumn className={classes.Categories} dataField='categories' dataFormat={categoriesFormatter}>Categories</TableHeaderColumn>}
                     <TableHeaderColumn dataField='actions' dataFormat={buttonFormatter.bind(this)} export={false}>Actions</TableHeaderColumn>
                 </BootstrapTable>}
             </React.Fragment>

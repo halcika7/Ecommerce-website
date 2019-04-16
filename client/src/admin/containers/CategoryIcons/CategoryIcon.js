@@ -11,29 +11,16 @@ const CategoryIcon = props => {
     const [error, setError] = useState(false);
     const [id, setId] = useState(false);
 
-    useEffect(() => {
-        startFunction();
-    }, []);
-
-    useEffect(() => {
-        setIconName(props.iconState.name);
-        setError(props.iconState.error);
-        if(props.viewicon || props.editicon) { setImgSrc(props.iconState.name); }
-    }, [props.iconState]);
-
+    useEffect(() => { startFunction(); }, []);
+    useEffect(() => { setIconName(props.iconState.name); setError(props.iconState.error); if(props.viewicon || props.editicon) { setImgSrc(props.iconState.name); } }, [props.iconState]);
     useEffect(() => { startFunction(); }, [props.addicon, props.viewicon, props.editicon]);
     useEffect(() => { if(props.iconState.errorID) { setTimeout(() => props.history.goBack(), 6000); } }, [props.iconState.errorID]);
 
     const onSubmit = e => {
         e.preventDefault();
-        if(iconName.length < 10) {
-            setError('URL must be at least 10 characters');
-            return;
-        }
+        if(iconName.length < 10) { setError('URL must be at least 10 characters'); return; }
         if(error) { return; }
-        setError(false);
-        setImgSrc(false);
-        setIconName('');
+        setError(false); setImgSrc(false); setIconName('');
         if(props.addicon) { props.addIcon(iconName); }
         if(props.editicon) { props.updateIcon(id, iconName); }
     }
@@ -41,27 +28,14 @@ const CategoryIcon = props => {
     const inputOnChange = e => {
         setIconName(e.target.value);
         const pattern = new RegExp('(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|gif|png)');
-        if(pattern.test(e.target.value)) { 
-            setImgSrc(e.target.value);
-            setError(false);
-        }else {
-            setImgSrc(false);
-            setError('Invalid img URL');
-        }
+        if(pattern.test(e.target.value)) { setImgSrc(e.target.value); setError(false); }
+        else { setImgSrc(false); setError('Invalid img URL'); }
     }
 
     const startFunction = () => {
-        if(!props.addicon) {
-            const id = new URLSearchParams(props.location.search).get('id');
-            setId(id);
-            props.getIcon(id);
-        }
-        if(props.addicon) {
-            props.clearState();
-        }
-        setIconName(props.iconState.name);
-        setError(props.iconState.error);
-        setImgSrc(false);
+        if(!props.addicon) { const id = new URLSearchParams(props.location.search).get('id'); setId(id); props.getIcon(id); }
+        if(props.addicon) { props.clearState(); }
+        setIconName(props.iconState.name); setError(props.iconState.error); setImgSrc(false);
     }
 
     return (
@@ -70,13 +44,7 @@ const CategoryIcon = props => {
             {props.iconState.failedMessage && <ResponseMessage ClassName="Danger" message={props.iconState.failedMessage} />}
             {props.iconState.errorID && <ResponseMessage ClassName="Danger" message={props.iconState.errorID} />}
             <div className={'col-12 mb-30'}>
-                {props.iconState.loading || props.iconState.errorID ? (
-                    <React.Fragment>
-                        <div className={"card bg-white"}>
-                            <SmallSpinner />
-                        </div>
-                    </React.Fragment>
-                ) : 
+                {props.iconState.loading || props.iconState.errorID ? <div className={"card bg-white"}> <SmallSpinner /></div> : 
                 <React.Fragment>
                     <div className="Card card text-white">
                         <div className="card-header">
@@ -89,28 +57,12 @@ const CategoryIcon = props => {
                                 <form>
                                     <div className="row">
                                         <div className="col-sm-8">
-                                            <LoginRegisterInputs 
-                                                formBox="form-group"
-                                                label="Icon Name"
-                                                type="text"
-                                                name="iconName"
-                                                placeholder="Add Icon URL"
-                                                inputClass='form-control'
-                                                invalidInput='invalid'
-                                                invalidFeedback='invalid-feedback'
-                                                value={iconName}
-                                                onChange={inputOnChange} 
-                                                error={error ? error : ''} 
-                                                disabled={props.viewicon && true}/>
+                                            <LoginRegisterInputs formBox="form-group" label="Icon Name" type="text" name="iconName" placeholder="Add Icon URL" inputClass='form-control' invalidInput='invalid' invalidFeedback='invalid-feedback' value={iconName} onChange={inputOnChange} error={error ? error : ''} disabled={props.viewicon && true}/>
                                         </div>
                                         {(imgSrc && !props.viewicon)&& 
                                         <div className="col-sm-4">
                                             <label className="d-block">Category Icon Image</label>
-                                            <img src={imgSrc} alt="imgPerview" onError={(e) => {
-                                                e.target.onerror = null;
-                                                e.target.src = '';
-                                                setImgSrc(false);
-                                                }}/>
+                                            <img src={imgSrc} alt="imgPerview" onError={(e) => { e.target.onerror = null; e.target.src = ''; setImgSrc(false); }}/>
                                         </div>}
                                         {props.viewicon && 
                                         <div className="col-sm-4">

@@ -14,49 +14,28 @@ const AddRole = props => {
     const [roleName, setRoleName] = useState('');
     useEffect(() => { props.getAllPermissions(); setAllPermissions(props.allPermissions); }, []);
     useEffect(() => { setAllPermissions(props.allPermissions); }, [props.allPermissions]);
-    useEffect(() => { setRoleName(''); setIsAdmin(false); setChoosenPermissions([]); }, [props.roles.successMessage]);
+    useEffect(() => { if(props.roles.successMessage) { setRoleName(''); setIsAdmin(false); setChoosenPermissions([]); } }, [props.roles.successMessage]);
 
-    const onFormSubmit = (e) => {
-        e.preventDefault();
-        const role = { name: roleName, isAdmin, permissions: choosenPermissions }
-        props.addNewRole(role);
-    } 
+    const onFormSubmit = (e) => { e.preventDefault(); const role = { name: roleName, isAdmin, permissions: choosenPermissions }; props.addNewRole(role); } 
 
     return (
         <div className={'AdminProfile row'}>
             {props.roles.failedMessage ? <ResponseMessages ClassName="Danger" message={props.roles.failedMessage} /> : null}
             {props.roles.successMessage ? <ResponseMessages message={props.roles.successMessage} /> : null}
             <div className={'col-12 mb-30'}>
-                {props.roles.loading ? (
-                    <React.Fragment>
-                        <div className={"card bg-white"}>
-                            <SmallSpinner />
-                        </div>
-                    </React.Fragment>
-                ) : 
+                {props.roles.loading ? <div className={"card bg-white"}><SmallSpinner /></div> : 
                 <React.Fragment>
                     <div className="Card card">
-                        <div className="card-header">
-                            <h4 className="text-white">Add Role</h4>
-                        </div>
+                        <div className="card-header"><h4 className="text-white">Add Role</h4></div>
                         <div className="card-body">
                             <div className="col-12">
                                 <form onSubmit={onFormSubmit}>
                                     <label className="text-white">Select Roles</label>
-                                    <TagsInput 
-                                        values={allPermissions}
-                                        choosenValues={choosenPermissions}
-                                        setChoosenValues={setChoosenPermissions}/>
+                                    <TagsInput values={allPermissions} choosenValues={choosenPermissions} setChoosenValues={setChoosenPermissions}/>
                                     <div className="row mt-20">
                                         <div className="col-md-6">
                                             <label className="text-white">Role Name</label>
-                                            <input type="text" 
-                                                name="roleName" 
-                                                className="w-100" 
-                                                placeholder="Enter Role Name"
-                                                value={roleName}
-                                                onChange={e => setRoleName(e.target.value)}
-                                                style={{ border: '1px solid rgba(255, 255, 255, 0.489)' }}/>
+                                            <input type="text" name="roleName" className="w-100" placeholder="Enter Role Name" value={roleName} onChange={e => setRoleName(e.target.value)} style={{ border: '1px solid rgba(255, 255, 255, 0.489)' }}/>
                                         </div>
                                         <div className="col-md-6">
                                             <ToggleSwitchButton value={isAdmin} setValue={setIsAdmin} name="Is Admin" />

@@ -79,6 +79,8 @@ router.get('/userroles', UserRolesController.getRoles);
 
 router.delete('/deleterole', UserRolesController.deleteUserRole);
 
+router.delete('/deletemanyroles', UserRolesController.deleteManyUserRoles);
+
 router.post('/getrole', UserRolesController.getRole);
 
 router.patch('/updaterole', UserRolesController.updateRole);

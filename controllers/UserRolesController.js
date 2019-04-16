@@ -1,5 +1,7 @@
 const UserRolesModel = require('../models/UserRole');
+const UserModel = require('../models/User');
 const validateRole = require('../validation/roleValidation');
+const ObjectId = require('mongoose').Types.ObjectId; 
 
 exports.addUserRole = async (req, res) => {
     try{
@@ -8,7 +10,7 @@ exports.addUserRole = async (req, res) => {
         const newRole = new UserRolesModel({ 
             name: req.body.name, 
             isAdmin: req.body.isAdmin, 
-            permissions: Object.keys(req.body.permissions).length > 0 ? req.body.permissions : {} });
+            permissions: req.body.permissions});
         await newRole.save();
         return res.json({ successMessage: 'New Role Added !' });
     }catch(err) {
@@ -28,9 +30,26 @@ exports.getRoles = async (req,res) => {
 
 exports.deleteUserRole = async (req, res) => {
     try {
-        const response = await UserRolesModel.deleteOne({ name: req.query.name });
-        if(response.n === 0) return res.json({ failedMessage: 'No Roles deleted !' });
-        return res.json({ successMessage: 'Roles deleted !' });
+        const findRole = await UserRolesModel.findOne({ $and: [ { _id: {$in: ['5cb604f564f027438f85970a','5cb604fd64f027438f85970b']} }, {  _id: new ObjectId(req.query.id) } ] });
+        const deleteRole = await UserRolesModel.deleteOne({ $and: [ { _id: {$nin: ['5cb604f564f027438f85970a','5cb604fd64f027438f85970b']} }, {  _id: new ObjectId(req.query.id) } ] });
+        const updateUserRole = await UserModel.updateMany({ role: req.query.id }, { role: new ObjectId('5cb604fd64f027438f85970b') });
+        if(deleteRole.n === 0 && findRole) { return res.json({ failedMessage: `Role with id = ${findRole._id} can't be deleted !` }); } 
+        if(deleteRole.n === 0) return res.json({ failedMessage: 'No Roles deleted !' });
+        return res.json({ successMessage: 'Role deleted !' });
+    }catch (err) {
+        return res.json({ failedMessage: err.message });
+    }
+}
+
+exports.deleteManyUserRoles = async (req, res) => {
+    const ids = Object.keys(req.query).map(id => req.query[id]);
+    try {
+        const findRole = await UserRolesModel.find({ $and: [ { _id: {$in: ['5cb604f564f027438f85970a','5cb604fd64f027438f85970b']} }, {  _id: {$in: ids} } ] });
+        const deleteRole = await UserRolesModel.deleteMany({ $and: [ { _id: {$nin: ['5cb604f564f027438f85970a','5cb604fd64f027438f85970b']} }, {  _id: {$in: ids}  } ] });
+        const updateUserRole = await UserModel.updateMany({ role: {$in: ids} }, { role: new ObjectId('5cb604fd64f027438f85970b') });
+        if(deleteRole.n === 0 && findRole) { return res.json({ failedMessage: `Role with id = ${findRole._id} can't be deleted !` }); } 
+        if(deleteRole.n === 0) return res.json({ failedMessage: 'No Roles deleted !' });
+        return res.json({ successMessage: 'Role deleted !' });
     }catch (err) {
         return res.json({ failedMessage: err.message });
     }

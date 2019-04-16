@@ -26,31 +26,20 @@ const reducer = (state = initialState, action) => {
             updateObject(state, {
                 ...initialState
             }),
-        [actionTypes.ADD_EDIT_DELETE_CATEGORY_FAILED_OR_ERROR] :
+        [actionTypes.CATEGORY_SUCCESS] :
             updateObject(state, {
-                ...initialState,
-                failedMessage: action.failedMessage ? action.failedMessage : false,
-                error: action.error ? action.error : false,
+                successMessage: action.successMessage ? action.successMessage : false,
+                allCategories: action.categories ? action.categories : [],
                 categoryData: action.data ? action.data : initialState.categoryData,
                 loading: action.loading ? action.loading : false
             }),
-        [actionTypes.ADD_EDIT_DELETE_CATEGORY_SUCESS] :
+        [actionTypes.CATEGORY_FAILED] :
             updateObject(state, {
-                ...initialState,
-                successMessage: action.successMessage,
-                loading: action.loading ? action.loading : false
-            }),
-        [actionTypes.GET_ALL_OR_SINGLE_CATEGORIES_SUCCESS] :
-            updateObject(state, {
-                ...initialState,
-                allCategories: action.categories ? action.categories : [],
-                categoryData: action.data ? action.data : initialState.categoryData
-            }),
-        [actionTypes.GET_ALL_OR_SINGLE_CATEGORIES_FAILED] :
-            updateObject(state, {
-                ...initialState,
-                failedMessage: action.failedMessage,
+                failedMessage: action.failedMessage ? action.failedMessage : false,
                 errorId: action.errorId ? action.errorId : false,
+                error: action.error ? action.error : false,
+                categoryData: action.data ? action.data : initialState.categoryData,
+                loading: action.loading ? action.loading : false
             }),
         default: state
     }

@@ -14,28 +14,32 @@ const TagsInput = props => {
             setListItems([]);
         }
     }, []);
-    
-    useEffect(() => { setValues(); }, [props.choosenValues, props.values]);
 
+    useEffect(() => { 
+        setValues();
+    }, [props]);
+    
     const setValues = () => {
         const loadTags = [];
-        const newListItems = [...props.values];
+        const newListItems = [];
+        props.values.forEach(perm => newListItems.push({...perm}));
         let i = 0;
         for(const obj in props.choosenValues) {
-            loadTags.push({ name: obj, index: i });
-            const tagIndex = newListItems.findIndex(tag => tag.permission === obj );
+            loadTags.push({ name: props.choosenValues[obj], index: i });
+            const tagIndex = newListItems.findIndex(tag => tag.permission === props.choosenValues[obj] );
             if(tagIndex !== -1) { newListItems[tagIndex].disabled = true; }
             i++;
         }
-        setListItems([ ...newListItems ]);
+        setListItems(newListItems);
         setTags(loadTags);
     }
 
     const listItemOnClick = e => {
         e.preventDefault();
         const input = document.querySelector('.' + classes.Input);
-        setTags([ ...tags, {name: e.target.getAttribute('data-name'), index: e.target.getAttribute('data-index')} ]);
-        props.setChoosenValues({ ...props.choosenValues, [e.target.getAttribute('data-name')]: true });
+        const name = e.target.getAttribute('data-name');
+        setTags([ ...tags, {name, index: e.target.getAttribute('data-index')} ]);
+        props.setChoosenValues([ ...props.choosenValues, name ]);
         document.querySelectorAll('.' + classes.List + ' label').forEach(item => item.removeAttribute('style'));
         const newListItems = [...listItems];
         newListItems[e.target.getAttribute('data-index')].disabled = true;
@@ -57,9 +61,9 @@ const TagsInput = props => {
         setListItems([...newListItems]);
         newTags.splice(tagIndex,1);
         setTags([...newTags]);
-        const newChoosenValues = { ...props.choosenValues };
-        delete newChoosenValues[e.target.getAttribute('data-name')];
-        props.setChoosenValues({ ...newChoosenValues });
+        const newChoosenValues = [ ...props.choosenValues ];
+        newChoosenValues.splice(tagIndex, 1)
+        props.setChoosenValues(newChoosenValues);
     }
 
     const onInputChange = e => {

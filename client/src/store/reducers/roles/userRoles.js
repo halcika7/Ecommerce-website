@@ -14,64 +14,21 @@ const reducer = (state = initialState, action) => {
     const actions = {
         [actionTypes.ROLE_START] :
             updateObject(state, {
-                failedMessage:false,
-                successMessage: false,
+                ...initialState,
                 loading: true
             }),
-        [actionTypes.ADD_USER_ROLE_SUCCESS] :
-            updateObject(state, {
-                successMessage: action.successMessage,
-                loading: false
-            }),
-        [actionTypes.ADD_USER_ROLE_FAILED] :
+        [actionTypes.ROLE_FAILED] : 
             updateObject(state, {
                 failedMessage: action.failedMessage,
-                loading: false
-            }),
-        [actionTypes.GET_USER_ROLES_SUCCESS] : 
-            updateObject(state, {
-                Roles: action.Roles,
-                loading: false
-            }),
-        [actionTypes.GET_USER_ROLES_FAILED] : 
-            updateObject(state, {
-                failedMessage: action.failedMessage ? action.failedMessage : false,
-                successMessage: false
-            }),
-        [actionTypes.DELETE_USER_ROLE_SUCCESS] :
-            updateObject(state, {
-                successMessage: action.successMessage
-            }),
-        [actionTypes.DELETE_USER_ROLE_FAILED] :
-            updateObject(state, {
-                failedMessage: action.failedMessage,
-                loading: false
-            }),
-        [actionTypes.GET_ROLE_FAILED] :
-            updateObject(state, {
-                ...initialState,
-                failedMessage: action.failedMessage ? action.failedMessage : false,
+                loading: action.loading ? action.loading : false,
                 errorId: action.errorId ? action.errorId : false
             }),
-        [actionTypes.GET_ROLE_SUCCESS] :
-            updateObject(state, {
-                ...initialState,
-                Role: action.role
-            }),
-        [actionTypes.UPDATE_ROLE_START] : 
-            updateObject(state, {
-                Role: {},
-                successMessage: false,
-                failedMessage: false
-            }),
-        [actionTypes.UPDATE_ROLE_FAILED] : 
-            updateObject(state, {
-                failedMessage: action.failedMessage
-            }),
-        [actionTypes.UPDATE_ROLE_SUCCESS] :
+        [actionTypes.ROLE_SUCCESS] :
             updateObject(state, {
                 successMessage: action.successMessage,
-                Role: action.role
+                Role: action.role ? action.role : {},
+                Roles: action.roles ? action.roles : {},
+                loading: action.loading ? action.loading : false
             }),
         default: state
     }

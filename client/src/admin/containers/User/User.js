@@ -16,54 +16,29 @@ const User = props => {
 
     const [user, setUser] = useState({});
     const [roles, setRoles] = useState([]);
-    const [inputValues, setInputValues] = useState({ 
-        dob: '', doe: '', facebook: '', instagram: '', github: '', twitter: '', salary: '', telephone: '', country: '', address: '', city: '', postal: '', role: '', confirmed: false, name: '', username: '', email: '' 
-    });
-    const [inputsCol12] = useState([ 
-        { label: 'Name', type: 'text', name: 'name', placeholder: 'Name' },{ label: 'User Name', type: 'text', name: 'username', placeholder: 'User Name' },{ label: 'Email', type: 'email', name: 'email', placeholder: 'Email' } 
-    ]);
+    const [inputValues, setInputValues] = useState({ dob: '', doe: '', facebook: '', instagram: '', github: '', twitter: '', salary: '', telephone: '', country: '', address: '', city: '', postal: '', role: '', confirmed: false, name: '', username: '', email: '' });
+    const [inputsCol12] = useState([ { label: 'Name', type: 'text', name: 'name', placeholder: 'Name' },{ label: 'User Name', type: 'text', name: 'username', placeholder: 'User Name' },{ label: 'Email', type: 'email', name: 'email', placeholder: 'Email' } ]);
 
-    const [inputsCol4] = useState([ 
-        { label: 'Country', type: 'text', name: 'country', placeholder: 'Country' },{ label: 'City', type: 'text', name: 'city', placeholder: 'City' },{ label: 'Postal Code', type: 'text', name: 'postal', placeholder: 'Postal Code' } ]);
+    const [inputsCol4] = useState([ { label: 'Country', type: 'text', name: 'country', placeholder: 'Country' },{ label: 'City', type: 'text', name: 'city', placeholder: 'City' },{ label: 'Postal Code', type: 'text', name: 'postal', placeholder: 'Postal Code' } ]);
 
-    const [inputsCol6] = useState([ 
-        { label: 'Salary', type: 'text', name: 'salary', placeholder: 'Salary' }, { label: 'Telephone', type: 'phone', name: 'telephone', placeholder: 'Telephone Number' } ]);
+    const [inputsCol6] = useState([ { label: 'Salary', type: 'text', name: 'salary', placeholder: 'Salary' }, { label: 'Telephone', type: 'phone', name: 'telephone', placeholder: 'Telephone Number' } ]);
 
-    const [inputsCol3] = useState([ 
-        { label: 'Facebook Link', type: 'text', name: 'facebook', placeholder: 'Facebook Link' }, { label: 'Instagram Link', type: 'text', name: 'instagram', placeholder: 'Instagram Link' }, { label: 'Github Link', type: 'text', name: 'github', placeholder: 'Github Link' }, { label: 'Twitter Link', type: 'text', name: 'twitter', placeholder: 'Twitter Link' }, ]);
+    const [inputsCol3] = useState([ { label: 'Facebook Link', type: 'text', name: 'facebook', placeholder: 'Facebook Link' }, { label: 'Instagram Link', type: 'text', name: 'instagram', placeholder: 'Instagram Link' }, { label: 'Github Link', type: 'text', name: 'github', placeholder: 'Github Link' }, { label: 'Twitter Link', type: 'text', name: 'twitter', placeholder: 'Twitter Link' }, ]);
 
-    const [inputsCol6S] = useState([ 
-        { label: 'Date of Birth', type: 'date', name: 'dob', placeholder: 'Date of Birth' }, { label: 'Date of Employment', type: 'date', name: 'doe', placeholder: '' } ]);
+    const [inputsCol6S] = useState([ { label: 'Date of Birth', type: 'date', name: 'dob', placeholder: 'Date of Birth' }, { label: 'Date of Employment', type: 'date', name: 'doe', placeholder: '' } ]);
 
-    useEffect(() => { 
-        props.getUser(userID, props.UserID, profile);
-        if(!(props.profile && (userID !== props.UserID))) { props.getRoles(); }
-    }, []);
-    useEffect(() => {
-        props.getUser(userID, props.UserID, profile);
-        if(!(props.profile && (userID !== props.UserID))) {props.getRoles(); }
-    }, [props.location.search, props.match.params]);
+    useEffect(() => { props.getUser(userID, props.UserID, profile); if(!(props.profile && (userID !== props.UserID))) { props.getRoles(); } }, []);
+    useEffect(() => { props.getUser(userID, props.UserID, profile); if(!(props.profile && (userID !== props.UserID))) {props.getRoles(); } }, [props.location.search, props.match.params]);
     useEffect(() => { if(props.errorID) { props.history.goBack(); } }, [props.errorID]);
-    useEffect(() => { 
-        setUser({ ...user, ...props.User }); setInputValues({ ...inputValues, ...props.User.userInfo, role: props.User.role, ...props.User.emailConfirmation, name: props.User.name, username: props.User.username, email: props.User.email });
-    }, [props.User]);
+    useEffect(() => { setUser({ ...user, ...props.User }); setInputValues({ ...inputValues, ...props.User.userInfo, role: props.User.role, ...props.User.emailConfirmation, name: props.User.name, username: props.User.username, email: props.User.email }); }, [props.User]);
     useEffect(() => { setRoles(props.roles); }, [props.roles]);
 
-    const inputChange = e => {
-        e.preventDefault();
-        setInputValues({ ...inputValues, [e.target.name]: e.target.value });
-    }
+    const inputChange = e => { e.preventDefault(); setInputValues({ ...inputValues, [e.target.name]: e.target.value }); }
 
     const onFormSubmit = e => {
         e.preventDefault();
-        const userData = {
-            userInfo: {
-                dob: inputValues.dob, doe: inputValues.doe, facebook: inputValues.facebook, instagram: inputValues.instagram, github: inputValues.github, twitter: inputValues.twitter, salary: inputValues.salary, telephone: inputValues.telephone, country: inputValues.country, address: inputValues.address, city: inputValues.city, postal: inputValues.postal
-            },role: inputValues.role, id: props.User._id, confirmed: inputValues.confirmed, name: inputValues.name, username: inputValues.username, email: inputValues.email
-        }
-        for(const data in userData.userInfo) { 
-            if(userData.userInfo[data] === '') { delete userData.userInfo[data]; } 
-        }
+        const userData = {userInfo: {dob: inputValues.dob, doe: inputValues.doe, facebook: inputValues.facebook, instagram: inputValues.instagram, github: inputValues.github, twitter: inputValues.twitter, salary: inputValues.salary, telephone: inputValues.telephone, country: inputValues.country, address: inputValues.address, city: inputValues.city, postal: inputValues.postal},role: inputValues.role, id: props.User._id, confirmed: inputValues.confirmed, name: inputValues.name, username: inputValues.username, email: inputValues.email}
+        for(const data in userData.userInfo) { if(userData.userInfo[data] === '') { delete userData.userInfo[data]; } }
         props.updateUser(userData);
     }
 
@@ -86,9 +61,7 @@ const User = props => {
                 </div> : 
                 <React.Fragment>
                     {(Object.keys(user).length < 1 || Object.keys(props.User).length < 1 || props.loadingPicture || props.loading || !props.User.emailConfirmation || !inputValues.name) ? 
-                    <div className='card bg-white'>
-                        <SmallSpinner />
-                    </div>  : 
+                    <div className='card bg-white'><SmallSpinner /></div>  : 
                     <div className="card text-white">
                         {props.profile !== true ? <div className="card-header"><h5 className="title">{user.username} Profile</h5></div> : null }
                         <div className="card-body">
@@ -121,8 +94,7 @@ const User = props => {
                                     )}
                                     {inputsCol6.map((input,index) => 
                                         <div className="col-md-6" key={index}>
-                                            <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name}
-                                                placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} disabled={(props.profile === true && input.name === 'salary') || props.view ? true : false}/>
+                                            <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name} placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} disabled={(props.profile === true && input.name === 'salary') || props.view ? true : false}/>
                                         </div>
                                     )}
                                     {inputsCol3.map((input,index) =>
@@ -132,8 +104,7 @@ const User = props => {
                                     )}
                                     {inputsCol6S.map((input,index) => 
                                         <div className="col-md-6" key={index}>
-                                            <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name}
-                                                placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} disabled={(props.profile === true && input.name === 'doe') || props.view ? true : false}/>
+                                            <LoginRegisterInputs formBox="form-group" label={input.label} type={input.type} name={input.name} placeholder={input.placeholder} inputClass='form-control' value={inputValues[input.name]} onChange={inputChange} disabled={(props.profile === true && input.name === 'doe') || props.view ? true : false}/>
                                         </div>
                                     )}
                                     {props.profile !== true ? 

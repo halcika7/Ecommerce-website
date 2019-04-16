@@ -27,21 +27,15 @@ const AccountActivation = lazy(() => import('./users/containers/AuthenticationPa
 
 // admin routes
 const Dashboard = lazy(() => import('./admin/containers/Dashboard/Dashboard'));
-const ProductsPage = lazy(() => import('./admin/containers/AdminProductsPage/AdminProductsPage'));
+const ProductsPage = lazy(() => import('./admin/containers/ProductsPage/ProductsPage'));
 const AddProduct = lazy(() => import('./admin/containers/AddProduct/AddProduct'));
 const ViewUser = lazy(() => import('./admin/containers/User/User'));
 const AddUser = lazy(() => import('./admin/containers/AddUser/AddUser'));
 const UpdateUserRole = lazy(() => import('./admin/containers/Role/UpdateRole'));
 const AddUserRole = lazy(() => import('./admin/containers/Role/AddRole'));
-const AllUserRoles = lazy(() => import('./admin/containers/Role/AllRoles'));
 const AddCategory = lazy(() => import('./admin/containers/Category/Category'));
 const CategoryIcon = lazy(() => import('./admin/containers/CategoryIcons/CategoryIcon'));
 const Brand = lazy(() => import('./admin/containers/Brand/Brand'));
-
-// const AdminAllUsers = lazy(() => import('./admin/containers/User/AllUsers'));
-// const AllCategories = lazy(() => import('./admin/containers/Category/AllCategories'));
-// const AllCategoryIcons = lazy(() => import('./admin/containers/CategoryIcons/AllCategoryIcons'));
-// const AllBrands = lazy(() => import('./admin/containers/Brand/AllBrands'));
 
 const TableContainer = lazy(() => import('./admin/containers/TableContainer/TableContainer'));
 
@@ -113,9 +107,9 @@ const App = props => {
 
                                 <Route path='/admindashboard/add-user' exact  render={(props) => <Suspense fallback={<Spinner />}><AddUser /></Suspense>}/>
                                 <Route path='/admindashboard/add-role' exact render={(props) => <Suspense fallback={<Spinner />}><AddUserRole {...props}/></Suspense>}/>
-                                <Route path='/admindashboard/update-role' exact render={(props) => <Suspense fallback={<Spinner />}><UpdateUserRole {...props}/></Suspense>}/>
+                                <Route path='/admindashboard/edit-role' exact render={(props) => <Suspense fallback={<Spinner />}><UpdateUserRole {...props}/></Suspense>}/>
                                 <Route path='/admindashboard/view-role' exact render={(props) => <Suspense fallback={<Spinner />}><UpdateUserRole view={true} {...props}/></Suspense>}/>
-                                <Route path='/admindashboard/all-roles' exact render={(props) => <Suspense fallback={<Spinner />}><AllUserRoles {...props}/></Suspense>}/>
+                                <Route path='/admindashboard/all-roles' exact render={(props) => <Suspense fallback={<Spinner />}><TableContainer Roles={true} /></Suspense>}/>
 
                                 <Route path='/admindashboard/add-category' exact render={(props) => <Suspense fallback={<Spinner />}><AddCategory addcategory={true} {...props}/></Suspense>}/>
                                 <Route path='/admindashboard/edit-category' exact render={(props) => <Suspense fallback={<Spinner />}><AddCategory editcategory={true} {...props}/></Suspense>}/>

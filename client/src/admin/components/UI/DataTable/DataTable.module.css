@@ -157,3 +157,23 @@
     max-height: 50px;
     overflow-y: auto;
 }
+
+.Role table{
+    min-width: 1000px;
+    height: 100%;
+}
+
+.Spans tbody tr td:nth-child(4) > div {
+    display: flex;
+    flex-wrap: wrap;
+    height: 73px;
+    overflow-y: auto;
+    align-items: center;
+}
+
+.Spans tbody tr td:nth-child(4) > div > span {
+    padding: 5px 10px;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    margin: 0 10px 10px 0;
+}

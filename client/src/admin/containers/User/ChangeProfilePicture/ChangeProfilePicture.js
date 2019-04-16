@@ -3,9 +3,7 @@ import UploadPicture from '../../../components/UI/UploadPicture/UploadPicture';
 
 const ChangeProfilePicture = props => {
     const [image, setImage] = useState({});
-
     const onProfilePictureChange = (name,file) => setImage({ [name]: file })
-
     const onFormSubmit = async e => {
         e.preventDefault();
 
@@ -25,9 +23,7 @@ const ChangeProfilePicture = props => {
     return (
         <div className="col-md-6 mb-30">
             <div className="card text-white">
-                <div className="card-header">
-                    <h5 className="title">Change Profile Picture</h5>
-                </div>
+                <div className="card-header"><h5 className="title">Change Profile Picture</h5></div>
                 <div className="card-body">
                     <form className="" onSubmit={onFormSubmit}>
                         <div className="row mb-10">

@@ -14,43 +14,26 @@ const Brand = props => {
     useEffect(() => { startFunction(); }, []);
     useEffect(() => { startFunction(); }, [props.addbrand, props.viewbrand, props.editbrand]);
     useEffect(() => { setBrandName(props.brand.brandData.name); setSelectedCategories(props.brand.brandData.categories) }, [props.brand.brandData]);
-    useEffect(() => { 
-        if(props.brand.errorID) { 
-            setTimeout(() => props.history.goBack(), 6000); 
-        } 
-    }, [props.brand.errorID]);
+    useEffect(() => { if(props.brand.errorID) { setTimeout(() => props.history.goBack(), 6000); } }, [props.brand.errorID]);
 
     const checkBoxOnChange = (e, value) => {
         const newSelectedCategories = [...selectedCategories];
-        if(e.target.checked) {
-            newSelectedCategories.push(value);
-        } else {
-            const index = newSelectedCategories.findIndex(categ => categ === value);
-            newSelectedCategories.splice(index, 1);
-        }
+        if(e.target.checked) { newSelectedCategories.push(value); }
+        else { const index = newSelectedCategories.findIndex(categ => categ === value); newSelectedCategories.splice(index, 1); }
         setSelectedCategories(newSelectedCategories);
     }
 
     const submitData = e => {
         e.preventDefault();
         const data = { name: brandName, categories: selectedCategories };
-        if(props.editbrand) { 
-            const id = new URLSearchParams(props.location.search).get('id'); 
-            props.editBrand(id, data);
-        }
+        if(props.editbrand) { const id = new URLSearchParams(props.location.search).get('id'); props.editBrand(id, data); }
         else { props.addBrand(data); }
-        setBrandName('');
-        setSelectedCategories([]);
+        setBrandName(''); setSelectedCategories([]);
     }
 
     const startFunction = () => {
-        if(!props.addbrand) {
-            const id = new URLSearchParams(props.location.search).get('id'); 
-            props.getBrand(id);
-        }
-        if(props.addbrand) {
-            props.clearState();
-        }
+        if(!props.addbrand) { const id = new URLSearchParams(props.location.search).get('id'); props.getBrand(id); }
+        if(props.addbrand) { props.clearState(); }
         props.getAllCategories();
     }
 
@@ -60,13 +43,7 @@ const Brand = props => {
             {props.brand.errorID && <ResponseMessages message={props.brand.errorID} ClassName="Danger" />}
             {props.brand.successMessage && <ResponseMessages message={props.brand.successMessage} />}
             <div className={'col-12 mb-30'}>
-                {props.brand.loading || props.brand.errorID ? (
-                    <React.Fragment>
-                        <div className={"card bg-white"}>
-                            <SmallSpinner />
-                        </div>
-                    </React.Fragment>
-                ) : 
+                {props.brand.loading || props.brand.errorID ? <div className={"card bg-white"}><SmallSpinner /></div> : 
                 <React.Fragment>
                     <div className="Card card text-white">
                         <div className="card-header">
@@ -80,16 +57,7 @@ const Brand = props => {
                                     <div className="row">
                                         <div className="col-12">
                                             <label className="text-white">Brand Name</label>
-                                            <LoginRegisterInputs 
-                                                type="text"
-                                                placeholder="Brand Name"
-                                                inputClass='form-control'
-                                                invalidInput='invalid'
-                                                invalidFeedback='invalid-feedback'
-                                                value={brandName}
-                                                onChange={(e) => setBrandName(e.target.value)} 
-                                                error={props.brand.error ? props.brand.error : ''} 
-                                                disabled={props.viewbrand}/>
+                                            <LoginRegisterInputs type="text" placeholder="Brand Name" inputClass='form-control' invalidInput='invalid' invalidFeedback='invalid-feedback' value={brandName} onChange={(e) => setBrandName(e.target.value)} error={props.brand.error ? props.brand.error : ''} disabled={props.viewbrand}/>
                                         </div>
                                         <div className="col-12 mb-20">
                                             <label>Choose Categories for Brand</label>
