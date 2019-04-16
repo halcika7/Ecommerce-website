@@ -15,7 +15,6 @@ export const addCategory = categoryData => async dispatch => {
 }
 
 export const getAllCategories = () => async dispatch => {
-    console.log('fired');
     dispatch({ type: actionTypes.CATEGORY_START });
     const response = await axios.get('/products/category/getallcategories');
     if(response.data.failedMessage) {

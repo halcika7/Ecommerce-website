@@ -887,6 +887,7 @@ box-shadow: none;
     z-index: -1;
     max-height: 300px;
     overflow-y: auto;
+    overflow-x: hidden;
     transition:all .3s ease-in ;
     -webkit-transition:all .3s ease-in ;
     -moz-transition:all .3s ease-in ;
@@ -939,32 +940,28 @@ font-size: 18px;
 
 .dropdown .dropdownMenu ul li.active{
 color: rgb(234, 120, 50);
-width: 100%;
+/* width: 100%; */
 border-right: none;
 }
 
 .dropdown .dropdownMenu ul li.active > .megamenu1{
-    visibility: visible;
-    opacity: 1;
+    display: block !important;
     overflow-y: auto;
+    overflow-x: hidden;
     cursor: auto;
-    transform-origin: top center;
-    width: 1000px;
+    width: 800px;
     padding-left: 5px;
 }
 
 .megamenu1 {
-height: 0px;
-background-color: white;
-color: black;
-visibility: hidden;
-opacity: 0;
-position: absolute;
-left: 200px;
-top: 0px;
-bottom: 0px;
-right: 0px;
-width: 100%;
+    display: none !important;
+    background-color: white;
+    color: black;
+    position: absolute;
+    left: 200px;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
 }
 
 .dropdownMenu.show {

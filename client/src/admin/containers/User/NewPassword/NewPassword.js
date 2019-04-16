@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import * as actions from '../../../../store/actions';
 import { connect } from 'react-redux';
 
-import classes from './AdminNewPassword.module.css';
+import classes from './NewPassword.module.css';
 import LoginRegisterInputs from '../../../../users/components/UI/LoginRegisterInputs/LoginRegisterInputs';
 
-const AdminNewPassword = props => {
+const NewPassword = props => {
 
     const [passwords, setPasswords] = useState({});
     const [inputs] = useState([
@@ -48,9 +48,9 @@ const AdminNewPassword = props => {
                                     error={passwords.errors[input.name]}
                                     type={input.type}
                                     onChange={passwordChange}
-                                    formBox={'form-group'}
-                                    invalidFeedback={classes.invalidFeedback}
-                                    invalidInput={classes.invalid}
+                                    formBox='form-group'
+                                    invalidInput='invalid'
+                                    invalidFeedback='invalid-feedback'
                                     inputClass="form-control"
                                     />  
                                 </div>  
@@ -77,4 +77,4 @@ const dispatchMapToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, dispatchMapToProps)(AdminNewPassword);
+export default connect(mapStateToProps, dispatchMapToProps)(NewPassword);

@@ -9,13 +9,13 @@ const DataTable = props => {
     const [length, setLength] = useState(false);
     const [selectedAll, setSelectedAll] = useState(false);
 
-    useEffect(() => { setFunction(props.usersData, setLength); }, [props.usersData]);
-    useEffect(() => { setFunction(props.categoriesData, setLength); }, [props.categoriesData]);
-    useEffect(() => { setFunction(props.iconsData, setLength); }, [props.iconsData]);
-    useEffect(() => { setFunction(props.brandsData, setLength); }, [props.brandsData]);
+    useEffect(() => { if(props.usersData) { setFunction(props.usersData, setLength); } }, [props.usersData]);
+    useEffect(() => { if(props.categoriesData) { setFunction(props.categoriesData, setLength); } }, [props.categoriesData]);
+    useEffect(() => { if(props.iconsData) { setFunction(props.iconsData, setLength); } }, [props.iconsData]);
+    useEffect(() => { if(props.brandsData) { setFunction(props.brandsData, setLength); } }, [props.brandsData]);
 
     const setFunction = (Data, setDataLength) => {
-        const data = [];
+        let data = [];
         for(let obj in Data) {
             let object = { ...Data[obj] };
             if(props.usersData) { object = { ...Data[obj], emailConfirmation: Data[obj].emailConfirmation.confirmed }; }
@@ -51,10 +51,10 @@ const DataTable = props => {
     const buttonFormatter = (cell, row) => {
         const id = row._id;
         let view = '/admindashboard/', edit = '/admindashboard/';
-        if(props.usersData) { view += 'adminViewUser?id='; edit += 'adminEditUser?id=' }
-        if(props.categoriesData) { view = 'viewcategory?id='; edit += 'editcategory?id=' }
-        if(props.iconsData) { view = 'viewcategoryicon?id='; edit += 'editcategoryicon?id=' }
-        if(props.brandsData) { view = 'viewbrand?id='; edit += 'editbrand?id=' }
+        if(props.usersData) { view += 'view-user?id='; edit += 'edit-user?id=' }
+        if(props.categoriesData) { view = 'view-category?id='; edit += 'edit-category?id=' }
+        if(props.iconsData) { view = 'view-category-icon?id='; edit += 'edit-category-icon?id=' }
+        if(props.brandsData) { view = 'view-brand?id='; edit += 'edit-brand?id=' }
         return (
             <React.Fragment>
                 <Link className="btn btn-warning" to={`${view}${id}`}>

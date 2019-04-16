@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, NavLink, withRouter } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getLoggedInUserPhoto } from '../../../store/actions';
 
@@ -39,16 +39,16 @@ const Navigation = props => {
                     </div>
                     <ul className={classes.Nav}>
                         <li className={"nav-item"}>
-                            <NavLink className="" to='/admindashboard/dashboard' exact activeClassName={classes.Active}>
+                            <Link className="" to='/admindashboard/dashboard'>
                                 <i className={classes.TimIcons + ' ' + classes.IconChartPie36}></i>
                                 <p>Dashboard</p>
-                            </NavLink>
+                            </Link>
                         </li>
                         <li className={"nav-item"}>
-                            <NavLink className="" to={`/admindashboard/profile/id=${props.userId}`} activeClassName={classes.Active}>
+                            <Link className="" to={`/admindashboard/profile?id=${props.userId}`} >
                                 <i className={classes.TimIcons + ' ' + classes.IconSingle02}></i>
                                 <p>Profile</p>
-                            </NavLink>
+                            </Link>
                         </li>
                         <li>
                             <div className="btn-group-vertical d-flex ">
@@ -62,7 +62,7 @@ const Navigation = props => {
                                     <Link to="/admindashboard/products">
                                         <p>Products</p>
                                     </Link>
-                                    <Link to="/admindashboard/addproduct">
+                                    <Link to="/admindashboard/add-product">
                                         <p>Add Product</p>
                                     </Link>
                                 </div>
@@ -77,10 +77,10 @@ const Navigation = props => {
                                     <p>Users Pages</p>
                                 </a>
                                 <div className={classes.DropDown}>
-                                    <Link to="/admindashboard/adminAllUsers">
+                                    <Link to="/admindashboard/all-users">
                                         <p>Users</p>
                                     </Link>
-                                    <Link to="/admindashboard/adduser">
+                                    <Link to="/admindashboard/add-user">
                                         <p>Add User</p>
                                     </Link>
                                 </div>
@@ -104,10 +104,10 @@ const Navigation = props => {
                                         onClick={(e) => toggleModal(e, setAllPermissionModal, allPermissionModal)}>
                                         <p>All Permissions</p>
                                     </a>
-                                    <Link to="/admindashboard/addrole">
+                                    <Link to="/admindashboard/add-role">
                                         <p>Add Role</p>
                                     </Link>
-                                    <Link to="/admindashboard/allroles">
+                                    <Link to="/admindashboard/all-roles">
                                         <p>All Roles</p>
                                     </Link>
                                 </div>
@@ -120,16 +120,16 @@ const Navigation = props => {
                                     <p>Categories & Icons</p>
                                 </a>
                                 <div className={classes.DropDown + ' ' + classes.MaxHeight100}>
-                                    <Link to="/admindashboard/addcategory">
+                                    <Link to="/admindashboard/add-category">
                                         <p>Add Category</p>
                                     </Link>
-                                    <Link to="/admindashboard/allcategories">
+                                    <Link to="/admindashboard/all-categories">
                                         <p>All Categories</p>
                                     </Link>
-                                    <Link to="/admindashboard/addcategoryicon">
+                                    <Link to="/admindashboard/add-category-icon">
                                         <p>Add Category Icon</p>
                                     </Link>
-                                    <Link to="/admindashboard/allcategoryicons">
+                                    <Link to="/admindashboard/all-category-icons">
                                         <p>All Category Icons</p>
                                     </Link>
                                 </div>
@@ -142,10 +142,10 @@ const Navigation = props => {
                                     <p>Brands</p>
                                 </a>
                                 <div className={classes.DropDown + ' ' + classes.MaxHeight100}>
-                                    <Link to="/admindashboard/addbrand">
+                                    <Link to="/admindashboard/add-brand">
                                         <p>Add Brand</p>
                                     </Link>
-                                    <Link to="/admindashboard/allbrands">
+                                    <Link to="/admindashboard/all-brands">
                                         <p>All Brands</p>
                                     </Link>
                                 </div>

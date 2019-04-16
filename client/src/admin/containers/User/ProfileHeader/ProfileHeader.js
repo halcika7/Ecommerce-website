@@ -1,8 +1,8 @@
 import React from 'react';
 
-import classes from './AdminProfileHeader.module.css';
+import classes from './ProfileHeader.module.css';
 
-const AdminProfileHeader = props => {
+const ProfileHeader = props => {
     return (
         <div className={classes.userBg + " mb-30"}>
             <div className={classes.userInfo}>
@@ -57,4 +57,4 @@ const AdminProfileHeader = props => {
     );
 }
 
-export default AdminProfileHeader;
+export default ProfileHeader;

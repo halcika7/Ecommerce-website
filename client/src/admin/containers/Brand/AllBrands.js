@@ -7,11 +7,14 @@ import ResponseMessages from '../../../users/components/UI/ResponseMessages/Resp
 import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
 
 const AllBrands = props => {
-    const [brands, setBrands] = useState([])
+    const [brands, setBrands] = useState([]);
+    const [deleteManyRecords, setDeleteManyRecords] = useState([]);
     const [loading, setLoading] = useState(false)
     useEffect(() => { 
         setBrands({...props.brand.allBrands}); 
         props.getBrands();
+        const table = document.querySelector('table');
+        console.log(table)
     },[]);
 
     useEffect(() => { 
@@ -23,6 +26,7 @@ const AllBrands = props => {
     }, [props.brand.allBrands]);
 
     const deleteBrand = (e,id) => { e.preventDefault(); props.deleteBrand(id); }
+    const deleteManyBrands = (e,ids) => { e.preventDefault(); props.deleteManyBrands(ids); setDeleteManyRecords([]); }
 
     return (
         <React.Fragment>
@@ -35,7 +39,15 @@ const AllBrands = props => {
                         <SmallSpinner /> 
                     </div> : 
                     <div className="card mb-30">
-                        <DataTable brandsData={brands} click={deleteBrand} loading={loading}/>
+                        <div className="card-header">
+                            <h4>All Brands</h4>
+                        </div>
+                        {(deleteManyRecords.length > 0) && <div className="col-12">
+                            <div className="ButtonWrapper col-12 mt-20">
+                                <button className='ButtonDanger' onClick={e => deleteManyBrands(e, deleteManyRecords)}>Delete Selected Records</button>
+                            </div>
+                        </div>}
+                        <DataTable brandsData={brands} click={deleteBrand} loading={loading} selectedDeleteData={deleteManyRecords} setDeleteData={setDeleteManyRecords}/>
                     </div> }
                 </div>
             </div>
@@ -52,7 +64,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         getBrands: () => dispatch(actions.getAllBrands()),
-        deleteBrand: (id) => dispatch(actions.deleteBrand(id))
+        deleteBrand: (id) => dispatch(actions.deleteBrand(id)),
+        deleteManyBrands: (ids) => dispatch(actions.deleteManyBrands(ids))
     }
 }
 

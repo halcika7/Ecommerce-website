@@ -4,9 +4,9 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import faker from 'faker';
 import 'react-bootstrap-table/css/react-bootstrap-table.css';
 
-import classes from './AdminProductsPage.module.css';
+import classes from './ProductsPage.module.css';
 
-const AdminProductsPage = props => {
+const ProductsPage = props => {
     const [data, setData] = useState({});
     const [options] = useState({
         page: 1,  // which page you want to show as default
@@ -92,4 +92,4 @@ const AdminProductsPage = props => {
     );
 }
 
-export default AdminProductsPage;
+export default ProductsPage;

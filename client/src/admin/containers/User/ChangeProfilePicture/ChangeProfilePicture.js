@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import UploadPicture from '../../../components/UI/UploadPicture/UploadPicture';
 
-const AdminChangeProfilePicture = props => {
+const ChangeProfilePicture = props => {
     const [image, setImage] = useState({});
 
     const onProfilePictureChange = (name,file) => setImage({ [name]: file })
@@ -45,4 +45,4 @@ const AdminChangeProfilePicture = props => {
     );
 }
 
-export default AdminChangeProfilePicture;
+export default ChangeProfilePicture;

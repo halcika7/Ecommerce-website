@@ -7,7 +7,7 @@ import BestSellingWidget from '../../components/UI/BestSellingWidget/BestSelling
 import EmployeesTable from '../../components/UI/EmployeesTable/EmployeesTable';
 import UsersWidget from '../../components/UI/UsersWidget/UsersWidget';
 
-const AdminDashboard = props => {
+const Dashboard = props => {
     
     return (
         <React.Fragment>
@@ -33,4 +33,4 @@ const AdminDashboard = props => {
     );
 }
 
-export default AdminDashboard;
+export default Dashboard;

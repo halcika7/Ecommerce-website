@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import './AdminAddProduct.css';
+import './AddProduct.css';
 import UploadPicture from '../../components/UI/UploadPicture/UploadPicture';
 import UploadPictures from '../../components/UI/UploadPictures/UploadPictures';
 
-const AdminAddProduct = props => {
+const AddProduct = props => {
     const [inputs, setInputs] = useState({});
     const [options, setOptions] = useState({});
     const inputChange = e => {
@@ -238,4 +238,4 @@ const AdminAddProduct = props => {
     );
 }
 
-export default AdminAddProduct;
+export default AddProduct;

@@ -146,25 +146,6 @@
     margin: 0 15px;
 }
 
-.Active{
-    color: #fff !important;
-}
-
-.Active::before {
-    content: " ";
-    position: absolute;
-    height: 6px;
-    width: 6px;
-    background: #ffffff;
-    border-radius: 50%;
-    top: 50%;
-    transform: translate(-100%, -50%);
-}
-
-.Active i {
-    color: #fff !important;
-}
-
 .Nav i {
     font-size: 20px;
     margin-right: 12px;

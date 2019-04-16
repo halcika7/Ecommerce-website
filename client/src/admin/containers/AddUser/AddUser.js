@@ -5,7 +5,7 @@ import LoginRegisterInputs from '../../../users/components/UI/LoginRegisterInput
 import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
 import ResponseMessages from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 
-const AdminAddUser = props => {
+const AddUser = props => {
 
     const [roles, setRoles] = useState([]);
     const [inputs] = useState([
@@ -115,4 +115,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminAddUser);
+export default connect(mapStateToProps, mapDispatchToProps)(AddUser);

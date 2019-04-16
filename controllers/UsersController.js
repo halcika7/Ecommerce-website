@@ -161,7 +161,7 @@ exports.updateUser = async (req, res) => {
 exports.getAllUsers = async (req, res) => {
     try{
         const role = await UserRolesModel.findOne({name: 'User'});
-        const users = await UserModel.find({ role: role._id }).select('name _id username email profilePicture emailConfirmation.confirmed');
+        const users = await UserModel.find({}).select('name _id username email profilePicture emailConfirmation.confirmed');
         return res.json({ users });
     }catch (err){
         return res.json({ failedMessage: err.message });

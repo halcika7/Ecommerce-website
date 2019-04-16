@@ -58,10 +58,10 @@ const AllRoles = props => {
                                                     </span>)) : 'No Permissions'}
                                             </td>
                                             <td className="text-center" style={{  minWidth: '220px'}}>
-                                                <Link className="btn btn-warning" to={`/admindashboard/viewRole?id=${perm._id}`}>
+                                                <Link className="btn btn-warning" to={`/admindashboard/view-role?id=${perm._id}`}>
                                                     <i className="far fa-eye"></i>
                                                 </Link>
-                                                <Link to={`/admindashboard/updateRole?id=${perm._id}`} className="btn btn-primary">
+                                                <Link to={`/admindashboard/update-role?id=${perm._id}`} className="btn btn-primary">
                                                     <i className="far fa-edit"></i>
                                                 </Link>
                                                 <button 

@@ -6,9 +6,9 @@ import ResponseMessages from '../../../users/components/UI/ResponseMessages/Resp
 import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
 import LoginRegisterInputs from '../../../users/components/UI/LoginRegisterInputs/LoginRegisterInputs';
 import ToggleSwitch from '../../components/UI/Buttons/ToggleSwitchButton';
-import AdminProfileHeader from './AdminProfileHeader/AdminProfileHeader';
-import AdminNewPassword from './AdminNewPassword/AdminNewPassword';
-import AdminChangeProfilePicture from './AdminChangeProfilePicture/AdminChangeProfilePicture';
+import AdminProfileHeader from './ProfileHeader/ProfileHeader';
+import AdminNewPassword from './NewPassword/NewPassword';
+import AdminChangeProfilePicture from './ChangeProfilePicture/ChangeProfilePicture';
 
 const User = props => {
     const userID = props.match.params.id ? props.match.params.id : new URLSearchParams(props.location.search).get('id'); 

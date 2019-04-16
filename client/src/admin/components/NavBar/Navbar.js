@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from './Navbar.module.css';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -8,6 +8,19 @@ import { withRouter } from 'react-router-dom';
 import { toggleSearchModal, toggleNav } from '../../utility/openDropdown';
 
 const Navbar = props => {
+
+    const [name, setName] = useState('');
+    const [locationSearch, setLoactionSearch] = useState(false);
+    const [queryString, setQueryString] = useState(false);
+
+    useEffect(() => { 
+        const str = props.location.pathname.replace('/admindashboard/','').split('-').join(' ');
+        const isSearch = props.location.search ? true : false;
+        const newQueryString = props.location.search ? props.location.search : false;
+        setLoactionSearch(isSearch);
+        setQueryString(newQueryString);
+        setName(str);
+    }, [props.location.pathname]);
 
     const logout = (e) => { e.preventDefault(); props.logoutUser(); }
 
@@ -38,7 +51,8 @@ const Navbar = props => {
                                 <span className={classes.NavbarTogglerBar + ' ' + classes.Bar3}></span>
                             </button>
                         </div>
-                        <Link to="/admindashboard/dashboard" className={classes.NavbarBrand}>Dashboard</Link>
+                        {!locationSearch && <Link to="/admindashboard/dashboard" className={classes.NavbarBrand}>{name}</Link>}
+                        {locationSearch && <Link to={`/admindashboard/${name}${queryString}`} className={classes.NavbarBrand}>{name}</Link>}
                     </div>
                     <button className={classes.NavbarToggler + ' navbar-toggler ' + classes.NavbarToggler2}
                         onClick={(e) => toggleNav(e, classes.WhiteBackground,classes.Show)}>
