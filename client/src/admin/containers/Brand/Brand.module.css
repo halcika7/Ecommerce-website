@@ -11,7 +11,7 @@
     height: 19px !important;
 }
 
-.checkbox label{
+.checkbox label {
     position: relative;
     padding-left: 30px;
     margin: 0;
@@ -65,16 +65,16 @@
     cursor: pointer;
 }
 
-.checkbox input:checked + label:after {
+.checkbox input:checked+label:after {
     max-width: 25px;
     opacity: 1;
 }
 
-.checkbox input:checked + label:before {
+.checkbox input:checked+label:before {
     border: 2px solid #4f9ae6;
 }
 
-ul.toDo li .checkbox input:checked ~ label {
+ul.toDo li .checkbox input:checked~label {
     color: #eeeeee3d;
     text-decoration: line-through;
 }

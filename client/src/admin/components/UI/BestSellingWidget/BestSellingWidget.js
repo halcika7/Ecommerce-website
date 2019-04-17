@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const BestSellingWidget = props => {
   return (
@@ -10,20 +10,27 @@ const BestSellingWidget = props => {
             <li className="mb-20">
               <div className="media">
                 <div className="position-relative">
-                  <img className="img-fluid mr-15 avatar-small" src="https://content-static.upwork.com/uploads/2014/10/01073427/profilephoto1.jpg" alt="" />
-                </div> 
+                  <img
+                    className="img-fluid mr-15 avatar-small"
+                    src="https://content-static.upwork.com/uploads/2014/10/01073427/profilephoto1.jpg"
+                    alt=""
+                  />
+                </div>
                 <div className="media-body  text-white">
-                  <h6 className="mt-0 mb-0">Car dealer <span className="float-right text-danger"> 8,561</span>  </h6>
+                  <h6 className="mt-0 mb-0">
+                    Car dealer{" "}
+                    <span className="float-right text-danger"> 8,561</span>{" "}
+                  </h6>
                   <p>Automotive WordPress Theme </p>
                 </div>
               </div>
-              <div className="divider dotted mt-20"></div>
+              <div className="divider dotted mt-20" />
             </li>
           </ul>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default BestSellingWidget;

@@ -1,78 +1,69 @@
+export { login, setCurrentUser, logoutUser } from "./auth/login";
 export {
-    login,
-    setCurrentUser,
-    logoutUser,
-    userUpdateProfilePicture
-} from './auth/login';
-export {
-    register,
-    activateAccount,
-    resendActivationLink
-} from './auth/register';
+  register,
+  activateAccount,
+  resendActivationLink
+} from "./auth/register";
+
+export { resetUserPasswordEmail } from "./auth/resetPasswordEmail";
 
 export {
-    resetUserPasswordEmail
-} from './auth/resetPasswordEmail';
+  resetPassword,
+  resetState,
+  updatePassword
+} from "./auth/resetpassword";
 
 export {
-    resetPassword,
-    resetState,
-    updatePassword
-} from './auth/resetpassword';
+  getAllUsers,
+  getSingleUser,
+  deleteUser,
+  addNewUser,
+  updateUser,
+  userUpdateProfilePicture,
+  getLoggedInUserPhoto
+} from "./auth/user";
 
 export {
-    getAllUsers,
-    getSingleUser,
-    deleteUser,
-    getLoggedInUserPhoto
-} from './auth/getUsers';
-
-export { 
-    addNewPermission,
-    getAllPermissions,
-    deletePermission
- } from './roles&permissions/permissions';
+  addNewPermission,
+  getAllPermissions,
+  deletePermission
+} from "./roles&permissions/permissions";
 
 export {
-    addRole,
-    getRoles,
-    deleteUserRole,
-    getUserRole,
-    deleteManyUserRoles,
-    updateUserRole
-} from './roles&permissions/userRoles';
+  addRole,
+  getRoles,
+  deleteUserRole,
+  getUserRole,
+  deleteManyUserRoles,
+  updateUserRole
+} from "./roles&permissions/userRoles";
 
 export {
-    addNewUser,
-    updateUser
-} from './auth/addNewUser';
+  addCategory,
+  getAllCategories,
+  getCategory,
+  editCategory,
+  deleteCategory,
+  deleteManyCategories,
+  clearState
+} from "./products/category";
 
-export { 
-    addCategory,
-    getAllCategories,
-    getCategory,
-    editCategory,
-    deleteCategory,
-    deleteManyCategories,
-    clearState
- } from './products/category';
+export {
+  addCategoryIcon,
+  getAllCategoryIcons,
+  getCategoryIcon,
+  editCategoryIcon,
+  deleteCategoryIcon,
+  deleteManyCategoryIcons,
+  clearStateIcons
+} from "./products/categoryicon";
 
- export { 
-     addCategoryIcon,
-     getAllCategoryIcons,
-     getCategoryIcon,
-     editCategoryIcon,
-     deleteCategoryIcon,
-     deleteManyCategoryIcons,
-     clearStateIcons
-  } from './products/categoryicon';
-
-  export {
-      addBrand,
-      getAllBrands,
-      getBrand,
-      editBrand,
-      deleteBrand,
-      deleteManyBrands,
-      clearBrandState
-  } from './products/brand';
+export {
+  addBrand,
+  getAllBrands,
+  getBrand,
+  editBrand,
+  deleteBrand,
+  deleteManyBrands,
+  clearBrandState
+} from "./products/brand";

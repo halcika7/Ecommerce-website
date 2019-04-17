@@ -59,7 +59,7 @@ const App = props => {
     })
 
     useEffect(() => {
-        checkLoggedInUser();
+        checkLoggedInUser(props.history.push);
         setTimeout(() => {
             setState({
                 ...state,

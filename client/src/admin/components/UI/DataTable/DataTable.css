@@ -4,17 +4,15 @@
     outline: none !important;
 }
 
-.DataTable table tbody tr td {
-    min-width: 100%;
+.DataTable table th label {
+    display: block;
+    margin-bottom: 0px;
+    margin-top: .5rem;
 }
 
-.DataTable table thead tr th {
-    width: 100%;
-}
-
-.DataTable table tbody tr td[tabindex = "7"],
+.DataTable table tbody tr td[tabindex="7"],
 .DataTable table thead tr th:nth-child(7) {
-    width: 168px;
+    width: 180px;
 }
 
 .DataTable table tbody tr td button {
@@ -53,22 +51,77 @@
     margin-left: 10px;
 }
 
-.DataTable > div > div > div > div > div:nth-child(3) > div > div:nth-child(2) {
+.DataTable>div>div>div>div>div:nth-child(3)>div>div:nth-child(2) {
     display: flex !important;
     justify-content: flex-end;
     align-items: center;
 }
 
-.DataTable > div > div > div > div > div:nth-child(3) > div > div:nth-child(2) ul {
+.DataTable>div>div>div>div>div:nth-child(3)>div>div:nth-child(2) ul {
     margin: 0;
 }
 
-.DataTable > div > div {
-    min-width: 1000px;
-    max-width: 100%;
+/* .DataTable > div > table  {
+    table-layout: auto;
+    display: block;
+} */
+
+.DataTable {
+    margin-bottom: 20px;
+    overflow-x: auto;
 }
 
-.DataTable > div > div:nth-child(3) {
+.DataTable>div>table {
+    min-width: 1100px;
+}
+
+.DataTable>div:nth-child(1)>div,
+.DataTable>div:nth-child(3)>div {
+    display: flex;
+    align-items: center;
+}
+
+.DataTable>div:nth-child(1)>div input,
+.DataTable>div:nth-child(1)>div label,
+.DataTable>div:nth-child(1)>div button,
+.DataTable>div:nth-child(3)>div p {
+    margin: 0;
+}
+
+.DataTable>div:nth-child(1)>div:nth-child(2),
+.DataTable>div:nth-child(3)>div:nth-child(2) {
+    justify-content: flex-end;
+}
+
+.DataTable>div:nth-child(3) {
+    margin-top: 2rem;
+}
+
+@media (max-width: 575px) {
+
+    .DataTable>div:nth-child(1)>div:nth-child(2),
+    .DataTable>div:nth-child(3)>div:nth-child(2) {
+        justify-content: flex-start;
+        margin-top: 2rem;
+    }
+}
+
+.DataTable>div,
+.DataTable>div>table {
+    min-width: 1600px;
+    width: 100%;
+}
+
+.DataTable table tbody tr.customClass {
+    background: linear-gradient(0deg, #3358f4 0%, #1d8cf8 100%);
+}
+
+.DataTable table tbody tr.customClass:hover {
+    background: rgba(0, 0, 0, 0.075);
+    color: #fff;
+}
+
+.DataTable>div>div:nth-child(3) {
     margin-bottom: 50px;
 }
 
@@ -81,9 +134,10 @@
     position: relative;
     margin: 0;
     height: 19px !important;
+    width: 20px !important;
 }
 
-.checkbox label{
+.checkbox label {
     position: relative;
     padding-left: 30px;
     margin: 0;
@@ -135,12 +189,12 @@
     cursor: pointer;
 }
 
-.checkbox input:checked + label:after {
+.checkbox input:checked+label:after {
     max-width: 25px;
     opacity: 1;
 }
 
-.checkbox input:checked + label:before {
+.checkbox input:checked+label:before {
     border: 2px solid #4f9ae6;
 }
 
@@ -158,22 +212,45 @@
     overflow-y: auto;
 }
 
-.Role table{
+.Role table {
     min-width: 1000px;
     height: 100%;
 }
 
-.Spans tbody tr td:nth-child(4) > div {
+.DataTable>.Spans,
+.DataTable>.Spans>.table,
+.DataTable>.Spans~div {
+    min-width: 1000px;
+}
+
+.Spans tbody tr td:nth-child(4)>div {
     display: flex;
     flex-wrap: wrap;
-    height: 73px;
+    height: 36px;
+    max-width: 300px;
     overflow-y: auto;
     align-items: center;
 }
 
-.Spans tbody tr td:nth-child(4) > div > span {
+.Spans tbody tr td:nth-child(4)>div>span {
     padding: 5px 10px;
     border: 1px solid #fff;
     border-radius: 10px;
     margin: 0 10px 10px 0;
+}
+
+.Confirmed {
+    padding: 5px 20px;
+    border-radius: 10px;
+    margin: 0 10px 10px 0;
+    background-color: #90ee90;
+    color: #222;
+}
+
+.NotConfirmed {
+    padding: 5px 20px;
+    border-radius: 10px;
+    margin: 0 10px 10px 0;
+    background-color: #D92E28;
+    color: #ddd;
 }
