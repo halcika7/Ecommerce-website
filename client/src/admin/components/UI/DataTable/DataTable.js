@@ -9,10 +9,9 @@ import ToolkitProvider, {
 } from "react-bootstrap-table2-toolkit";
 
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
-import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "./DataTable.css";
 
-const { SearchBar } = Search;
+const { SearchBar, ClearSearchButton } = Search;
 const { ExportCSVButton } = CSVExport;
 
 const DataTable = props => {
@@ -65,20 +64,19 @@ const DataTable = props => {
     setData(data);
   };
 
-  const selectAllDataCheckbox = e => {
-    if (e === true || e === false) {
+  const selectAllDataCheckbox = (isSelect, rows, e) => {
+    if (typeof isSelect === "boolean" && rows) {
       const tableRows = document.querySelectorAll("tbody input"),
-        tableRowTdThirdChild = document.querySelectorAll(
-          "tbody tr td:nth-child(2)"
-        ),
         choosenValues = [];
-      tableRows.forEach((row, index) => {
-        if (e === false) {
-          return (row.checked = false);
+      rows.forEach((row, index) => {
+        if (isSelect === false) {
+          return (tableRows[index].checked = false);
         }
-        if (e === true) {
-          row.checked = true;
-          choosenValues.push(tableRowTdThirdChild[index].innerHTML);
+        if (isSelect === true) {
+          tableRows[index].checked = true;
+          !props.permissionsData
+            ? choosenValues.push(row._id)
+            : choosenValues.push(row.permission);
           return;
         }
       });
@@ -86,22 +84,22 @@ const DataTable = props => {
     }
   };
 
-  const selectOneDataCheckbox = val => {
-    if (val._id) {
+  const selectOneDataCheckbox = (row, isSelect, rowIndex, e) => {
+    if (e) {
       const newDeleteMany = [...props.selectedDeleteData],
-        index = newDeleteMany.findIndex(name => name === val._id),
-        tableRows = document.querySelectorAll("tbody tr");
-      tableRows.forEach(row => {
-        if (val._id === row.children[1].innerHTML) {
-          if (row.children[0].children[0].children[0].checked) {
-            row.children[0].children[0].children[0].checked = false;
-          } else {
-            row.children[0].children[0].children[0].checked = true;
-          }
-        }
-      });
+        input = document.querySelectorAll("tbody input[type='checkbox']"),
+        index = !props.permissionsData
+          ? newDeleteMany.findIndex(name => name === row._id)
+          : newDeleteMany.findIndex(
+              permission => permission === row.permission
+            );
+      if (e.target.type !== "checkbox") {
+        input[rowIndex].checked = isSelect ? true : false;
+      }
       if (index === -1) {
-        newDeleteMany.push(val._id);
+        !props.permissionsData
+          ? newDeleteMany.push(row._id)
+          : newDeleteMany.push(row.permission);
       } else {
         newDeleteMany.splice(index, 1);
       }
@@ -135,17 +133,19 @@ const DataTable = props => {
     }
     if (props.permissionsData) {
       id = row.permission;
-      view = "view-role?id=";
-      edit += "edit-role?id=";
     }
     return (
       <React.Fragment>
-        <Link className="btn btn-warning" to={`${view}${id}`}>
-          <i className="far fa-eye" />
-        </Link>
-        <Link className="btn btn-primary" to={`${edit}${id}`}>
-          <i className="far fa-edit" />
-        </Link>
+        {!props.permissionsData && (
+          <Link className="btn btn-warning" to={`${view}${id}`}>
+            <i className="far fa-eye" />
+          </Link>
+        )}
+        {!props.permissionsData && (
+          <Link className="btn btn-primary" to={`${edit}${id}`}>
+            <i className="far fa-edit" />
+          </Link>
+        )}
         <button
           className="btn btn-danger"
           type="button"
@@ -169,22 +169,30 @@ const DataTable = props => {
     ) : (
       <div>No Permissions</div>
     );
-  const subcategoriesFormatter = (cell, row) =>
-    row.subcategories.length > 0
-      ? row.subcategories.map((sub, index) => (
-          <span key={index} class="SPAN">
+  const subcategoriesFormatter = (cell, row, ...rest) =>
+    row.subcategories.length > 0 ? (
+      <div>
+        {row.subcategories.map((sub, index) => (
+          <span key={index} className="SPAN">
             {sub.name}
           </span>
-        ))
-      : "No Subcategories";
+        ))}
+      </div>
+    ) : (
+      "No Subcategories"
+    );
   const categoriesFormatter = (cell, row) =>
-    row.categories.length
-      ? row.categories.map((cat, index) => (
-          <span key={index} class="SPAN">
+    row.categories.length > 0 ? (
+      <div>
+        {row.categories.map((cat, index) => (
+          <span key={index} className="SPAN">
             {cat}
           </span>
-        ))
-      : "No categories";
+        ))}
+      </div>
+    ) : (
+      "No categories"
+    );
   const confirmFormatter = (cell, row) => {
     const customClass = row.emailConfirmation ? "Confirmed" : "NotConfirmed";
     return (
@@ -197,8 +205,8 @@ const DataTable = props => {
       height = "30";
     if (props.usersData) {
       src = `/${row.profilePicture}`;
-      width = "80";
-      height = "80";
+      width = "50";
+      height = "50";
     }
     if (props.categoriesData || props.iconsData) {
       src = row.icon ? row.icon : row.name;
@@ -226,9 +234,9 @@ const DataTable = props => {
   const selectRow = !props.usersData
     ? {
         mode: "checkbox",
-        clickToSelect: true,
         onSelect: selectOneDataCheckbox,
         onSelectAll: selectAllDataCheckbox,
+        clickToSelect: true,
         selectionHeaderRenderer: ({ indeterminate, ...rest }) => (
           <div className="checkbox">
             <input
@@ -248,7 +256,7 @@ const DataTable = props => {
             <label />
           </div>
         ),
-        bgColor: "#F08080"
+        bgColor: "#9E1429"
       }
     : {};
 
@@ -371,7 +379,6 @@ const DataTable = props => {
       dataField: "subcategories",
       text: "Subcategories",
       formatter: subcategoriesFormatter,
-      filter: textFilter(),
       align: "center",
       headerAlign: "center",
       sort: true
@@ -531,11 +538,14 @@ const DataTable = props => {
                       </div>
                       <div className="col-sm-6">
                         <SearchBar {...props.searchProps} tableId="1" />
+                        <ClearSearchButton
+                          {...props.searchProps}
+                          className="btn-sm"
+                        />
                       </div>
                     </div>
                     <BootstrapTable
                       wrapperClasses={containerClass}
-                      headerClasses="headerClass"
                       {...props.baseProps}
                       striped
                       hover
@@ -559,7 +569,6 @@ const DataTable = props => {
                 data={data}
                 columns={categoryColumns}
                 exportCSV
-                selectedData={props.selectedDeleteData}
               >
                 {props => (
                   <React.Fragment>
@@ -571,6 +580,10 @@ const DataTable = props => {
                       </div>
                       <div className="col-sm-6">
                         <SearchBar {...props.searchProps} tableId="1" />
+                        <ClearSearchButton
+                          {...props.searchProps}
+                          className="btn-sm"
+                        />
                       </div>
                     </div>
                     <BootstrapTable
@@ -596,7 +609,6 @@ const DataTable = props => {
                 data={data}
                 columns={userColumns}
                 exportCSV
-                selectedData={props.selectedDeleteData}
               >
                 {props => (
                   <React.Fragment>
@@ -608,6 +620,10 @@ const DataTable = props => {
                       </div>
                       <div className="col-sm-6">
                         <SearchBar {...props.searchProps} tableId="1" />
+                        <ClearSearchButton
+                          {...props.searchProps}
+                          className="btn-sm"
+                        />
                       </div>
                     </div>
                     <BootstrapTable
@@ -632,7 +648,6 @@ const DataTable = props => {
                 data={data}
                 columns={iconColumns}
                 exportCSV
-                selectedData={props.selectedDeleteData}
               >
                 {props => (
                   <React.Fragment>
@@ -644,6 +659,10 @@ const DataTable = props => {
                       </div>
                       <div className="col-sm-6">
                         <SearchBar {...props.searchProps} tableId="1" />
+                        <ClearSearchButton
+                          {...props.searchProps}
+                          className="btn-sm"
+                        />
                       </div>
                     </div>
                     <BootstrapTable
@@ -669,7 +688,6 @@ const DataTable = props => {
                 data={data}
                 columns={brandColumns}
                 exportCSV
-                selectedData={props.selectedDeleteData}
               >
                 {props => (
                   <React.Fragment>
@@ -681,6 +699,10 @@ const DataTable = props => {
                       </div>
                       <div className="col-sm-6">
                         <SearchBar {...props.searchProps} tableId="1" />
+                        <ClearSearchButton
+                          {...props.searchProps}
+                          className="btn-sm"
+                        />
                       </div>
                     </div>
                     <BootstrapTable
@@ -708,7 +730,6 @@ const DataTable = props => {
                 data={data}
                 columns={permissionColumns}
                 exportCSV
-                selectedData={props.selectedDeleteData}
               >
                 {props => (
                   <React.Fragment>
@@ -720,6 +741,10 @@ const DataTable = props => {
                       </div>
                       <div className="col-sm-6">
                         <SearchBar {...props.searchProps} tableId="1" />
+                        <ClearSearchButton
+                          {...props.searchProps}
+                          className="btn-sm"
+                        />
                       </div>
                     </div>
                     <BootstrapTable

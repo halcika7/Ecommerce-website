@@ -24,7 +24,6 @@ exports.addUserRole = async (req, res) => {
 exports.getRoles = async (req, res) => {
   try {
     const roles = await UserRolesModel.find({});
-    // const user = await UserModel.find({ role: {"$ne": new ObjectId('5c65ed491c9d440000b29bf4')} })
     return res.json(roles);
   } catch (err) {
     return res.json({ failedMessage: err.message });
@@ -36,7 +35,7 @@ exports.deleteUserRole = async (req, res) => {
     const findRole = await UserRolesModel.findOne({
       $and: [
         {
-          _id: { $in: ["5cb604f564f027438f85970a", "5cb604fd64f027438f85970b"] }
+          _id: { $in: ["5cb8d94156f66a552ee55856", "5cb8d94556f66a552ee55857"] }
         },
         { _id: new ObjectId(req.query.id) }
       ]
@@ -45,7 +44,7 @@ exports.deleteUserRole = async (req, res) => {
       $and: [
         {
           _id: {
-            $nin: ["5cb604f564f027438f85970a", "5cb604fd64f027438f85970b"]
+            $nin: ["5cb8d94156f66a552ee55856", "5cb8d94556f66a552ee55857"]
           }
         },
         { _id: new ObjectId(req.query.id) }
@@ -53,7 +52,7 @@ exports.deleteUserRole = async (req, res) => {
     });
     const updateUserRole = await UserModel.updateMany(
       { role: req.query.id },
-      { role: new ObjectId("5cb604fd64f027438f85970b") }
+      { role: new ObjectId("5cb8d94556f66a552ee55857") }
     );
     if (deleteRole.n === 0 && findRole) {
       return res.json({
@@ -74,7 +73,7 @@ exports.deleteManyUserRoles = async (req, res) => {
     const findRole = await UserRolesModel.find({
       $and: [
         {
-          _id: { $in: ["5cb604f564f027438f85970a", "5cb604fd64f027438f85970b"] }
+          _id: { $in: ["5cb8d94156f66a552ee55856", "5cb8d94556f66a552ee55857"] }
         },
         { _id: { $in: ids } }
       ]
@@ -83,7 +82,7 @@ exports.deleteManyUserRoles = async (req, res) => {
       $and: [
         {
           _id: {
-            $nin: ["5cb604f564f027438f85970a", "5cb604fd64f027438f85970b"]
+            $nin: ["5cb8d94156f66a552ee55856", "5cb8d94556f66a552ee55857"]
           }
         },
         { _id: { $in: ids } }
@@ -100,7 +99,7 @@ exports.deleteManyUserRoles = async (req, res) => {
       return res.json({ failedMessage: "No Roles deleted !" });
     const updateUserRole = await UserModel.updateMany(
       { role: { $in: ids } },
-      { role: new ObjectId("5cb604fd64f027438f85970b") }
+      { role: new ObjectId("5cb8d94556f66a552ee55857") }
     );
     return res.json({ successMessage: "Role deleted !" });
   } catch (err) {

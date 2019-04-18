@@ -77,7 +77,7 @@ const Navigation = props => {
                   className="dropdown-toggle-split"
                 >
                   <i className={classes.TimIcons + " " + classes.IconBag} />
-                  <p>Products Pages</p>
+                  <p>Products</p>
                 </a>
                 <div className={classes.DropDown}>
                   <Link to="/admindashboard/products">
@@ -99,7 +99,7 @@ const Navigation = props => {
                   <i
                     className={classes.TimIcons + " " + classes.IconSingle02}
                   />
-                  <p>Users Pages</p>
+                  <p>Users</p>
                 </a>
                 <div className={classes.DropDown}>
                   <Link to="/admindashboard/all-users">
@@ -122,15 +122,9 @@ const Navigation = props => {
                   <p>Permissions & Roles</p>
                 </a>
                 <div className={classes.DropDown + " " + classes.MaxHeight100}>
-                  {/* {props.permissions['Create Permission'] ?  */}
-                  <a
-                    href="/"
-                    onClick={e =>
-                      toggleModal(e, setPermissionModal, permissionModal)
-                    }
-                  >
-                    <p>Add Permissions</p>
-                  </a>
+                  <Link to="/admindashboard/add-permission">
+                    <p>Add Permission</p>
+                  </Link>
                   <Link to="/admindashboard/all-permissions">
                     <p>ALL Permissions</p>
                   </Link>

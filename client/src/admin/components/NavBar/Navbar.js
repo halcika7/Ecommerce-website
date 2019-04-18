@@ -21,6 +21,7 @@ const Navbar = props => {
     const newQueryString = props.location.search
       ? props.location.search
       : false;
+    console.log(str);
     setLoactionSearch(isSearch);
     setQueryString(newQueryString);
     setName(str);
@@ -74,7 +75,7 @@ const Navbar = props => {
             </div>
             {!locationSearch && (
               <Link
-                to="/admindashboard/dashboard"
+                to={`/admindashboard/${name}`}
                 className={classes.NavbarBrand}
               >
                 {name}

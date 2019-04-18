@@ -7331,6 +7331,10 @@ button.bg-dark:focus {
   padding-left: 1.5rem !important;
 }
 
+.pl-125{
+  padding-left: 1.25rem !important;
+}
+
 .p-5 {
   padding: 3rem !important;
 }

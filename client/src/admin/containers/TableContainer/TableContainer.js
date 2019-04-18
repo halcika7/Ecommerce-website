@@ -169,7 +169,10 @@ const TableContainer = props => {
       props.deleteManyCategoryIcons(ids);
     }
     if (props.Roles) {
-      props.dleteManyRoles(ids);
+      props.deleteManyRoles(ids);
+    }
+    if (props.Permissions) {
+      props.deleteManyPermissions(ids);
     }
     setDeleteManyRecords([]);
   };
@@ -197,13 +200,13 @@ const TableContainer = props => {
                 {props.Permissions && <h4>All Permissions</h4>}
               </div>
               {deleteManyRecords.length > 0 && !props.Users && (
-                <div className="col-12">
-                  <div className="ButtonWrapper col-12">
+                <div className="col-12 mt-20 pl-125">
+                  <div className="ButtonWrapper">
                     <button
                       className="ButtonDanger"
                       onClick={e => manyDelete(e, deleteManyRecords)}
                     >
-                      Delete Selected Records
+                      Delete Selected
                     </button>
                   </div>
                 </div>
@@ -256,6 +259,8 @@ const TableContainer = props => {
                   permissionsData={allPermissions}
                   click={singleDelete}
                   loading={loading}
+                  setDeleteData={setDeleteManyRecords}
+                  selectedDeleteData={deleteManyRecords}
                 />
               )}
             </div>
@@ -287,14 +292,18 @@ const mapDispatchToProps = dispatch => {
     deleteManyCategories: ids => dispatch(actions.deleteManyCategories(ids)),
     getAllCategoryIcons: () => dispatch(actions.getAllCategoryIcons()),
     deleteCategoryIcon: id => dispatch(actions.deleteCategoryIcon(id)),
-    deleteManyCategoryIcons: ids => dispatch(actions.deleteManyCategoryIcons(ids)),
+    deleteManyCategoryIcons: ids =>
+      dispatch(actions.deleteManyCategoryIcons(ids)),
     getUsers: () => dispatch(actions.getAllUsers()),
     deleteUser: id => dispatch(actions.deleteUser(id)),
     getRoles: () => dispatch(actions.getRoles()),
     deleteRole: id => dispatch(actions.deleteUserRole(id)),
-    dleteManyRoles: ids => dispatch(actions.deleteManyUserRoles(ids)),
+    deleteManyRoles: ids => dispatch(actions.deleteManyUserRoles(ids)),
     getAllPermissions: () => dispatch(actions.getAllPermissions()),
-    deletePermission: permission => dispatch(actions.deletePermission(permission))
+    deletePermission: permission =>
+      dispatch(actions.deletePermission(permission)),
+    deleteManyPermissions: permissions =>
+      dispatch(actions.deleteManyPermissions(permissions))
   };
 };
 

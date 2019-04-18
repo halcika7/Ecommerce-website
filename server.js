@@ -19,10 +19,11 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 
 const db = require("./config/keys").mongoURI;
+const names = [];
 
 mongoose
   .connect(db, { useNewUrlParser: true, useCreateIndex: true })
-  .then(() => console.log("MongoDB Connected"))
+  .then(() => console.log("MongoDB connected !"))
   .catch(err => console.log(err));
 
 app.use(passport.initialize());

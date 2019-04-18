@@ -26,6 +26,8 @@ export {
 export {
   addNewPermission,
   getAllPermissions,
+  getAllModelNames,
+  deleteManyPermissions,
   deletePermission
 } from "./roles&permissions/permissions";
 

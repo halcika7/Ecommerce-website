@@ -15,6 +15,12 @@
     width: 180px;
 }
 
+.DataTable table tbody tr td:not(:first-child) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .DataTable table tbody tr td button {
     color: #fff;
     background-color: #dc3545;
@@ -86,6 +92,19 @@
 .DataTable>div:nth-child(1)>div button,
 .DataTable>div:nth-child(3)>div p {
     margin: 0;
+}
+
+.DataTable>div:nth-child(1)>div:nth-child(2) button {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    transform: none !important;
+}
+
+.DataTable>div:nth-child(1)>div:nth-child(2) input {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 .DataTable>div:nth-child(1)>div:nth-child(2),

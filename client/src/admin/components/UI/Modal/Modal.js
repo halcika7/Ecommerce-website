@@ -9,17 +9,17 @@ import SmallSpinner from "../../../../users/components/UI/SmallSpinner/SmallSpin
 
 const Modal = props => {
   const [permission, setPermission] = useState("");
-  const [allPermissions, setAllPermissions] = useState([]);
+  const [modelNames, setModelNames] = useState([]);
   useEffect(() => {
     document.body.classList.add(classes.NoScroll);
-    props.getAllPermissions();
+    props.getAllModelNames();
     setPermission(props.permissions.permission);
-    setAllPermissions(props.permissions.allPermissions);
+    setModelNames(props.permissions.modelNames);
     return () => document.body.classList.remove(classes.NoScroll);
   }, []);
   useEffect(() => {
     setPermission(props.permissions.permission);
-    setAllPermissions(props.permissions.allPermissions);
+    setModelNames(props.permissions.modelNames);
   }, [props.permissions]);
   const formSubmit = e => {
     e.preventDefault();
@@ -60,12 +60,12 @@ const Modal = props => {
               <label>All Permissions</label>
               <input
                 list="permissions"
-                disabled={allPermissions.length < 1 ? true : false}
+                disabled={modelNames.length < 1 ? true : false}
               />
               <datalist id="permissions" className={classes.datalist}>
-                {allPermissions.length > 0
-                  ? allPermissions.map(perm => (
-                      <option value={perm.permission} key={perm._id} />
+                {modelNames.length > 0
+                  ? modelNames.map((perm, index) => (
+                      <option value={perm} key={index} />
                     ))
                   : null}
               </datalist>
@@ -107,7 +107,7 @@ const mapStateToProps = state => {
 const dispatchMapToProps = dispatch => {
   return {
     addPermission: permission => dispatch(actions.addNewPermission(permission)),
-    getAllPermissions: () => dispatch(actions.getAllPermissions())
+    getAllModelNames: () => dispatch(actions.getAllModelNames())
   };
 };
 
