@@ -1,14 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { getLoggedInUserPhoto } from "../../../store/actions";
 
 import classes from "./Navigation.module.css";
-import Modal from "../UI/Modal/Modal";
 
 const Navigation = props => {
-  const [permissionModal, setPermissionModal] = useState(false);
-
   const toggleActiveClass = e => {
     e.preventDefault();
     e.currentTarget.classList.toggle(classes.Active);
@@ -17,20 +13,8 @@ const Navigation = props => {
     );
   };
 
-  const toggleModal = (e, setModal, modal) => {
-    e.preventDefault();
-    setModal(!modal);
-  };
-
   return (
     <React.Fragment>
-      {permissionModal === true ? (
-        <Modal
-          click={toggleModal}
-          setModal={setPermissionModal}
-          modal={permissionModal}
-        />
-      ) : null}
       <div className={classes.Sidebar}>
         <div className={classes.SidebarWrapper}>
           <div className={classes.Logo}>

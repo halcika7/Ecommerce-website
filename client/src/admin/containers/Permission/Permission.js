@@ -53,7 +53,7 @@ const Permission = props => {
               <h4>Add Permission</h4>
             </div>
             <div className="card-body">
-              <form onSubmit={formSubmit}>
+              <form onSubmit={formSubmit} className="col-12 col-sm-6">
                 <label>All Model Names</label>
                 <select
                   name="role"

@@ -20,117 +20,115 @@ const TableContainer = props => {
   const [deleteManyRecords, setDeleteManyRecords] = useState([]);
 
   useEffect(() => {
-    setBrands(props.brand.allBrands);
-    props.getBrands();
-  }, [props.Brands]);
-  useEffect(() => {
-    setAllRoles(props.roles.Roles);
-    props.getRoles();
-  }, [props.Roles]);
-  useEffect(() => {
-    setAllPermissions(props.permissions.allPermissions);
-    props.getAllPermissions();
-  }, [props.Permissions]);
-  useEffect(() => {
-    setAllUsers(props.users.Users);
-    props.getUsers();
-  }, [props.Users]);
-  useEffect(() => {
-    setAllCategories(props.categories.allCategories);
-    props.getAllCategories();
-  }, [props.Categories]);
-  useEffect(() => {
-    setAllCategoryIcons(props.icons.allCategoryIcons);
-    props.getAllCategoryIcons();
-  }, [props.Icons]);
+    if(props.Brands === true) {
+      setBrands(props.brand.allBrands);
+      props.getBrands();
+    }
+    if(props.Rrands === true) {
+      setAllRoles(props.roles.Roles);
+      props.getRoles();
+    }
+    if(props.Permissions === true) {
+      setAllPermissions(props.permissions.allPermissions);
+      props.getAllPermissions();
+    }
+    if(props.Users === true) {
+      setAllUsers(props.users.Users);
+      props.getUsers();
+    }
+    if(props.Categories === true) {
+      setAllCategories(props.categories.allCategories);
+      props.getAllCategories();
+    }
+    if(props.Icons === true) {
+      setAllCategoryIcons(props.icons.allCategoryIcons);
+      props.getAllCategoryIcons();
+    }
+  }, [props.Brands,props.Roles,props.Permissions,props.Users,props.Categories,props.Icons]);
 
   useEffect(() => {
-    if (props.Brands) {
+    if (props.Brands === true) {
       setBrands(props.brand.allBrands);
     }
-  }, [props.brand.allBrands]);
-  useEffect(() => {
-    if (props.Permissions) {
+    if (props.Permissions === true) {
       setAllPermissions(props.permissions.allPermissions);
     }
-  }, [props.permissions.allPermissions]);
-  useEffect(() => {
-    if (props.Roles) {
+    if (props.Roles === true) {
       setAllRoles(props.roles.Roles);
     }
-  }, [props.roles.Roles]);
-  useEffect(() => {
-    if (props.Users) {
+    if (props.Users === true) {
       setAllUsers(props.users.Users);
     }
-  }, [props.users.Users]);
-  useEffect(() => {
-    if (props.Categories) {
+    if (props.Categories === true) {
       setAllCategories(props.categories.allCategories);
     }
-  }, [props.categories.allCategories]);
-  useEffect(() => {
-    if (props.Icons) {
+    if (props.Icons === true) {
       setAllCategoryIcons(props.icons.allCategoryIcons);
     }
-  }, [props.icons.allCategoryIcons]);
+  }, [props.brand.allBrands,props.permissions.allPermissions,props.roles.Roles,props.users.Users,props.categories.allCategories,props.icons.allCategoryIcon]);
 
   useEffect(() => {
-    setFailedMessage(props.brand.failedMessage);
-  }, [props.brand.failedMessage]);
-  useEffect(() => {
-    setFailedMessage(props.permissions.failedMessage);
-  }, [props.permissions.failedMessage]);
-  useEffect(() => {
-    setFailedMessage(props.roles.failedMessage);
-  }, [props.roles.failedMessage]);
-  useEffect(() => {
-    setFailedMessage(props.users.failedMessage);
-  }, [props.users.failedMessage]);
-  useEffect(() => {
-    setFailedMessage(props.categories.failedMessage);
-  }, [props.categories.failedMessage]);
-  useEffect(() => {
-    setFailedMessage(props.icons.failedMessage);
-  }, [props.icons.failedMessage]);
+    if(props.Brands === true) {
+      setFailedMessage(props.brand.failedMessage);
+    }
+    if(props.Permissions === true) {
+      setFailedMessage(props.permissions.failedMessage);
+    }
+    if(props.Roles === true) {
+      setFailedMessage(props.roles.failedMessage);
+    }
+    if(props.Users === true) {
+      setFailedMessage(props.users.failedMessage);
+    }
+    if(props.Categories === true) {
+      setFailedMessage(props.categories.failedMessage);
+    }
+    if(props.Icons === true) {
+      setFailedMessage(props.icons.failedMessage);
+    }
+  }, [props.brand.failedMessage,props.permissions.failedMessage,props.roles.failedMessage,props.users.failedMessage,props.categories.failedMessage,props.icons.failedMessage]);
 
   useEffect(() => {
-    setSuccessMessage(props.brand.successMessage);
-  }, [props.brand.successMessage]);
-  useEffect(() => {
-    setSuccessMessage(props.permissions.successMessage);
-  }, [props.permissions.successMessage]);
-  useEffect(() => {
-    setSuccessMessage(props.roles.successMessage);
-  }, [props.roles.successMessage]);
-  useEffect(() => {
-    setSuccessMessage(props.users.successMessage);
-  }, [props.users.successMessage]);
-  useEffect(() => {
-    setSuccessMessage(props.categories.successMessage);
-  }, [props.categories.successMessage]);
-  useEffect(() => {
-    setSuccessMessage(props.icons.successMessage);
-  }, [props.icons.successMessage]);
+    if(props.Brands === true) {
+      setSuccessMessage(props.brand.successMessage);
+    }
+    if(props.Permissions === true) {
+      setSuccessMessage(props.permissions.successMessage);
+    }
+    if(props.Roles === true) {
+      setSuccessMessage(props.roles.successMessage);
+    }
+    if(props.Users === true) {
+      setSuccessMessage(props.users.successMessage);
+    }
+    if(props.Categories === true) {
+      setSuccessMessage(props.categories.successMessage);
+    }
+    if(props.Icons === true) {
+      setSuccessMessage(props.icons.successMessage);
+    }
+  }, [props.brand.successMessage,props.permissions.successMessage,props.roles.successMessage,props.users.successMessage,props.categories.successMessage,props.icons.successMessage]);
 
   useEffect(() => {
-    setLoading(props.brand.loading);
-  }, [props.brand.loading]);
-  useEffect(() => {
-    setLoading(props.permissions.loading);
-  }, [props.permissions.loading]);
-  useEffect(() => {
-    setLoading(props.roles.loading);
-  }, [props.roles.loading]);
-  useEffect(() => {
-    setLoading(props.users.loading);
-  }, [props.users.loading]);
-  useEffect(() => {
-    setLoading(props.categories.loading);
-  }, [props.categories.loading]);
-  useEffect(() => {
-    setLoading(props.icons.loading);
-  }, [props.icons.loading]);
+    if(props.Brands === true) {
+      setLoading(props.brand.loading);
+    }
+    if(props.Permissions === true) {
+      setLoading(props.permissions.loading);
+    }
+    if(props.Roles === true) {
+      setLoading(props.roles.loading);
+    }
+    if(props.Users === true) {
+      setLoading(props.users.loading);
+    }
+    if(props.Categories === true) {
+      setLoading(props.categories.loading);
+    }
+    if(props.Icons === true) {
+      setLoading(props.icons.loading);
+    }
+  }, [props.brand.loading,props.permissions.loading,props.roles.loading,props.users.loading,props.categories.loading,props.icons.loading]);
 
   const singleDelete = (e, id) => {
     e.preventDefault();
@@ -152,6 +150,7 @@ const TableContainer = props => {
     if (props.Permissions) {
       props.deletePermission(id);
     }
+    setDeleteManyRecords([]);
   };
 
   const manyDelete = (e, ids) => {
@@ -199,7 +198,7 @@ const TableContainer = props => {
                 {props.Roles && <h4>All Roles</h4>}
                 {props.Permissions && <h4>All Permissions</h4>}
               </div>
-              {deleteManyRecords.length > 0 && !props.Users && (
+              {(deleteManyRecords.length > 0 && !props.Users) && (
                 <div className="col-12 mt-20 pl-125">
                   <div className="ButtonWrapper">
                     <button

@@ -11,6 +11,7 @@ const roles = require("./routes/roles&permissions/roles");
 const productsCategory = require("./routes/products/category");
 const categoryIcon = require("./routes/products/categoryicon");
 const brand = require("./routes/products/brand");
+const product = require("./routes/products/product");
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use("/rolespermissions/roles", roles);
 app.use("/products/category", productsCategory);
 app.use("/products/categoryicon", categoryIcon);
 app.use("/products/brand", brand);
+app.use("/products/product", product);
 
 const port = process.env.PORT || 5000;
 

@@ -3,7 +3,7 @@ import classes from "./TodoList.module.css";
 
 const TodoList = props => {
   return (
-    <div className="col-xl-4 mb-30">
+    <div className={classes.MaxHeight + " col-xl-4 mb-30"}>
       <div className="card card-statistics">
         <div className="card-body">
           <h5 className={classes.heading + " card-title"}>To Do List </h5>

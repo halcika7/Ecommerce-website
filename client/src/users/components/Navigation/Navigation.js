@@ -3,17 +3,16 @@ import TopNavigation from './TopNavigation/TopNavigation';
 import MiddleNavigation from './MiddleNavigation/MiddleNavigation';
 import BottomNavigation from './BottomNavigation/BottomNavigation';
 
-class Navigation extends Component {                            
-    
-    render() {
-        return (
-            <React.Fragment>
-                <TopNavigation />
-                <MiddleNavigation />
-                <BottomNavigation icons={this.props.icons}/>
-            </React.Fragment>
-        );
-    }
+class Navigation extends Component {
+	render() {
+		return (
+			<React.Fragment>
+				<TopNavigation />
+				<MiddleNavigation />
+				<BottomNavigation icons={this.props.icons} />
+			</React.Fragment>
+		);
+	}
 }
 
 export default Navigation;

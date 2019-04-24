@@ -11,6 +11,7 @@ import Spinner from "./users/components/UI/Spinner/Spinner";
 import AdminNavigation from "./admin/components/Navigation/Navigation";
 import NavBar from "./admin/components/NavBar/Navbar";
 import AdminFooter from "./admin/components/Footer/Footer";
+import SmallSpinner from "./users/components/UI/SmallSpinner/SmallSpinner";
 
 const Home = lazy(() => import("./users/containers/Home/Home"));
 const Product = lazy(() => import("./users/containers/Product/Product"));
@@ -81,22 +82,8 @@ const App = props => {
         ...state,
         show: !state.show
       });
-    }, 3500);
-    // let elements = [5,3,7,13,33,97];
-    // // let elements = [10,34,2,4,7,13,5,42];
-    // for(let i = 0; i < elements.length - 1; i++) {
-    //     let index = i;
-    //     for(let j = i + 1; j < elements.length; j++) {
-    //         if(elements[j] < elements[index]) {
-    //             index = j;
-    //         }
-    //     }
-    //     const smallerNumber = elements[index];
-    //     elements[index] = elements[i];
-    //     elements[i] = smallerNumber;
-    //     console.log(elements);
-    //     setTimeout(() => {}, 500);
-    // }
+    }, 2000);
+    return () => setState({ ...state, show: false });
   }, []);
 
   useEffect(() => {
@@ -119,7 +106,7 @@ const App = props => {
                   path="/admindashboard/dashboard"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <Dashboard />
                     </Suspense>
                   )}
@@ -128,7 +115,7 @@ const App = props => {
                   path="/admindashboard/profile"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <ViewUser profile={true} {...props} />
                     </Suspense>
                   )}
@@ -137,7 +124,7 @@ const App = props => {
                   path="/admindashboard/add-user"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <AddUser />
                     </Suspense>
                   )}
@@ -146,7 +133,7 @@ const App = props => {
                   path="/admindashboard/view-user"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <ViewUser view={true} {...props} />
                     </Suspense>
                   )}
@@ -155,7 +142,7 @@ const App = props => {
                   path="/admindashboard/edit-user"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <ViewUser edit={true} {...props} />
                     </Suspense>
                   )}
@@ -164,7 +151,7 @@ const App = props => {
                   path="/admindashboard/all-users"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <TableContainer Users={true} />
                     </Suspense>
                   )}
@@ -174,7 +161,7 @@ const App = props => {
                   path="/admindashboard/products"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <ProductsPage />
                     </Suspense>
                   )}
@@ -183,7 +170,7 @@ const App = props => {
                   path="/admindashboard/add-product"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <AddProduct />
                     </Suspense>
                   )}
@@ -193,8 +180,8 @@ const App = props => {
                   path="/admindashboard/add-permission"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
-                      <Permission {...props}/>
+                    <Suspense fallback={<div className="bg-white"><SmallSpinner /></div>}>
+                      <Permission {...props} />
                     </Suspense>
                   )}
                 />
@@ -202,7 +189,7 @@ const App = props => {
                   path="/admindashboard/all-permissions"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <TableContainer Permissions={true} />
                     </Suspense>
                   )}
@@ -212,7 +199,7 @@ const App = props => {
                   path="/admindashboard/add-role"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <AddRole {...props} />
                     </Suspense>
                   )}
@@ -221,7 +208,7 @@ const App = props => {
                   path="/admindashboard/edit-role"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <UpdateRole {...props} />
                     </Suspense>
                   )}
@@ -230,7 +217,7 @@ const App = props => {
                   path="/admindashboard/view-role"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <UpdateRole view={true} {...props} />
                     </Suspense>
                   )}
@@ -239,7 +226,7 @@ const App = props => {
                   path="/admindashboard/all-roles"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <TableContainer Roles={true} />
                     </Suspense>
                   )}
@@ -249,7 +236,7 @@ const App = props => {
                   path="/admindashboard/add-category"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <AddCategory addcategory={true} {...props} />
                     </Suspense>
                   )}
@@ -258,7 +245,7 @@ const App = props => {
                   path="/admindashboard/edit-category"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <AddCategory editcategory={true} {...props} />
                     </Suspense>
                   )}
@@ -267,7 +254,7 @@ const App = props => {
                   path="/admindashboard/view-category"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <AddCategory viewcategory={true} {...props} />
                     </Suspense>
                   )}
@@ -276,7 +263,7 @@ const App = props => {
                   path="/admindashboard/all-categories"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <TableContainer Categories={true} />
                     </Suspense>
                   )}
@@ -286,7 +273,7 @@ const App = props => {
                   path="/admindashboard/add-category-icon"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <CategoryIcon addicon={true} {...props} />
                     </Suspense>
                   )}
@@ -295,7 +282,7 @@ const App = props => {
                   path="/admindashboard/view-category-icon"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <CategoryIcon viewicon={true} {...props} />
                     </Suspense>
                   )}
@@ -304,7 +291,7 @@ const App = props => {
                   path="/admindashboard/edit-category-icon"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <CategoryIcon editicon={true} {...props} />
                     </Suspense>
                   )}
@@ -313,7 +300,7 @@ const App = props => {
                   path="/admindashboard/all-category-icons"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <TableContainer Icons={true} />
                     </Suspense>
                   )}
@@ -323,7 +310,7 @@ const App = props => {
                   path="/admindashboard/add-brand"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <Brand addbrand={true} {...props} />
                     </Suspense>
                   )}
@@ -332,7 +319,7 @@ const App = props => {
                   path="/admindashboard/view-brand"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <Brand viewbrand={true} {...props} />
                     </Suspense>
                   )}
@@ -341,7 +328,7 @@ const App = props => {
                   path="/admindashboard/edit-brand"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <Brand editbrand={true} {...props} />
                     </Suspense>
                   )}
@@ -350,7 +337,7 @@ const App = props => {
                   path="/admindashboard/all-brands"
                   exact
                   render={props => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <TableContainer Brands={true} />
                     </Suspense>
                   )}
@@ -358,7 +345,7 @@ const App = props => {
 
                 <Route
                   render={() => (
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <PageNotFound />
                     </Suspense>
                   )}
@@ -512,7 +499,7 @@ const App = props => {
 
 const mapStateToProps = state => {
   return {
-    isAdmin: state.login.User.isAdmin
+    isAdmin: state.login.User.role.isAdmin
   };
 };
 

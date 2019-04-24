@@ -10,9 +10,14 @@ const BrandSchema = new Schema({
   categories: [
     {
       type: String,
-      required: true
+      required: true,
+      index: true
     }
   ]
+});
+
+BrandSchema.index({
+  '$**': 'text'
 });
 
 module.exports = Brand = mongoose.model("brands", BrandSchema);

@@ -767,6 +767,9 @@ ul.searchResults{
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+}
+
+.jumbotroneSearch div > ul.searchResults.active:hover{
     overflow-y: auto;
 }
 
@@ -886,6 +889,7 @@ box-shadow: none;
     opacity: 0;
     z-index: -1;
     max-height: 300px;
+    min-height: 300px;
     overflow-y: auto;
     overflow-x: hidden;
     transition:all .3s ease-in ;

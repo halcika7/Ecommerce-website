@@ -10,7 +10,7 @@ const initialStateLogin = {
     password: ""
   },
   User: {
-    isAdmin: false
+    role:{isAdmin: false}
   },
   isAuthenticated: false,
   successMessage: false,

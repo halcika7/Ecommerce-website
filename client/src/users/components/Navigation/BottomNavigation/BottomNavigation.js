@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+
 import * as actions from '../../../../store/actions';
 import CategorySearchList from './CategorySearchList/CategorySearchList';
 import NavItem from './NavItem/NavItem';
@@ -65,7 +67,11 @@ const BottomNavigation = props => {
     const categoryDrop = (e) => {
         const dropdownMenu = e.currentTarget.parentElement.children[1];
         dropdownMenu.classList.toggle(c.active);
-        setMenuHeight(dropdownMenu.children[0].clientHeight);
+        if(dropdownMenu.children[0].clientHeight < 300) {
+            setMenuHeight(300);
+        }else{
+            setMenuHeight(dropdownMenu.children[0].clientHeight);
+        }
     }
     
     const liOnClick = (e) => {
@@ -136,4 +142,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BottomNavigation);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BottomNavigation));

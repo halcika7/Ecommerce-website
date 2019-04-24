@@ -1,5 +1,6 @@
 const ObjectId = require("mongoose").Types.ObjectId;
 const BrandModel = require("../models/Brand");
+const BrandModelCategories = require("../models/Brand");
 
 exports.addBrand = async (req, res) => {
   const name = req.body.name,
@@ -103,3 +104,13 @@ exports.deleteManyBrands = async (req, res) => {
     return res.json({ failedMessage: err.message });
   }
 };
+
+exports.getBrandsByCategory = async (req, res) => {
+  try {
+    const findBrands = await BrandModel.find({ categories: { $in: req.query.category} }).select('name');
+    return res.json(findBrands);
+  }catch (err) {
+    if (err.errmsg) return res.json({ error: err.errmsg });
+    return res.json({ failedMessage: err.message });
+  }
+}

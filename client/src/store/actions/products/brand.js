@@ -53,6 +53,19 @@ export const getBrand = id => async dispatch => {
   }
 };
 
+export const getBrandByCategory = category => async dispatch => {
+  dispatch({ type: actionTypes.BRAND_START });
+  const response = await axios.get('/products/brand/getbrandsbycategory?category=' + category);
+  if (response.data.failedMessage) {
+    dispatch({
+      type: actionTypes.BRAND_FAILED,
+      failedMessage: response.data.failedMessage
+    });
+  } else {
+    dispatch({ type: actionTypes.BRAND_SUCCESS, brands: response.data });
+  }
+};
+
 export const editBrand = (id, data) => async dispatch => {
   dispatch({ type: actionTypes.BRAND_START });
   const response = await axios.put(`/products/brand/editbrand`, { id, data });

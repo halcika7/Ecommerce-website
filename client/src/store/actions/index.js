@@ -64,8 +64,14 @@ export {
   addBrand,
   getAllBrands,
   getBrand,
+  getBrandByCategory,
   editBrand,
   deleteBrand,
   deleteManyBrands,
   clearBrandState
 } from "./products/brand";
+
+export {
+  checkProductName,
+  addProduct
+} from "./products/product";

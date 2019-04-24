@@ -1,3 +1,9 @@
+.MaxHeight {
+    max-height: 668px;
+    overflow-y: auto;
+}
+
+
 .heading {
     color: #fff;
 }
@@ -32,7 +38,7 @@ ul.toDo li {
     position: relative;
 }
 
-.rememeberCheckbox label{
+.rememeberCheckbox label {
     position: relative;
     padding-left: 30px;
     font-size: 13px;
@@ -86,16 +92,16 @@ ul.toDo li {
     cursor: pointer;
 }
 
-.rememeberCheckbox input:checked + label:after {
+.rememeberCheckbox input:checked+label:after {
     max-width: 25px;
     opacity: 1;
 }
 
-.rememeberCheckbox input:checked + label:before {
+.rememeberCheckbox input:checked+label:before {
     border: 2px solid #85ba3fc0;
 }
 
-ul.toDo li .rememeberCheckbox input:checked ~ label {
+ul.toDo li .rememeberCheckbox input:checked~label {
     color: #eeeeee3d;
     text-decoration: line-through;
 }
@@ -112,7 +118,7 @@ ul.toDo li .rememeberCheckbox input:checked ~ label {
     box-shadow: none;
 }
 
-.socialIcons > ul {
+.socialIcons>ul {
     display: flex;
     list-style: none;
     justify-content: center;
