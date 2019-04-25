@@ -2,7 +2,9 @@
     height: calc(2.25rem + 2px);
 }
 
-.adminAddProduct .form-group input,
+.adminAddProduct .form-group > input,
+.adminAddProduct .form-group > div > input,
+.adminAddProduct .col-md-4 input,
 .adminAddProduct .form-group select {
     margin-bottom: 20px;
     padding: 10px 18px;
@@ -27,141 +29,6 @@
     -moz-appearance: none;
     appearance: none;
     background-color: #27293d;
-}
-
-.radioButtons,
-.checkboxSizes,
-.radioButtonsSizes {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.radioButtonContainer,
-.radioButtonContainerSizes {
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    height: 25px;
-    width: 25px;
-    user-select: none;
-}
-
-.radioButtonContainerSizes {
-    width: 40px;
-    height: 40px;
-    margin-right: 1rem;
-}
-
-/* Hide the browser's default radio button */
-.radioButtonContainer input[type=radio] {
-    position: absolute;
-    left: 0px;
-    height: 25px !important;
-    width: 25px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    opacity: 0;
-    position: absolute;
-    cursor: pointer;
-}
-
-.radioButtonContainerSizes input[type=radio] {
-    position: absolute;
-    left: 0px;
-    height: 40px !important;
-    width: 40px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    opacity: 0;
-    position: absolute;
-    cursor: pointer;
-}
-
-/* Create a custom radio button */
-.checkmark {
-    position: absolute;
-    pointer-events: none;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    border-radius: 4px;
-    transition: all .3s ease-in;
-}
-
-.radioButtonContainerSizes .checkmark {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: #fff;
-    color: #111;
-}
-
-.radioButtonContainerSizes .checkmark:before {
-    font-size: 17px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    padding-left: 2px;
-    border-radius: 3px;
-    border: 2px solid rgba(2555, 255, 255, 1);
-    content: "";
-    height: 100%;
-    width: 100%;
-}
-
-/* On mouse-over, add a grey background color */
-.radioButtonContainer:hover input[type=radio]~.checkmark,
-.radioButtonContainerSizes:hover input[type=radio]~.checkmark {
-    filter: brightness(60%);
-    -webkit-filter: brightness(60%);
-}
-
-/* Create the indicator (the dot/circle - hidden when not checked) */
-.checkmark:after {
-    content: "\f00c";
-    position: absolute;
-    display: none;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-}
-
-/* Show the indicator (dot/circle) when checked */
-.radioButtonContainer > input[type=radio]:checked~.checkmark:after {
-    display: flex;
-    font-weight: 900;
-    font-family: 'Font Awesome 5 Free';
-    align-items: center;
-    justify-content: center;
-    color: #111;
-}
-
-.radioButtonContainerSizes > input[type=radio]:checked~.checkmark:after  {
-    display: flex;
-    font-weight: 900;
-    font-family: 'Font Awesome 5 Free';
-    align-items: center;
-    justify-content: center;
-    color: #ddd;
-    background-color: #7a7676c3;
-    font-size: 32px;
-    border-radius: 3px;
-}
-
-.radioButtonContainer input[type=radio]:checked~.checkmark.black:after,
-.radioButtonContainer input[type=radio]:checked~.checkmark.blue:after,
-.radioButtonContainer input[type=radio]:checked~.checkmark.mediumblue:after,
-.radioButtonContainer input[type=radio]:checked~.checkmark.midnightblue:after,
-.radioButtonContainer input[type=radio]:checked~.checkmark.darkblue:after,
-.radioButtonContainer input[type=radio]:checked~.checkmark.indigo:after,
-.radioButtonContainer input[type=radio]:checked~.checkmark.navy:after{
-    color: #fff;
 }
 
 .adminAddProduct .checkbox-wrapper {
@@ -239,4 +106,37 @@
 
 .checkbox-wrapper .checkbox input:checked+label:before {
     border: 2px solid #4f9ae6;
+}
+
+
+/* Custom Select */
+
+.css-bg1rzq-control,
+.css-1szy77t-control  {
+    background-color: transparent !important;
+    border: 1px solid #4f9ae6 !important;
+    border-radius: .4285rem !important;
+    color: #fff !important;
+}
+
+.css-dvua67-singleValue {
+    color: #fff !important;
+}
+
+.css-kj6f9i-menu {
+    background-color: #27293d !important;
+    color: #fff !important;
+}
+
+.css-kj6f9i-menu .css-dpec0i-option:hover {
+    color: #111 !important;
+}
+
+.css-bgvzuu-indicatorSeparator {
+    background-color: #4f9ae6 !important;
+}
+
+.css-1g6gooi,
+.css-1hwfws3 > div {
+    color: #fff !important;
 }

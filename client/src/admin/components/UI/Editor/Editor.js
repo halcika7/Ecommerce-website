@@ -9,9 +9,9 @@ const EditorMNCE = props => {
                 <Editor
                     apiKey="zf0abgdeik13s50do5snh722ymmlk7m2on5cfz1s2ip8iuyh"
                     init={props.init}
-                    onKeyDown={e => props.change(window.frames[0].document.body.innerHTML) }
-                    onPaste={e => props.change(window.frames[0].document.body.innerHTML) }
-                    onChange={e => [props.change](window.frames[0].document.body.innerHTML) }
+                    onKeyDown={e => props.change(e.target.innerHTML) }
+                    onPaste={e => props.change(e.currentTarget.innerHTML) }
+                    onChange={e => props.change(e.target.getContent()) }
                 />
             </div>
         </div>

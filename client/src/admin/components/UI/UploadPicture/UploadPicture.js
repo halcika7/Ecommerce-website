@@ -10,13 +10,19 @@ const UploadPicture = props => {
 		const reader = new FileReader();
 		reader.readAsDataURL(file);
 
-		reader.onloadend = event => {
-			setUrl({
-				imgSrc: reader.result
-			});
+		setUrl({ imgSrc: 'https://media3.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif' });
 
-			props.change(e.target.name, e.target.files[0]);
-		};
+
+		reader.onloadend = event => {
+			setTimeout(() => {
+				setUrl({
+					imgSrc: reader.result
+				});
+	
+				props.change(e.target.name, e.target.files[0]);
+			}, 4000);
+			};
+
 	};
 	return (
 		<React.Fragment>

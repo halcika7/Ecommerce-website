@@ -1,78 +1,94 @@
-import React, { useState } from "react";
-import classes from "./UploadPictures.module.css";
+import React, { useState } from 'react';
+import classes from './UploadPictures.module.css';
 
 const UploadPictures = props => {
-  const [pictures, setPictures] = useState([]);
-  const [pictureLoaded, setPictureLoaded] = useState([]);
+	const [pictures, setPictures] = useState([]);
+	const [pictureLoaded, setPictureLoaded] = useState([]);
 
-  const readURL = e => {
-    const files = e.target.files;
-    const newPictures = [...pictures];
-    const newPictureLoaded = [...pictureLoaded];
+	const readURL = e => {
+		const files = e.target.files;
+		const newPictures = [...pictures];
+		const newPictureLoaded = [...pictureLoaded];
 
-    for (let file of files) {
-      const picReader = new FileReader();
-      if (!file.type.match("image")) continue;
+		for (let file of files) {
+			if (!file.type.match('image')) continue;
+			const picReader = new FileReader();
+			picReader.readAsDataURL(file);
 
-      newPictures.push(file);
-      setPictures(newPictures);
+			newPictures.push(file);
+			setPictures(newPictures);
 
-      picReader.onload = e => {
-        const picFile = e.target.result;
-        console.log(file);
-        newPictureLoaded.push({file: picFile});
-        setPictureLoaded(newPictureLoaded);
-      };
-      
-      picReader.onloadend = e => {
-        const newPictureLoade = newPictureLoaded.map(item => ({file: item.file}));
-        setPictureLoaded(newPictureLoade); 
-      };
+			picReader.onload = async e => {
+				const picFile = e.target.result;
+				newPictureLoaded.push({
+					file: picFile,
+					loading: 'http://assets.motherjones.com/interactives/projects/features/koch-network/shell19/img/loading.gif'
+				});
+				setTimeout(() => {
+					setPictureLoaded(newPictureLoaded);
+				}, 100);
+			};
 
-      picReader.readAsDataURL(file);
-    }
-  };
+			picReader.onloadend = e => {
+				setTimeout(() => {
+					const newPictureLoade = newPictureLoaded.map(item => ({
+						file: item.file
+					}));
+					setPictureLoaded(newPictureLoade);
+				}, 4000);
+			};
+		}
+	};
 
-  const deleteButton = (e, index) => {
-    e.preventDefault();
-    const newPictures = [...pictures];
-    newPictures.splice(index,1);
-    setPictures(newPictures);
-    const newPictureLoaded = [...pictureLoaded];
-    newPictureLoaded.splice(index,1);
-    setPictureLoaded(newPictureLoaded);
-  }
+	const deleteButton = (e, index) => {
+		e.preventDefault();
+		const newPictures = [...pictures];
+		newPictures.splice(index, 1);
+		setPictures(newPictures);
+		const newPictureLoaded = [...pictureLoaded];
+		newPictureLoaded.splice(index, 1);
+		setPictureLoaded(newPictureLoaded);
+	};
 
-  if(pictures.length > 0) {
-    props.change(pictures);
-  }
+	if (pictures.length > 0) {
+		props.change(pictures);
+	}
 
-  return (
-    <React.Fragment>
-      <label className={classes.btn2}>
-        Upload Pictures
-        <input
-          className={classes.input}
-          type="file"
-          onChange={readURL}
-          multiple
-        />
-      </label>
-      {pictureLoaded.length > 0 && <div className={classes.imagesPerview} >
-        {pictureLoaded.map((picture, index) => 
-          <div className={classes.perviewImage} key={index}>
-            <div className={classes.imageCancle} onClick={e => deleteButton(e,index)}>
-              <div className="button-block">
-                <i className="mark x"></i>
-                <i className="mark xx"></i>
-              </div>
-            </div>
-            <img src={picture.file} alt={picture.file}/>
-          </div>
-        )}
-      </div>}
-    </React.Fragment>
-  );
+	return (
+		<React.Fragment>
+			<label className={classes.btn2}>
+				Upload Pictures
+				<input
+					className={classes.input}
+					type="file"
+					onChange={readURL}
+					multiple
+				/>
+			</label>
+			{pictures.length > 0 && (
+				<div className={classes.imagesPerview}>
+					{pictureLoaded.map((picture, index) => (
+						<div className={classes.perviewImage} key={index}>
+							{!picture.loading && (
+								<div
+									className={classes.imageCancle}
+									onClick={e => deleteButton(e, index)}>
+									<div className="button-block">
+										<i className="mark x" />
+										<i className="mark xx" />
+									</div>
+								</div>
+							)}
+							<img
+								src={picture.loading ? picture.loading : picture.file}
+								alt={picture.file}
+							/>
+						</div>
+					))}
+				</div>
+			)}
+		</React.Fragment>
+	);
 };
 
 export default UploadPictures;

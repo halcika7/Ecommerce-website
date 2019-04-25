@@ -1,26 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
-import { Editor } from '@tinymce/tinymce-react';
 
 import './AddProduct.css';
-import Clothing from './Clothing';
+import Clothing from './Clothing/Clothing';
 import EditorMNCE from '../../components/UI/Editor/Editor';
 import LoginRegisterInputs from '../../../users/components/UI/LoginRegisterInputs/LoginRegisterInputs';
+import ToggleSwitchButton from '../../components/UI/Buttons/ToggleSwitchButton';
+import ClothingProductPerview from './Clothing/ClothingProductPerview';
 
 const AddProduct = props => {
-	const [Inputs] = useState([{ label: 'Name', type: 'text', name: 'name', placeholder: 'Enter Product Name' },{ label: 'Price', type: 'number', name: 'price', placeholder: 'Enter Product Price', min: '0' },{ label: 'Release Year', type: 'number', name: 'year', placeholder: 'Enter Release Year', min: '1950' }]);
+	const [Inputs] = useState([
+		{ label: 'Name', type: 'text', name: 'name', placeholder: 'Enter Product Name' },{ label: 'Price', type: 'number', name: 'price', placeholder: 'Enter Product Price', min: '0' },{ label: 'Release Year', type: 'number', name: 'year', placeholder: 'Enter Release Year', min: '1950' }
+	]);
+	
 	const [inputs, setInputs] = useState({ name: '', price: 0, year: 1950 });
+	const [published, setPublished] = useState(false);
 	const [subcategories, setSubcategories] = useState([]);
 	const [options, setOptions] = useState([]);
 	const [smallDesc, setSmallDesc] = useState(false);
 	const [desc, setDesc] = useState(false);
 
+	const [showPerview, setShowPerview] = useState(false);
+
 	useEffect(() => { props.getCategories(); }, []);
 
 	const inputChange = e => {
 		setInputs({ ...inputs, [e.target.name]: e.target.value });
-		if (e.target.name === 'category') { props.getBrandByCategory(e.target.value); }
+		if (e.target.name === 'category') { props.getBrandByCategory(e.target.value); setOptions([]); setSubcategories([]); }
 		if (e.target.name === 'name') { props.checkProductName(e.target.value); }
 	};
 
@@ -72,16 +79,18 @@ const AddProduct = props => {
 			<div className="col-12">
 				<div className="card mb-30 text-white">
 					<div className="card-body">
-						<h2 className="pl-3 mb-4">Add New Product</h2>
+						{!showPerview && <h2 className="pl-3 mb-4">Add New Product</h2>}
+						{showPerview && <h2 className="pl-3 mb-4">Product Review</h2>}
 						<form className="form-horizontal" onSubmit={onSubmitForm}>
-							<div className="form-group row m-0">
+							<div className="form-group row m-0 mb-2">
 								{Inputs.map(input => 
-									<React.Fragment key={input.name}>
-									<LoginRegisterInputs formBox='col-sm-6' label={input.label} type={input.type} name={input.name} placeholder={input.placeholder} inputClass='w-100' invalidInput="invalid" invalidFeedback="invalid-feedback" value={inputs[input.name]} min={input.min ? input.min : false} onChange={inputChange} />
-									</React.Fragment>
+									<LoginRegisterInputs key={input.name} formBox='col-sm-6' label={input.label} type={input.type} name={input.name} placeholder={input.placeholder} inputClass='w-100' invalidInput="invalid" invalidFeedback="invalid-feedback" value={inputs[input.name]} min={input.min ? input.min : false} onChange={inputChange} />
 								)}
+								<div className='col-sm-6'>
+									<ToggleSwitchButton name='Publish' value={published} setValue={setPublished} />
+								</div>
 							</div>
-							<EditorMNCE change={setSmallDesc} init={{ menubar: false, statusbar: false, toolbar: 'bold italic', height: '100px', resize: false }} label='Short Description'/>
+							<EditorMNCE change={setSmallDesc} init={{ format:'html', menubar: false, statusbar: false, toolbar: 'bold italic', height: '100px', resize: false }} label='Short Description'/>
 							<EditorMNCE change={setDesc} init={{ statusbar: false, plugins: 'print preview fullpage powerpaste searchreplace autolink directionality advcode visualblocks visualchars fullscreen image link codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help formatpainter permanentpen mentions linkchecker', toolbar: 'formatselect | bold italic strikethrough forecolor backcolor permanentpen formatpainter | link image | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent | removeformat ', height: '600px', resize: false }} label='Description'/>
 							<div className="form-group">
 								<label className="col-12">Select Category</label>
@@ -93,7 +102,7 @@ const AddProduct = props => {
 								</div>
 							</div>
 							{inputs.category && (
-								<div className="form-group mb-20">
+								<div className="form-group">
 									<label className="col-12">Select Sub Category</label>
 									<div className="col-12 checkbox-wrapper">
 										{props.categories.map(
@@ -114,22 +123,25 @@ const AddProduct = props => {
 									</div>
 								</div>
 							)}
-							{subcategories.length > 0 && (
-								<div className="form-group mb-20">
-									<label className="col-12">Select Brand</label>
-									<div className="col-12 checkbox-wrapper">
-										<select name="brand" className="w-100 p-3" onChange={inputChange} defaultValue="DEFAULT">
-											<option value="DEFAULT" hidden>Select Brand</option>
-											{props.brands.map(brand => <option value={brand.name} key={brand._id}>{brand.name}</option>)}
-										</select>
-									</div>
+							<div className="form-group m-0">
+								<label className="col-12">Select Brand</label>
+								<div className="col-12">
+									<select name="brand" className="w-100 p-3" onChange={inputChange} defaultValue="DEFAULT">
+										<option value="DEFAULT" hidden>Select Brand</option>
+										{props.brands.map(brand => <option value={brand.name} key={brand._id}>{brand.name}</option>)}
+									</select>
 								</div>
-							)}
-							{inputs.category === 'Clothing' && inputs.brand && (
-								<Clothing setOptions={setOptions} />
-							)}
-							{options.length > 0 && <button className="btn btn-primary" type="submit">Add Product</button>}
+							</div>
+							{(inputs.category === 'Clothing' && !showPerview) && (<Clothing setOptions={setOptions} />)}
 						</form>
+						{showPerview && 
+							<React.Fragment>
+								{/* <div dangerouslySetInnerHTML={{ __html: smallDesc }} contentEditable={true}/> */}
+								{options.map((option, index) => <ClothingProductPerview data={option} key={index}/>)}
+							</React.Fragment>
+						}
+						{(options.length > 0 && !showPerview) && <button className="btn btn-primary" type="button" onClick={e => {e.preventDefault(); setShowPerview(!showPerview)}}>Show Product Perview</button>}
+						{(options.length > 0 && showPerview) && <button className="btn btn-primary" type="button">Add Product</button>}
 					</div>
 				</div>
 			</div>

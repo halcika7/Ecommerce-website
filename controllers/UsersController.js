@@ -150,7 +150,6 @@ exports.resetPassword = async (req, res) => {
 
 exports.updateProfilePicture = async (req, res) => {
 	try {
-		console.log(req.file);
 		if (!req.file) {
 			return res.json({ failedMessage: 'Attached file is not an image.' });
 		}
@@ -285,13 +284,11 @@ exports.getSingleUser = async (req, res) => {
 		}
 	}
 	try {
-		console.log(req.query.id);
 		const user = await UserModel.findOne({
 			_id: new ObjectId(req.query.id)
 		}).select(
 			'profilePicture name email role username userInfo emailConfirmation.confirmed'
 		);
-		console.log(user);
 		if (!user) {
 			return res.json({ failedMessage: 'User not found' });
 		}
