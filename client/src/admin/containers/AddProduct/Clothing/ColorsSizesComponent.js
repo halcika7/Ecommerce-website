@@ -25,25 +25,52 @@ const ColorsSizesComponent = props => {
     });
       
     const colourStyles = {
-    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-        const color = chroma(data.value);
-        return {
-        ...styles,
-        backgroundColor: isDisabled
-            ? null
-            : isSelected ? data.value : isFocused ? color.alpha(0.1).css() : null,
-        color: isDisabled
-            ? '#ccc'
-            : isSelected
-            ? chroma.contrast(color, 'white') > 2 ? 'white' : 'black'
-            : data.value,
-        cursor: isDisabled ? 'not-allowed' : 'default',
-        };
-    },
-    input: styles => ({ ...styles, ...dot() }),
-    placeholder: styles => ({ ...styles, ...dot() }),
-    singleValue: (styles, { data }) => ({ ...styles, ...dot(data.value) }),
+        option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+            const color = chroma(data.value);
+            return {
+                ...styles,
+                backgroundColor: isDisabled
+                    ? null
+                    : isSelected ? data.value : isFocused ? color.alpha(0.1).css() : null,
+                color: isDisabled
+                    ? '#ccc'
+                    : isSelected
+                    ? chroma.contrast(color, 'white') > 2 ? 'white' : 'black'
+                    : data.value,
+                cursor: isDisabled ? 'not-allowed' : 'default',
+            };
+        },
+        input: styles => ({ ...styles, ...dot() }),
+        placeholder: styles => ({ ...styles, ...dot() }),
+        singleValue: (styles, { data }) => ({ ...styles, ...dot(data.value) }),
+        control: (base, state) => ({
+            ...base,
+            backgroundColor: 'transparent',
+            borderColor: state.isFocused ?
+            '#4f9ae6' : props.isValid ?
+            '#4f9ae6' : 'red',
+            '&:hover': {
+            borderColor: state.isFocused ?
+                '#4f9ae6' : props.isValid ?
+                '#4f9ae6' : 'red'
+            }
+        })
     };
+
+    const sizeStyles = {
+        control: (base, state) => ({
+            ...base,
+            backgroundColor: 'transparent',
+            borderColor: state.isFocused ?
+            '#4f9ae6' : props.isValid ?
+            '#4f9ae6' : 'red',
+            '&:hover': {
+            borderColor: state.isFocused ?
+                '#4f9ae6' : props.isValid ?
+                '#4f9ae6' : 'red'
+            }
+        })
+    }
 
     useEffect(() => {
         if(props.sizes) {
@@ -79,8 +106,8 @@ const ColorsSizesComponent = props => {
 
     return (
         <div className="mb-20">
-            {props.color && <Select options={colors} onChange={e => props.setColor(e.label)} styles={colourStyles} value={ props.value === false ? {label: 'Choose Color'} : { label: props.value, value: props.value.toLowerCase()} }/>}
-            {props.sizes && <Select options={sizes} onChange={e => props.setSize(e.label)} value={ props.value === false ? {label: 'Choose Size'} : { label: props.value } } />}
+            {props.color && <Select options={colors} onChange={e => props.setColor(e.label)} styles={colourStyles} value={ props.value === false ? {label: 'Choose Color'} : { label: props.value, value: props.value.toLowerCase()} } required/>}
+            {props.sizes && <Select options={sizes} onChange={e => props.setSize(e.label)} styles={sizeStyles} value={ props.value === false ? {label: 'Choose Size'} : { label: props.value } } required/>}
         </div>
     );
 }

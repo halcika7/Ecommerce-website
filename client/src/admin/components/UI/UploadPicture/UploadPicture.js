@@ -1,29 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import classes from './UploadPicture.module.css';
 
 const UploadPicture = props => {
 	const [url, setUrl] = useState({ imgSrc: 'http://placehold.it/180' });
+
+	useEffect(() => {
+		if(props.predefinedPicture) {
+			helperFunction(props.predefinedPicture);
+		}
+	}, [props.predefinedPicture]);
+
 	const readURL = e => {
 		e.persist();
 		const file = e.target.files[0];
+		const name = e.target.name;
+		helperFunction(file, name);
+	};
+
+	const helperFunction = (file, name=null) => {
 		if (!file.type.match('image')) return;
 		const reader = new FileReader();
 		reader.readAsDataURL(file);
 
 		setUrl({ imgSrc: 'https://media3.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif' });
 
-
-		reader.onloadend = event => {
+		reader.onloadend = e => {
 			setTimeout(() => {
 				setUrl({
 					imgSrc: reader.result
 				});
-	
-				props.change(e.target.name, e.target.files[0]);
-			}, 4000);
-			};
 
-	};
+				if(props.predefinedPicture) {
+					props.change(file, props.index);
+				}else {
+					props.change(name, file);
+				}
+	
+			}, 4000);
+		};
+	}
+
 	return (
 		<React.Fragment>
 			<label className={classes.btn2}>

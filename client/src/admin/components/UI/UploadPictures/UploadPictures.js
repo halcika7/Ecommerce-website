@@ -1,15 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import classes from './UploadPictures.module.css';
 
 const UploadPictures = props => {
 	const [pictures, setPictures] = useState([]);
 	const [pictureLoaded, setPictureLoaded] = useState([]);
 
+	useEffect(() => {
+		if (props.predefinedPictures) {
+			helperMethod(props.predefinedPictures);
+		}
+	}, [props.predefinedPictures]);
+
+	useEffect(() => {
+		if (props.predefinedPictures) {
+			props.change(pictures, props.index);
+		} else {
+			props.change(pictures);
+		}
+	}, [pictures]);
+
 	const readURL = e => {
+		e.persist();
 		const files = e.target.files;
+
+		helperMethod(files);
+	};
+
+	const helperMethod = files => {
 		const newPictures = [...pictures];
 		const newPictureLoaded = [...pictureLoaded];
-
 		for (let file of files) {
 			if (!file.type.match('image')) continue;
 			const picReader = new FileReader();
@@ -22,20 +41,17 @@ const UploadPictures = props => {
 				const picFile = e.target.result;
 				newPictureLoaded.push({
 					file: picFile,
-					loading: 'http://assets.motherjones.com/interactives/projects/features/koch-network/shell19/img/loading.gif'
+					loading:
+						'http://assets.motherjones.com/interactives/projects/features/koch-network/shell19/img/loading.gif'
 				});
-				setTimeout(() => {
-					setPictureLoaded(newPictureLoaded);
-				}, 100);
+				setTimeout(() => setPictureLoaded(newPictureLoaded), 300);
 			};
 
 			picReader.onloadend = e => {
-				setTimeout(() => {
-					const newPictureLoade = newPictureLoaded.map(item => ({
-						file: item.file
-					}));
-					setPictureLoaded(newPictureLoade);
-				}, 4000);
+				const newPictureLoade = newPictureLoaded.map(item => ({
+					file: item.file
+				}));
+				setTimeout(() => setPictureLoaded(newPictureLoade), 4000);
 			};
 		}
 	};
@@ -43,16 +59,14 @@ const UploadPictures = props => {
 	const deleteButton = (e, index) => {
 		e.preventDefault();
 		const newPictures = [...pictures];
-		newPictures.splice(index, 1);
-		setPictures(newPictures);
-		const newPictureLoaded = [...pictureLoaded];
-		newPictureLoaded.splice(index, 1);
-		setPictureLoaded(newPictureLoaded);
+		if (newPictures.length > 1) {
+			newPictures.splice(index, 1);
+			setPictures(newPictures);
+			const newPictureLoaded = [...pictureLoaded];
+			newPictureLoaded.splice(index, 1);
+			setPictureLoaded(newPictureLoaded);
+		}
 	};
-
-	if (pictures.length > 0) {
-		props.change(pictures);
-	}
 
 	return (
 		<React.Fragment>
@@ -69,7 +83,7 @@ const UploadPictures = props => {
 				<div className={classes.imagesPerview}>
 					{pictureLoaded.map((picture, index) => (
 						<div className={classes.perviewImage} key={index}>
-							{!picture.loading && (
+							{(!picture.loading && pictures.length > 1)&& (
 								<div
 									className={classes.imageCancle}
 									onClick={e => deleteButton(e, index)}>

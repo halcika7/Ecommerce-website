@@ -9147,7 +9147,9 @@ ul{
 }
 
 input.invalid,
-input:invalid {
+input:invalid,
+select.invalid,
+select:invalid {
     border-color: #f92400 !important;
     background: transparent;
 }

@@ -7,26 +7,21 @@ export const checkProductName = name => async dispatch => {
 		'/products/product/validateproductname',
 		{name}
     );
-    // console.log(response.data);
-	// if (response.data.error) {
-	// 	dispatch({
-	// 		type: actionTypes.CATEGORY_FAILED,
-	// 		error: response.data.error,
-	// 		data: categoryData
-	// 	});
-	// } else if (response.data.failedMessage) {
-	// 	dispatch({
-	// 		type: actionTypes.CATEGORY_FAILED,
-	// 		failedMessage: response.data.failedMessage,
-	// 		data: categoryData
-	// 	});
-	// } else {
-	// 	dispatch({
-	// 		type: actionTypes.CATEGORY_SUCCESS,
-	// 		successMessage: response.data.successMessage
-	// 	});
-	// 	setTimeout(() => clearState(), 4000);
-	// }
+	if (response.data.error) {
+		dispatch({
+			type: actionTypes.PRODUCT_FAILED,
+			errorName: response.data.error,
+		});
+	}else if(response.data.failedMessage) {
+		dispatch({
+			type: actionTypes.PRODUCT_FAILED,
+			failedMessage: response.data.failedMessage,
+		});
+	} else {
+		dispatch({
+			type: actionTypes.PRODUCT_SUCCESS
+		});
+	}
 };
 
 export const addProduct = (formData, config) => async dispatch => {

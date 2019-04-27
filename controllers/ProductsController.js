@@ -4,7 +4,6 @@ const ProductModel = require('../models/Product');
 
 exports.validateName = async (req, res) => {
 	try {
-		console.log(req.body.name);
 		const checkProductNameExistence = await ProductModel.findOne({
 			name: req.body.name
 		});
@@ -19,7 +18,7 @@ exports.validateName = async (req, res) => {
 
 exports.addProduct = async (req, res) => {
 	try {
-		console.log(req.body)
+		// console.log(req.body)
 		console.log(req.files);
 		// req.body.pictures.forEach(picture => console.log(picture));
 	} catch (err) {

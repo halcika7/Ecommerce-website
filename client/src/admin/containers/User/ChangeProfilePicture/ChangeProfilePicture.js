@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import UploadPicture from '../../../components/UI/UploadPicture/UploadPicture';
 
 const ChangeProfilePicture = props => {
-	const [image, setImage] = useState({});
+	const [image, setImage] = useState(false);
 	const onProfilePictureChange = (name, file) => setImage({ [name]: file });
 	const onFormSubmit = e => {
 		e.preventDefault();
@@ -18,10 +18,8 @@ const ChangeProfilePicture = props => {
 		document
 			.querySelector('#updloadPicture')
 			.setAttribute('src', 'http://placehold.it/180');
-		setImage({});
+		setImage(false);
 	};
-
-	console.log(image.profilePicture);
 
 	return (
 		<div className="col-md-6 mb-30">
@@ -41,9 +39,9 @@ const ChangeProfilePicture = props => {
 								</div>
 							</div>
 						</div>
-						<button type="submit" className="btn-fill btn btn-primary">
+						{image && <button type="submit" className="btn-fill btn btn-primary">
 							Update Profile Picture
-						</button>
+						</button>}
 					</form>
 				</div>
 			</div>

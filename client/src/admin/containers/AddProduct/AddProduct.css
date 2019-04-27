@@ -2,6 +2,13 @@
     height: calc(2.25rem + 2px);
 }
 
+.adminAddProduct input:disabled {
+    cursor: not-allowed;
+    background: #EF6347 !important;
+    color: #fff !important;
+    border: none;
+}
+
 .adminAddProduct .form-group > input,
 .adminAddProduct .form-group > div > input,
 .adminAddProduct .col-md-4 input,
@@ -15,6 +22,7 @@
     background-color: transparent;
     color: hsla(0, 0%, 100%, .8);
     outline: none;
+    margin: 0;
 }
 
 .adminAddProduct .form-group input:focus,
