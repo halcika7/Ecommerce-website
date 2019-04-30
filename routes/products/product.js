@@ -7,7 +7,7 @@ const ProductController = require('../../controllers/ProductsController');
 const fileStorage = multer.diskStorage({
 	destination: (req, file, cb) => {
 		const directory = `public/images/temp/product`;
-		while (!fs.existsSync(directory)) {
+		if (!fs.existsSync(directory)) {
 			fs.mkdirSync(directory);
 		}
 		cb(null, directory);
@@ -42,5 +42,7 @@ router.post(
 	multerPictures.array('pictures'),
 	ProductController.addProduct
 );
+
+router.get('/getproducts', ProductController.getProducts);
 
 module.exports = router;

@@ -9,10 +9,12 @@ const EditorMNCE = props => {
                 <Editor
                     apiKey="zf0abgdeik13s50do5snh722ymmlk7m2on5cfz1s2ip8iuyh"
                     init={props.init}
-                    onKeyDown={e => props.change(e.target.innerHTML) }
                     onPaste={e => props.change(e.currentTarget.innerHTML) }
                     onChange={e => props.change(e.target.getContent()) }
+                    onEditorChange={value => props.change(value) }
+                    value={props.value}
                 />
+                {props.error && <div style={{ width:' 100%', marginTop: '0.25rem', fontSize: '80%', color: '#dc3545' }}>{props.error}</div>}
             </div>
         </div>
     );

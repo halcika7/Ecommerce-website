@@ -7,8 +7,8 @@ import ResponseMessage from '../../../../users/components/UI/ResponseMessages/Re
 import LoginRegisterInputs from '../../../../users/components/UI/LoginRegisterInputs/LoginRegisterInputs';
 
 const Clothing = props => {
-	const [color, setColor] = useState(false);
-	const [size, setSize] = useState(false);
+	const [color, setColor] = useState('');
+	const [size, setSize] = useState('');
 	const [qty, setQty] = useState('');
 	const [price, setPrice] = useState('');
 	const [discount, setDiscount] = useState('');
@@ -22,22 +22,50 @@ const Clothing = props => {
 	const [, setAllSizesSelected] = useState(false);
 
 	const [failedMessage, setFailedMessage] = useState(false);
-	const [successMessage, setSuccessMessage] = useState(false);
 	const [showImagesChooser, setShowImagesChooser] = useState(true);
+
+	const [errors, setErrors] = useState([]);
 
 	useEffect(() => {
 		const findIndex = options.findIndex(option => option.color === color);
 		findIndex !== -1 && setShowImagesChooser(false);
 		findIndex === -1 && setShowImagesChooser(true);
+		choosenSizesHelper();
 	}, [color]);
+
+	useEffect(() => {
+		if (props.options) {
+			const newChoosenColors = [...choosenColors];
+			props.options.forEach(option => {
+				const findInChoosenColors = newChoosenColors.find(
+					color => color === option.color
+				);
+				if (option.options.length === 10 && !findInChoosenColors) {
+					newChoosenColors.push(option.color);
+				}
+				const findIndexChoosenColors = newChoosenColors.findIndex(
+					color => color === option.color
+				);
+				if (option.options.length !== 10 && findIndexChoosenColors) {
+					newChoosenColors.splice(findIndexChoosenColors, option.color);
+				}
+			});
+			setChoosenColors(newChoosenColors);
+			setOptions(props.options);
+		}
+	}, [props.options]);
+
+	useEffect(() => {
+		if (props.errors) {
+			setErrors(props.errors);
+		}
+	}, [props.errors]);
 
 	const addOption = e => {
 		e.preventDefault();
-		const newOptions = [...options];
-		const findOptionIndex = newOptions.findIndex(
-			option => option.color === color
-		);
-		const newChoosenSizes = [...choosenSizes];
+		const newOptions = [...options],
+			findOptionIndex = newOptions.findIndex(option => option.color === color),
+			newChoosenSizes = [...choosenSizes];
 		if (!size) {
 			failedMessages('Please provide Product Size');
 			return;
@@ -60,14 +88,13 @@ const Clothing = props => {
 				options: [
 					{ quantity: +qty, aditionalPrice: +price, discount: +discount, size }
 				],
-				featuredPicture: singlePicture,
+				featuredPicture: singlePicture ? singlePicture : '',
 				pictures: multyPicture
 			});
 			newChoosenSizes.push(size);
 			setSinglePicture(false);
 			setMultyPicture(false);
 			setShowImagesChooser(false);
-			successMessages('Color Option Successfuly Added !');
 		} else {
 			const findSize = newOptions[findOptionIndex].options.find(
 				option => option.size === size
@@ -83,12 +110,11 @@ const Clothing = props => {
 				size
 			});
 			newChoosenSizes.push(size);
-			successMessages('Size Option Successfuly added !');
 		}
 		setQty('');
 		setPrice('');
 		setDiscount('');
-		setSize(false);
+		setSize('');
 		setOptions(newOptions);
 		setChoosenSizes(newChoosenSizes);
 	};
@@ -99,88 +125,96 @@ const Clothing = props => {
 		newChoosenColors.push(color);
 		setChoosenColors(newChoosenColors);
 		setChoosenSizes([]);
-		setColor(false);
+		setColor('');
 		props.setOptions(options);
 	};
 
 	const inputOnChange = e => {
-		if (parseInt(e.target.value) >= 0 && e.target.name !== 'discount') {
-			e.target.name === 'qty' && setQty(e.target.value);
-			e.target.name === 'aditionalPrice' && setPrice(e.target.value);
+		const name = e.target.name,
+			value = parseInt(e.target.value);
+		if (value >= 0 && name !== 'discount') {
+			name === 'qty' && setQty(value);
+			name === 'aditionalPrice' && setPrice(value);
 		}
-		if (
-			parseInt(e.target.value) >= 0 &&
-			parseInt(e.target.value) <= 99 &&
-			e.target.name === 'discount'
-		) {
-			setDiscount(e.target.value);
+		if (value >= 0 && value <= 99 && name === 'discount') {
+			setDiscount(value);
 		}
 	};
 
 	const setFeaturedPicture = (name, file) => setSinglePicture(file);
 
 	const allSizesSelectedChange = bool => {
+		const newChooseColors = [...choosenColors];
 		if (bool) {
-			const newChooseColors = [...choosenColors];
 			newChooseColors.push(color);
 			setChoosenColors(newChooseColors);
-			setColor(false);
+			setColor('');
 		}
 		setAllSizesSelected(bool);
 	};
 
 	const colorChange = color => {
-		if (options.length > 0) {
-			const newChoosenSizes = [];
-			options.forEach(
-				option =>
-					option.color === color &&
-					option.options.forEach(opt => newChoosenSizes.push(opt.size))
-			);
-			setChoosenSizes(newChoosenSizes);
-		}
 		setColor(color);
 	};
 
-	const failedMessages = message => {
-		setFailedMessage(message);
-		setTimeout(() => setFailedMessage(false), 4000);
+	const choosenSizesHelper = () => {
+		const newChoosenSizes = [];
+		options.forEach(
+			option =>
+				option.color === color &&
+				option.options.forEach(opt => newChoosenSizes.push(opt.size))
+		);
+		setChoosenSizes(newChoosenSizes);
 	};
 
-	const successMessages = message => {
-		setSuccessMessage(message);
-		setTimeout(() => setSuccessMessage(false), 4000);
+	const removeSizeOption = (e, colorIndex, sizeIndex) => {
+		e.preventDefault();
+		const newOptions = [...options],
+			newChoosenColors = [...choosenColors],
+			choosenColorIndex = newChoosenColors.findIndex(
+				color => newOptions[colorIndex].color === color
+			);
+		if (choosenColorIndex !== -1) {
+			newChoosenColors.splice(choosenColorIndex, 1);
+		}
+		newOptions[colorIndex].options.splice(sizeIndex, 1);
+		if (newOptions[colorIndex].options.length === 0) {
+			newOptions.splice(colorIndex, 1);
+		}
+		setChoosenColors(newChoosenColors);
+		choosenSizesHelper();
+		setOptions(newOptions);
+		props.changeOptions(newOptions);
 	};
 
 	const perviewChangeInput = (e, colorOptionIndex, optionIndex) => {
-		const name = e.target.name;
-		const value = parseInt(e.target.value);
+		const name = e.target.name,
+			value = parseInt(e.target.value);
 		if (value >= 0 && name !== 'discount') {
-			const changedValue = options.map((option, index) => {
-				if (index === colorOptionIndex) {
-					const options = option.options.map((opt, index) =>
-						index === optionIndex ? { ...opt, [name]: value } : opt
-					);
-					const newOption = { ...option, options };
-					return newOption;
-				}
-				return option;
-			});
-			setOptions(changedValue);
+			helperPerviewChangeInput(name, value, colorOptionIndex, optionIndex);
 		}
 		if (value >= 0 && value <= 99 && name === 'discount') {
-			const changedValue = options.map((option, index) => {
-				if (index === colorOptionIndex) {
-					const options = option.options.map((opt, index) =>
-						index === optionIndex ? { ...opt, [name]: value } : opt
-					);
-					const newOption = { ...option, options };
-					return newOption;
-				}
-				return option;
-			});
-			setOptions(changedValue);
+			helperPerviewChangeInput(name, value, colorOptionIndex, optionIndex);
 		}
+	};
+
+	const helperPerviewChangeInput = (
+		name,
+		value,
+		colorOptionIndex,
+		optionIndex
+	) => {
+		const changedValue = options.map((option, index) => {
+			if (index === colorOptionIndex) {
+				const options = option.options.map((opt, index) =>
+					index === optionIndex ? { ...opt, [name]: value } : opt
+				);
+				const newOption = { ...option, options };
+				return newOption;
+			}
+			return option;
+		});
+		setOptions(changedValue);
 	};
 
 	const changeOptionPicture = (file, index) => {
@@ -201,43 +235,9 @@ const Clothing = props => {
 		setOptions(changedOptionPictures);
 	};
 
-	const removeColorOption = (e, index) => {
-		e.persist();
-		const newOptions = [...options];
-		if (newOptions[index].color === color) {
-			setChoosenSizes([]);
-			setAllSizesSelected(false);
-			setShowImagesChooser(true);
-		}
-		newOptions.splice(index, 1);
-		setOptions(newOptions);
-	};
-
-	const removeSizeOption = async (e, colorIndex, sizeIndex) => {
-		e.persist();
-		const newOptions = [...options];
-		const newChoosenColors = [...choosenColors];
-		const choosenColorIndex = newChoosenColors.findIndex(
-			color => newOptions[colorIndex].color === color
-		);
-		if (choosenColorIndex !== -1) {
-			newChoosenColors.splice(choosenColorIndex, 1);
-		}
-		newOptions[colorIndex].options.splice(sizeIndex, 1);
-		await setOptions(newOptions);
-		if (color === newOptions[colorIndex].color) {
-			const newChoosenSizes = [];
-			options.forEach(
-				option =>
-					option.color === color &&
-					option.options.forEach(opt => newChoosenSizes.push(opt.size))
-			);
-			setChoosenSizes(newChoosenSizes);
-		}
-		setChoosenColors(newChoosenColors);
-		if (newOptions[colorIndex].options.length === 0) {
-			removeColorOption(e, colorIndex);
-		}
+	const failedMessages = message => {
+		setFailedMessage(message);
+		setTimeout(() => setFailedMessage(false), 4000);
 	};
 
 	return (
@@ -245,7 +245,6 @@ const Clothing = props => {
 			{failedMessage && (
 				<ResponseMessage message={failedMessage} ClassName="Danger" />
 			)}
-			{successMessage && <ResponseMessage message={successMessage} />}
 			<div className="row m-0">
 				<div className="col-sm-6">
 					<label className="">Select Color</label>
@@ -319,10 +318,8 @@ const Clothing = props => {
 						<UploadPictures name="multyPictures" change={setMultyPicture} />
 					</React.Fragment>
 				)}
-				{!successMessage && !failedMessage && (
-					<button
-						type="submit"
-						className="btn btn-primary mt-4 d-block">
+				{!failedMessage && (
+					<button type="submit" className="btn btn-primary mt-4 d-block">
 						Add Option
 					</button>
 				)}
@@ -337,27 +334,32 @@ const Clothing = props => {
 							className="mt-5">
 							Color:{' '}
 							<span style={{ marginRight: '5px', marginLeft: '5px' }}>
-								{option.color}
+								{' '}
+								{option.color}{' '}
 							</span>
 							<span
 								style={{
 									width: '20px',
 									height: '20px',
-									background: `${option.color.toLowerCase()}`,
+									background: `${option.color && option.color.toLowerCase()}`,
 									display: 'inline-block',
 									marginRight: '10px',
 									marginLeft: '5px',
 									borderRadius: '50% '
 								}}
 							/>
-							<button
-								className="btn btn-danger btn-sm"
-								style={{ pointerEvents: 'all' }}
-								type="button"
-								onClick={e => removeColorOption(e, index)}>
-								Delete Color Option
-							</button>
 						</label>
+						{errors[index] && errors[index].color && (
+							<div
+								style={{
+									width: ' 100%',
+									marginTop: '0.25rem',
+									fontSize: '80%',
+									color: '#dc3545'
+								}}>
+								{errors[index].color}
+							</div>
+						)}
 						{option.options.map((opt, i) => (
 							<div
 								className="form-group row m-0 mb-4"
@@ -377,7 +379,7 @@ const Clothing = props => {
 								</div>
 								<LoginRegisterInputs
 									formBox="col-sm-6 mt-3 mb-3"
-									label={'Aditional Price'}
+									label="Aditional Price"
 									type="number"
 									name="aditionalPrice"
 									placeholder="Enter Aditional Price"
@@ -386,11 +388,16 @@ const Clothing = props => {
 									invalidFeedback="invalid-feedback"
 									value={opt.aditionalPrice}
 									min="0"
+									error={
+										errors[index] && errors[index].options
+											? errors[index].options[i].aditionalPrice
+											: ''
+									}
 									onChange={e => perviewChangeInput(e, index, i)}
 								/>
 								<LoginRegisterInputs
 									formBox="col-sm-6 mt-3 mb-3"
-									label={'Discount'}
+									label="Discount"
 									type="number"
 									name="discount"
 									placeholder="Enter Discount"
@@ -399,6 +406,11 @@ const Clothing = props => {
 									invalidFeedback="invalid-feedback"
 									value={opt.discount}
 									min="0"
+									error={
+										errors[index] && errors[index].options
+											? errors[index].options[i].discount
+											: ''
+									}
 									onChange={e => perviewChangeInput(e, index, i)}
 								/>
 								<LoginRegisterInputs
@@ -412,6 +424,11 @@ const Clothing = props => {
 									invalidFeedback="invalid-feedback"
 									value={opt.quantity}
 									min="1"
+									error={
+										errors[index] && errors[index].options
+											? errors[index].options[i].quantity
+											: ''
+									}
 									onChange={e => perviewChangeInput(e, index, i)}
 								/>
 								<LoginRegisterInputs
@@ -424,6 +441,11 @@ const Clothing = props => {
 									invalidInput="invalid"
 									invalidFeedback="invalid-feedback"
 									value={opt.size}
+									error={
+										errors[index] && errors[index].options
+											? errors[index].options[i].size
+											: ''
+									}
 									onChange={() => {}}
 									disabled={true}
 								/>
@@ -438,6 +460,17 @@ const Clothing = props => {
 									predefinedPicture={option.featuredPicture}
 									index={index}
 								/>
+								{errors[index] && errors[index].featuredPicture && (
+									<div
+										style={{
+											width: ' 100%',
+											marginTop: '0.25rem',
+											fontSize: '80%',
+											color: '#dc3545'
+										}}>
+										{errors[index].featuredPicture}
+									</div>
+								)}
 							</div>
 							<div className="col-12 mb-3">
 								<label className="d-block">Feature Option Pictures</label>
@@ -447,11 +480,22 @@ const Clothing = props => {
 									index={index}
 									predefinedPictures={option.pictures}
 								/>
+								{errors[index] && errors[index].pictures && (
+									<div
+										style={{
+											width: ' 100%',
+											marginTop: '0.25rem',
+											fontSize: '80%',
+											color: '#dc3545'
+										}}>
+										{errors[index].pictures}
+									</div>
+								)}
 							</div>
 						</div>
 					</React.Fragment>
 				))}
-				{options.length > 0 && !failedMessage && !successMessage && (
+				{options.length > 0 && !failedMessage && (
 					<button
 						type="button"
 						className="btn btn-primary mt-4 d-block"
