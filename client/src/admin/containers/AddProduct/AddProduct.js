@@ -40,10 +40,14 @@ const AddProduct = props => {
 		price: '',
 		year: '',
 		brand: '',
-		category: ''
+		category: '',
+		optionsDiscount: ''
 	});
 	const [errors, setErrors] = useState({ name: '', price: '', year: '' });
 	const [published, setPublished] = useState(false);
+	const [featured, setFeatured] = useState(false);
+	const [dailyOffer, setDailyOffer] = useState(false);
+	const [weeklyOffer, setWeeklyOffer] = useState(false);
 	const [subcategories, setSubcategories] = useState([]);
 	const [options, setOptions] = useState([]);
 	const [smallDesc, setSmallDesc] = useState('');
@@ -64,12 +68,17 @@ const AddProduct = props => {
 				price: data.price,
 				year: data.year,
 				brand: data.brand,
-				category: data.category
+				category: data.category,
+				optionsDiscount: data.optionsDiscount
 			});
-			setPublished(data.published);
+			setPublished(JSON.parse(data.published));
+			setFeatured(JSON.parse(data.featured));
+			setWeeklyOffer(JSON.parse(data.weeklyOffer));
+			setDailyOffer(JSON.parse(data.dailyOffer));
 			setSmallDesc(data.smalldescription);
 			setDesc(data.description);
 			setOptions(data.options);
+			setSubcategories(data.subcategories)
 		}
 		if (props.product.errors) {
 			setErrors(props.product.errors);
@@ -80,14 +89,23 @@ const AddProduct = props => {
 		setErrors({ ...errors, name: props.product.errorName });
 	}, [props.product.errorName]);
 
+	useEffect(() => {
+		if(dailyOffer) {
+			setWeeklyOffer(false);
+		}
+	}, [dailyOffer]);
+
+	useEffect(() => {
+		if(weeklyOffer) {
+			setDailyOffer(false);
+		}
+	}, [weeklyOffer]);
+
 	const inputChange = e => {
 		if (e.target.name === 'category') {
 			props.getBrandByCategory(e.target.value);
 			setOptions([]);
 			setSubcategories([]);
-		}
-		if (e.target.name === 'name') {
-			props.checkProductName(e.target.value);
 		}
 		setInputs({ ...inputs, [e.target.name]: e.target.value });
 	};
@@ -149,15 +167,21 @@ const AddProduct = props => {
 		}
 		pictures.forEach(async file => await formData.append('pictures', file));
 		formData.append('published', published);
+		formData.append('featured', featured);
+		formData.append('dailyOffer', dailyOffer);
+		formData.append('weeklyOffer', weeklyOffer);
 		formData.append('description', desc);
 		formData.append('smalldescription', smallDesc);
 		formData.append('subcategories', JSON.stringify(subcategories));
 		formData.append('options', JSON.stringify(newOptions));
 		const config = { headers: { 'content-type': 'multipart/form-data' } };
 		props.addProduct(formData, config);
-		setInputs({ name: '', price: '', year: '', brand: '', category: '' });
+		setInputs({ name: '', price: '', year: '', brand: '', category: '', optionsDiscount: '' });
 		setErrors({ name: '', price: '', year: '' });
 		setPublished(false);
+		setFeatured(false);
+		setDailyOffer(false);
+		setWeeklyOffer(false);
 		setSubcategories([]);
 		setOptions([]);
 		setSmallDesc('');
@@ -213,7 +237,7 @@ const AddProduct = props => {
 											error={errors[input.name]}
 										/>
 									))}
-									<div className="col-sm-6">
+									<div className="col-sm-3">
 										<ToggleSwitchButton
 											name="Publish"
 											value={published}
@@ -221,6 +245,50 @@ const AddProduct = props => {
 											error={errors['published']}
 										/>
 									</div>
+									<div className="col-sm-3">
+										<ToggleSwitchButton
+											name="Featured"
+											value={featured}
+											setValue={setFeatured}
+											error={errors['featured']}
+										/>
+									</div>
+								</div>
+								<div className="form-group row m-0 mb-2">
+									<div className="col-sm-6 mb-3">
+										<ToggleSwitchButton
+											name="Daily Offer"
+											value={dailyOffer}
+											setValue={setDailyOffer}
+											error={errors['dailyOffer']}
+										/>
+									</div>
+									<div className="col-sm-6">
+										<ToggleSwitchButton
+											name="Weekly Offer"
+											value={weeklyOffer}
+											setValue={setWeeklyOffer}
+											error={errors['weeklyOffer']}
+										/>
+									</div>
+									{(dailyOffer || weeklyOffer) && 
+									<div className='col-12 mb-3'>
+										<LoginRegisterInputs
+											label='Discount for all Product Options'
+											type='number'
+											name='optionsDiscount'
+											placeholder='Enter discount for all Product Options'
+											inputClass="w-100"
+											invalidInput="invalid"
+											invalidFeedback="invalid-feedback"
+											value={inputs['optionsDiscount']}
+											min='1'
+											max='95'
+											onChange={inputChange}
+											required={true}
+											error={errors['optionsDiscount']}
+										/>
+									</div>}
 								</div>
 								<EditorMNCE
 									change={setSmallDesc}
@@ -313,10 +381,13 @@ const AddProduct = props => {
 																	<label className="d-block">
 																		{subname.name}
 																	</label>
-																	{subname.subcategories.map((sub, index) => (
-																		<div className="checkbox" key={index}>
+																	{subname.subcategories.map((sub, i) => {
+																		const finIndex = subcategories.findIndex(subb => subb.subName === subname.name);
+																		const finSubIndex = finIndex !== -1 && subcategories[finIndex].sub.findIndex(subb => subb === sub);
+																		return <div className="checkbox" key={i}>
 																			<input
 																				type="checkbox"
+																				defaultChecked={finSubIndex !== false && finSubIndex !== -1 ? true : false}
 																				onChange={e =>
 																					subcategoriesChange(
 																						e,
@@ -327,7 +398,7 @@ const AddProduct = props => {
 																			/>
 																			<label>{sub}</label>
 																		</div>
-																	))}
+																	})}
 																</div>
 															))}
 														</React.Fragment>
@@ -368,7 +439,7 @@ const AddProduct = props => {
 										)}
 									</div>
 								</div>
-								{/* <div dangerouslySetInnerHTML={{ __html: smallDesc }} contentEditable={true}/> */}
+								{/* <div dangerouslySetInnerHTML={{ __html: desc }}/> */}
 								{options.length > 0 && showPerview && (
 									<button className="btn btn-primary" type="submit">
 										Add Product
@@ -404,7 +475,6 @@ const mapDispatchToProps = dispatch => {
 		getCategories: () => dispatch(actions.getAllCategories()),
 		getBrandByCategory: category =>
 			dispatch(actions.getBrandByCategory(category)),
-		checkProductName: name => dispatch(actions.checkProductName(name)),
 		addProduct: (formData, config) =>
 			dispatch(actions.addProduct(formData, config))
 	};

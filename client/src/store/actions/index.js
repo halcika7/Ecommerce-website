@@ -72,6 +72,6 @@ export {
 } from "./products/brand";
 
 export {
-  checkProductName,
-  addProduct
+  addProduct,
+  homePageProducts
 } from "./products/product";

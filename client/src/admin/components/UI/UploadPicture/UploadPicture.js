@@ -23,6 +23,7 @@ const UploadPicture = props => {
 		reader.readAsDataURL(file);
 
 		setUrl({ imgSrc: 'https://media3.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif' });
+		props.showButton && props.showButton(false);
 
 		reader.onloadend = e => {
 			setTimeout(() => {
@@ -35,6 +36,8 @@ const UploadPicture = props => {
 				}else {
 					props.change(name, file);
 				}
+
+				props.showButton && props.showButton(true);
 	
 			}, 4000);
 		};

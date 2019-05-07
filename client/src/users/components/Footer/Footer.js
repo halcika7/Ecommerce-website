@@ -27,7 +27,7 @@ const Footer = props => {
                     <div className="col-10 col-sm-6 col-lg-3">
                         <div className="store-img">
                             <Link to="/">
-                                <img src='' height="100" alt="" />
+                                <img src='https://halcikastore.herokuapp.com/img/halcstore.png' height="100" alt="" />
                             </Link>
                         </div>
                         <div className={classes.contactFooter}>

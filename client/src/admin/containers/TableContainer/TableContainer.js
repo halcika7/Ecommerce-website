@@ -24,7 +24,7 @@ const TableContainer = props => {
       setBrands(props.brand.allBrands);
       props.getBrands();
     }
-    if(props.Rrands === true) {
+    if(props.Roles === true) {
       setAllRoles(props.roles.Roles);
       props.getRoles();
     }
@@ -65,7 +65,7 @@ const TableContainer = props => {
     if (props.Icons === true) {
       setAllCategoryIcons(props.icons.allCategoryIcons);
     }
-  }, [props.brand.allBrands,props.permissions.allPermissions,props.roles.Roles,props.users.Users,props.categories.allCategories,props.icons.allCategoryIcon]);
+  }, [props.brand.allBrands,props.permissions.allPermissions,props.roles.Roles,props.users.Users,props.categories.allCategories,props.icons.allCategoryIcons]);
 
   useEffect(() => {
     if(props.Brands === true) {

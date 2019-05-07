@@ -11,6 +11,10 @@ exports.addProductValidation = async (data, files) => {
 	data.price = !isEmpty(data.price) ? data.price : '';
 	data.year = !isEmpty(data.year) ? data.year : '';
 	data.published = !isEmpty(data.published) ? data.published : '';
+	data.featured = !isEmpty(data.featured) ? data.featured : '';
+	data.dailyOffer = !isEmpty(data.dailyOffer) ? data.dailyOffer : '';
+	data.weeklyOffer = !isEmpty(data.weeklyOffer) ? data.weeklyOffer : '';
+	data.optionsDiscount = !isEmpty(data.optionsDiscount) ? data.optionsDiscount : '';
 	data.brand = !isEmpty(data.brand) ? data.brand : '';
 	data.category = !isEmpty(data.category) ? data.category : '';
 	data.description = !isEmpty(data.description) ? data.description : '';
@@ -26,7 +30,7 @@ exports.addProductValidation = async (data, files) => {
 		errors.name = 'Name must be between 2 and 30 characters';
 	}
 
-	if (Validator.isEmpty('')) {
+	if (Validator.isEmpty(data.name)) {
 		errors.name = 'Name field is required';
 	}
 
@@ -50,8 +54,38 @@ exports.addProductValidation = async (data, files) => {
 		errors.year = 'Year must be between 1000 and current year';
 	}
 
-	if (Validator.isEmpty(data.published)) {
+	if (Validator.isEmpty(data.published) || !Validator.isBoolean(data.published)) {
 		errors.published = 'Publish is required';
+	}
+
+	if (Validator.isEmpty(data.featured) || !Validator.isBoolean(data.featured)) {
+		errors.featured = 'Featured is required';
+	}
+
+	if (Validator.isEmpty(data.dailyOffer) || !Validator.isBoolean(data.dailyOffer)) {
+		errors.dailyOffer = 'Daily offer is required';
+	}
+
+	if (Validator.isEmpty(data.weeklyOffer) || !Validator.isBoolean(data.weeklyOffer)) {
+		errors.weeklyOffer = 'Weekly offer is required';
+	}
+
+	if (
+		(JSON.parse(data.weeklyOffer) === true || JSON.parse(data.dailyOffer) === true)
+		 && Validator.isEmpty(data.optionsDiscount)) {
+		errors.optionsDiscount = 'Options Discount is required';
+	}else if (
+		(JSON.parse(data.weeklyOffer) === true || JSON.parse(data.dailyOffer) === true)
+		 && !Validator.isNumeric(data.optionsDiscount)) {
+		errors.optionsDiscount = 'Options Discount needs to be a number';
+	}else if (
+		(JSON.parse(data.weeklyOffer) === true || JSON.parse(data.dailyOffer) === true)
+		 && (!Validator.isNumeric(data.optionsDiscount) || JSON.parse(data.optionsDiscount) <= 0)) {
+		errors.optionsDiscount = 'Options Discount needs to be greather than 0';
+	}else if (
+		(JSON.parse(data.weeklyOffer) === true || JSON.parse(data.dailyOffer) === true)
+		 && (!Validator.isNumeric(data.optionsDiscount) || JSON.parse(data.optionsDiscount) > 95)) {
+		errors.optionsDiscount = 'Options Discount needs to be less than 96';
 	}
 
 	if (Validator.isEmpty(data.brand)) {

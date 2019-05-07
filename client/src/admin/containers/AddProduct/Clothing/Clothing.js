@@ -21,6 +21,7 @@ const Clothing = props => {
 	const [choosenSizes, setChoosenSizes] = useState([]);
 	const [, setAllSizesSelected] = useState(false);
 
+	const [showButton, setShowButton] = useState(true);
 	const [failedMessage, setFailedMessage] = useState(false);
 	const [showImagesChooser, setShowImagesChooser] = useState(true);
 
@@ -180,6 +181,7 @@ const Clothing = props => {
 		newOptions[colorIndex].options.splice(sizeIndex, 1);
 		if (newOptions[colorIndex].options.length === 0) {
 			newOptions.splice(colorIndex, 1);
+			setColor('');
 		}
 		setChoosenColors(newChoosenColors);
 		choosenSizesHelper();
@@ -313,189 +315,208 @@ const Clothing = props => {
 				{showImagesChooser && (
 					<React.Fragment>
 						<label className="d-block">Featured Picture</label>
-						<UploadPicture name="featuredPicture" change={setFeaturedPicture} />
+						<UploadPicture name="featuredPicture" change={setFeaturedPicture} showButton={setShowButton}/>
 						<label className="d-block mt-4">Upload Pictures</label>
-						<UploadPictures name="multyPictures" change={setMultyPicture} />
+						<UploadPictures name="multyPictures" change={setMultyPicture} showButton={setShowButton}/>
 					</React.Fragment>
 				)}
-				{!failedMessage && (
+				{!failedMessage && showButton && (
 					<button type="submit" className="btn btn-primary mt-4 d-block">
 						Add Option
 					</button>
 				)}
-				{options.map((option, index) => (
-					<React.Fragment key={index}>
-						<label
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-								pointerEvents: 'none'
-							}}
-							className="mt-5">
-							Color:{' '}
-							<span style={{ marginRight: '5px', marginLeft: '5px' }}>
-								{' '}
-								{option.color}{' '}
-							</span>
-							<span
+				<div className="accordion" id="accordionExample">
+					{options.map((option, index) => (
+						<div key={index}>
+							<label
 								style={{
-									width: '20px',
-									height: '20px',
-									background: `${option.color && option.color.toLowerCase()}`,
-									display: 'inline-block',
-									marginRight: '10px',
-									marginLeft: '5px',
-									borderRadius: '50% '
+									display: 'inline-flex',
+									alignItems: 'center',
+									cursor: 'pointer'
 								}}
-							/>
-						</label>
-						{errors[index] && errors[index].color && (
-							<div
-								style={{
-									width: ' 100%',
-									marginTop: '0.25rem',
-									fontSize: '80%',
-									color: '#dc3545'
-								}}>
-								{errors[index].color}
-							</div>
-						)}
-						{option.options.map((opt, i) => (
-							<div
-								className="form-group row m-0 mb-4"
-								key={i}
-								style={{
-									border: '1px solid #4f9ae6',
-									padding: '10px',
-									borderRadius: '.4285rem'
-								}}>
-								<div className="col-12">
-									<button
-										className="btn btn-sm btn-danger"
-										type="button"
-										onClick={e => removeSizeOption(e, index, i)}>
-										Delete Size Option
-									</button>
+								className="mt-3 mb-3"
+								data-toggle="collapse"
+								data-target={'#' + index}
+								data-tooltip={`Click to show ${option.color &&
+									option.color.toLowerCase()} options`}>
+								Color:{' '}
+								<span style={{ marginRight: '5px', marginLeft: '5px' }}>
+									{' '}
+									{option.color}{' '}
+								</span>
+								<span
+									style={{
+										width: '20px',
+										height: '20px',
+										background: `${option.color && option.color.toLowerCase()}`,
+										display: 'inline-block',
+										marginRight: '10px',
+										marginLeft: '5px',
+										borderRadius: '50% '
+									}}
+								/>
+							</label>
+							{errors[index] && errors[index].color && (
+								<div
+									style={{
+										width: ' 100%',
+										marginTop: '0.25rem',
+										fontSize: '80%',
+										color: '#dc3545'
+									}}>
+									{errors[index].color}
 								</div>
-								<LoginRegisterInputs
-									formBox="col-sm-6 mt-3 mb-3"
-									label="Aditional Price"
-									type="number"
-									name="aditionalPrice"
-									placeholder="Enter Aditional Price"
-									inputClass="w-100"
-									invalidInput="invalid"
-									invalidFeedback="invalid-feedback"
-									value={opt.aditionalPrice}
-									min="0"
-									error={
-										errors[index] && errors[index].options
-											? errors[index].options[i].aditionalPrice
-											: ''
-									}
-									onChange={e => perviewChangeInput(e, index, i)}
-								/>
-								<LoginRegisterInputs
-									formBox="col-sm-6 mt-3 mb-3"
-									label="Discount"
-									type="number"
-									name="discount"
-									placeholder="Enter Discount"
-									inputClass="w-100"
-									invalidInput="invalid"
-									invalidFeedback="invalid-feedback"
-									value={opt.discount}
-									min="0"
-									error={
-										errors[index] && errors[index].options
-											? errors[index].options[i].discount
-											: ''
-									}
-									onChange={e => perviewChangeInput(e, index, i)}
-								/>
-								<LoginRegisterInputs
-									formBox="col-sm-6 mt-3 mb-3"
-									label={'Quantity'}
-									type="number"
-									name="quantity"
-									placeholder="Enter Quantity"
-									inputClass="w-100"
-									invalidInput="invalid"
-									invalidFeedback="invalid-feedback"
-									value={opt.quantity}
-									min="1"
-									error={
-										errors[index] && errors[index].options
-											? errors[index].options[i].quantity
-											: ''
-									}
-									onChange={e => perviewChangeInput(e, index, i)}
-								/>
-								<LoginRegisterInputs
-									formBox="col-sm-6 mt-3 mb-3"
-									label={'Size'}
-									type="text"
-									name="size"
-									placeholder="Enter Size"
-									inputClass="w-100"
-									invalidInput="invalid"
-									invalidFeedback="invalid-feedback"
-									value={opt.size}
-									error={
-										errors[index] && errors[index].options
-											? errors[index].options[i].size
-											: ''
-									}
-									onChange={() => {}}
-									disabled={true}
-								/>
-							</div>
-						))}
-						<div className="form-group row">
-							<div className="col-12 mb-3">
-								<label className="d-block">Feature Option Picture</label>
-								<UploadPicture
-									name="featuredPicture"
-									change={changeOptionPicture}
-									predefinedPicture={option.featuredPicture}
-									index={index}
-								/>
-								{errors[index] && errors[index].featuredPicture && (
+							)}
+							<div
+								id={index}
+								className="collapse"
+								data-parent="#accordionExample"
+								style={{
+									maxHeight: '400px',
+									overflowY: 'auto',
+									overflowX: 'hidden',
+									paddingRight: '10px'
+								}}>
+								{option.options.map((opt, i) => (
 									<div
+										className="form-group row m-0 mb-4"
+										key={i}
 										style={{
-											width: ' 100%',
-											marginTop: '0.25rem',
-											fontSize: '80%',
-											color: '#dc3545'
+											border: '1px solid #4f9ae6',
+											padding: '10px',
+											borderRadius: '.4285rem'
 										}}>
-										{errors[index].featuredPicture}
+										<div className="col-12">
+											<button
+												className="btn btn-sm btn-danger"
+												type="button"
+												onClick={e => removeSizeOption(e, index, i)}>
+												Delete Size Option
+											</button>
+										</div>
+										<LoginRegisterInputs
+											formBox="col-sm-6 mt-3 mb-3"
+											label="Aditional Price"
+											type="number"
+											name="aditionalPrice"
+											placeholder="Enter Aditional Price"
+											inputClass="w-100"
+											invalidInput="invalid"
+											invalidFeedback="invalid-feedback"
+											value={opt.aditionalPrice}
+											min="0"
+											error={
+												errors[index] && errors[index].options
+													? errors[index].options[i].aditionalPrice
+													: ''
+											}
+											onChange={e => perviewChangeInput(e, index, i)}
+										/>
+										<LoginRegisterInputs
+											formBox="col-sm-6 mt-3 mb-3"
+											label="Discount"
+											type="number"
+											name="discount"
+											placeholder="Enter Discount"
+											inputClass="w-100"
+											invalidInput="invalid"
+											invalidFeedback="invalid-feedback"
+											value={opt.discount}
+											min="0"
+											error={
+												errors[index] && errors[index].options
+													? errors[index].options[i].discount
+													: ''
+											}
+											onChange={e => perviewChangeInput(e, index, i)}
+										/>
+										<LoginRegisterInputs
+											formBox="col-sm-6 mt-3 mb-3"
+											label={'Quantity'}
+											type="number"
+											name="quantity"
+											placeholder="Enter Quantity"
+											inputClass="w-100"
+											invalidInput="invalid"
+											invalidFeedback="invalid-feedback"
+											value={opt.quantity}
+											min="1"
+											error={
+												errors[index] && errors[index].options
+													? errors[index].options[i].quantity
+													: ''
+											}
+											onChange={e => perviewChangeInput(e, index, i)}
+										/>
+										<LoginRegisterInputs
+											formBox="col-sm-6 mt-3 mb-3"
+											label={'Size'}
+											type="text"
+											name="size"
+											placeholder="Enter Size"
+											inputClass="w-100"
+											invalidInput="invalid"
+											invalidFeedback="invalid-feedback"
+											value={opt.size}
+											error={
+												errors[index] && errors[index].options
+													? errors[index].options[i].size
+													: ''
+											}
+											onChange={() => {}}
+											disabled={true}
+										/>
 									</div>
-								)}
-							</div>
-							<div className="col-12 mb-3">
-								<label className="d-block">Feature Option Pictures</label>
-								<UploadPictures
-									name="multyPictures"
-									change={changeOptionPictures}
-									index={index}
-									predefinedPictures={option.pictures}
-								/>
-								{errors[index] && errors[index].pictures && (
-									<div
-										style={{
-											width: ' 100%',
-											marginTop: '0.25rem',
-											fontSize: '80%',
-											color: '#dc3545'
-										}}>
-										{errors[index].pictures}
+								))}
+								<div className="form-group row">
+									<div className="col-12 mb-3">
+										<label className="d-block">Feature Option Picture</label>
+										<UploadPicture
+											name="featuredPicture"
+											change={changeOptionPicture}
+											predefinedPicture={option.featuredPicture}
+											showButton={setShowButton}
+											index={index}
+										/>
+										{errors[index] && errors[index].featuredPicture && (
+											<div
+												style={{
+													width: ' 100%',
+													marginTop: '0.25rem',
+													fontSize: '80%',
+													color: '#dc3545'
+												}}>
+												{errors[index].featuredPicture}
+											</div>
+										)}
 									</div>
-								)}
+									<div className="col-12 mb-3">
+										<label className="d-block">Feature Option Pictures</label>
+										<UploadPictures
+											name="multyPictures"
+											change={changeOptionPictures}
+											index={index}
+											showButton={setShowButton}
+											predefinedPictures={option.pictures}
+										/>
+										{errors[index] && errors[index].pictures && (
+											<div
+												style={{
+													width: ' 100%',
+													marginTop: '0.25rem',
+													fontSize: '80%',
+													color: '#dc3545'
+												}}>
+												{errors[index].pictures}
+											</div>
+										)}
+									</div>
+								</div>
 							</div>
 						</div>
-					</React.Fragment>
-				))}
-				{options.length > 0 && !failedMessage && (
+					))}
+				</div>
+				{options.length > 0 && !failedMessage && showButton && (
 					<button
 						type="button"
 						className="btn btn-primary mt-4 d-block"

@@ -51,7 +51,7 @@
     color: #fff;
     position: relative;
     margin: 15px 17px 0 0;
-    height: 100% !important;
+    /* height: 100% !important; */
     width: auto !important;
 }
 

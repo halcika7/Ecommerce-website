@@ -26,7 +26,13 @@ const ProductSchema = new Schema(
     },
     published: {
 			type: Boolean,
-			required: true
+      required: true,
+      default: false
+    },
+    featured: {
+      type: Boolean,
+      required: true,
+      default: false
     },
     description: {
 			type: String,
@@ -43,6 +49,29 @@ const ProductSchema = new Schema(
     options: {
       type: Array,
       required: true
+    },
+    dailyOffer: {
+      active: {
+        type: Boolean
+      },
+      expires: {
+        type: Date
+      },
+      discount: Number
+    },
+    weeklyOffer: {
+      active: {
+        type: Boolean
+      },
+      expires: {
+        type: Date
+      },
+      discount: Number
+    },
+    numberOfsales: {
+      type: Number,
+      required: true,
+      default: 0
     }
 	},
 	{

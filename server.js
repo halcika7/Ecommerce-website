@@ -13,6 +13,10 @@ const categoryIcon = require("./routes/products/categoryicon");
 const brand = require("./routes/products/brand");
 const product = require("./routes/products/product");
 
+// cron jobs
+const dailyOffer = require('./cronJobs/product').dailyOffer;
+const weeklyOffer = require('./cronJobs/product').weeklyOffer;
+
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -20,7 +24,6 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 
 const db = require("./config/keys").mongoURI;
-const names = [];
 
 mongoose
   .connect(db, { useNewUrlParser: true, useCreateIndex: true })

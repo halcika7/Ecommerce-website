@@ -44,6 +44,7 @@ const UploadPictures = props => {
 					loading:
 						'http://assets.motherjones.com/interactives/projects/features/koch-network/shell19/img/loading.gif'
 				});
+				props.showButton && props.showButton(false);
 				setTimeout(() => setPictureLoaded(newPictureLoaded), 300);
 			};
 
@@ -51,7 +52,7 @@ const UploadPictures = props => {
 				const newPictureLoade = newPictureLoaded.map(item => ({
 					file: item.file
 				}));
-				setTimeout(() => setPictureLoaded(newPictureLoade), 4000);
+				setTimeout(() => {props.showButton && props.showButton(true);setPictureLoaded(newPictureLoade);}, 4000);
 			};
 		}
 	};

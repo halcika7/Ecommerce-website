@@ -35,8 +35,6 @@ const multerPictures = multer({
 });
 
 // Product Routes
-router.post('/validateproductname', ProductController.validateName);
-
 router.post(
 	'/addproduct',
 	multerPictures.array('pictures'),
@@ -44,5 +42,7 @@ router.post(
 );
 
 router.get('/getproducts', ProductController.getProducts);
+
+router.get('/homepageproducts', ProductController.homePage);
 
 module.exports = router;
