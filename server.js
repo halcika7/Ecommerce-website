@@ -14,8 +14,7 @@ const brand = require("./routes/products/brand");
 const product = require("./routes/products/product");
 
 // cron jobs
-const dailyOffer = require('./cronJobs/product').dailyOffer;
-const weeklyOffer = require('./cronJobs/product').weeklyOffer;
+const dailyWeeklyOffer = require('./cronJobs/product').dailyWeeklyOffer;
 
 const app = express();
 

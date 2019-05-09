@@ -1,10 +1,20 @@
 const cron = require('node-cron');
 const productModel = require('../models/Product');
 
-exports.dailyOffer = cron.schedule('0 0 0 * * *', async () => {
-    await productModel.updateMany({ 'dailyOffer.active': true, 'dailyOffer.expires': { $lte: new Date() } }, { $unset: { dailyOffer: '' } });
-}).start();
+const date = new Date();
+date.setDate(date.getDate());
+date.setHours(0, 0, 0, 0);
 
-exports.weeklyOffer = cron.schedule('0 0 0 * * *', async () => {
-    await productModel.updateMany({ 'weeklyOffer.active': true, 'weeklyOffer.expires': { $lte: new Date() } }, { $unset: { weeklyOffer: '' } });
+exports.dailyWeeklyOffer = cron.schedule('0 0 0 * * *', async () => {
+    await productModel.updateMany({ 'dailyOffer.active': true, 'dailyOffer.expires': { $eq: date } }, 
+    { 
+        $set: { "options.$[].options.$[].discount" : 0 },
+        $unset: { dailyOffer: '' } 
+    });
+
+    await productModel.updateMany({ 'weeklyOffer.active': true, 'weeklyOffer.expires': { $eq: date } }, 
+    { 
+        $set: { "options.$[].options.$[].discount" : 0 },
+        $unset: { weeklyOffer: '' } 
+    });
 }).start();

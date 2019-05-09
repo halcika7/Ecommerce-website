@@ -38,15 +38,15 @@ exports.addProduct = async (req, res) => {
 		if (dailyOffer) {
 			offer.active = true;
 			date.setDate(date.getDate() + 1);
-			date.setHours(0, 0, 0);
+			date.setHours(0, 0, 0, 0);
 			offer.expires = date;
 			offer.discount = optionsDiscount;
 		}
 
 		if (weeklyOffer) {
 			offer.active = true;
-			date.setDate(new Date().getDate() + 7);
-			date.setHours(0, 0, 0);
+			date.setDate(date.getDate() + 7);
+			date.setHours(0, 0, 0, 0);
 			offer.expires = date;
 			offer.discount = optionsDiscount;
 		}
