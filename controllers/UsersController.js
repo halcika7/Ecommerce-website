@@ -64,7 +64,6 @@ exports.registerUser = async (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
-	console.log(req.body);
 	const { errors, isValid } = validateLoginInput(req.body);
 	if (!isValid) {
 		return res.json(errors);
@@ -112,6 +111,7 @@ exports.loginUser = async (req, res) => {
 		});
 	} catch (err) {
 		console.log(err);
+		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		return res.json({ failedMessage: err.message });
 	}
 };
@@ -144,7 +144,10 @@ exports.resetPassword = async (req, res) => {
 			successMessage: 'Password has bees successfuly changed'
 		});
 	} catch (err) {
-		return res.json({ failedMessage: err.message });
+		console.log(err);
+		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
+		else if(err.message) return res.json({ failedMessage: err.message });
+		else return res.json({ failedMessage: err });
 	}
 };
 
@@ -166,7 +169,7 @@ exports.updateProfilePicture = async (req, res) => {
 			{ username: req.body.username },
 			{ profilePicture: req.file.path }
 		);
-		const updatedUser = await UserModel.findOne({
+		await UserModel.findOne({
 			username: req.body.username
 		});
 		return res.json({

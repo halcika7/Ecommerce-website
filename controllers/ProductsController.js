@@ -9,6 +9,7 @@ exports.addProduct = async (req, res) => {
 		return res.json(errors);
 	}
 	try {
+		console.log(req);
 		const name = req.body.name;
 		const price = parseInt(req.body.price);
 		const year = parseInt(req.body.year);

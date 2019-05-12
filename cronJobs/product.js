@@ -6,6 +6,7 @@ date.setDate(date.getDate());
 date.setHours(0, 0, 0, 0);
 
 exports.dailyWeeklyOffer = cron.schedule('0 0 0 * * *', async () => {
+    console.log(date);
     await productModel.updateMany({ 'dailyOffer.active': true, 'dailyOffer.expires': { $eq: date } }, 
     { 
         $set: { "options.$[].options.$[].discount" : 0 },
