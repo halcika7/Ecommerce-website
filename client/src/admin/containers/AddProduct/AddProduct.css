@@ -116,6 +116,20 @@
     border: 2px solid #4f9ae6;
 }
 
+/* radio */
+
+.checkbox-wrapper .checkbox input[type="radio"] + label:before {
+    border-radius: 50%;
+}
+
+.checkbox-wrapper .checkbox label:after {
+    font-size: 13px;
+    left: 1px;
+    top: 1px;
+}
+
+/* radio */
+
 
 /* Custom Select */
 
@@ -148,3 +162,50 @@
 .css-1hwfws3 > div {
     color: #fff !important;
 }
+
+.adminAddProduct .option-color-wrapper {
+    display: inline-flex;
+    cursor: pointer;
+    align-items: center;
+}
+
+.adminAddProduct  .option-color {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin-right: 10px;
+    margin-left: 5px;
+    border-radius: 50%;
+}
+
+.adminAddProduct  .color-name {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.adminAddProduct .collapse {
+    max-height: 400px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding-right: 10px;
+}
+
+.adminAddProduct .options-error {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: #dc3545;
+}
+
+.adminAddProduct .form-group .col-md-2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+@media (max-width: 767px) {
+    .adminAddProduct .form-group .col-md-2 {
+        align-items: flex-start;
+    }
+  }

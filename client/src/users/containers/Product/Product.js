@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../../store/actions';
 import './Product.css';
 import FooterSocialIcons from '../../components/UI/FooterSocialIcons/FooterSocialIcons';
+import ImageGalery from '../../components/UI/ImageGalery/ImageGalery';
+import SelectProductOptions from './SelectProductOptions';
 
 const Product = props => {
+    const productID = props.match.params.id
+    ? props.match.params.id
+    : new URLSearchParams(props.location.search).get('id');
     const [socialIcons] = useState([
         {link: '/', icon: 'fab fa-facebook-f'},
         {link: '/', icon: 'fab fa-twitter'},
@@ -10,93 +17,128 @@ const Product = props => {
         {link: '/', icon: 'fab fa-pinterest'},
         {link: '/', icon: 'fab fa-dribbble'},
         {link: '/', icon: 'fab fa-google'}
-    ])
+    ]);
+
+    const [product, setProduct] = useState({});
+    const [colors, setColors] = useState([]);
+    const [sizes, setSizes] = useState([]);
+    const [choosenColor, setChoosenColor] = useState('');
+    const [choosenSize, setChoosenSize] = useState('');
+
+    const [optionPictures, setOptionPictures] = useState(0);
+
+    const [aditionalPrice, setAditionalPrice] = useState(0);
+    const [discount, setDiscount] = useState(0);
+
+    const [firstIndex, setFirstIndex] = useState(0);
+    const [secondIndex, setSecondIndex] = useState(0);
+
+    useEffect(() => {
+        props.getProduct(productID);
+    }, []);
+    
+	// useEffect(() => {
+	// 	props.getProduct(productID);
+    // }, [props.location.search, props.match.params]);
+
+    useEffect(() => {
+        setProduct({ ...props.product.singleProduct });
+    }, [props.product.singleProduct]);
+
+    useEffect(() => {
+        if(Object.keys(product).length > 0) {
+            setOptions();
+        }
+    }, [product]);
+
+    useEffect(() => {
+        if(choosenColor) {
+            const newSizes = [];
+            product.options.forEach(option => 
+                option.color === choosenColor && option.options.forEach(opt => opt.quantity > 0 && newSizes.push(opt.size))
+            )
+            const findColorOptionIndex = product.options.findIndex(option => option.color === choosenColor);
+            setFirstIndex(findColorOptionIndex);
+            setOptionPictures(findColorOptionIndex);
+            setSizes(newSizes);
+        }
+    }, [choosenColor]);
+
+    useEffect(() => {
+        if(choosenSize) {
+            const sizeIndex = product.options[firstIndex].options.findIndex(option => option.size === choosenSize);
+            setAditionalPrice(product.options[firstIndex].options[sizeIndex].aditionalPrice)
+            setDiscount(product.options[firstIndex].options[sizeIndex].discount)
+        }
+    }, [choosenSize]);
+
+    const setOptions = () => {
+        const subCatName = product.subcategories[0].sub;
+        const category = product.category;
+        if(subCatName !== 'Projection Screens' && subCatName !== 'Games') {
+            const newColors = product.options.map(option => option.color);
+            setColors(newColors);
+        }
+    }
+
     return (
         <React.Fragment>
-            <div class="container-fluid breadcrum">
-                <div class="container">
-                    <div class="inline-nav">
+            <div className="container-fluid breadcrum">
+                <div className="container">
+                    <div className="inline-nav">
                         <a href="{{route('home.index')}}">Home</a>
-                        <i class="fas fa-long-arrow-alt-right"></i>
-                        <a class="prevent-click" href="/">Shop</a>
-                        <i class="fas fa-long-arrow-alt-right"></i>
-                        <a class="prevent-click" href="/">Product_slug</a>
+                        <i className="fas fa-long-arrow-alt-right"></i>
+                        <a className="prevent-click" href="/">Shop</a>
+                        <i className="fas fa-long-arrow-alt-right"></i>
+                        <a className="prevent-click" href="/">{product.name}</a>
                     </div>
                 </div>
             </div>
 
-            <div class="container images">
-                <div class="row">
-                    <div class="col-md-8 pictures">
-                        <img src="{{asset('/img/1.jpg')}}" alt="New Air Jordan Shoes" />
-                        <img src="{{asset('/img/2.jpg')}}" alt="img/2.jpg" />
-                        <img src="{{asset('/img/3.jpg')}}" alt="img/3.jpg" />
-                        <img src="{{asset('/img/4.jpg')}}" alt="img/4.jpg" />
-                        <img src="{{asset('/img/5.jpg')}}" alt="img/5.jpg" />
-                        <img src="{{asset('/img/6.jpg')}}" alt="img/6.jpg" />
-                        <img src="{{asset('/img/1.jpg')}}" alt="New Air Jordan Shoes" />
-                        <img src="{{asset('/img/2.jpg')}}" alt="img/2.jpg" />
-                        <img src="{{asset('/img/3.jpg')}}" alt="img/3.jpg" />
-                        <img src="{{asset('/img/4.jpg')}}" alt="img/4.jpg" />
-                        <img src="{{asset('/img/5.jpg')}}" alt="img/5.jpg" />
-                        <img src="{{asset('/img/6.jpg')}}" alt="img/6.jpg" />
-                    </div>
-                    <div class="col-md-4 about-product">
-                        <h4>Product name</h4>
-                        <p class="category-name">Categoy</p>
-                        <div class="review">
-                            <div class="stars">
-                                <div class="star">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
+            <div className="container images">
+                <div className="row">
+                    {Object.keys(product).length > 0 && props.show && <ImageGalery images={product.options[optionPictures].pictures} />}
+                    <div className="col-md-4 about-product">
+                        <h4>{product.name}</h4>
+                        <p className="category-name">{product.category}</p>
+                        <div className="review">
+                            <div className="stars">
+                                <div className="star">
+                                    <i className="fa fa-star"></i>
+                                    <i className="fa fa-star"></i>
+                                    <i className="fa fa-star"></i>
+                                    <i className="fa fa-star"></i>
+                                    <i className="fa fa-star"></i>
                                 </div>
                                 <p>(34)reviews</p>
                             </div>
-                            <span class="availability">
-                                <span class="badge">In Stock</span>
+                            <span className="availability">
+                                <span className="badge">In Stock</span>
                             </span>
                         </div>
+                        <p className="new-price">
+                            Starting from: ${product.price}
+                        </p>
+                        <p className="description">
+                            {product.smalldescription}
+                        </p>
+                        <p className="sku"><span>SKU: </span>Lorem ipsum</p>
+                        {discount !== 0 && <p>Discount: {discount}%</p>}
 
-                        <p class="old-price">
-                            $2,999.00
-                        </p>
-                        <p class="new-price">
-                            $1,999.00
-                        </p>
-                        <p class="description">
-                            Vivamus in tempor eros. Phasellus rhoncus in nunc sit amet mattis. Integer in ipsum vestibulum, molestie arcu ac, efficitur tellus. Phasellus id vulputate erat.
-                        </p>
-                        <p class="sku"><span>SKU: </span>Lorem ipsum</p>
-
-                        <div class="options">
-                            <div class="row">
-                                <div class="col-6">
-                                    <select name="color" id="colors">
-                                        <option value="white">White</option>
-                                        <option value="white">White</option>
-                                        <option value="white">White</option>
-                                        <option value="white">White</option>
-                                        <option value="white">White</option>
-                                    </select>
-                                </div>
-                                <div class="col-6">
-                                    <select name="color" id="colors">
-                                        <option value="white">White</option>
-                                    </select>
-                                </div>
+                        <div className="options">
+                            <div className="row">
+                                {colors.length > 0 && <SelectProductOptions color={true} values={colors} change={setChoosenColor} value={choosenColor} label='Choose Product'/>}
+                                {sizes.length > 0 && <SelectProductOptions size={true} values={sizes} change={setChoosenSize} value={choosenSize} label='Choose Product Size'/>}
                             </div>
                         </div>
-                        <div class="buttons">
-                            <button href="#" class="btn btn-default add-to-cart">
-                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                        <div className="buttons">
+                            <button href="#" className="btn btn-default add-to-cart">
+                                <i className="fas fa-shopping-cart"></i> Add to Cart
                             </button>
-                            <div class="row ">
-                                <a href="/" class="compare"><i class="fas fa-sync"></i> Compare</a>
-                                <button href="#" class="wishlist">
-                                    <i class="fas fa-heart"></i> Wishlist
+                            <div className="row ">
+                                <a href="/" className="compare"><i className="fas fa-sync"></i> Compare</a>
+                                <button href="#" className="wishlist">
+                                    <i className="fas fa-heart"></i> Wishlist
                                 </button>
                             </div>
                         </div>
@@ -105,321 +147,317 @@ const Product = props => {
                 </div>
             </div>
 
-            <div class="container-fluid about-product">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">Description</a>
+            <div className="container-fluid about-product">
+                <ul className="nav nav-tabs" id="myTab" role="tablist">
+                    <li className="nav-item">
+                        <a className="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">Description</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="true">Reviews</a>
+                    <li className="nav-item">
+                        <a className="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="true">Reviews</a>
                     </li>
                 </ul>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col description">
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laborum eaque, adipisci optio voluptatum est possimus error et quod, voluptates placeat alias illum vel quia iste commodi ratione ipsa nihil eveniet.
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi numquam, odio alias aliquam id odit reprehenderit deleniti quas    
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque neque reprehenderit beatae repellendus incidunt at, ipsum eum adipisci. Atque minima natus, ipsa quo repudiandae animi obcaecati iste mollitia? Impedit cupiditate velit blanditiis. Doloremque aut culpa mollitia id aspernatur placeat consequatur voluptates maxime odio rerum quis, ex sequi, libero rem nam asperiores animi repellendus! Nihil delectus assumenda perferendis libero doloribus enim qui, sit illum labore deserunt, nobis quas quia, ut ullam nulla inventore animi facilis doloremque. Ex quia molestiae corporis corrupti a modi repudiandae fuga dolorem accusantium aut debitis neque excepturi quaerat, vero accusamus! Rem quasi eaque, eligendi iste eius temporibus.
-                                </div>
+                <div className="tab-content" id="myTabContent">
+                    <div className="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col description" dangerouslySetInnerHTML={{ __html: product.description }} />
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade show active" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                        <div class="container">
-                            <div class="row" style={{ margin: '0px' }}>
-                                <div class="col-md-6">
+                    <div className="tab-pane fade show active" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                        <div className="container">
+                            <div className="row" style={{ margin: '0px' }}>
+                                <div className="col-md-6">
                                     <h5>Based on 3 reviews</h5>
-                                    <div class="review-score">
-                                        <div class="scores">
-                                            <p class="number">4.3</p>
-                                            <p class="text">Average Score</p>
+                                    <div className="review-score">
+                                        <div className="scores">
+                                            <p className="number">4.3</p>
+                                            <p className="text">Average Score</p>
                                         </div>
                                     </div>
                                     <ul>
-                                        <li class="five-star">
-                                            <span class="stars">
-                                                <i class="fa fa-star"></i>
+                                        <li className="five-star">
+                                            <span className="stars">
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             </span>
-                                            <span class="number-star" id="number-star-5">
+                                            <span className="number-star" id="number-star-5">
                                                 3
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar" style={{width: '85%'}}></div>
+                                                <div className="progress">
+                                                    <div className="progress-bar" role="progressbar" style={{width: '85%'}}></div>
                                                 </div>
                                             </span>
                                         </li>
-                                        <li class="four-star">
-                                            <span class="stars">
-                                                <i class="fa fa-star"></i>
+                                        <li className="four-star">
+                                            <span className="stars">
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             </span>
-                                            <span class="number-star">
+                                            <span className="number-star">
                                                 4
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar" style={{width: '25%'}}></div>
+                                                <div className="progress">
+                                                    <div className="progress-bar" role="progressbar" style={{width: '25%'}}></div>
                                                 </div>
                                             </span>
                                         </li>
-                                        <li class="three-star">
-                                            <span class="stars">
-                                                <i class="fa fa-star"></i>
+                                        <li className="three-star">
+                                            <span className="stars">
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             </span>
-                                            <span class="number-star">
+                                            <span className="number-star">
                                                 3
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar" style={{width: '25%'}}></div>
+                                                <div className="progress">
+                                                    <div className="progress-bar" role="progressbar" style={{width: '25%'}}></div>
                                                 </div>
                                             </span>
                                         </li>
-                                        <li class="two-star">
-                                            <span class="stars">
-                                                <i class="fa fa-star"></i>
+                                        <li className="two-star">
+                                            <span className="stars">
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             </span>
-                                            <span class="number-star">
+                                            <span className="number-star">
                                                 2
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar" style={{width: '25%'}}></div>
+                                                <div className="progress">
+                                                    <div className="progress-bar" role="progressbar" style={{width: '25%'}}></div>
                                                 </div>
                                             </span>
                                         </li>
-                                        <li class="one-star">
-                                            <span class="stars">
-                                                <i class="fa fa-star"></i>
+                                        <li className="one-star">
+                                            <span className="stars">
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             
-                                                <i class="fa fa-star"></i>
+                                                <i className="fa fa-star"></i>
                                             </span>
-                                            <span class="number-star">
+                                            <span className="number-star">
                                                 0
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar" style={{width: '25%'}}></div>
+                                                <div className="progress">
+                                                    <div className="progress-bar" role="progressbar" style={{width: '25%'}}></div>
                                                 </div>
                                             </span>
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="col-md-6">
+                                <div className="col-md-6">
                                     <h5>Add a review</h5>
-                                    <div class="user-rating">
+                                    <div className="user-rating">
                                         Your rating
-                                        <div class="stars-rating">
-                                            <span class="star" data-value="1">
-                                                <i class="fa fa-star"></i>
+                                        <div className="stars-rating">
+                                            <span className="star" data-value="1">
+                                                <i className="fa fa-star"></i>
                                             </span>
-                                            <span class="star" data-value="2">
-                                                <i class="fa fa-star"></i>
+                                            <span className="star" data-value="2">
+                                                <i className="fa fa-star"></i>
                                             </span>
-                                            <span class="star" data-value="3">
-                                                <i class="fa fa-star"></i>
+                                            <span className="star" data-value="3">
+                                                <i className="fa fa-star"></i>
                                             </span>
-                                            <span class="star" data-value="4">
-                                                <i class="fa fa-star"></i>
+                                            <span className="star" data-value="4">
+                                                <i className="fa fa-star"></i>
                                             </span>
-                                            <span class="star" data-value="5">
-                                                <i class="fa fa-star"></i>
+                                            <span className="star" data-value="5">
+                                                <i className="fa fa-star"></i>
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="user-comment">
-                                        <div class="wrapper-content-editabel">
-                                            <div class="contenteditable" contenteditable="true" tabindex="5"></div>
-                                            <div class="navbar-content-editable"></div>
+                                    <div className="user-comment">
+                                        <div className="wrapper-content-editabel">
+                                            <div className="contenteditable" contentEditable="true" tabIndex="5"></div>
+                                            <div className="navbar-content-editable"></div>
                                         </div>
-                                        <button class="btn btn-default add-comment">Add Review</button>
+                                        <button className="btn btn-default add-comment">Add Review</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row comments" style={{ margin: '0px' }}>
-                                <div class="blog-post-comments">
-                                    <ol class="blog-comment">
-                                        <li class="comment">
-                                            <div class="comment-author">
+                            <div className="row comments" style={{ margin: '0px' }}>
+                                <div className="blog-post-comments">
+                                    <ol className="blog-comment">
+                                        <li className="comment">
+                                            <div className="comment-author">
                                                 <img src="{{asset('/img/profile5.jpg')}}" alt="" />
                                             </div>
-                                            <div class="comment-text">
-                                                <div class="top">
+                                            <div className="comment-text">
+                                                <div className="top">
                                                     <span><b>Ali Tufan: </b></span>
-                                                    <button class="like"><i class="fas fa-thumbs-up"></i>(50)</button>
-                                                    <button class="dislike"><i class="fas fa-thumbs-down"></i>(4)</button>
-                                                    <div class="stars-rating five-stars">
-                                                        <span class="star">
-                                                            <i class="fa fa-star"></i>
+                                                    <button className="like"><i className="fas fa-thumbs-up"></i>(50)</button>
+                                                    <button className="dislike"><i className="fas fa-thumbs-down"></i>(4)</button>
+                                                    <div className="stars-rating five-stars">
+                                                        <span className="star">
+                                                            <i className="fa fa-star"></i>
                                                         </span>
-                                                        <span class="star">
-                                                            <i class="fa fa-star"></i>
+                                                        <span className="star">
+                                                            <i className="fa fa-star"></i>
                                                         </span>
-                                                        <span class="star">
-                                                            <i class="fa fa-star"></i>
+                                                        <span className="star">
+                                                            <i className="fa fa-star"></i>
                                                         </span>
-                                                        <span class="star">
-                                                            <i class="fa fa-star"></i>
+                                                        <span className="star">
+                                                            <i className="fa fa-star"></i>
                                                         </span>
-                                                        <span class="star">
-                                                            <i class="fa fa-star"></i>
+                                                        <span className="star">
+                                                            <i className="fa fa-star"></i>
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <div class="text">
+                                                <div className="text">
                                                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leaLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard took a galley of type and <b>Halcika</b>
                                                     scrambled it to make a type specimen book. It has survived not only five centuries, but also the leaLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leaLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the lea</p>
                                                 </div>
-                                                <div class="comment-footer">
+                                                <div className="comment-footer">
                                                     <button>
-                                                        <i class="fas fa-reply"></i> Reply
+                                                        <i className="fas fa-reply"></i> Reply
                                                     </button>
                                                     <button>
-                                                        <i class="far fa-edit"></i>
+                                                        <i className="far fa-edit"></i>
                                                     </button>
                                                     <button>
-                                                        <i class="fas fa-trash-alt"></i>
+                                                        <i className="fas fa-trash-alt"></i>
                                                     </button>
                                                     <button>
                                                         Replays(10)
                                                     </button>
                                                 </div>
                                             </div>
-                                            <li class="comment comment-sub">
-                                                <div class="comment-author">
+                                            {/* <li className="comment comment-sub">
+                                                <div className="comment-author">
                                                     <img src="{{asset('/img/profile5.jpg')}}" alt="" />
                                                 </div>
-                                                <div class="comment-text">
-                                                    <div class="top">
+                                                <div className="comment-text">
+                                                    <div className="top">
                                                         <span><b>Ali Tufan: </b></span>
-                                                        <button class="like"><i class="fas fa-thumbs-up"></i>(50)</button>
-                                                        <button class="dislike"><i class="fas fa-thumbs-down"></i>(4)</button>
+                                                        <button className="like"><i className="fas fa-thumbs-up"></i>(50)</button>
+                                                        <button className="dislike"><i className="fas fa-thumbs-down"></i>(4)</button>
                                                     </div>
-                                                    <div class="text">
+                                                    <div className="text">
                                                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the lea</p>
                                                     </div>
-                                                    <div class="comment-footer">
+                                                    <div className="comment-footer">
                                                         <button>
-                                                            <i class="fas fa-reply"></i> Reply
+                                                            <i className="fas fa-reply"></i> Reply
                                                         </button>
                                                         <button>
-                                                            <i class="far fa-edit"></i>
+                                                            <i className="far fa-edit"></i>
                                                         </button>
                                                         <button>
-                                                            <i class="fas fa-trash-alt"></i>
+                                                            <i className="fas fa-trash-alt"></i>
                                                         </button>
                                                         <button>
                                                             Replays(10)
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <li class="comment comment-sub-sub">
-                                                    <div class="comment-author">
+                                                {/* <li className="comment comment-sub-sub">
+                                                    <div className="comment-author">
                                                         <img src="{{asset('/img/profile5.jpg')}}" alt="" />
                                                     </div>
-                                                    <div class="comment-text">
-                                                        <div class="top">
+                                                    <div className="comment-text">
+                                                        <div className="top">
                                                             <span><b>Ali Tufan: </b></span>
-                                                            <button class="like"><i class="fas fa-thumbs-up"></i>(50)</button>
-                                                            <button class="dislike"><i class="fas fa-thumbs-down"></i>(4)</button>
+                                                            <button className="like"><i className="fas fa-thumbs-up"></i>(50)</button>
+                                                            <button className="dislike"><i className="fas fa-thumbs-down"></i>(4)</button>
                                                         </div>
-                                                        <div class="text">
+                                                        <div className="text">
                                                             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the lea</p>
                                                         </div>
                                                     </div>
-                                                </li>
-                                            </li>
+                                                </li> */}
+                                            {/* </li> */} 
                                         </li>
-                                        <li class="comment">
-                                            <div class="comment-author">
+                                        <li className="comment">
+                                            <div className="comment-author">
                                                 <img src="{{asset('/img/profile5.jpg')}}" alt="" />
                                             </div>
-                                            <div class="comment-text">
-                                                <div class="top">
+                                            <div className="comment-text">
+                                                <div className="top">
                                                     <span><b>Ali Tufan: </b></span>
-                                                    <button class="like"><i class="fas fa-thumbs-up"></i>(50)</button>
-                                                    <button class="dislike"><i class="fas fa-thumbs-down"></i>(4)</button>
-                                                    <div class="stars-rating five-stars">
-                                                        <span class="star">
-                                                            <i class="fa fa-star"></i>
+                                                    <button className="like"><i className="fas fa-thumbs-up"></i>(50)</button>
+                                                    <button className="dislike"><i className="fas fa-thumbs-down"></i>(4)</button>
+                                                    <div className="stars-rating five-stars">
+                                                        <span className="star">
+                                                            <i className="fa fa-star"></i>
                                                         </span>
-                                                        <span class="star">
-                                                            <i class="fa fa-star"></i>
+                                                        <span className="star">
+                                                            <i className="fa fa-star"></i>
                                                         </span>
-                                                        <span class="star">
-                                                            <i class="fa fa-star"></i>
+                                                        <span className="star">
+                                                            <i className="fa fa-star"></i>
                                                         </span>
-                                                        <span class="star">
-                                                            <i class="fa fa-star"></i>
+                                                        <span className="star">
+                                                            <i className="fa fa-star"></i>
                                                         </span>
-                                                        <span class="star">
-                                                            <i class="fa fa-star"></i>
+                                                        <span className="star">
+                                                            <i className="fa fa-star"></i>
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <div class="text">
+                                                <div className="text">
                                                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the lea</p>
                                                 </div>
                                             </div>
                                         </li>
-                                        <li class="comment">
-                                            <div class="comment-author">
+                                        <li className="comment">
+                                            <div className="comment-author">
                                                 <img src="{{asset('/img/profile5.jpg')}}" alt="" />
                                             </div>
-                                            <div class="comment-text">
-                                                <div class="top">
+                                            <div className="comment-text">
+                                                <div className="top">
                                                     <span><b>Ali Tufan: </b></span>
-                                                    <button class="like"><i class="fas fa-thumbs-up"></i>(50)</button>
-                                                    <button class="dislike"><i class="fas fa-thumbs-down"></i>(4)</button>
-                                                    <div class="stars-rating five-stars">
-                                                        <span class="star">
-                                                            <i class="fa fa-star"></i>
+                                                    <button className="like"><i className="fas fa-thumbs-up"></i>(50)</button>
+                                                    <button className="dislike"><i className="fas fa-thumbs-down"></i>(4)</button>
+                                                    <div className="stars-rating five-stars">
+                                                        <span className="star">
+                                                            <i className="fa fa-star"></i>
                                                         </span>
-                                                        <span class="star">
-                                                            <i class="fa fa-star"></i>
+                                                        <span className="star">
+                                                            <i className="fa fa-star"></i>
                                                         </span>
-                                                        <span class="star">
-                                                            <i class="fa fa-star"></i>
+                                                        <span className="star">
+                                                            <i className="fa fa-star"></i>
                                                         </span>
-                                                        <span class="star">
-                                                            <i class="fa fa-star"></i>
+                                                        <span className="star">
+                                                            <i className="fa fa-star"></i>
                                                         </span>
-                                                        <span class="star">
-                                                            <i class="fa fa-star"></i>
+                                                        <span className="star">
+                                                            <i className="fa fa-star"></i>
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <div class="text">
+                                                <div className="text">
                                                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the lea</p>
                                                 </div>
                                             </div>
@@ -435,4 +473,16 @@ const Product = props => {
     );
 }
 
-export default Product;
+const mapStateToProps = state => {
+    return {
+        product: state.product
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        getProduct: (id) => dispatch(actions.getProduct(id))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Product);

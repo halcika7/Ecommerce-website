@@ -31,7 +31,7 @@ const UploadPicture = props => {
 					imgSrc: reader.result
 				});
 
-				if(props.predefinedPicture) {
+				if(props.predefinedPicture || props.predefinedPicture === '') {
 					props.change(file, props.index);
 				}else {
 					props.change(name, file);

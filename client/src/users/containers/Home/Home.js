@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
 import OwlCarousel from 'react-owl-carousel';
@@ -54,7 +55,7 @@ const Home = props => {
 										<p>{product.smalldescription}</p>
 										<div className="row">
 											<div className="old-price">${product.price}</div>
-											<a href="#">Shop Now</a>
+											<Link to={`/product?id=${product._id}`}>Shop Now</Link>
 										</div>
 									</div>
 									<div className="right-part">
@@ -80,7 +81,7 @@ const Home = props => {
 						<div className="col-md-8">
 							<div className="banner-box one-half">
 								<div className="inner-box">
-									<a href="#" title="">
+									<a href="/" title="">
 										<img
 											src="https://grandetest.com/theme/techno-html/images/banner_boxes/home-01.jpg"
 											alt=""
@@ -88,7 +89,7 @@ const Home = props => {
 									</a>
 								</div>
 								<div className="inner-box">
-									<a href="#" title="">
+									<a href="/" title="">
 										<img
 											src="https://grandetest.com/theme/techno-html/images/banner_boxes/home-05.jpg"
 											alt=""
@@ -99,7 +100,7 @@ const Home = props => {
 							</div>
 							<div className="banner-box">
 								<div className="inner-box">
-									<a href="#" title="">
+									<a href="/" title="">
 										<img
 											src="https://grandetest.com/theme/techno-html/images/banner_boxes/home-04.jpg"
 											alt=""
@@ -111,7 +112,7 @@ const Home = props => {
 						<div className="col-md-4">
 							<div className="banner-box">
 								<div className="inner-box">
-									<a href="#" title="">
+									<a href="/" title="">
 										<img
 											src="https://grandetest.com/theme/techno-html/images/banner_boxes/home-03.jpg"
 											alt=""
@@ -143,25 +144,25 @@ const Home = props => {
 												animateIn={true}
 												nav={true}>
 												{product.options.map((opt, index) => (
-													<a href="#" key={index}>
+													<Link to={`/product?id=${product._id}`} key={index}>
 														<img
 															className="owl-lazy"
 															data-src={opt.featuredPicture}
 															alt=""
 														/>
-													</a>
+													</Link>
 												))}
 											</OwlCarousel>
 										) : (
-											<a href="#" key={index}>
+											<Link to={`/product?id=${product._id}`} key={index}>
 												<img src={product.options[0].featuredPicture} alt="" />
-											</a>
+											</Link>
 										)}
 										<div className="box-content">
 											<p>{product.category}</p>
-											<a href="#">
+											<Link to={`/product?id=${product._id}`}>
 												<p>{product.name}</p>
-											</a>
+											</Link>
 											<p className="new-price">
 												Starting from: ${product.price}
 											</p>
@@ -215,25 +216,25 @@ const Home = props => {
 												animateIn={true}
 												nav={true}>
 												{product.options.map((opt, index) => (
-													<a href="#" key={index}>
+													<Link to={`/product?id=${product._id}`} key={index}>
 														<img
 															className="owl-lazy"
 															data-src={opt.featuredPicture}
 															alt=""
 														/>
-													</a>
+													</Link>
 												))}
 											</OwlCarousel>
 										) : (
-											<a href="#" key={index}>
+											<Link to={`/product?id=${product._id}`} key={index}>
 												<img src={product.options[0].featuredPicture} alt="" />
-											</a>
+											</Link>
 										)}
 										<div className="box-content">
 											<p>{product.category}</p>
-											<a href="#">
+											<Link to={`/product?id=${product._id}`}>
 												<p>{product.name}</p>
-											</a>
+											</Link>
 											<p className="new-price">
 												Starting from: ${product.price}
 											</p>
@@ -287,25 +288,25 @@ const Home = props => {
 												dots={false}
 												nav={true}>
 												{product.options.map((opt, index) => (
-													<a href="#" key={index}>
+													<Link to={`/product?id=${product._id}`} key={index}>
 														<img
 															className="owl-lazy"
 															data-src={opt.featuredPicture}
 															alt=""
 														/>
-													</a>
+													</Link>
 												))}
 											</OwlCarousel>
 										) : (
-											<a href="#" key={index}>
+											<Link to={`/product?id=${product._id}`} key={index}>
 												<img src={product.options[0].featuredPicture} alt="" />
-											</a>
+											</Link>
 										)}
 										<div className="box-content">
 											<p>{product.category}</p>
-											<a href="#">
+											<Link to={`/product?id=${product._id}`}>
 												<p>{product.name}</p>
-											</a>
+											</Link>
 											<p className="new-price">
 												Starting from: ${product.price}
 											</p>
@@ -384,9 +385,9 @@ const Home = props => {
 									<div className="product-box style1">
 										<div className="imagebox style1">
 											<div className="box-image">
-												<a href="#" key={index}>
+												<Link to={`/product?id=${product._id}`} >
 													<img src={product.options[0].featuredPicture} alt="" />
-												</a>
+												</Link>
 												<p className="options-length">
 													{product.options.length}{' '}
 													{product.options.length === 1 ? 'option' : 'options'}
@@ -398,9 +399,9 @@ const Home = props => {
 													{product.category}
 												</div>
 												<div className="product-name">
-													<a href="#" title="">
+													<Link to={`/product?id=${product._id}`}>
 														{product.name}
-													</a>
+													</Link>
 												</div>
 												<div className="price">
 													<span className="regular">From: ${product.price}</span>
@@ -411,12 +412,12 @@ const Home = props => {
 									<div className="product-box style1">
 										<div className="imagebox style1">
 											<div className="box-image">
-												<a href="#" title="">
+												<Link to={`/product?id=${bottomColumn[index]._id}`}>
 													<img
 														src={bottomColumn[index].options[0].featuredPicture}
 														alt=""
 													/>
-												</a>
+												</Link>
 												<p className="options-length">
 													{product.options.length}{' '}
 													{product.options.length === 1 ? 'option' : 'options'}
@@ -428,9 +429,9 @@ const Home = props => {
 													{bottomColumn[index].category}
 												</div>
 												<div className="product-name">
-													<a href="#" title="">
+													<Link to={`/product?id=${bottomColumn[index]._id}`}>
 														{bottomColumn[index].name}
-													</a>
+													</Link>
 												</div>
 												<div className="price">
 													<span className="regular">From: ${bottomColumn[index].price}</span>

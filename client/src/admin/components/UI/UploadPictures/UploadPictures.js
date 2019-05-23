@@ -7,9 +7,10 @@ const UploadPictures = props => {
 
 	useEffect(() => {
 		if (props.predefinedPictures) {
-			helperMethod(props.predefinedPictures);
+			props.predefinedPictures.length > 0 &&
+				helperMethod(props.predefinedPictures);
 		}
-	}, [props.predefinedPictures]);
+	}, []);
 
 	useEffect(() => {
 		if (props.predefinedPictures) {
@@ -52,7 +53,10 @@ const UploadPictures = props => {
 				const newPictureLoade = newPictureLoaded.map(item => ({
 					file: item.file
 				}));
-				setTimeout(() => {props.showButton && props.showButton(true);setPictureLoaded(newPictureLoade);}, 4000);
+				setTimeout(() => {
+					props.showButton && props.showButton(true);
+					setPictureLoaded(newPictureLoade);
+				}, 4000);
 			};
 		}
 	};
@@ -84,7 +88,7 @@ const UploadPictures = props => {
 				<div className={classes.imagesPerview}>
 					{pictureLoaded.map((picture, index) => (
 						<div className={classes.perviewImage} key={index}>
-							{(!picture.loading && pictures.length > 1)&& (
+							{!picture.loading && pictures.length > 1 && (
 								<div
 									className={classes.imageCancle}
 									onClick={e => deleteButton(e, index)}>

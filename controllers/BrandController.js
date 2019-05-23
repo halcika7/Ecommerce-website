@@ -1,6 +1,5 @@
 const ObjectId = require("mongoose").Types.ObjectId;
 const BrandModel = require("../models/Brand");
-const BrandModelCategories = require("../models/Brand");
 
 exports.addBrand = async (req, res) => {
   const name = req.body.name,

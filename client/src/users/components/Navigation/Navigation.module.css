@@ -2,7 +2,6 @@
 .dropdownNavCategoryLinks:hover{
     width: 100% !important;
     display: inline-flex;
-    white-space: nowrap;
     cursor: pointer;
     margin: 0;
     position: relative;
@@ -117,7 +116,6 @@
 }
 
 .links a{
-white-space: nowrap;
 color: black;
 font-size: 12px;
 margin: 0;
@@ -161,13 +159,11 @@ padding: 0;
 .dropdownLinks ul li{
 list-style: none;
 padding: 11px 0px 11px 0px !important;
-white-space: nowrap;
 }
 
 .dropdownLinks ul li a.dropdownLink{
 display: block;
 color: black;
-white-space: nowrap;
 cursor: pointer;
 font-size: 12px;
 width: 100% !important;
@@ -918,7 +914,6 @@ box-shadow: none;
     width: 100%;
     padding: 15px;
     font-size: 100%;
-    white-space: nowrap;
     border-bottom: 1px solid rgb(0, 0, 0, 0.1);
 }
 
@@ -932,7 +927,7 @@ font-size: 18px;
 
 .dropdown .dropdownMenu ul li:hover{
     color: rgb(234, 120, 50);
-    cursor: pointer;
+    cursor: pointer; 
 }
 
 .dropdown .dropdownMenu ul li:hover > .megamenu1{
@@ -978,16 +973,13 @@ padding-top: 0px;
 padding: 15px;
 color: rgb(234, 120, 50);
 cursor: default;
-width: 100%;
+/* width: 100%; */
 }
 
 .megamenu1 .row ul li {
     font-size: 12px;
-    width: 0px;
     padding: 0px;
     border-bottom: none;
-    word-wrap: none;
-    white-space: nowrap;
     cursor: default;
 }
 
@@ -1208,7 +1200,7 @@ color: rgb(234, 120, 50) !important;
     }
 
     .dropdown .dropdownMenu ul li:hover > .megamenu1 {
-        width: 758px;
+        width: 750px;
     }
 }
 

@@ -10,6 +10,7 @@ const initialState = {
 	newProducts: [],
 	bannerProducts: [],
 	ourProducts: [],
+	singleProduct: {},
 	errors: false,
 	errorName: '',
 	successMessage: false,
@@ -40,6 +41,7 @@ const reducer = (state = initialState, action) => {
 			newProducts: action.newProducts ? action.newProducts : [],
 			bannerProducts: action.bannerProducts ? action.bannerProducts : [],
 			ourProducts: action.ourProducts ? action.ourProducts : [],
+			singleProduct: action.singleProduct ? action.singleProduct : {},
 			dailyOffer: action.dailyOffer ? action.dailyOffer : [],
 			weeklyOffer: action.weeklyOffer ? action.weeklyOffer : []
 		}),

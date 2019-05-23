@@ -9,32 +9,32 @@ exports.addProduct = async (req, res) => {
 		return res.json(errors);
 	}
 	try {
-		console.log(req);
-		const name = req.body.name;
-		const price = parseInt(req.body.price);
-		const year = parseInt(req.body.year);
-		const brand = req.body.brand;
-		const category = req.body.category;
-		const optionsDiscount = parseInt(req.body.optionsDiscount);
-		const published = JSON.parse(req.body.published);
-		const featured = JSON.parse(req.body.featured);
-		const dailyOffer = JSON.parse(req.body.dailyOffer);
-		const weeklyOffer = JSON.parse(req.body.weeklyOffer);
-		const description = req.body.description;
-		const smalldescription = req.body.smalldescription.replace(
-			/<\/?[^>]+(>|$)/g,
-			''
-		);
-		const subcategories = JSON.parse(req.body.subcategories);
-		const rawOptions = JSON.parse(req.body.options);
-		const files = req.files.map(file => ({
-			...file,
-			destination: `public/images/products/${req.body.name}`,
-			path: `public/images/products/${req.body.name}/${file.filename}`
-		}));
-		const offer = {};
-
-		const date = new Date();
+		const name = req.body.name,
+			price = parseInt(req.body.price),
+			year = parseInt(req.body.year),
+			brand = req.body.brand,
+			category = req.body.category,
+			optionsDiscount = parseInt(req.body.optionsDiscount),
+			published = JSON.parse(req.body.published),
+			featured = JSON.parse(req.body.featured),
+			dailyOffer = JSON.parse(req.body.dailyOffer),
+			weeklyOffer = JSON.parse(req.body.weeklyOffer),
+			description = req.body.description,
+			smalldescription = req.body.smalldescription.replace(
+				/<\/?[^>]+(>|$)/g,
+				''
+			),
+			bluetooth = req.body.bluetooth,
+			wifi = req.body.wifi,
+			subcategories = JSON.parse(req.body.subcategories),
+			rawOptions = JSON.parse(req.body.options),
+			files = req.files.map(file => ({
+				...file,
+				destination: `public/images/products/${req.body.name}`,
+				path: `public/images/products/${req.body.name}/${file.filename}`
+			})),
+			offer = {},
+			date = new Date();
 
 		if (dailyOffer) {
 			offer.active = true;
@@ -52,19 +52,20 @@ exports.addProduct = async (req, res) => {
 			offer.discount = optionsDiscount;
 		}
 
-		await req.files.forEach(async file => {
-			await fs.move(
-				file.path,
-				`public/images/products/${req.body.name}/${file.filename}`
-			);
-		});
+		await req.files.forEach(
+			async file =>
+				await fs.move(
+					file.path,
+					`public/images/products/${req.body.name}/${file.filename}`
+				)
+		);
 
 		const options = rawOptions.map(opt => {
 			const newOpt = { ...opt };
 			if (dailyOffer || weeklyOffer) {
 				newOpt.options = newOpt.options.map(opt => ({
 					...opt,
-					dicount: optionsDiscount
+					discount: optionsDiscount
 				}));
 			}
 			const findFeaturedPictureInFiles = files.find(
@@ -92,6 +93,8 @@ exports.addProduct = async (req, res) => {
 			featured,
 			description,
 			smalldescription,
+			wifi,
+			bluetooth,
 			subcategories,
 			options,
 			weeklyOffer: weeklyOffer ? offer : null,
@@ -165,7 +168,7 @@ exports.homePage = async (req, res) => {
 			{ $sample: { size: 4 } }
 		]);
 		const newProducts = await ProductModel.aggregate([
-			{ $match: { published: true, dailyOffer: null, weeklyOffer: null} },
+			{ $match: { published: true, dailyOffer: null, weeklyOffer: null } },
 			{ $sort: { createdAt: -1 } },
 			{ $sample: { size: 8 } }
 		]);
@@ -207,6 +210,21 @@ exports.homePage = async (req, res) => {
 			dailyOffer,
 			weeklyOffer
 		});
+	} catch (err) {
+		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
+		return res.json({ failedMessage: err.message });
+	}
+};
+
+exports.getProduct = async (req, res) => {
+	try {
+		const product = await ProductModel.findById(req.query.id).select(
+			'subcategories options numberOfsales name price year brand category description smalldescription createdAt updatedAt wifi bluetooth -_id'
+		);
+		if (!product) {
+			return res.json({ failedMessage: 'Product not found with provided ID' });
+		}
+		return res.json({ product });
 	} catch (err) {
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		return res.json({ failedMessage: err.message });

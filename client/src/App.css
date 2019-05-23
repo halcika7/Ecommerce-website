@@ -9130,12 +9130,30 @@ body {
   border: none;
 }
 
-.AdminProfile input:focus {
+.AdminProfile textarea,
+.AdminProfile textarea:active,
+.AdminProfile textarea:enabled,
+.AdminProfile textarea:focus {
+  padding: 10px 18px;
+  border-color: #4f9ae6;
+  border-radius: .4285rem;
+  font-size: .75rem;
+  transition: color .3s ease-in-out,border-color .3s ease-in-out,background-color .3s ease-in-out;
+  background-color: transparent !important;
+  background: none !important;
+  color: hsla(0,0%,100%,.8);
+  resize: none;
+  height: 100px;
+}
+
+.AdminProfile input:focus,
+.AdminProfile textarea:focus {
   border-color: #3358f4;
   background-color: initial;
   -webkit-box-shadow: none;
           box-shadow: none;
   color: hsla(0,0%,100%,.8);
+  outline: none;
 }
 
 td, th{
@@ -9149,7 +9167,9 @@ ul{
 input.invalid,
 input:invalid,
 select.invalid,
-select:invalid {
+select:invalid,
+textarea.invalid,
+textarea:invalid {
     border-color: #f92400 !important;
     background: transparent;
 }

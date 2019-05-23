@@ -42,6 +42,12 @@ const ProductSchema = new Schema(
 			type: String,
 			required: true
     },
+    wifi: {
+      type: Boolean
+    },
+    bluetooth: {
+      type: Boolean
+    },
     subcategories: {
       type: Array,
       required: true

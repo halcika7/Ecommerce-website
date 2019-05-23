@@ -12,6 +12,7 @@ const productsCategory = require("./routes/products/category");
 const categoryIcon = require("./routes/products/categoryicon");
 const brand = require("./routes/products/brand");
 const product = require("./routes/products/product");
+const answers = require("./routes/answers/answers");
 
 // cron jobs
 const dailyWeeklyOffer = require('./cronJobs/product').dailyWeeklyOffer;
@@ -41,6 +42,7 @@ app.use("/products/category", productsCategory);
 app.use("/products/categoryicon", categoryIcon);
 app.use("/products/brand", brand);
 app.use("/products/product", product);
+app.use("/answers/", answers);
 
 const port = process.env.PORT || 5000;
 

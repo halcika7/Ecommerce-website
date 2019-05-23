@@ -52,6 +52,7 @@ const Brand = lazy(() => import("./admin/containers/Brand/Brand"));
 const Permission = lazy(() =>
   import("./admin/containers/Permission/Permission")
 );
+const AnswersToQuestions = lazy(() => import('./admin/containers/AnswersToQuestions/AnswersToQuestions'));
 
 const TableContainer = lazy(() =>
   import("./admin/containers/TableContainer/TableContainer")
@@ -111,6 +112,8 @@ const App = props => {
                     </Suspense>
                   )}
                 />
+
+                {/* user */}
                 <Route
                   path="/admindashboard/profile"
                   exact
@@ -157,6 +160,7 @@ const App = props => {
                   )}
                 />
 
+                {/* products */}
                 <Route
                   path="/admindashboard/products"
                   exact
@@ -176,6 +180,7 @@ const App = props => {
                   )}
                 />
 
+                {/* permissions */}
                 <Route
                   path="/admindashboard/add-permission"
                   exact
@@ -195,6 +200,7 @@ const App = props => {
                   )}
                 />
 
+                {/* roles */}
                 <Route
                   path="/admindashboard/add-role"
                   exact
@@ -232,6 +238,7 @@ const App = props => {
                   )}
                 />
 
+                {/* category icons */}
                 <Route
                   path="/admindashboard/add-category"
                   exact
@@ -268,7 +275,8 @@ const App = props => {
                     </Suspense>
                   )}
                 />
-
+                
+                {/* Category Icon */}
                 <Route
                   path="/admindashboard/add-category-icon"
                   exact
@@ -306,6 +314,7 @@ const App = props => {
                   )}
                 />
 
+                {/* Brand */}
                 <Route
                   path="/admindashboard/add-brand"
                   exact
@@ -339,6 +348,16 @@ const App = props => {
                   render={props => (
                     <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <TableContainer Brands={true} />
+                    </Suspense>
+                  )}
+                />
+                {/* Answers */}
+                <Route
+                  path="/admindashboard/add-answer"
+                  exact
+                  render={props => (
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
+                      <AnswersToQuestions addanswer={true}/>
                     </Suspense>
                   )}
                 />
@@ -378,7 +397,7 @@ const App = props => {
               exact
               render={() => (
                 <Suspense fallback={<Spinner />}>
-                  <Product />
+                  <Product {...props} show={state.show}/>
                 </Suspense>
               )}
             />

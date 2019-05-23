@@ -73,5 +73,11 @@ export {
 
 export {
   addProduct,
-  homePageProducts
+  homePageProducts,
+  getProduct
 } from "./products/product";
+
+export {
+  addAnswer,
+  getAllAnswers
+} from "./answers/answers";

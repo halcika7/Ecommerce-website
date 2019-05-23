@@ -10,6 +10,7 @@ import categoryReducer from "./products/category";
 import categoryIconReducer from "./products/categoryicon";
 import brandReducer from "./products/brand";
 import productReducer from "./products/product";
+import answerReducer from "./answers/answers";
 
 export const combinedReducers = combineReducers({
   login: loginReducer,
@@ -22,5 +23,6 @@ export const combinedReducers = combineReducers({
   category: categoryReducer,
   categoryIcon: categoryIconReducer,
   brand: brandReducer,
-  product: productReducer
+  product: productReducer,
+  answers: answerReducer
 });

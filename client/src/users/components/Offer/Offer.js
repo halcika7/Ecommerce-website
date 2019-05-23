@@ -1,12 +1,14 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import OfferProduct from './OfferProduct';
 import OwlCarousel from 'react-owl-carousel';
 
 const Offer = props => {
+
     return(
         <div className="container-fluid weekly-offer">
             <div className="container weekly-offer">
                 <h5>{props.label}</h5>
+                {props.products.length > 0 && 
                 <OwlCarousel
                     className="owl-carousel-2 owl-carousel owl-theme owl-loaded owl-drag"
                     margin={10}
@@ -15,8 +17,10 @@ const Offer = props => {
                     items={1}
                     lazyLoad={true}
                     navText={['<span></span>', '<span></span>']}>
-                    {props.products.map((product, index) => <OfferProduct key={index} product={product} weekly={props.weekly ? props.weekly : false}/>)}
-                </OwlCarousel>
+                    {props.products.map((product, index) => 
+                        <OfferProduct key={index} product={product} weekly={props.weekly ? props.weekly : false}/>
+                    )}
+                </OwlCarousel>}
             </div>
         </div>
     );

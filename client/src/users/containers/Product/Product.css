@@ -7,21 +7,21 @@
   }
   
   .container.images .row .pictures{
-    margin: 0 auto;
-    padding: 0;
-    column-count: 3;
-    column-gap: 16px;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-auto-rows: 5px;
+    height: auto;
   }
-  
-  .container.images .row .pictures > img{
+
+  .container.images .row .pictures .perviewImage {
+    grid-row-end: span 100;
+  }
+
+  .container.images .row .pictures img {
     width: 100%;
-    border: 2px solid #e5e5e5;
-    border-radius: 10px;
+    border: 1px solid #b2b2b2;
     cursor: pointer;
-    background: #fff;
-    padding: 1em;
-    margin: 0 0 1.5em;
-    break-inside: avoid-column;
   }
   
   .container-fluid.about-product{
@@ -162,11 +162,11 @@
     margin-bottom: 30px;
   }
   
-  .container.images .row .col-md-4.about-product .options .row .col-6{
+  .container.images .row .col-md-4.about-product .options .row > div{
     padding: 0;
   }
   
-  .container.images .row .col-md-4.about-product .options .row .col-6 > select{
+  .container.images .row .col-md-4.about-product .options .row > div > select{
     border-radius: 30px;
     border: none;
     height: 46px;
@@ -178,7 +178,7 @@
     color: #838383;
   }
   
-  .container.images .row .col-md-4.about-product .options .row .col-6 > select:focus{
+  .container.images .row .col-md-4.about-product .options .row > div > select:focus{
     outline: none;
   }
   
@@ -299,15 +299,6 @@
       font-size: 12px;
       padding: 12px 10px;
     }
-  
-    .container.images .row .pictures{
-      grid-template-columns: repeat(2,50%);
-    }
-    
-    .container.images .row .pictures > img:first-child{
-      grid-column-end: span 2;
-      grid-row-end: span 2;
-    }
   }
   
   .tab-pane .container .row .col-md-6 h5{
@@ -319,6 +310,10 @@
   
   .tab-pane .container .row .col{
     padding: 50px 20px;
+  }
+
+  .tab-pane .container .row .col p {
+    background: transparent !important;
   }
   
   .tab-pane .container .row .col-md-6 > .review-score{

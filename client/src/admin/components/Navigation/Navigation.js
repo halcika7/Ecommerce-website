@@ -167,6 +167,26 @@ const Navigation = props => {
                 </div>
               </div>
             </li>
+            <li>
+              <div className="btn-group-vertical d-flex ">
+                <a
+                  href="/"
+                  onClick={toggleActiveClass}
+                  className="dropdown-toggle-split"
+                >
+                  <i className="far fa-question-circle" />
+                  <p>Answers to visitor questions</p>
+                </a>
+                <div className={classes.DropDown + " " + classes.MaxHeight100}>
+                  <Link to="/admindashboard/add-answer">
+                    <p>Add Answer</p>
+                  </Link>
+                  <Link to="/admindashboard/all-answers">
+                    <p>All Answers</p>
+                  </Link>
+                </div>
+              </div>
+            </li>
           </ul>
         </div>
       </div>

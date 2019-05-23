@@ -52,3 +52,19 @@ export const homePageProducts = () => async dispatch => {
 		});
 	}
 };
+
+export const getProduct = id => async dispatch => {
+	dispatch({ type: actionTypes.PRODUCT_START });
+	const response = await axios.get('/products/product/getproduct?id=' + id);
+	if (response.data.failedMessage) {
+		dispatch({
+			type: actionTypes.PRODUCT_FAILED,
+			failedMessage: response.data.failedMessage
+		});
+	} else {
+		dispatch({
+			type: actionTypes.PRODUCT_SUCCESS,
+			singleProduct: response.data.product
+		});
+	}
+};

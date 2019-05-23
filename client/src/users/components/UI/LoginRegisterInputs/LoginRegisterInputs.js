@@ -17,9 +17,7 @@ const LoginRegisterInputs = ({
     disabled,
     onFocus,
     onKeyDown,
-    required,
-    max,
-    min
+    required
 }) => {
     return (
         <React.Fragment>
@@ -33,13 +31,11 @@ const LoginRegisterInputs = ({
                     className={classnames(inputClass ? inputClass : '', {
                         [invalidInput]: error
                     })}
-                    value={value}
+                    value={(type === 'number' && value <= 0) ? 0 : value}
                     onChange={onChange}
                     onKeyDown={onKeyDown}
                     onFocus={onFocus}
                     disabled={disabled}
-                    max={max ? max : null}
-                    min={min ? min : null}
                     required={required ? required : null}/>
 
                     {error && <div className={invalidFeedback}>{error}</div>}
@@ -52,13 +48,11 @@ const LoginRegisterInputs = ({
                     className={classnames(inputClass ? inputClass : '', {
                         [invalidInput]: error
                     })}
-                    value={value}
+                    value={(type === 'number' && value <= 0) ? 0 : value}
                     onChange={onChange}
                     onKeyDown={onKeyDown}
                     onFocus={onFocus}
                     disabled={disabled}
-                    min={min ? min : null}
-                    max={max ? max : null}
                     required={required ? required : null}/>
 
                     {error && <div className={invalidFeedback}>{error}</div>}

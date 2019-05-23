@@ -3,46 +3,24 @@ import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
 
 import './AddProduct.css';
-import Clothing from './Clothing/Clothing';
-import EditorMNCE from '../../components/UI/Editor/Editor';
+import Options from './Options/Options';
 import LoginRegisterInputs from '../../../users/components/UI/LoginRegisterInputs/LoginRegisterInputs';
 import ToggleSwitchButton from '../../components/UI/Buttons/ToggleSwitchButton';
 import ResponseMessage from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 import SmallSpinner from '../../../users/components/UI/SmallSpinner/SmallSpinner';
+import SelectCategory from './SelectCategory';
+import SelectSubcategory from './SelectSubcategory';
+import SelectBrand from './SelectBrand';
+import Editors from './Editors';
 
 const AddProduct = props => {
 	const [Inputs] = useState([
-		{
-			label: 'Name',
-			type: 'text',
-			name: 'name',
-			placeholder: 'Enter Product Name'
-		},
-		{
-			label: 'Price',
-			type: 'number',
-			name: 'price',
-			placeholder: 'Enter Product Price',
-			min: '0'
-		},
-		{
-			label: 'Release Year',
-			type: 'number',
-			name: 'year',
-			placeholder: 'Enter Release Year',
-			min: '1000',
-			max: new Date().getFullYear()
-		}
+		{ label: 'Name', type: 'text', name: 'name', placeholder: 'Enter Product Name' },
+		{ label: 'Price', type: 'number', name: 'price', placeholder: 'Enter Product Price' },
+		{ label: 'Release Year', type: 'number', name: 'year', placeholder: 'Enter Release Year' }
 	]);
 
-	const [inputs, setInputs] = useState({
-		name: '',
-		price: '',
-		year: '',
-		brand: '',
-		category: '',
-		optionsDiscount: ''
-	});
+	const [inputs, setInputs] = useState({ name: '', price: '', year: '', brand: '', category: '', optionsDiscount: '' });
 	const [errors, setErrors] = useState({ name: '', price: '', year: '' });
 	const [published, setPublished] = useState(false);
 	const [featured, setFeatured] = useState(false);
@@ -53,95 +31,66 @@ const AddProduct = props => {
 	const [smallDesc, setSmallDesc] = useState('');
 	const [desc, setDesc] = useState('');
 
-	const [showPerview, setShowPerview] = useState(false);
-	const [failedMessage, setFailedMessage] = useState(false);
+	const [isBluetooth, setIsBluetooth] = useState(false);
+	const [isWifi, setIsWifi] = useState(false);
 
-	useEffect(() => {
-		props.getCategories();
-	}, []);
+	const [showPerview, setShowPerview] = useState(false);
+
+	useEffect(() => { props.getCategories(); }, []);
 
 	useEffect(() => {
 		if (props.product.failedMessage || props.product.errors) {
-			const data = props.product.productData;
-			setInputs({
-				name: data.name,
-				price: data.price,
-				year: data.year,
-				brand: data.brand,
-				category: data.category,
-				optionsDiscount: data.optionsDiscount
-			});
-			setPublished(JSON.parse(data.published));
-			setFeatured(JSON.parse(data.featured));
-			setWeeklyOffer(JSON.parse(data.weeklyOffer));
-			setDailyOffer(JSON.parse(data.dailyOffer));
-			setSmallDesc(data.smalldescription);
-			setDesc(data.description);
-			setOptions(data.options);
-			setSubcategories(data.subcategories)
+			const { name, price, year, brand, category, optionsDiscount, published, featured, weeklyOffer, dailyOffer, smalldescription, description, options, subcategories } = props.product.productData;
+			setInputs({ name, price, year, brand, category, optionsDiscount });
+			setPublished(JSON.parse(published)); setFeatured(JSON.parse(featured)); setWeeklyOffer(JSON.parse(weeklyOffer)); setDailyOffer(JSON.parse(dailyOffer)); setSmallDesc(smalldescription); setDesc(description); setOptions(options);
+			setSubcategories(subcategories);
 		}
-		if (props.product.errors) {
-			setErrors(props.product.errors);
-		}
+		props.product.errors && setErrors(props.product.errors);
 	}, [props.product.errors, props.product.failedMessage]);
 
-	useEffect(() => {
-		setErrors({ ...errors, name: props.product.errorName });
-	}, [props.product.errorName]);
+	useEffect(() => { dailyOffer && setWeeklyOffer(false); }, [dailyOffer]);
 
-	useEffect(() => {
-		if(dailyOffer) {
-			setWeeklyOffer(false);
-		}
-	}, [dailyOffer]);
+	useEffect(() => { weeklyOffer && setDailyOffer(false); }, [weeklyOffer]);
 
-	useEffect(() => {
-		if(weeklyOffer) {
-			setDailyOffer(false);
-		}
-	}, [weeklyOffer]);
-
-	const inputChange = e => {
-		if (e.target.name === 'category') {
-			props.getBrandByCategory(e.target.value);
-			setOptions([]);
-			setSubcategories([]);
+	const inputChange = (e, value = null, inputName = null) => {
+		if (e === undefined) {
+			if (inputName === 'category') {
+				props.getBrandByCategory(value);
+				setOptions([]);
+				setSubcategories([]);
+				setInputs({ ...inputs, [inputName]: value, brand: '' });
+			}
+			inputName !== 'category' && setInputs({ ...inputs, [inputName]: value });
+			return;
 		}
 		setInputs({ ...inputs, [e.target.name]: e.target.value });
 	};
 
 	const subcategoriesChange = (e, subName, sub) => {
-		const newSubcategories = [...subcategories];
-		const findIndex = newSubcategories.findIndex(
-			cat => cat.subName === subName
-		);
-		const findSubName = newSubcategories.find(cat => cat.subName === subName);
-		if (e.target.checked) {
-			if (!findSubName && findIndex === -1) {
-				newSubcategories.push({ subName, sub: [sub] });
+		const newSubcategories = [...subcategories],
+			findIndex = newSubcategories.findIndex(cat => cat.subName === subName),
+			findSubName = newSubcategories.find(cat => cat.subName === subName);
+		if (inputs.category !== 'Electronics') {
+			if (e.target.checked) {
+				(!findSubName && findIndex === -1) && newSubcategories.push({ subName, sub: [sub] });
+				(findSubName && findIndex !== -1) && newSubcategories[findIndex].sub.push(sub);
 			} else {
-				newSubcategories[findIndex].sub.push(sub);
+				const findIndexSub = newSubcategories[findIndex].sub.findIndex(cat => cat === sub);
+				newSubcategories[findIndex].sub.splice(findIndexSub, 1);
+				newSubcategories[findIndex].sub.length === 0 && newSubcategories.splice(findIndex, 1);
 			}
 		} else {
-			const findIndexSub = newSubcategories[findIndex].sub.findIndex(
-				cat => cat === sub
-			);
-			newSubcategories[findIndex].sub.splice(findIndexSub, 1);
-			if (newSubcategories[findIndex].sub.length === 0) {
-				newSubcategories.splice(findIndex, 1);
+			if (e.target.checked) {
+				newSubcategories[0] = { subName, sub };
 			}
+			setOptions([]);
 		}
 		setSubcategories(newSubcategories);
 	};
 
-	const changeOptions = data => {
-		setOptions(data);
-	};
+	const changeOptions = data => setOptions(data);
 
-	const handleFinalizeOptions = data => {
-		setOptions(data);
-		setShowPerview(true);
-	};
+	const handleFinalizeOptions = (data, finalize = true) => { setOptions(data); finalize && setShowPerview(true); };
 
 	const onSubmitForm = e => {
 		e.preventDefault();
@@ -150,60 +99,33 @@ const AddProduct = props => {
 		const newOptions = [...options].map(option => {
 			const pictures = [];
 			option.pictures.forEach(picture => pictures.push(picture.name));
-			return {
-				...option,
-				featuredPicture: option.featuredPicture.name
-					? option.featuredPicture.name
-					: '',
-				pictures
-			};
+			return { ...option, featuredPicture: option.featuredPicture.name ? option.featuredPicture.name : '', pictures };
 		});
-		options.forEach(option => {
-			pictures.push(option.featuredPicture);
-			pictures.push(...option.pictures);
-		});
-		for (const input in inputs) {
-			formData.append(input, inputs[input]);
-		}
+		options.forEach(option => { pictures.push(option.featuredPicture); pictures.push(...option.pictures); });
+		for (const input in inputs) { formData.append(input, inputs[input]); }
 		pictures.forEach(async file => await formData.append('pictures', file));
-		formData.append('published', published);
-		formData.append('featured', featured);
-		formData.append('dailyOffer', dailyOffer);
-		formData.append('weeklyOffer', weeklyOffer);
+		formData.append('published', published); 
+		formData.append('featured', featured); 
+		formData.append('dailyOffer', dailyOffer); 
+		formData.append('weeklyOffer', weeklyOffer); 
 		formData.append('description', desc);
-		formData.append('smalldescription', smallDesc);
+		formData.append('smalldescription', smallDesc); 
 		formData.append('subcategories', JSON.stringify(subcategories));
+		if(subcategories[0].subName === 'Headphones' || subcategories[0].subName === 'Headphones') {
+			formData.append('bluetooth', isBluetooth);
+			formData.append('wifi', isWifi);
+		}
 		formData.append('options', JSON.stringify(newOptions));
 		const config = { headers: { 'content-type': 'multipart/form-data' } };
 		props.addProduct(formData, config);
 		setInputs({ name: '', price: '', year: '', brand: '', category: '', optionsDiscount: '' });
-		setErrors({ name: '', price: '', year: '' });
-		setPublished(false);
-		setFeatured(false);
-		setDailyOffer(false);
-		setWeeklyOffer(false);
-		setSubcategories([]);
-		setOptions([]);
-		setSmallDesc('');
-		setDesc('');
-		setShowPerview(false);
-		setFailedMessage(false);
+		setErrors({ name: '', price: '', year: '' }); setPublished(false); setFeatured(false); setDailyOffer(false); setWeeklyOffer(false); setSubcategories([]); setOptions([]); setSmallDesc(''); setDesc(''); setShowPerview(false);
 	};
 
 	return (
 		<div className="row adminAddProduct">
-			{failedMessage && (
-				<ResponseMessage message={failedMessage} ClassName="Danger" />
-			)}
-			{props.product.failedMessage && (
-				<ResponseMessage
-					message={props.product.failedMessage}
-					ClassName="Danger"
-				/>
-			)}
-			{props.product.successMessage && (
-				<ResponseMessage message={props.product.successMessage} />
-			)}
+			{props.product.failedMessage && (<ResponseMessage message={props.product.failedMessage} ClassName="Danger"/>)}
+			{props.product.successMessage && (<ResponseMessage message={props.product.successMessage} />)}
 			<div className="col-12">
 				<div className="card mb-30 text-white">
 					<div className="card-header">
@@ -211,248 +133,43 @@ const AddProduct = props => {
 						{showPerview && <h2 className="pl-3">Product Review</h2>}
 					</div>
 					{props.product.loading ? (
-						<div className="card-body bg-white">
-							<SmallSpinner />
-						</div>
-					) : (
+						<div className="card-body bg-white"><SmallSpinner /></div>) : 
+						(
 						<div className="card-body">
 							<form className="form-horizontal" onSubmit={onSubmitForm}>
 								<div className="form-group row m-0 mb-2">
 									{Inputs.map(input => (
-										<LoginRegisterInputs
-											key={input.name}
-											formBox="col-sm-6 mb-3"
-											label={input.label}
-											type={input.type}
-											name={input.name}
-											placeholder={input.placeholder}
-											inputClass="w-100"
-											invalidInput="invalid"
-											invalidFeedback="invalid-feedback"
-											value={inputs[input.name]}
-											min={input.min ? input.min : false}
-											max={input.max ? input.max : false}
-											onChange={inputChange}
-											required={true}
-											error={errors[input.name]}
-										/>
+										<LoginRegisterInputs key={input.name} formBox="col-sm-6 mb-3" label={input.label} type={input.type} name={input.name} placeholder={input.placeholder} inputClass="w-100" invalidInput="invalid" invalidFeedback="invalid-feedback" value={inputs[input.name]} onChange={inputChange} required={true} error={errors[input.name]} />
 									))}
-									<div className="col-sm-3">
-										<ToggleSwitchButton
-											name="Publish"
-											value={published}
-											setValue={setPublished}
-											error={errors['published']}
-										/>
-									</div>
-									<div className="col-sm-3">
-										<ToggleSwitchButton
-											name="Featured"
-											value={featured}
-											setValue={setFeatured}
-											error={errors['featured']}
-										/>
-									</div>
+									<div className="col-sm-3"><ToggleSwitchButton name="Publish" value={published} setValue={setPublished} error={errors['published']} /></div>
+									<div className="col-sm-3"><ToggleSwitchButton name="Featured" value={featured} setValue={setFeatured} error={errors['featured']} /></div>
 								</div>
 								<div className="form-group row m-0 mb-2">
-									<div className="col-sm-6 mb-3">
-										<ToggleSwitchButton
-											name="Daily Offer"
-											value={dailyOffer}
-											setValue={setDailyOffer}
-											error={errors['dailyOffer']}
-										/>
-									</div>
-									<div className="col-sm-6">
-										<ToggleSwitchButton
-											name="Weekly Offer"
-											value={weeklyOffer}
-											setValue={setWeeklyOffer}
-											error={errors['weeklyOffer']}
-										/>
-									</div>
-									{(dailyOffer || weeklyOffer) && 
-									<div className='col-12 mb-3'>
-										<LoginRegisterInputs
-											label='Discount for all Product Options'
-											type='number'
-											name='optionsDiscount'
-											placeholder='Enter discount for all Product Options'
-											inputClass="w-100"
-											invalidInput="invalid"
-											invalidFeedback="invalid-feedback"
-											value={inputs['optionsDiscount']}
-											min='1'
-											max='95'
-											onChange={inputChange}
-											required={true}
-											error={errors['optionsDiscount']}
-										/>
-									</div>}
-								</div>
-								<EditorMNCE
-									change={setSmallDesc}
-									value={smallDesc}
-									init={{
-										format: 'html',
-										menubar: false,
-										statusbar: false,
-										toolbar: 'bold italic',
-										height: '100px',
-										resize: false
-									}}
-									label="Short Description"
-									error={errors.smalldescription}
-								/>
-								<EditorMNCE
-									change={setDesc}
-									value={desc}
-									init={{
-										statusbar: false,
-										plugins:
-											'print preview fullpage powerpaste searchreplace autolink directionality advcode visualblocks visualchars fullscreen image link codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern help formatpainter permanentpen mentions linkchecker',
-										toolbar:
-											'formatselect | bold italic strikethrough forecolor backcolor permanentpen formatpainter | link image | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent | removeformat ',
-										height: '600px',
-										resize: false
-									}}
-									label="Description"
-									error={errors.description}
-								/>
-								{!props.product.loading && (
-									<div className="form-group">
-										<label className="col-12">Select Category</label>
-										<div className="col-12">
-											<select
-												name="category"
-												className="w-100 p-3"
-												onChange={inputChange}
-												value={inputs.category}
-												disabled={showPerview === true ? true : false}
-												required>
-												<option value="" hidden>
-													Select Category
-												</option>
-												{props.categories.map((category, index) => (
-													<option value={category.name} key={index}>
-														{category.name}
-													</option>
-												))}
-											</select>
-											{errors.category && (
-												<div
-													style={{
-														width: ' 100%',
-														marginTop: '0.25rem',
-														fontSize: '80%',
-														color: '#dc3545'
-													}}>
-													{errors.category}
-												</div>
-											)}
+									<div className="col-sm-6 mb-3"><ToggleSwitchButton name="Daily Offer" value={dailyOffer} setValue={setDailyOffer} error={errors['dailyOffer']}/></div>
+									<div className="col-sm-6"><ToggleSwitchButton name="Weekly Offer" value={weeklyOffer} setValue={setWeeklyOffer} error={errors['weeklyOffer']}/></div>
+									{(dailyOffer || weeklyOffer) && (
+										<div className="col-12 mb-3">
+											<LoginRegisterInputs label="Discount for all Product Options" type="number" name="optionsDiscount" placeholder="Enter discount for all Product Options" inputClass="w-100" invalidInput="invalid" invalidFeedback="invalid-feedback" value={inputs['optionsDiscount']} min="1" max="95" onChange={inputChange} required={true} error={errors['optionsDiscount']} />
 										</div>
-									</div>
-								)}
-								{inputs.category && (
-									<div className="form-group">
-										<label className="col-12">Select Sub Category</label>
-										<div className="col-12 checkbox-wrapper">
-											{props.categories.map(
-												(category, index) =>
-													category.name === inputs.category && (
-														<React.Fragment key={index}>
-															{errors.subcategories && (
-																<div
-																	style={{
-																		width: ' 100%',
-																		marginTop: '0.25rem',
-																		fontSize: '80%',
-																		color: '#dc3545'
-																	}}>
-																	{errors.subcategories[0].subName}
-																	<br />
-																	{errors.subcategories[0].sub}
-																</div>
-															)}
-															{category.subcategories.map((subname, index) => (
-																<div
-																	className="d-flex flex-column mt-3 mr-3"
-																	key={index}>
-																	<label className="d-block">
-																		{subname.name}
-																	</label>
-																	{subname.subcategories.map((sub, i) => {
-																		const finIndex = subcategories.findIndex(subb => subb.subName === subname.name);
-																		const finSubIndex = finIndex !== -1 && subcategories[finIndex].sub.findIndex(subb => subb === sub);
-																		return <div className="checkbox" key={i}>
-																			<input
-																				type="checkbox"
-																				defaultChecked={finSubIndex !== false && finSubIndex !== -1 ? true : false}
-																				onChange={e =>
-																					subcategoriesChange(
-																						e,
-																						subname.name,
-																						sub
-																					)
-																				}
-																			/>
-																			<label>{sub}</label>
-																		</div>
-																	})}
-																</div>
-															))}
-														</React.Fragment>
-													)
-											)}
-										</div>
-									</div>
-								)}
-								<div className="form-group m-0 mb-3">
-									<label className="col-12">Select Brand</label>
-									<div className="col-12">
-										<select
-											name="brand"
-											className="w-100 p-3"
-											onChange={inputChange}
-											value={inputs.brand}
-											required
-											placeholder="Select Brand">
-											<option value="" hidden>
-												Select Brand
-											</option>
-											{props.brands.map(brand => (
-												<option value={brand.name} key={brand._id}>
-													{brand.name}
-												</option>
-											))}
-										</select>
-										{errors.brand && (
-											<div
-												style={{
-													width: ' 100%',
-													marginTop: '0.25rem',
-													fontSize: '80%',
-													color: '#dc3545'
-												}}>
-												{errors.brand}
-											</div>
-										)}
-									</div>
+									)}
 								</div>
-								{/* <div dangerouslySetInnerHTML={{ __html: desc }}/> */}
-								{options.length > 0 && showPerview && (
-									<button className="btn btn-primary" type="submit">
-										Add Product
-									</button>
-								)}
+								<Editors smallChange={setSmallDesc} smallValue={smallDesc} smallLabel="Short Description" smallError={errors.smalldescription} change={setDesc} value={desc} label="Description" error={errors.description} />
+								<SelectCategory loading={props.product.loading} onChange={inputChange} value={inputs.category} disabled={showPerview} error={errors.category} categories={props.categories} />
+								{inputs.category && (<SelectSubcategory categories={props.categories} error={errors.subcategories} change={subcategoriesChange} category={inputs.category} subcategories={subcategories} />)}
+								{inputs.category && (<SelectBrand change={inputChange} value={inputs.brand} brands={props.brands} error={errors.brand} />)}
+								{inputs.category === 'Electronics' &&
+									subcategories.length > 0 &&
+									(subcategories[0].subName === 'Headphones' ||
+										subcategories[0].subName === 'Speakers') && (
+										<div className="form-group row m-0 mb-2">
+											<div className="col-6"><ToggleSwitchButton name="Bluetooth" value={isBluetooth} setValue={setIsBluetooth} error={errors['bluetooth']} /></div>
+											<div className="col-6"><ToggleSwitchButton name="Wifi" value={isWifi} setValue={setIsWifi} error={errors['wifi']} /></div>
+										</div>
+									)}
+								{options.length > 0 && showPerview && (<button className="btn btn-primary" type="submit">Add Product</button>)}
 							</form>
-							{inputs.category === 'Clothing' && !showPerview && (
-								<Clothing
-									changeOptions={changeOptions}
-									setOptions={handleFinalizeOptions}
-									options={options.length > 0 ? options : []}
-									errors={errors.options}
-								/>
+							{subcategories.length > 0 && !showPerview && (
+								<Options changeOptions={changeOptions} setOptions={handleFinalizeOptions} options={options.length > 0 ? options : []} errors={errors.options} category={inputs.category} subcategories={subcategories} />
 							)}
 						</div>
 					)}
@@ -473,14 +190,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return {
 		getCategories: () => dispatch(actions.getAllCategories()),
-		getBrandByCategory: category =>
-			dispatch(actions.getBrandByCategory(category)),
-		addProduct: (formData, config) =>
-			dispatch(actions.addProduct(formData, config))
+		getBrandByCategory: category => dispatch(actions.getBrandByCategory(category)),
+		addProduct: (formData, config) => dispatch(actions.addProduct(formData, config))
 	};
 };
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(AddProduct);
+export default connect(mapStateToProps,mapDispatchToProps)(AddProduct);

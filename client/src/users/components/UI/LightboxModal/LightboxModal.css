@@ -1,0 +1,204 @@
+.light-box-modal{
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -100000;
+    max-width: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transition:opacity 0s;
+}
+
+.light-box-modal.open{
+    z-index: 100000;
+    opacity: 1;
+    transition:opacity .3s ease-in;
+}
+
+.light-box-modal > .modal-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 1000px;
+    max-width: 100%;
+}
+
+.close-modal{
+    z-index: 10;
+    color: rgba(234, 120, 50, 1);
+    font-size: 2rem;
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    right: 40px;
+}
+
+.main-img{    
+    min-height: 83vh;
+    height: 100%;
+    max-width:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    font: 14px/1.8 "Roboto", "Helvetica", "lucida grande", sans-serif, sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 1em;
+    color: #ccc;
+}
+
+.main-img > .img{
+    position: relative;
+}
+
+.main-img > .img > img{
+    max-width: 100%;
+    height: auto;
+    opacity: 0;
+    transition:opacity 0s ease-out;
+    -webkit-transition:opacity 0s ease-out;
+    -moz-transition:opacity 0s ease-out;
+    -ms-transition:opacity 0s ease-out;
+    -o-transition:opacity 0s ease-out;
+}
+
+.main-img > .img > img.show{
+    opacity: 1;
+    transition:opacity .3s ease-out;
+    -webkit-transition:opacity .3s ease-out;
+    -moz-transition:opacity .3s ease-out;
+    -ms-transition:opacity .3s ease-out;
+    -o-transition:opacity .3s ease-out;
+}
+
+.main-img > .arrow{
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    background: black;
+    color: white;
+    opacity: 0;
+    transition: all .3s ease-in;
+    -webkit-transition: all .3s ease-in;
+    -moz-transition: all .3s ease-in;
+    -ms-transition: all .3s ease-in;
+    -o-transition: all .3s ease-in;
+}
+
+.main-img > .arrow:nth-child(3){
+    right: 0;
+}
+
+.main-img > .arrow:nth-child(2){
+    left: 0;
+}
+
+.main-img > .arrow i{
+    font-size: 3rem;
+    padding: 10px;    
+    cursor: pointer;
+    display: block;
+}
+
+.main-img:hover > .arrow{
+    opacity: 1;
+}
+
+.main-img:hover > .arrow:hover{
+    color: rgba(234, 120, 50, 1);
+}
+
+.img-description{
+    position: absolute;
+    top: 90%;
+    left: 0%;
+}
+
+.img-description > .img-alt{
+    padding-left: 10px;
+    opacity: 0;
+    transition:opacity 0s ease-out;
+    -webkit-transition:opacity 0s ease-out;
+    -moz-transition:opacity 0s ease-out;
+    -ms-transition:opacity 0s ease-out;
+    -o-transition:opacity 0s ease-out;
+}
+
+.img-description > .img-alt.show{
+    opacity: 1;
+    transition:opacity .3s ease-out;
+    -webkit-transition:opacity .3s ease-out;
+    -moz-transition:opacity .3s ease-out;
+    -ms-transition:opacity .3s ease-out;
+    -o-transition:opacity .3s ease-out;
+}
+
+.number-imgs{
+    position: absolute;
+    top: 90%;
+    right: 0;
+    padding-right: 10px;
+}
+
+.number-imgs > span{
+    opacity: 0;
+    transition:opacity 0s ease-out;
+    -webkit-transition:opacity 0s ease-out;
+    -moz-transition:opacity 0s ease-out;
+    -ms-transition:opacity 0s ease-out;
+    -o-transition:opacity 0s ease-out;
+}
+
+.number-imgs > .show{
+    opacity: 1;
+    transition:opacity .3s ease-out;
+    -webkit-transition:opacity .3s ease-out;
+    -moz-transition:opacity .3s ease-out;
+    -ms-transition:opacity .3s ease-out;
+    -o-transition:opacity .3s ease-out;
+}
+
+@keyframes bounceRight {
+	0%, 100%, 20%, 50%, 80% {
+	    transform: translateX(0);
+	}
+	40% {
+		transform: translateX(-50px);
+	}
+	60% {
+		transform:  translateX(-30px);
+	}
+}
+.bounceRight {  
+    animation-duration: 1s !important;
+    animation-name: bounceRight !important;
+    animation-fill-mode: both !important;
+    animation-timing-function: ease-in-out !important;
+}
+
+@keyframes bounceLeft {
+	0%, 100%, 20%, 50%, 80% {
+	    transform: translateX(0);
+	}
+	40% {
+		transform: translateX(50px);
+	}
+	60% {
+		transform:  translateX(30px);
+	}
+}
+.bounceLeft {  
+    animation-duration: 1s !important;
+    animation-name: bounceLeft !important;
+    animation-fill-mode: both !important;
+    animation-timing-function: ease-in-out !important;
+}
