@@ -111,7 +111,7 @@ const AddProduct = props => {
 		formData.append('description', desc);
 		formData.append('smalldescription', smallDesc); 
 		formData.append('subcategories', JSON.stringify(subcategories));
-		if(subcategories[0].subName === 'Headphones' || subcategories[0].subName === 'Headphones') {
+		if(subcategories[0].subName === 'Headphones' || subcategories[0].subName === 'Speakers') {
 			formData.append('bluetooth', isBluetooth);
 			formData.append('wifi', isWifi);
 		}

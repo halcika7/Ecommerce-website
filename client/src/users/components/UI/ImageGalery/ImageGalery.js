@@ -12,16 +12,23 @@ const ImageGalery = ({ images }) => {
 	useEffect(() => {
         setImages(images);
         setLoading(true);
-		window.addEventListener('resize', resizeAllGridItems);
+        window.addEventListener('resize', resizeAllGridItems);
+        return () => {
+            window.removeEventListener('resize', resizeAllGridItems);
+        }
     }, [images]);
     
 	useEffect(() => {
-        Images.length > 0 && setLoading(false);
         setTimeout(() => {
-                if(Images.length > 0) {
-                    resizeAllGridItems();
+            if(Images.length > 0) {
+                setLoading(false);
                 }
-            }, 1000);
+            }, 2000);
+        setTimeout(() => {
+        if(Images.length > 0) {
+                resizeAllGridItems();
+            }
+        }, 2080);
 	}, [Images]);
 
 	const resizeAllGridItems = (d=null) => {
@@ -63,7 +70,6 @@ const ImageGalery = ({ images }) => {
                 )}
             </div>
             {showLightboxModal && <LightboxModal images={Images} setShow={setLightboxModal} i={index} />}
-
         </React.Fragment>
 	);
 };

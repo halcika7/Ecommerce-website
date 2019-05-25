@@ -1,45 +1,52 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { searchProducts } from '../../../../store/actions'
 import SearchResults from './SearchResults/SearchResults';
 import CartItems from './CartItems/CartItems';
 
 import c from '../Navigation.module.css';
 
-class MiddleNavigation extends Component {
-    state = {
-        searchResults: [
-            {src: 'https://halcikastore.herokuapp.com/img/8.png', alt: '', href: '/', title: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quasi, fugiat.', old: '1$', new: '1234'},
-            {src: 'https://halcikastore.herokuapp.com/img/8.png', alt: '', href: '/', title: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quasi, fugiat.', old: '12$', new: '1234'},
-            {src: 'https://halcikastore.herokuapp.com/img/8.png', alt: '', href: '/', title: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quasi, fugiat.', old: '12u$', new: '1234'},
-            {src: 'https://halcikastore.herokuapp.com/img/8.png', alt: '', href: '/', title: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quasi, fugiat.', old: '12u9$', new: '1234'},
-            {src: 'https://halcikastore.herokuapp.com/img/8.png', alt: '', href: '/', title: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quasi, fugiat.', old: '12u90$', new: '1234'},
-            {src: 'https://halcikastore.herokuapp.com/img/8.png', alt: '', href: '/', title: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quasi, fugiat.', old: '12u904$', new: '1234'},
-            {src: 'https://halcikastore.herokuapp.com/img/8.png', alt: '', href: '/', title: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quasi, fugiat.', old: '12u9043$', new: '1234'},
-            {src: 'https://halcikastore.herokuapp.com/img/8.png', alt: '', href: '/', title: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quasi, fugiat.', old: '', new: '1234'},
-            {src: 'https://halcikastore.herokuapp.com/img/8.png', alt: '', href: '/', title: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quasi, fugiat.', old: '43$', new: '1234'}
-        ],
-        cartItems: [
-            {src: 'https://halcikastore.herokuapp.com/img/8.png', alt: '', href: '/', title: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quasi, fugiat.', qty: 1, new: 45},
-            {src: 'https://halcikastore.herokuapp.com/img/8.png', alt: '', href: '/', title: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quasi, fugiat.', qty: 3, new: 120}
-        ],
+const MiddleNavigation = props => {
+
+    useEffect( () => { 
+        return () => { 
+            props.searchProducts('');
+        }
+    }, [])
+
+    const [value, setValue] = useState( '' );
+
+    const searchChange = e => { 
+        e.preventDefault();
+        const value = e.target.value;
+        if ( value.length > 0 ) { 
+            props.searchProducts( value );
+        }
+        setValue( value );
     }
 
-    onSearchFocused = (event) => {
-        const ul = event.target.nextElementSibling.nextElementSibling
+    const onSearchFocused = ( e ) => {
+        e.preventDefault();
+        const ul = e.target.nextElementSibling.nextElementSibling
         ul.classList.add(c.active);
     }
 
-    onSearchFocusOut = (event) => {
-        const ul = event.target.nextElementSibling.nextElementSibling
-        ul.classList.remove(c.active);
+    const onSearchFocusOut = ( e ) => {
+        e.preventDefault();        
+        const ul = e.target.nextElementSibling.nextElementSibling;
+        setTimeout( () => {
+            ul.classList.remove( c.active );
+            setValue( '' );
+            props.searchProducts( '' );
+         }, 400)
     }
 
-    shoppingCartClicked = (event) => {
-        event.preventDefault();
-        event.target.parentNode.classList.toggle(c.active);
+    const shoppingCartClicked = (e) => {
+        e.preventDefault();
+        e.target.parentNode.classList.toggle(c.active);
     }
 
-    render () {
         return(
             <div className={"container " + c.container + " " + c.middle}>
             <div className={c.row + " row"}>
@@ -53,14 +60,16 @@ class MiddleNavigation extends Component {
                 <div className={c.col12 + " " + c.colLg4 + " col-12 col-lg-4"}>
                     <div className={c.jumbotroneSearch}>
                         <div>
-                            <input type="text" id="search-input" className="search-input" 
-                            placeholder="Search" 
-                            onFocus={this.onSearchFocused}
-                            onBlur={this.onSearchFocusOut}/>
-
+                                <input type="text" id="search-input" className="search-input" autoComplete="off"
+                                    placeholder="Search"
+                                    onFocus={onSearchFocused}
+                                    onBlur={onSearchFocusOut}
+                                    onChange={searchChange}
+                                    value={value}
+                            />
                             <button aria-label="search"><i className="fas fa-search"></i></button>
 
-                            <SearchResults searchResults={this.state.searchResults} />
+                            <SearchResults searchResults={props.searchedProducts} loading={props.loading} />
                         </div>
                     </div>
                 </div>
@@ -70,9 +79,9 @@ class MiddleNavigation extends Component {
                             <div className="wishlist"><a href="/" aria-label="jfoia" target="_self" rel="noopener"><i className="fas fa-sync"></i></a></div>
                             <div className="span-link">
                                 <i className="fas fa-shopping-cart"
-                                onClick={this.shoppingCartClicked}></i>
-                                <span>{this.state.cartItems.length}</span>
-                                <CartItems items={this.state.cartItems}/>
+                                onClick={shoppingCartClicked}></i>
+                                <span>{0}</span>
+                                <CartItems items={[]}/>
                             </div>
                         </div>
                     </div>
@@ -80,7 +89,19 @@ class MiddleNavigation extends Component {
             </div>
         </div>
         );
+}
+
+const mapStateToProps = state => { 
+    return {
+        searchedProducts: state.product.searchedProducts,
+        loading: state.product.loading
     }
 }
 
-export default MiddleNavigation;
+const dispatchMapToProps = dispatch => { 
+    return {
+        searchProducts: (query) => dispatch(searchProducts(query))
+    }
+}
+
+export default connect(mapStateToProps, dispatchMapToProps)(MiddleNavigation);

@@ -74,7 +74,8 @@ export {
 export {
   addProduct,
   homePageProducts,
-  getProduct
+  getProduct,
+  searchProducts
 } from "./products/product";
 
 export {

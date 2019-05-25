@@ -155,60 +155,72 @@ exports.getProducts = async (req, res) => {
 
 exports.homePage = async (req, res) => {
 	try {
-		const bannerProducts = await ProductModel.aggregate([
-			{
-				$match: {
-					published: true,
-					featured: true,
-					dailyOffer: null,
-					weeklyOffer: null
-				}
-			},
-			{ $sort: { createdAt: -1 } },
-			{ $sample: { size: 4 } }
-		]);
+		// const bannerProducts = await ProductModel.aggregate([
+		// 	{
+		// 		$match: {
+		// 			published: true,
+		// 			featured: true,
+		// 			dailyOffer: null,
+		// 			weeklyOffer: null
+		// 		}
+		// 	},
+		// 	{ $sort: { createdAt: -1 } },
+		// 	{ $sample: { size: 4 } }
+		// ]);
 		const newProducts = await ProductModel.aggregate([
 			{ $match: { published: true, dailyOffer: null, weeklyOffer: null } },
+			{
+				$project: {
+					name: 1,
+					price: 1,
+					category: 1,
+					brand: 1,
+					smalldescription: 1,
+					createdAt: 1,
+					'options.featuredPicture': 1,
+					"optionsSize": { $size: "$options" }
+				}
+			},
 			{ $sort: { createdAt: -1 } },
 			{ $sample: { size: 8 } }
 		]);
-		const featuredProducts = await ProductModel.aggregate([
-			{
-				$match: {
-					published: true,
-					featured: true,
-					dailyOffer: null,
-					weeklyOffer: null
-				}
-			},
-			{ $sample: { size: 8 } }
-		]);
-		const topSellingProducts = await ProductModel.aggregate([
-			{ $match: { published: true, dailyOffer: null, weeklyOffer: null } },
-			{ $sample: { size: 8 } },
-			{ $sort: { numberOfsales: -1 } }
-		]);
-		const ourProducts = await ProductModel.aggregate([
-			{ $match: { published: true, dailyOffer: null, weeklyOffer: null } },
-			{ $sample: { size: 36 } }
-		]);
-		const dailyOffer = await ProductModel.aggregate([
-			{ $match: { published: true, 'dailyOffer.active': true } },
-			{ $sample: { size: 10 } }
-		]);
-		const weeklyOffer = await ProductModel.aggregate([
-			{ $match: { published: true, 'weeklyOffer.active': true } },
-			{ $sample: { size: 10 } }
-		]);
+		// const featuredProducts = await ProductModel.aggregate([
+		// 	{
+		// 		$match: {
+		// 			published: true,
+		// 			featured: true,
+		// 			dailyOffer: null,
+		// 			weeklyOffer: null
+		// 		}
+		// 	},
+		// 	{ $sample: { size: 8 } }
+		// ]);
+		// const topSellingProducts = await ProductModel.aggregate([
+		// 	{ $match: { published: true, dailyOffer: null, weeklyOffer: null } },
+		// 	{ $sample: { size: 8 } },
+		// 	{ $sort: { numberOfsales: -1 } }
+		// ]);
+		// const ourProducts = await ProductModel.aggregate([
+		// 	{ $match: { published: true, dailyOffer: null, weeklyOffer: null } },
+		// 	{ $sample: { size: 36 } }
+		// ]);
+		// const dailyOffer = await ProductModel.aggregate([
+		// 	{ $match: { published: true, 'dailyOffer.active': true } },
+		// 	{ $sample: { size: 10 } }
+		// ]);
+		// const weeklyOffer = await ProductModel.aggregate([
+		// 	{ $match: { published: true, 'weeklyOffer.active': true } },
+		// 	{ $sample: { size: 10 } }
+		// ]);
 
 		return res.json({
 			newProducts,
-			featuredProducts,
-			topSellingProducts,
-			bannerProducts,
-			ourProducts,
-			dailyOffer,
-			weeklyOffer
+			// featuredProducts,
+			// topSellingProducts,
+			// bannerProducts,
+			// ourProducts,
+			// dailyOffer,
+			// weeklyOffer
 		});
 	} catch (err) {
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
@@ -230,3 +242,36 @@ exports.getProduct = async (req, res) => {
 		return res.json({ failedMessage: err.message });
 	}
 };
+
+exports.searchForProduct = async ( req, res ) => { 
+	RegExp.escape = (s) => {
+		return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+	};
+	const expr = new RegExp( RegExp.escape( req.query.query ), 'ig' );
+
+	if ( req.query.query.length === 0 ) { 
+		return res.json( { products: [] } );
+	}
+
+	try {
+		
+		const products = await ProductModel.aggregate( [
+			{ $match: { published: true, $or: [{ name: { $regex: expr } },  {brand: { $regex: expr } }, {category: { $regex: expr } }]  } },
+			{
+				$project: {
+					name: 1,
+					price: 1,
+					category: 1,
+					brand: 1,
+					'options.featuredPicture': 1,
+					'first': { $arrayElemAt: ["$options.featuredPicture", 0] },
+					"sizeOfArray": { $size: "$options" }
+				}
+			}
+		] );
+
+		return res.json( { products } );
+	} catch ( err ) { 
+		return res.json( { failedMessage: 'Something Happend' } )
+	}
+}

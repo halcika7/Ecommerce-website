@@ -8735,6 +8735,7 @@ a.text-dark:hover, a.text-dark:focus {
     .container-fluid.breadcrum .container .inline-nav > a:last-of-type{
       color: #919191;
       cursor: text;
+      pointer-events: none;
     }
     
     .container-fluid.breadcrum .container .inline-nav > i{
@@ -9326,6 +9327,10 @@ button {
   padding: 0;
   font-size: 13px;
   color: #e5e5e5;
+}
+
+.no-scroll {
+  overflow: hidden;
 }
 
 /* end ikone */

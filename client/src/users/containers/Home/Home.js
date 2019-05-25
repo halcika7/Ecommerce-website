@@ -34,6 +34,19 @@ const Home = props => {
 		return Math.ceil(Math.abs(dateNow - newDate) / (1000 * 3600 * 24));
 	};
 
+	console.log( props.product.newProducts );
+
+	    const options = {
+			items: 1,
+			margin: 10,
+			lazyLoad: true,
+			dots: false,
+			animateIn: true,
+			autoHeightClass: 'owl-height',
+			responsiveClass: true,
+			nav:true
+		};
+
 	return (
 		<React.Fragment>
 			<div className="container-fluid carousel-main d-none d-sm-block">
@@ -136,13 +149,8 @@ const Home = props => {
 									<div className="imagebox">
 										{product.options.length > 1 ? (
 											<OwlCarousel
-												className="box-image owl-carousel owl-theme owl-loaded owl-height"
-												margin={10}
-												items={1}
-												lazyLoad={true}
-												dots={false}
-												animateIn={true}
-												nav={true}>
+												className="box-image owl-carousel owl-theme owl-loaded"
+												{...options}>
 												{product.options.map((opt, index) => (
 													<Link to={`/product?id=${product._id}`} key={index}>
 														<img
@@ -184,8 +192,8 @@ const Home = props => {
 										</div>
 										{diff < 32 && <span className="new-product">NEW</span>}
 										<p className="options-length">
-											{product.options.length}{' '}
-											{product.options.length === 1 ? 'option' : 'options'}
+											{product.optionsSize}{' '}
+											{product.optionsSize === 1 ? 'option' : 'options'}
 										</p>
 									</div>
 								</div>

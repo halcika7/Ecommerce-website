@@ -9,7 +9,7 @@
     bottom: 0;
     z-index: -100000;
     max-width: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, .9);
     opacity: 0;
     transition:opacity 0s;
 }
@@ -18,6 +18,17 @@
     z-index: 100000;
     opacity: 1;
     transition:opacity .3s ease-in;
+}
+
+.light-box-modal.open .card {
+    width: 1000px;
+    max-width: 100%;
+    min-width: 100%;
+    height: 100%;
+    min-height: 83vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .light-box-modal > .modal-content{
@@ -61,22 +72,7 @@
 
 .main-img > .img > img{
     max-width: 100%;
-    height: auto;
-    opacity: 0;
-    transition:opacity 0s ease-out;
-    -webkit-transition:opacity 0s ease-out;
-    -moz-transition:opacity 0s ease-out;
-    -ms-transition:opacity 0s ease-out;
-    -o-transition:opacity 0s ease-out;
-}
-
-.main-img > .img > img.show{
-    opacity: 1;
-    transition:opacity .3s ease-out;
-    -webkit-transition:opacity .3s ease-out;
-    -moz-transition:opacity .3s ease-out;
-    -ms-transition:opacity .3s ease-out;
-    -o-transition:opacity .3s ease-out;
+    max-height: 83vh;
 }
 
 .main-img > .arrow{
@@ -84,26 +80,23 @@
     z-index: 1;
     display: flex;
     justify-content: space-between;
-    background: black;
-    color: white;
+    border-radius: 50%;
+    color: #fff;
+    mix-blend-mode: difference;
     opacity: 0;
     transition: all .3s ease-in;
-    -webkit-transition: all .3s ease-in;
-    -moz-transition: all .3s ease-in;
-    -ms-transition: all .3s ease-in;
-    -o-transition: all .3s ease-in;
 }
 
 .main-img > .arrow:nth-child(3){
-    right: 0;
+    right: 10px;
 }
 
 .main-img > .arrow:nth-child(2){
-    left: 0;
+    left: 10px;
 }
 
 .main-img > .arrow i{
-    font-size: 3rem;
+    font-size: 2rem;
     padding: 10px;    
     cursor: pointer;
     display: block;
@@ -111,10 +104,6 @@
 
 .main-img:hover > .arrow{
     opacity: 1;
-}
-
-.main-img:hover > .arrow:hover{
-    color: rgba(234, 120, 50, 1);
 }
 
 .img-description{
@@ -147,6 +136,8 @@
     top: 90%;
     right: 0;
     padding-right: 10px;
+    color: #fff;
+    mix-blend-mode: difference;
 }
 
 .number-imgs > span{
@@ -201,4 +192,65 @@
     animation-name: bounceLeft !important;
     animation-fill-mode: both !important;
     animation-timing-function: ease-in-out !important;
+}
+
+.thumbnails {
+    height: 80px;
+    overflow: hidden;
+    max-width: 100%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.thumbnails .images-thumb {
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    padding: 5px 0;
+}
+
+.thumbnails img {
+    max-width: 80px;
+    margin: 0 10px;
+    filter: contrast(.345);
+    cursor: pointer;
+    transition: filter .3s ease-in-out, transform .8s ease-in-out;
+}
+
+@media (max-width: 1000px) {
+    .thumbnails {
+        display: none;
+    }
+}
+
+.thumbnails img.active {
+    filter: contrast(1);
+}
+
+.thumbnails > .arrow{
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 50%;
+    color: #fff;
+    mix-blend-mode: difference;
+    transition: all .3s ease-in;
+    max-width: 5%;
+    margin-right: 12px;
+}
+
+.thumbnails > .arrow:last-child{
+    margin-left: 15px;
+    margin-right: 20px;
+    /* margin-right: unset; */
+}
+
+.thumbnails > .arrow i{
+    font-size: 1rem;
+    padding: 10px;    
+    cursor: pointer;
+    display: block;
 }

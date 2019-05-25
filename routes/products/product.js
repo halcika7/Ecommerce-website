@@ -45,6 +45,8 @@ router.get('/getproducts', ProductController.getProducts);
 
 router.get('/homepageproducts', ProductController.homePage);
 
-router.get('/getproduct', ProductController.getProduct);
+router.get( '/getproduct', ProductController.getProduct );
+
+router.get( '/serachforproduct', ProductController.searchForProduct );
 
 module.exports = router;

@@ -1,6 +1,7 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
 import { returnProductDataOnError } from '../../../helpers/product';
+import { setTimeout } from 'timers';
 
 export const addProduct = (formData, config) => async dispatch => {
 	dispatch({ type: actionTypes.PRODUCT_START });
@@ -66,5 +67,30 @@ export const getProduct = id => async dispatch => {
 			type: actionTypes.PRODUCT_SUCCESS,
 			singleProduct: response.data.product
 		});
+	}
+};
+
+export const searchProducts = query => async dispatch => {
+	dispatch({ type: actionTypes.PRODUCT_START });
+	const response = await axios.get('/products/product/serachforproduct?query=' + query);
+	if (response.data.failedMessage) {
+		dispatch({
+			type: actionTypes.PRODUCT_FAILED,
+			failedMessage: response.data.failedMessage
+		});
+	} else {
+
+		dispatch({
+			type: actionTypes.PRODUCT_SUCCESS,
+			loading: true
+		});
+
+		setTimeout( () => { 
+			dispatch({
+				type: actionTypes.PRODUCT_SUCCESS,
+				searchedProducts: response.data.products
+			});
+		}, 1000)
+
 	}
 };

@@ -11,6 +11,7 @@ const initialState = {
 	bannerProducts: [],
 	ourProducts: [],
 	singleProduct: {},
+	searchedProducts: [],
 	errors: false,
 	errorName: '',
 	successMessage: false,
@@ -21,7 +22,6 @@ const initialState = {
 const reducer = (state = initialState, action) => {
 	const actions = {
 		[actionTypes.PRODUCT_START]: updateObject(state, {
-			...initialState,
 			loading: true
 		}),
 		[actionTypes.PRODUCT_FAILED]: updateObject(state, {
@@ -34,16 +34,17 @@ const reducer = (state = initialState, action) => {
 		[actionTypes.PRODUCT_SUCCESS]: updateObject(state, {
 			successMessage: action.successMessage ? action.successMessage : false,
 			loading: action.loading ? action.loading : false,
-			featuredProducts: action.featuredProducts ? action.featuredProducts : [],
+			featuredProducts: action.featuredProducts ? action.featuredProducts : state.featuredProducts,
 			topSellingProducts: action.topSellingProducts
 				? action.topSellingProducts
-				: [],
-			newProducts: action.newProducts ? action.newProducts : [],
-			bannerProducts: action.bannerProducts ? action.bannerProducts : [],
-			ourProducts: action.ourProducts ? action.ourProducts : [],
-			singleProduct: action.singleProduct ? action.singleProduct : {},
-			dailyOffer: action.dailyOffer ? action.dailyOffer : [],
-			weeklyOffer: action.weeklyOffer ? action.weeklyOffer : []
+				: state.topSellingProducts,
+			newProducts: action.newProducts ? action.newProducts : state.newProducts,
+			bannerProducts: action.bannerProducts ? action.bannerProducts : state.bannerProducts,
+			ourProducts: action.ourProducts ? action.ourProducts : state.ourProducts,
+			singleProduct: action.singleProduct ? action.singleProduct : state.singleProduct,
+			searchedProducts: action.searchedProducts ? action.searchedProducts : state.searchedProducts,
+			dailyOffer: action.dailyOffer ? action.dailyOffer : state.dailyOffer,
+			weeklyOffer: action.weeklyOffer ? action.weeklyOffer : state.weeklyOffer
 		}),
 		default: state
 	};

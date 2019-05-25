@@ -159,21 +159,23 @@ exports.addProductValidation = async (data, files) => {
 	) {
 		data.wifi = !isEmpty(data.wifi) ? data.wifi : '';
 		data.bluetooth = !isEmpty(data.bluetooth) ? data.bluetooth : '';
+		console.log(data.wifi)
+		console.log(data.bluetooth)
 		if (Validator.isEmpty(data.wifi)) {
 			errors.wifi = 'Wifi is required';
 		} else if (
-			JSON.parse(data.wifi) !== false &&
-			JSON.parse(data.wifi) !== true
+			(JSON.parse(data.wifi) !== true && data.wifi !== true || (typeof data.wifi === 'string' && data.wifi !== 'true')) &&
+			(JSON.parse(data.wifi) !== false && data.wifi !== false || (typeof data.wifi === 'string' && data.wifi !== 'false'))
 		) {
 			errors.wifi = 'Wifi has to be an Boolean';
 		}
 		if (Validator.isEmpty(data.bluetooth)) {
 			errors.bluetooth = 'Bluetooth is required';
 		} else if (
-			JSON.parse(data.bluetooth) !== false &&
-			JSON.parse(data.bluetooth) !== true
-		) {
-			errors.bluetooth = 'Bluetooth has to be an Boolean';
+			(JSON.parse(data.bluetooth) !== true && data.bluetooth !== true || (typeof data.bluetooth === 'string' && data.bluetooth !== 'true') ) &&
+			(JSON.parse(data.bluetooth) !== false && data.bluetooth !== false || (typeof data.bluetooth === 'string' && data.bluetooth !== 'false'))
+			) {
+				errors.bluetooth = 'Bluetooth has to be an Boolean';
 		}
 	}
 
@@ -267,24 +269,24 @@ exports.addProductValidation = async (data, files) => {
 						if (isEmpty(opt.withDisplay)) {
 							optError.withDisplay = 'Display is required';
 						} else if (
-							JSON.parse(opt.withDisplay) !== true ||
-							JSON.parse(opt.withDisplay) !== false
+							(JSON.parse(opt.withDisplay) !== true || opt.withDisplay !== true) &&
+							(JSON.parse(opt.withDisplay) !== false || opt.withDisplay !== false)
 						) {
 							optError.withDisplay = 'Display has to be an Boolean';
 						}
 						if (isEmpty(opt.withKeyboard)) {
 							optError.withKeyboard = 'Keyboard is required';
 						} else if (
-							JSON.parse(opt.withKeyboard) !== true ||
-							JSON.parse(opt.withKeyboard) !== false
+							(JSON.parse(opt.withKeyboard) !== true || opt.withKeyboard !== true) &&
+							(JSON.parse(opt.withKeyboard) !== false || opt.withKeyboard !== false)
 						) {
 							optError.withKeyboard = 'Keyboard has to be an Boolean';
 						}
 						if (isEmpty(opt.withMouse)) {
 							optError.withMouse = 'Mouse is required';
 						} else if (
-							JSON.parse(opt.withMouse) !== true ||
-							JSON.parse(opt.withMouse) !== false
+							(JSON.parse(opt.withMouse) !== true || opt.withMouse !== true) &&
+							(JSON.parse(opt.withMouse) !== false || opt.withMouse !== false)
 						) {
 							optError.withMouse = 'Mouse has to be an Boolean';
 						}
@@ -320,16 +322,16 @@ exports.addProductValidation = async (data, files) => {
 					if (isEmpty(opt.smart)) {
 						optError.smart = 'Smart is required';
 					} else if (
-						JSON.parse(opt.smart) !== true &&
-						JSON.parse(opt.smart) !== false
+						(JSON.parse(opt.smart) !== true || opt.smart !== true) &&
+							(JSON.parse(opt.smart) !== false || opt.smart !== false)
 					) {
 						optError.smart = 'Smart has to be an Boolean';
 					}
 					if (isEmpty(opt.threeD)) {
 						optError.threeD = '3D is required';
 					} else if (
-						JSON.parse(opt.threeD) !== true &&
-						JSON.parse(opt.threeD) !== false
+						(JSON.parse(opt.threeD) !== true || opt.threeD !== true) &&
+							(JSON.parse(opt.threeD) !== false || opt.threeD !== false)
 					) {
 						optError.threeD = '3D has to be an Boolean';
 					}
@@ -355,8 +357,6 @@ exports.addProductValidation = async (data, files) => {
 			await fs.remove(file.path);
 		});
 	}
-
-	console.log(JSON.stringify(errors));
 
 	return { errors: { errors }, isValid: isEmpty(errors) };
 };
