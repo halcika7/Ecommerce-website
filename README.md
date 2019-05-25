@@ -20,7 +20,7 @@ npm test
 ``` 
 module.exports = {
     mongoURI: '...',
-    secretOrKey: 'secret',
+    secretOrKey: '...',
     sendgridKey: '...'
 }
 ```

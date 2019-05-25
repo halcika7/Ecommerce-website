@@ -3,4 +3,4 @@
 
 /client/node_modules
 
-/public/images
+# /public/images
