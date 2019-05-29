@@ -133,7 +133,7 @@ const BottomNavigation = props => {
 									{categories.map((category, index) => (
 										<li className="dropdownLi" onClick={liOnClick} key={index}>
 											<img src={category.icon} alt="" /> {category.name}
-											<DropdownMenu data={category.subcategories} />
+											<DropdownMenu data={category.subcategories} category={category.name} />
 										</li>
 									))}
 								</ul>

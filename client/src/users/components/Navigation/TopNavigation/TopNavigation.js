@@ -54,7 +54,7 @@ const TopNavigation = props => {
 
     const logout = (e) => {
         e.preventDefault();
-        props.logoutUser();
+        props.logoutUser(props.history.push);
     }
 
     let rightLinks = (
@@ -115,6 +115,7 @@ const TopNavigation = props => {
             </React.Fragment>
         );
     }
+
     return(
         <div className={"container-fluid " + c.borderBottomGrey}>
             <div className={"container " + c.top}>
@@ -146,7 +147,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        logoutUser: () => dispatch(actions.logoutUser())
+        logoutUser: (callBack) => dispatch(actions.logoutUser(callBack))
     }
 }
 

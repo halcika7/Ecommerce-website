@@ -38,6 +38,9 @@ const MiddleNavigation = props => {
         setTimeout( () => {
             ul.classList.remove( c.active );
             setValue( '' );
+         }, 100)
+
+         setTimeout( () => {
             props.searchProducts( '' );
          }, 400)
     }

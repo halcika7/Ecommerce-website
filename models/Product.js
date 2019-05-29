@@ -78,6 +78,16 @@ const ProductSchema = new Schema(
       type: Number,
       required: true,
       default: 0
+    },
+    rating: {
+      averageRating: {
+        type: Number,
+        default: 0
+      },
+      numberOfReviews: {
+        type: Number,
+        default: 0
+      }
     }
 	},
 	{
@@ -85,4 +95,4 @@ const ProductSchema = new Schema(
 	}
 );
 
-module.exports = User = mongoose.model( 'products', ProductSchema );
+module.exports = Product = mongoose.model( 'products', ProductSchema );

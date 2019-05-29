@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
 import './Product.css';
+
 import FooterSocialIcons from '../../components/UI/FooterSocialIcons/FooterSocialIcons';
 import ImageGalery from '../../components/UI/ImageGalery/ImageGalery';
 import SelectProductOptions from './SelectProductOptions';
@@ -9,19 +10,14 @@ import SmallSpinner from '../../components/UI/SmallSpinner/SmallSpinner';
 import Breadcrumb from '../../components/UI/Breadcrumb/Breadcrumb';
 import ProductButtons from './ProductButtons';
 import AboutProduct from './AboutProduct';
+import DescriptionAndReviews from './DescriptionAndReviews';
 
 const Product = props => {
-    const productID = props.match.params.id
-    ? props.match.params.id
-    : new URLSearchParams(props.location.search).get('id');
+    const productID = props.match.params.id ? props.match.params.id : new URLSearchParams(props.location.search).get('id');
 
-    const [socialIcons] = useState([
-        {link: '/', icon: 'fab fa-facebook-f'},
-        {link: '/', icon: 'fab fa-twitter'},
-        {link: '/', icon: 'fab fa-instagram'},
-        {link: '/', icon: 'fab fa-pinterest'},
-        {link: '/', icon: 'fab fa-dribbble'},
-        {link: '/', icon: 'fab fa-google'}
+    const [socialIcons] = useState([ 
+        {link: '/', icon: 'fab fa-facebook-f'}, {link: '/', icon: 'fab fa-twitter'}, {link: '/', icon: 'fab fa-instagram'}, {link: '/', icon: 'fab fa-pinterest'}, 
+        {link: '/', icon: 'fab fa-dribbble'}, {link: '/', icon: 'fab fa-google'}
     ]);
 
     const [product, setProduct] = useState({});
@@ -31,25 +27,41 @@ const Product = props => {
     const [optionLabeledBy, setOptionLabeledBy] = useState([]);
     const [sizes, setSizes] = useState( [] );
 
-    // for computers
+    // for computers and laptops
     const [graphics, setGraphics] = useState([]);
     const [ssd, setSSD] = useState([]);
     const [hdd, setHDD] = useState( [] );
-    const [extra, setExtra] = useState({});
-    // laptop
+    // computers
+    const [withMouse, setWithMouse] = useState([]);
+    const [withKeyboard, setWithKeyboard] = useState([]);
+    const [withDisplay, setWithDisplay] = useState([]);
+    // laptop and monitors
     const [resolution, setResolution] = useState([]);
+    // monitors
+    const [smart, setSmart] = useState([]);
+    const [threeD, setThreeD] = useState([]);
 
     const [choosenLabeledBy, setChoosenLabeledBy] = useState('');
     const [choosenSize, setChoosenSize] = useState('');
+    // comp and laptops
     const [choosenGraphics, setChoosenGraphics] = useState('');
     const [choosenSSD, setChoosenSSD] = useState('');
     const [choosenHDD, setChoosenHDD] = useState('');
+    // comp
+    const [choosenWithMouse, setChoosenWithMouse] = useState('');
+    const [choosenWithKeyboard, setChoosenWithKeyboard] = useState('');
+    const [choosenWithDisplay, setChoosenWithDisplay] = useState('');
+    // laptops
     const [choosenResolution, setChoosenResolution] = useState('');
+    // monitors
+    const [choosenSmart, setChoosenSmart] = useState('');
+    const [choosenThreeD, setChoosenThreeD] = useState('');
 
     const [optionPictures, setOptionPictures] = useState(0);
 
     const [aditionalPrice, setAditionalPrice] = useState(0);
     const [discount, setDiscount] = useState(0);
+    const [sku, setSKU] = useState('');
 
     const [firstIndex, setFirstIndex] = useState(0);
 
@@ -57,21 +69,26 @@ const Product = props => {
     const [numberInStock, setNumberInStock] = useState(0);
 
     useEffect( () => {
-        setSubCat( '' );
-        setSubCatName('');
         props.getProduct(productID);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return () => {props.clearSingleProduct()}
     }, [] );
     
     useEffect( () => {
-        setSubCat( '' );
-        setSubCatName('');
-		props.getProduct(productID);
+        resets('all');
+        props.getProduct(productID);
 	}, [props.location.search, props.match.params]);
+    
+    useEffect(() => {setProduct({ ...props.product.singleProduct })}, [props.product.singleProduct]);
 
-    useEffect(() => {
-        setProduct({ ...props.product.singleProduct });
-    }, [props.product.singleProduct]);
-
+    useEffect( () => {
+        if(numberInStock > 0) {
+            setInStock(true);
+        } else {
+            setInStock(false);
+        }
+    }, [numberInStock] );
+    
     useEffect(() => {
         if(Object.keys(product).length > 0) {
             setSubCatName(product.subcategories[0].sub)
@@ -82,208 +99,246 @@ const Product = props => {
 
     useEffect(() => {
         if ( choosenLabeledBy ) {
-            setSizes( [] );
-            const newSizes = [];
-            let findLabeledByOptionIndex = null;
-            let newNumberInStock = null;
-            if ( subCat !== 'Headphones' || subCat !== 'Camera & Photo' || subCat !== 'Speakers' || subCatName !== 'Console' || subCatName !== 'Blue-ray Players & Recorders' || subCatName !== 'DVD Players & Recorders' || subCatName !== 'Projectors' || subCatName !== 'Games' ) {
+            resets('choosenLabeledBy');
+            let newSizes = [], findLabeledByOptionIndex = null;
+            if ( subCatName !== 'Projection Screens' && subCatName !== 'Games' ) {
+                findLabeledByOptionIndex = product.options.findIndex(option => option.color === choosenLabeledBy);
                 if ( product.category !== 'Electronics' ) {
-                    product.options.forEach( option => 
-                        option.color === choosenLabeledBy && option.options.forEach(opt => opt.quantity > 0 && newSizes.push(opt.size))
-                    )
+                    newSizes = newSizesArray(findLabeledByOptionIndex, 'size');
                     setSizeLabel('Choose Product Size');
-                }
-                if ( subCatName === 'Tablets' || subCatName === 'Phones' ) {
-                    product.options.forEach( option => 
-                        option.color === choosenLabeledBy && option.options.forEach(opt => opt.quantity > 0 && newSizes.push(opt.memory))
-                    )
+                }else if ( subCatName === 'Tablets' || subCatName === 'Phones' ) {
+                    newSizes = newSizesArray(findLabeledByOptionIndex, 'memory');
                     setSizeLabel('Select Product Memory');
+                }else if ( subCatName === 'Desktop Computers' || subCatName === 'Laptops' ) {
+                    newSizes = newSizesArray(findLabeledByOptionIndex, 'ram');
+                    setSizeLabel('Select Product Ram'); 
+                    resets('choosenLabeledByDL');
+                }else if( subCatName === 'Monitors' || subCatName === 'Televisions' ) {
+                    newSizes = newSizesArray(findLabeledByOptionIndex, 'display');
+                    setSizeLabel('Choose Display Size');
+                    resets('choosenLabeledByMT');
+                }else {
+                    findLabeledByOptionIndex = product.options.findIndex(option => option.color === choosenLabeledBy);
+                    setting('other');
                 }
-                if ( subCatName === 'Desktop Computers' || subCatName === 'Laptops' ) {
-                    product.options.forEach( option => 
-                        option.color === choosenLabeledBy && option.options.forEach(opt => opt.quantity > 0 && newSizes.push(opt.ram))
-                    )
-                    setSizeLabel('Select Product Ram');
-                }
-                findLabeledByOptionIndex = product.options.findIndex(option => option.color === choosenLabeledBy);
-                newSizes.length === 0 ? setInStock(false) : setInStock(true);
+            } else {
+                findLabeledByOptionIndex = product.options.findIndex(option => {
+                    if(subCatName === 'Games') return option.console === choosenLabeledBy;
+                    return option.display === choosenLabeledBy;
+                });
+                setting('other');
             }
-            if(subCatName === 'Games') {
-                findLabeledByOptionIndex = product.options.findIndex(option => option.console === choosenLabeledBy);
-                newNumberInStock = product.options[findLabeledByOptionIndex].options[0].quantity;
-                setNumberInStock(newNumberInStock);
-            }
-            if( subCat === 'Headphones' || subCat === 'Camera & Photo' || subCat === 'Speakers' || subCatName === 'Console' || subCatName === 'Blue-ray Players & Recorders' || subCatName === 'DVD Players & Recorders' || subCatName === 'Projectors' ) {
-                findLabeledByOptionIndex = product.options.findIndex(option => option.color === choosenLabeledBy);
-                newNumberInStock = product.options[findLabeledByOptionIndex].options[0].quantity;
-                setNumberInStock(newNumberInStock);
-            }
-            setFirstIndex(findLabeledByOptionIndex);
-            setOptionPictures(findLabeledByOptionIndex);
-            setSizes(newSizes);
+            returnTimeouts(newSizes, setSizes, findLabeledByOptionIndex);
         }
     }, [choosenLabeledBy]);
 
     useEffect(() => {
-        if(choosenSize) {
-            let sizeIndex = null;
-            if ( subCat !== 'Headphones' || subCat !== 'Camera & Photo' || subCat !== 'Speakers' || subCatName !== 'Console' || subCatName !== 'Blue-ray Players & Recorders' || subCatName !== 'DVD Players & Recorders' || subCatName !== 'Projectors' || subCatName !== 'Games' ) {
-                if ( product.category === 'Clothing' || product.category === 'Shoes' ) {
-                    sizeIndex = product.options[firstIndex].options.findIndex( option => option.size === choosenSize );
-                    setNumberInStock( product.options[firstIndex].options[sizeIndex].quantity );
-                    setAditionalPrice(product.options[firstIndex].options[sizeIndex].aditionalPrice)
-                    setDiscount(product.options[firstIndex].options[sizeIndex].discount)
-                }
-                if ( subCatName === 'Tablets' || subCatName === 'Phones' ) {
-                    sizeIndex = product.options[firstIndex].options.findIndex( option => option.memory === choosenSize );
-                    setNumberInStock( product.options[firstIndex].options[sizeIndex].quantity );
-                    setAditionalPrice(product.options[firstIndex].options[sizeIndex].aditionalPrice)
-                    setDiscount(product.options[firstIndex].options[sizeIndex].discount)
-                }
-                if ( subCatName === 'Desktop Computers' || subCatName === 'Laptops' ) {
-                    const graphics = [];
-                    sizeIndex = product.options[firstIndex].options.findIndex( option => option.ram === choosenSize );
-                    product.options[firstIndex].options.forEach( option => {
-                        if ( option.ram === choosenSize ) { 
-                            graphics.push( option.graphics );
-                        }
-                    } )
-                    setGraphics( graphics );
-                }
-            }
-        }
+        ( choosenSize && (product.category === 'Clothing' || product.category === 'Shoes') ) && setting('choosenSize', 'Clothing&Shoes');
+        ( choosenSize && (subCatName === 'Tablets' || subCatName === 'Phones') ) && setting('choosenSize', 'Tablets&Phones');
+        ( choosenSize && (subCatName === 'Desktop Computers' || subCatName === 'Laptops') ) && commonInUseEffects('choosenSize', 'Computers',false, 'graphics', 'choosenSizeDL', setGraphics);
+        ( choosenSize && (subCatName === 'Monitors' || subCatName === 'Televisions') ) && commonInUseEffects('choosenSize', 'Displays',false, 'resolution', 'choosenSizeMT', setResolution);
     }, [choosenSize] );
     
-    useEffect(() => {
-        if(choosenGraphics) {
-            let sizeIndex = null;
-            if ( subCatName === 'Desktop Computers' || subCatName === 'Laptops' ) {
-                const ssd = [];
-                sizeIndex = product.options[firstIndex].options.findIndex( option => (option.graphics === choosenGraphics && option.ram === choosenSize) );
-                product.options[firstIndex].options.forEach( option => {
-                    if ( option.ram === choosenSize && option.graphics === choosenGraphics ) { 
-                        ssd.push( option.ssd );
-                    }
-                } )
-                setSSD( ssd );
-            }
-        }
-    }, [choosenGraphics] );
+    useEffect(() => { choosenGraphics && commonInUseEffects('choosenSize', 'Computers',false, 'ssd', 'choosenGraphics', setSSD) }, [choosenGraphics] );
+    
+    useEffect( () => { choosenSSD && commonInUseEffects('choosenSSD', 'Computers',false, 'hdd', 'choosenSSD', setHDD) }, [choosenSSD] );
     
     useEffect( () => {
-        if(choosenSSD) {
-            let sizeIndex = null;
-            if ( subCatName === 'Desktop Computers' || subCatName === 'Laptops' ) {
-                const hdd = [];
-                sizeIndex = product.options[firstIndex].options.findIndex( option => (option.graphics === choosenGraphics && option.ram === choosenSize && option.ssd === choosenSSD) );
-                product.options[firstIndex].options.forEach( option => {
-                    if ( option.ram === choosenSize && option.graphics === choosenGraphics && option.ssd === choosenSSD) { 
-                        hdd.push( option.hdd );
-                    }
-                } )
-                setHDD( hdd );
-            }
+        if ( choosenHDD && (subCatName === 'Laptops') ) {
+            commonInUseEffects('choosenHDD','Laptops',false, 'resolution', 'choosenHDDL', setResolution);
+            setting('choosenHDD','Laptops', true);
         }
-    }, [choosenSSD] );
-    
-    useEffect( () => {
-        if(choosenHDD) {
-            if ( subCatName === 'Laptops' ) {
-                const resolution = [];
-                product.options[firstIndex].options.forEach( option => {
-                    if ( option.ram === choosenSize && option.graphics === choosenGraphics && option.ssd === choosenSSD && option.hdd === choosenHDD) { 
-                        resolution.push( option.resolution );
-                    }
-                } )
-                setResolution( resolution );
-            }
-            if ( subCatName === 'Desktop Computers' ) {
-                const extra = {};
-                product.options[firstIndex].options.forEach( option => {
-                    if ( option.ram === choosenSize && option.graphics === choosenGraphics && option.ssd === choosenSSD && option.hdd === choosenHDD) { 
-                        extra.withMouse = option.withMouse;
-                        extra.withDisplay = option.withDisplay;
-                        extra.withKeyboard = option.withKeyboard;
-                    }
-                } )
-                setExtra( extra );
-                const sizeIndex = product.options[firstIndex].options.findIndex( option => (option.ram === choosenSize && option.graphics === choosenGraphics && option.ssd === choosenSSD && option.hdd === choosenHDD) );
-                setNumberInStock( product.options[firstIndex].options[sizeIndex].quantity );
-                setAditionalPrice(product.options[firstIndex].options[sizeIndex].aditionalPrice)
-                setDiscount(product.options[firstIndex].options[sizeIndex].discount)
-            }
-        }
+        ( choosenHDD && subCatName === 'Desktop Computers' ) && commonInUseEffects('choosenHDD','Desktop',false, 'withMouse', 'choosenHDDD', setWithMouse);
     }, [choosenHDD]);
 
+    useEffect( () => {choosenWithMouse && commonInUseEffects('choosenWithMouse',null,null, 'withDisplay', 'choosenWithMouse', setWithDisplay) }, [choosenWithMouse]);
+
+    useEffect( () => {choosenWithDisplay && commonInUseEffects('choosenWithDisplay',null,null,'withKeyboard', 'choosenWithDisplay', setWithKeyboard) }, [choosenWithDisplay]);
+
+    useEffect( () => { choosenWithKeyboard && setting('choosenWithKeyboard') }, [choosenWithKeyboard]);
+
+    useEffect( () => { choosenResolution && commonInUseEffects('choosenResolution',null,null,'threeD', 'choosenResolution', setThreeD) }, [choosenResolution]);
+
+    useEffect( () => { choosenThreeD && commonInUseEffects('choosenThreeD',null,null,'smart', 'choosenThreeD', setSmart); }, [choosenThreeD]);
+
+    useEffect( () => { choosenSmart && setting('choosenSmart') }, [choosenSmart]);
+
+    const commonInUseEffects = (first, second, third, fourth, fifth, setValue) => {
+        const value = setting(first, second, third, fourth);
+        resets(fifth);
+        returnTimeouts(value,setValue);
+    }
+
+    const resets = change => {
+        (change === 'all') && setProduct({}); 
+        (change === 'all') && setSubCat(''); 
+        (change === 'all') && setSubCatName(''); 
+        (change === 'all') && setSizeLabel(''); 
+        (change === 'all') && setOptionLabeledBy([]); 
+        (change === 'all' || change === 'choosenLabeledBy') && setSizes([]); 
+        (change === 'all' || change === 'choosenLabeledByDL' || change === 'choosenSizeDL') && setGraphics([]); 
+        (change === 'all' || change === 'choosenLabeledByDL' || change === 'choosenSizeDL' || change === 'choosenGraphics') && setSSD([]); 
+        (change === 'all' || change === 'choosenLabeledByDL' || change === 'choosenSizeDL' || change === 'choosenGraphics' || change === 'choosenSSD') && setHDD([]); 
+        (change === 'all' || change === 'choosenLabeledByDL' || change === 'choosenSizeDL' || change === 'choosenGraphics' || change === 'choosenSSD' || change === 'choosenHDDD') && setWithMouse([]); 
+        (change === 'all' || change === 'choosenLabeledByDL' || change === 'choosenSizeDL' || change === 'choosenGraphics' || change === 'choosenSSD' || change === 'choosenHDDD' || change === 'choosenWithMouse' || change === 'choosenWithDisplay') && setWithKeyboard([]); 
+        (change === 'all' || change === 'choosenLabeledByDL' || change === 'choosenSizeDL' || change === 'choosenGraphics' || change === 'choosenSSD' || change === 'choosenHDDD' || change === 'choosenWithMouse') && setWithDisplay([]); 
+        (change === 'all' || change === 'choosenLabeledByDL' || change === 'choosenLabeledByMT' || change === 'choosenSizeDL' || change === 'choosenSizeMT' || change === 'choosenGraphics' || change === 'choosenSSD' || change === 'choosenHDDL') && setResolution([]); 
+        (change === 'all' || change === 'choosenLabeledByMT' || change === 'choosenSizeMT' || change === 'choosenResolution' || change === 'choosenThreeD') && setSmart([]); 
+        (change === 'all' || change === 'choosenLabeledByMT' || change === 'choosenSizeMT' || change === 'choosenResolution') && setThreeD([]); 
+        (change === 'all') && setChoosenLabeledBy(''); 
+        (change === 'all' || change === 'choosenLabeledBy') && setChoosenSize(''); 
+        (change === 'all' || change === 'choosenLabeledByDL' || change === 'choosenSizeDL') && setChoosenGraphics(''); 
+        (change === 'all' || change === 'choosenLabeledByDL' || change === 'choosenSizeDL' || change === 'choosenGraphics') && setChoosenSSD(''); 
+        (change === 'all' || change === 'choosenLabeledByDL' || change === 'choosenSizeDL' || change === 'choosenGraphics' || change === 'choosenSSD') && setChoosenHDD(''); 
+        (change === 'all' || change === 'choosenLabeledByDL' || change === 'choosenSizeDL' || change === 'choosenGraphics' || change === 'choosenSSD' || change === 'choosenHDDD') && setChoosenWithMouse(''); 
+        (change === 'all' || change === 'choosenLabeledByDL' || change === 'choosenSizeDL' || change === 'choosenGraphics' || change === 'choosenSSD' || change === 'choosenHDDD' || change === 'choosenWithMouse' || change === 'choosenWithDisplay') && setChoosenWithKeyboard(''); 
+        (change === 'all' || change === 'choosenLabeledByDL' || change === 'choosenSizeDL' || change === 'choosenGraphics' || change === 'choosenSSD' || change === 'choosenHDDD' || change === 'choosenWithMouse') && setChoosenWithDisplay(''); 
+        (change === 'all' || change === 'choosenLabeledByDL' || change === 'choosenLabeledByMT' || change === 'choosenSizeDL' || change === 'choosenSizeMT' || change === 'choosenGraphics' || change === 'choosenSSD' || change === 'choosenHDDL') && setChoosenResolution(''); 
+        (change === 'all' || change === 'choosenLabeledByMT' || change === 'choosenSizeMT' || change === 'choosenResolution' || change === 'choosenThreeD') && setChoosenSmart(''); 
+        (change === 'all' || change === 'choosenLabeledByMT' || change === 'choosenSizeMT' || change === 'choosenResolution') && setChoosenThreeD(''); 
+        (change === 'all') && setOptionPictures(0); 
+        (change === 'all') && setAditionalPrice(0); 
+        (change === 'all') && setDiscount(0); 
+        (change === 'all') && setFirstIndex(0); 
+        (change === 'all'|| change === 'choosenLabeledBy') && setNumberInStock(0); 
+        (change === 'all'|| change === 'choosenLabeledBy') && setInStock(false);
+    }
+                        
+    const newSizesArray = (index, property) => [...new Set(product.options[index].options.filter(option => option.quantity > 0 && option ).map(opt => opt[property]))].sort((a, b) => a - b);
+
     const setOptions = () => {
-        const subName = product.subcategories[0].subName;
-        const sub = product.subcategories[0].sub;
+        const subName = product.subcategories[0].subName, sub = product.subcategories[0].sub;
         let newLabeledBy = null;
-        if(subName !== 'Headphones' || subName !== 'Camera & Photo' || subName !== 'Speakers' || sub !== 'Console' || sub !== 'Blue-ray Players & Recorders' || sub !== 'DVD Players & Recorders' || sub !== 'Projectors' || sub !== 'Games') {
-            newLabeledBy = product.options.map(option => option.color);
-            newLabeledBy.length === 0 ? setInStock(false) : setInStock(true);
-        }
-        if(sub === 'Games') {
-            newLabeledBy = [];
-            product.options.forEach(option => {
-                option.options[0].quantity > 0 && newLabeledBy.push(option.console);
-            });
-            newLabeledBy.length === 0 ? setInStock(false) : setInStock(true);
-        }
-        if( subName === 'Headphones' || subName === 'Camera & Photo' || subName === 'Speakers' || sub === 'Console' || sub === 'Blue-ray Players & Recorders' || sub === 'DVD Players & Recorders' || sub === 'Projectors' ) {
-            newLabeledBy = [];
-            product.options.forEach(option => {
-                option.options[0].quantity > 0 && newLabeledBy.push(option.color);
-            });
-            newLabeledBy.length === 0 ? setInStock(false) : setInStock(true);
+        if( sub !== 'Games' && sub !== 'Projection Screens' ) {
+            if( subName === 'Headphones' || subName === 'Camera & Photo' || subName === 'Speakers' || sub === 'Console' || sub === 'Blue-ray Players & Recorders' || sub === 'DVD Players & Recorders' || sub === 'Projectors' ) {
+                newLabeledBy = product.options.filter(option => option.options[0].quantity > 0 && option ).map(opt => opt.color );
+            }else {
+                newLabeledBy = product.options.map(option => option.color);
+            }
+        }else {
+            newLabeledBy = product.options.filter(option => option.options[0].quantity > 0 && option ).map(opt => {
+                if(sub === 'Games') return opt.console;
+                return opt.display;
+            } );
         }
         setOptionLabeledBy(newLabeledBy);
     }
 
+    const bool = (option, change, subCat = null) => {
+        const withmouse = choosenWithMouse === 'Yes' ? true : false;
+        const withdisplay = choosenWithDisplay === 'Yes' ? true : false;
+        const withkeyboard = choosenWithKeyboard === 'Yes' ? true : false;
+        const threed = choosenThreeD === 'Yes' ? true : false;
+        const smart = choosenSmart === 'Yes' ? true : false;
+
+        if(change === 'choosenSize' && subCat === 'Clothing&Shoes') return option.size === choosenSize;
+        if(change === 'choosenSize' && subCat === 'Tablets&Phones') return option.memory === choosenSize;
+        if(change === 'choosenSize' && subCat === 'Computers') return option.ram === choosenSize;
+        if(change === 'choosenSize' && subCat === 'Displays') return option.display === choosenSize;
+        if(change === 'choosenGraphics' && subCat === 'Computers') return option.graphics === choosenGraphics && option.ram === choosenSize;
+        if(change === 'choosenSSD' && subCat === 'Computers') return option.graphics === choosenGraphics && option.ram === choosenSize && option.ssd === choosenSSD;
+        if(change === 'choosenHDD' && (subCat === 'Laptops' || subCat === 'Desktop')) {
+            return option.ram === choosenSize && option.graphics === choosenGraphics && option.ssd === choosenSSD && option.hdd === choosenHDD;
+        }
+        if(change === 'choosenWithMouse') {
+            return option.ram === choosenSize && option.graphics === choosenGraphics && option.ssd === choosenSSD && option.hdd === choosenHDD && option.withMouse === withmouse;
+        }
+        if(change === 'choosenWithDisplay') {
+            return option.ram === choosenSize && option.graphics === choosenGraphics && option.ssd === choosenSSD && option.hdd === choosenHDD && option.withMouse === withmouse && option.withDisplay === withdisplay;
+        }
+        if(change === 'choosenWithKeyboard') {
+            return option.ram === choosenSize && option.graphics === choosenGraphics && option.ssd === choosenSSD && option.hdd === choosenHDD && option.withMouse === withmouse && option.withDisplay === withdisplay && option.withKeyboard === withkeyboard;
+        }
+        if(change === 'choosenResolution') return option.display === choosenSize && option.resolution === choosenResolution;
+        if(change === 'choosenThreeD') return option.display === choosenSize && option.resolution === choosenResolution && option.threeD === threed;
+        if(change === 'choosenSmart') return option.display === choosenSize && option.resolution === choosenResolution && option.threeD === threed && option.smart === smart;
+    }
+
+    const setting = (change, subCat = null, sizeIndex = null, property = null) => {
+        const array = [...new Set(product.options[firstIndex].options.filter(option => bool(option, change, subCat) && option ).map(opt => opt[property]))];
+        const sizeIndexx = change === 'other' ? 0 : product.options[firstIndex].options.findIndex( option => bool(option, change, subCat));
+        if((change === 'choosenSize' && subCat === 'Computers') || (change === 'choosenGraphics' && subCat === 'Computers') || (change === 'choosenSSD' && subCat === 'Computers') || (change === 'choosenHDD' && subCat === 'Laptops' && !sizeIndex)) return array.sort((a, b) => a - b);
+
+        if(change === 'choosenSize' && subCat === 'Displays') return array;
+
+        if((change === 'choosenHDD' && subCat === 'Desktop') || (change === 'choosenWithMouse') || (change === 'choosenWithDisplay') || (change === 'choosenResolution') || (change === 'choosenThreeD')) {
+            return [...new Set(product.options[firstIndex].options.filter(option => bool(option, change, subCat) && option ).map(opt => opt[property] === true ? 'Yes' : 'No'))];
+        }
+
+        if((change === 'choosenHDD' && subCat === 'Laptops' && sizeIndex) || change === 'choosenWithKeyboard' || change === 'choosenSmart' || subCat === 'Clothing&Shoes' || subCat === 'Tablets&Phones' || change === 'other') {
+            const option = product.options[firstIndex].options[sizeIndexx];
+            console.log(option)
+            setNumberInStock( option.quantity );
+            setAditionalPrice(option.aditionalPrice)
+            setDiscount(option.discount)
+            setSKU(option.sku);
+            return;
+        }
+    }
+
+    const returnTimeouts = (value, setValue, third = null) => setTimeout(() => {
+        if(third !== null) {setFirstIndex(third);setOptionPictures(third);}
+        setValue(value);
+    },500);
+
     return (
         <React.Fragment>
             {Object.keys(product).length === 0 ?
-                <div className='card' style={{ minHeight: '60vh' }}>
-                    <SmallSpinner />
-                </div> :
+                <div className='card' style={{ minHeight: '60vh' }}><SmallSpinner /></div> :
                 <React.Fragment>
-                    <Breadcrumb links={[ { link: '/', value: 'Home' }, { link: '/', value: 'Shop' }, { link: `/product?id=${productID}`, value: product.name } ]} />
-
+                    <Breadcrumb links={[ { link: '/', value: 'Home' }, { link: `/product?id=${productID}`, value: product.name } ]} />
                     <div className="container images">
                         <div className="row">
                             {Object.keys(product).length > 0 && props.show && <ImageGalery images={product.options[optionPictures].pictures} />}
                             <div className="col-md-4 about-product">
-                                <AboutProduct name={product.name} numberOfSales={product.numberOfsales} category={product.category} brand={product.brand} inStock={inStock} numberInStock={numberInStock} price={product.price} aditionalPrice={aditionalPrice} discount={discount} smalldescription={product.smalldescription} subCat={subCat} wifi={product.wifi} bluetooth={product.bluetooth} />
-
+                                {subCat !== '' && 
+                                    <AboutProduct 
+                                        name={product.name} 
+                                        numberOfSales={product.numberOfsales} 
+                                        category={product.category} 
+                                        brand={product.brand} 
+                                        inStock={inStock} 
+                                        numberInStock={numberInStock} 
+                                        price={product.price} 
+                                        aditionalPrice={aditionalPrice} 
+                                        discount={discount} 
+                                        subCat={subCat} 
+                                        wifi={product.wifi} 
+                                        bluetooth={product.bluetooth} 
+                                        rating={product.rating} 
+                                        createdAt={product.createdAt}
+                                        subcategories={product.subcategories}
+                                        sku={sku}/>
+                                }
                                 <div className="options">
                                     <div className="row">
-                                        {optionLabeledBy.length > 0 && (subCatName !== 'Projection Screens' && subCatName !== 'Games' && subCatName !== '') && <SelectProductOptions color={true} values={optionLabeledBy} change={setChoosenLabeledBy} value={choosenLabeledBy} label='Choose Product'/>}
-                                        
-                                        {(optionLabeledBy.length > 0 && subCatName === 'Games' && subCatName !== '') && <SelectProductOptions size={true} values={optionLabeledBy} change={setChoosenLabeledBy} value={choosenLabeledBy} label='Choose Console'/>}
-                                        
-                                        {sizes.length > 0 &&
-                                            <SelectProductOptions
-                                            size={true} values={sizes} change={setChoosenSize} value={choosenSize}
-                                                label={sizeLabel} />}
-                                        {graphics.length > 0 &&
-                                            <SelectProductOptions
-                                            size={true} values={graphics} change={setChoosenGraphics} value={choosenGraphics}
-                                                label={"Select Product Graphics"} />}
-                                        {ssd.length > 0 &&
-                                            <SelectProductOptions
-                                            size={true} values={ssd} change={setChoosenSSD} value={choosenSSD}
-                                                label={"Select Product SSD"} />}
-                                        {hdd.length > 0 &&
-                                            <SelectProductOptions
-                                            size={true} values={hdd} change={setChoosenHDD} value={choosenHDD}
-                                                label={"Select Product HDD"} />}
+                                        {optionLabeledBy.length > 0 && (subCatName !== 'Projection Screens' && subCatName !== 'Games') && 
+                                            <SelectProductOptions color={true} values={optionLabeledBy} change={setChoosenLabeledBy} value={choosenLabeledBy} label='Choose Product'/>
+                                        }
+                                        {(optionLabeledBy.length > 0 && subCatName === 'Games') && 
+                                            <SelectProductOptions size={true} values={optionLabeledBy} change={setChoosenLabeledBy} value={choosenLabeledBy} label='Choose Console'/>
+                                        }
+                                        {(optionLabeledBy.length > 0 && subCatName === 'Projection Screens') && 
+                                            <SelectProductOptions size={true} values={optionLabeledBy} change={setChoosenLabeledBy} value={choosenLabeledBy} label='Choose Display'/>
+                                        }
+                                        {sizes.length > 0 && <SelectProductOptions size={true} values={sizes} change={setChoosenSize} value={choosenSize} label={sizeLabel} /> }
+                                        {graphics.length > 0 && <SelectProductOptions size={true} values={graphics} change={setChoosenGraphics} value={choosenGraphics} label={"Select Product Graphics"} /> }
+                                        {ssd.length > 0 && <SelectProductOptions size={true} values={ssd} change={setChoosenSSD} value={choosenSSD} label={"Select Product SSD"} /> }
+                                        {hdd.length > 0 && <SelectProductOptions size={true} values={hdd} change={setChoosenHDD} value={choosenHDD} label={"Select Product HDD"} /> }
                                         {resolution.length > 0 &&
-                                            <SelectProductOptions
-                                            size={true} values={resolution} change={setChoosenResolution} value={choosenResolution}
-                                                label={"Select Product Display Resolution"} />}
-                                        {extra.withMouse && <p>Product Comes with Mouse</p>}
-                                        {extra.withDisplay && <p>Product Comes with Display</p>}
-                                        {extra.withKeyboard && <p>Product Comes with Keyboard</p>}
+                                            <SelectProductOptions size={true} values={resolution} change={setChoosenResolution} value={choosenResolution} label={"Select Product Display Resolution"} />
+                                        }
+                                        {withMouse.length > 0 &&
+                                            <SelectProductOptions size={true} values={withMouse} change={setChoosenWithMouse} value={choosenWithMouse} label="With extra mouse" />
+                                        }
+                                        {withDisplay.length > 0 &&
+                                            <SelectProductOptions size={true} values={withDisplay} change={setChoosenWithDisplay} value={choosenWithDisplay} label="With extra display" />
+                                        }
+                                        {withKeyboard.length > 0 &&
+                                            <SelectProductOptions size={true} values={withKeyboard} change={setChoosenWithKeyboard} value={choosenWithKeyboard} label="With extra keyboard" />
+                                        }
+                                        {threeD.length > 0 && <SelectProductOptions size={true} values={threeD} change={setChoosenThreeD} value={choosenThreeD} label="Is 3D" /> }
+                                        {smart.length > 0 && <SelectProductOptions size={true} values={smart} change={setChoosenSmart} value={choosenSmart} label="Is Smart" /> }
                                     </div>
                                 </div>
                                 <ProductButtons inStock={inStock} />
@@ -291,329 +346,7 @@ const Product = props => {
                             </div>
                         </div>
                     </div>
-
-                    <div className="container-fluid about-product">
-                        <ul className="nav nav-tabs" id="myTab" role="tablist">
-                            <li className="nav-item">
-                                <a className="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">Description</a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="true">Reviews</a>
-                            </li>
-                        </ul>
-                        <div className="tab-content" id="myTabContent">
-                            <div className="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                <div className="container">
-                                    <div className="row">
-                                        <div className="col description" dangerouslySetInnerHTML={{ __html: product.description }} />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="tab-pane fade show active" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                                <div className="container">
-                                    <div className="row" style={{ margin: '0px' }}>
-                                        <div className="col-md-6">
-                                            <h5>Based on 3 reviews</h5>
-                                            <div className="review-score">
-                                                <div className="scores">
-                                                    <p className="number">4.3</p>
-                                                    <p className="text">Average Score</p>
-                                                </div>
-                                            </div>
-                                            <ul>
-                                                <li className="five-star">
-                                                    <span className="stars">
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    </span>
-                                                    <span className="number-star" id="number-star-5">
-                                                        3
-                                                        <div className="progress">
-                                                            <div className="progress-bar" role="progressbar" style={{width: '85%'}}></div>
-                                                        </div>
-                                                    </span>
-                                                </li>
-                                                <li className="four-star">
-                                                    <span className="stars">
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    </span>
-                                                    <span className="number-star">
-                                                        4
-                                                        <div className="progress">
-                                                            <div className="progress-bar" role="progressbar" style={{width: '25%'}}></div>
-                                                        </div>
-                                                    </span>
-                                                </li>
-                                                <li className="three-star">
-                                                    <span className="stars">
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    </span>
-                                                    <span className="number-star">
-                                                        3
-                                                        <div className="progress">
-                                                            <div className="progress-bar" role="progressbar" style={{width: '25%'}}></div>
-                                                        </div>
-                                                    </span>
-                                                </li>
-                                                <li className="two-star">
-                                                    <span className="stars">
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    </span>
-                                                    <span className="number-star">
-                                                        2
-                                                        <div className="progress">
-                                                            <div className="progress-bar" role="progressbar" style={{width: '25%'}}></div>
-                                                        </div>
-                                                    </span>
-                                                </li>
-                                                <li className="one-star">
-                                                    <span className="stars">
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    
-                                                        <i className="fa fa-star"></i>
-                                                    </span>
-                                                    <span className="number-star">
-                                                        0
-                                                        <div className="progress">
-                                                            <div className="progress-bar" role="progressbar" style={{width: '25%'}}></div>
-                                                        </div>
-                                                    </span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <h5>Add a review</h5>
-                                            <div className="user-rating">
-                                                Your rating
-                                                <div className="stars-rating">
-                                                    <span className="star" data-value="1">
-                                                        <i className="fa fa-star"></i>
-                                                    </span>
-                                                    <span className="star" data-value="2">
-                                                        <i className="fa fa-star"></i>
-                                                    </span>
-                                                    <span className="star" data-value="3">
-                                                        <i className="fa fa-star"></i>
-                                                    </span>
-                                                    <span className="star" data-value="4">
-                                                        <i className="fa fa-star"></i>
-                                                    </span>
-                                                    <span className="star" data-value="5">
-                                                        <i className="fa fa-star"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div className="user-comment">
-                                                <div className="wrapper-content-editabel">
-                                                    <div className="contenteditable" contentEditable="true" tabIndex="5"></div>
-                                                    <div className="navbar-content-editable"></div>
-                                                </div>
-                                                <button className="btn btn-default add-comment">Add Review</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="row comments" style={{ margin: '0px' }}>
-                                        <div className="blog-post-comments">
-                                            <ol className="blog-comment">
-                                                <li className="comment">
-                                                    <div className="comment-author">
-                                                        <img src="{{asset('/img/profile5.jpg')}}" alt="" />
-                                                    </div>
-                                                    <div className="comment-text">
-                                                        <div className="top">
-                                                            <span><b>Ali Tufan: </b></span>
-                                                            <button className="like"><i className="fas fa-thumbs-up"></i>(50)</button>
-                                                            <button className="dislike"><i className="fas fa-thumbs-down"></i>(4)</button>
-                                                            <div className="stars-rating five-stars">
-                                                                <span className="star">
-                                                                    <i className="fa fa-star"></i>
-                                                                </span>
-                                                                <span className="star">
-                                                                    <i className="fa fa-star"></i>
-                                                                </span>
-                                                                <span className="star">
-                                                                    <i className="fa fa-star"></i>
-                                                                </span>
-                                                                <span className="star">
-                                                                    <i className="fa fa-star"></i>
-                                                                </span>
-                                                                <span className="star">
-                                                                    <i className="fa fa-star"></i>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="text">
-                                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leaLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard took a galley of type and <b>Halcika</b>
-                                                            scrambled it to make a type specimen book. It has survived not only five centuries, but also the leaLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leaLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the lea</p>
-                                                        </div>
-                                                        <div className="comment-footer">
-                                                            <button>
-                                                                <i className="fas fa-reply"></i> Reply
-                                                            </button>
-                                                            <button>
-                                                                <i className="far fa-edit"></i>
-                                                            </button>
-                                                            <button>
-                                                                <i className="fas fa-trash-alt"></i>
-                                                            </button>
-                                                            <button>
-                                                                Replays(10)
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    {/* <li className="comment comment-sub">
-                                                        <div className="comment-author">
-                                                            <img src="{{asset('/img/profile5.jpg')}}" alt="" />
-                                                        </div>
-                                                        <div className="comment-text">
-                                                            <div className="top">
-                                                                <span><b>Ali Tufan: </b></span>
-                                                                <button className="like"><i className="fas fa-thumbs-up"></i>(50)</button>
-                                                                <button className="dislike"><i className="fas fa-thumbs-down"></i>(4)</button>
-                                                            </div>
-                                                            <div className="text">
-                                                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the lea</p>
-                                                            </div>
-                                                            <div className="comment-footer">
-                                                                <button>
-                                                                    <i className="fas fa-reply"></i> Reply
-                                                                </button>
-                                                                <button>
-                                                                    <i className="far fa-edit"></i>
-                                                                </button>
-                                                                <button>
-                                                                    <i className="fas fa-trash-alt"></i>
-                                                                </button>
-                                                                <button>
-                                                                    Replays(10)
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        {/* <li className="comment comment-sub-sub">
-                                                            <div className="comment-author">
-                                                                <img src="{{asset('/img/profile5.jpg')}}" alt="" />
-                                                            </div>
-                                                            <div className="comment-text">
-                                                                <div className="top">
-                                                                    <span><b>Ali Tufan: </b></span>
-                                                                    <button className="like"><i className="fas fa-thumbs-up"></i>(50)</button>
-                                                                    <button className="dislike"><i className="fas fa-thumbs-down"></i>(4)</button>
-                                                                </div>
-                                                                <div className="text">
-                                                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the lea</p>
-                                                                </div>
-                                                            </div>
-                                                        </li> */}
-                                                    {/* </li> */} 
-                                                </li>
-                                                <li className="comment">
-                                                    <div className="comment-author">
-                                                        <img src="{{asset('/img/profile5.jpg')}}" alt="" />
-                                                    </div>
-                                                    <div className="comment-text">
-                                                        <div className="top">
-                                                            <span><b>Ali Tufan: </b></span>
-                                                            <button className="like"><i className="fas fa-thumbs-up"></i>(50)</button>
-                                                            <button className="dislike"><i className="fas fa-thumbs-down"></i>(4)</button>
-                                                            <div className="stars-rating five-stars">
-                                                                <span className="star">
-                                                                    <i className="fa fa-star"></i>
-                                                                </span>
-                                                                <span className="star">
-                                                                    <i className="fa fa-star"></i>
-                                                                </span>
-                                                                <span className="star">
-                                                                    <i className="fa fa-star"></i>
-                                                                </span>
-                                                                <span className="star">
-                                                                    <i className="fa fa-star"></i>
-                                                                </span>
-                                                                <span className="star">
-                                                                    <i className="fa fa-star"></i>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="text">
-                                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the lea</p>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li className="comment">
-                                                    <div className="comment-author">
-                                                        <img src="{{asset('/img/profile5.jpg')}}" alt="" />
-                                                    </div>
-                                                    <div className="comment-text">
-                                                        <div className="top">
-                                                            <span><b>Ali Tufan: </b></span>
-                                                            <button className="like"><i className="fas fa-thumbs-up"></i>(50)</button>
-                                                            <button className="dislike"><i className="fas fa-thumbs-down"></i>(4)</button>
-                                                            <div className="stars-rating five-stars">
-                                                                <span className="star">
-                                                                    <i className="fa fa-star"></i>
-                                                                </span>
-                                                                <span className="star">
-                                                                    <i className="fa fa-star"></i>
-                                                                </span>
-                                                                <span className="star">
-                                                                    <i className="fa fa-star"></i>
-                                                                </span>
-                                                                <span className="star">
-                                                                    <i className="fa fa-star"></i>
-                                                                </span>
-                                                                <span className="star">
-                                                                    <i className="fa fa-star"></i>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="text">
-                                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the lea</p>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ol>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <DescriptionAndReviews product={product} match={props.match} location={props.location}/>
                 </React.Fragment>
             }
         </React.Fragment>
@@ -628,7 +361,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        getProduct: (id) => dispatch(actions.getProduct(id))
+        getProduct: (id) => dispatch(actions.getProduct(id)),
+        clearSingleProduct: () => dispatch(actions.clearSingleProduct())
     }
 }
 

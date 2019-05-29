@@ -1,19 +1,22 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 import c from '../../Navigation.module.css';
 
-const dropdownMenu = (props) => {
-    return(
-        <div className={c.megamenu1 + " megamenu1 d-none d-lg-block"} style={{ height: `${props.height}px` }}>
-            <div className={c.row + " row"} >
-                {props.data.map((category, index) => 
-                    <ul key={index} className={c.col + " col-4"}>
-                        <li><h5>{category.name}</h5></li>
-                        {category.subcategories.map((cat, index) => <li key={index}><a href="/">{cat}</a></li>)}
-                    </ul>
-                )}
-            </div>
+const dropdownMenu = ({ data, category }) => (
+    <div className={c.megamenu1 + " megamenu1 d-none d-lg-block"}>
+        <div className={c.row + " row"} >
+            {data.map((categ, index) => 
+                <ul key={index} className={c.col + " col-4"}>
+                    <li><h5>{categ.name}</h5></li>
+                    {categ.subcategories.map((cat, index) => 
+                        <li key={index}>
+                            <Link to={`/products?category=${category}&subcategoryName=${categ.name}&subcategory=${cat}`} >{cat}</Link>
+                        </li>
+                    )}
+                </ul>
+            )}
         </div>
-    );
-};
+    </div>
+);
 
 export default dropdownMenu;

@@ -7,7 +7,7 @@ class Navigation extends Component {
 	render() {
 		return (
 			<React.Fragment>
-				<TopNavigation />
+				<TopNavigation {...this.props}/>
 				<MiddleNavigation />
 				<BottomNavigation icons={this.props.icons} />
 			</React.Fragment>

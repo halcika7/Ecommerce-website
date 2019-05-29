@@ -75,8 +75,30 @@ export {
   addProduct,
   homePageProducts,
   getProduct,
-  searchProducts
+  getNewProducts,
+  searchProducts,
+  clearSingleProduct
 } from "./products/product";
+
+export {
+  getProductsOnLoad
+} from "./products/filterproducts";
+
+export {
+  addReview,
+  editReview,
+  deleteReview,
+  updateAddReview,
+  updateEditReview,
+  updateDeleteReview,
+  addReply,
+  editReply,
+  deleteReply,
+  updateAddReply,
+  updateDeleteReply,
+  getReviews,
+  clearReviews
+} from "./products/productreview";
 
 export {
   addAnswer,

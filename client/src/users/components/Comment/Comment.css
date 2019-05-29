@@ -1,0 +1,207 @@
+.comment{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 30px 0 0;
+  }
+  
+  .comment-sub{
+    margin-left: 20px;
+    width: 100%;
+  }
+  
+  .comment-sub-sub{
+  margin-left: 60px;
+  }
+  
+  .comment-sub-sub > .comment-text{
+      max-width: 85%;
+  }
+  
+  .comment-author{
+  max-height: 100px;
+  max-width: 80px;
+  }
+  
+  .comment-author > img{
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .comment-text{
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    max-width: 90%;
+    width: 100%;
+  }
+  .comment-text > button {
+    max-width: 150px;
+    border-radius: 30px;
+    padding: 10px;
+    background-color: rgb(234, 120, 50);
+    color: white;
+    font-weight: bold;
+    -webkit-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+    font-family: 'Open Sans';
+  }
+  
+  .comment-text > .top{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .comment-text > .top > span > b{
+  font-weight: bold;
+  color: #484848;
+  line-height: 17px;
+  font-size: 1rem;
+  }
+  
+  .comment-text > .top > span,
+  .comment-text > .top > button{
+  color: #838383;
+  font-weight: 400;
+  font-size: .8rem;
+  }
+  
+  .like,
+  .dislike{
+    padding:0 10px;
+    display: flex;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+  }
+  
+  .like:hover,.dislike:hover,
+  .like:focus,.dislike:focus{
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .like > i{
+    color: blue;
+  }
+  
+  .dislike > i{
+    color: red;
+  }
+  
+  .comment-text > .top > .stars-rating{
+    margin-left: auto !important;
+    font-size: 12px;
+  }
+  
+  .comment-text > .text > p{
+  margin: 0;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  word-spacing: .2rem;
+  color: #919191;
+  }
+  
+  .comment-text > .text{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  }
+  
+  .comment-text > .comment-footer{
+    margin-top: 10px;
+  border-bottom: 1px solid #dddddd;
+  padding-bottom: 24px;
+  }
+  
+  .comment-text > .comment-footer > button{
+    font-family: 'Open Sans Condensed', sans-serif;
+    border: none;
+    background: transparent;
+  }
+  
+  .comment-text > .comment-footer > button:hover,
+  .comment-text > .comment-footer > button:focus{
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .comment-text > .top > .stars-rating.stars-5 > span > i,
+  .comment-text > .top > .stars-rating.stars-4 > span:not(:last-child) > i,
+  .comment-text > .top > .stars-rating.stars-3 > span:not(:nth-child(n+4)) > i, 
+  .comment-text > .top > .stars-rating.stars-2 > span:not(:nth-child(n+3)) > i, 
+  .comment-text > .top > .stars-rating.stars-1 > span:first-child > i{
+  color: rgb(234, 120, 50);
+  }
+  
+  .comment-text > .top > .stars-rating.stars-4> span:last-child > i,
+  .comment-text > .top > .stars-rating.stars-3 > span:nth-last-child(-n+2) > i,
+  .comment-text > .top > .stars-rating.stars-2 > span:nth-last-child(-n+3) > i,
+  .comment-text > .top > .stars-rating.stars-1 > span:nth-last-child(-n+4) > i
+  {
+  color: #838383;
+  }
+
+  .comment-text > textarea {
+    width: 100%;
+    border: none;
+    box-shadow: 0px 2px 3px 0px #d5d5d5;
+    padding: 10px 18px 10px 10px;
+    color: #838383;
+    outline: none;
+    background-color: #fff;
+    height: 100px;
+    max-height: 100px;
+    font-size: 17px;
+    resize: none;
+  }
+
+  .comment-text > ::-webkit-scrollbar {
+    width: 5px !important;
+  }
+  
+  @media(max-width:1115px){
+  .comment-text{
+      max-width: 85% !important;
+  }   
+  }
+  
+  @media(max-width:812px){
+  .comment-sub-sub > .comment-text{
+      max-width: 80% !important;
+  }   
+  }
+  
+  @media(max-width:768px){
+  .comment-sub-sub,
+  .comment-sub{
+      margin-left: 0;
+  }
+  
+  .comment-text{
+      max-width: 80% !important;
+  }
+  }
+  
+  @media(max-width:575px){
+  .comment-text{
+      max-width: 100% !important;
+      padding: 0;
+  }
+  blockquote {
+      padding-left: 50px;
+  }
+  
+  blockquote span {
+      left: 3px;
+  }
+  }
+
+  .time-ago {
+    font-size: 12px;
+  }

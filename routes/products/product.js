@@ -43,7 +43,13 @@ router.post(
 
 router.get('/getproducts', ProductController.getProducts);
 
-router.get('/homepageproducts', ProductController.homePage);
+router.get('/getbannerproducts', ProductController.getBannerProducts);
+router.get('/getfeaturedproducts', ProductController.getFeaturedProducts);
+router.get('/gettopsellingproducts', ProductController.getTopSellingProducts);
+router.get('/getourproducts', ProductController.getOurProducts);
+router.get('/getdailyofferproducts', ProductController.getDailyOfferProducts);
+router.get('/getweeklyofferproducts', ProductController.getWeeklyOfferProducts);
+router.get('/getnewproducts', ProductController.getNewProducts);
 
 router.get( '/getproduct', ProductController.getProduct );
 

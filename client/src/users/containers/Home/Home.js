@@ -34,19 +34,6 @@ const Home = props => {
 		return Math.ceil(Math.abs(dateNow - newDate) / (1000 * 3600 * 24));
 	};
 
-	console.log( props.product.newProducts );
-
-	    const options = {
-			items: 1,
-			margin: 10,
-			lazyLoad: true,
-			dots: false,
-			animateIn: true,
-			autoHeightClass: 'owl-height',
-			responsiveClass: true,
-			nav:true
-		};
-
 	return (
 		<React.Fragment>
 			<div className="container-fluid carousel-main d-none d-sm-block">
@@ -143,6 +130,7 @@ const Home = props => {
 				<div className="row">
 					{props.product.newProducts.map((product, index) => {
 						const diff = calculateDateDifferenece(product.createdAt);
+						console.log(product)
 						return (
 							<div className="col-12 col-sm-6 col-md-4 col-lg-3" key={index}>
 								<div className="product-box">
@@ -150,7 +138,14 @@ const Home = props => {
 										{product.options.length > 1 ? (
 											<OwlCarousel
 												className="box-image owl-carousel owl-theme owl-loaded"
-												{...options}>
+												items={1}
+												margin={10}
+												lazyLoad={true}
+												dots={false}
+												animateIn={true}
+												responsiveClass={true}
+												nav={true}
+												>
 												{product.options.map((opt, index) => (
 													<Link to={`/product?id=${product._id}`} key={index}>
 														<img
@@ -176,13 +171,13 @@ const Home = props => {
 											</p>
 										</div>
 										<div className="box-bottom">
-											<div className="product rating three">
+											<div className={"product rating rating-"+product.rating.averageRating}>
 												<i className="fas fa-star" />
 												<i className="fas fa-star" />
 												<i className="fas fa-star" />
 												<i className="fas fa-star" />
 												<i className="fas fa-star" />
-												<p>(50)</p>
+												<p>({product.rating.numberOfReviews})</p>
 											</div>
 											<p>
 												{product.smalldescription.length > 50
@@ -248,13 +243,13 @@ const Home = props => {
 											</p>
 										</div>
 										<div className="box-bottom">
-											<div className="product rating three">
+											<div className={"product rating rating-"+product.rating.averageRating}>
 												<i className="fas fa-star" />
 												<i className="fas fa-star" />
 												<i className="fas fa-star" />
 												<i className="fas fa-star" />
 												<i className="fas fa-star" />
-												<p>(50)</p>
+												<p>({product.rating.numberOfReviews})</p>
 											</div>
 											<p>
 												{product.smalldescription.length > 50
@@ -320,13 +315,13 @@ const Home = props => {
 											</p>
 										</div>
 										<div className="box-bottom">
-											<div className="product rating three">
+											<div className={"product rating rating-"+product.rating.averageRating}>
 												<i className="fas fa-star" />
 												<i className="fas fa-star" />
 												<i className="fas fa-star" />
 												<i className="fas fa-star" />
 												<i className="fas fa-star" />
-												<p>(50)</p>
+												<p>({product.rating.numberOfReviews})</p>
 											</div>
 											<p>
 												{product.smalldescription.length > 50

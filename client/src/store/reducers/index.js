@@ -10,6 +10,8 @@ import categoryReducer from "./products/category";
 import categoryIconReducer from "./products/categoryicon";
 import brandReducer from "./products/brand";
 import productReducer from "./products/product";
+import filterProductReducer from "./products/filterproducts";
+import productReviewReducer from "./products/productreview";
 import answerReducer from "./answers/answers";
 
 export const combinedReducers = combineReducers({
@@ -24,5 +26,7 @@ export const combinedReducers = combineReducers({
   categoryIcon: categoryIconReducer,
   brand: brandReducer,
   product: productReducer,
+  filteredProducts: filterProductReducer,
+  reviews: productReviewReducer,
   answers: answerReducer
 });

@@ -53,9 +53,11 @@ export const logoutUser = callBack => dispatch => {
 	localStorage.removeItem('jwtToken');
 	setAuthToken(false);
 
+	console.log(callBack)
+
 	dispatch({
 		type: actionTypes.LOGOUT,
-		User: {}
+		User: {role:{isAdmin: false}}
 	});
 
 	callBack('/authentication');

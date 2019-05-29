@@ -1,8 +1,9 @@
 import React, { lazy, Suspense, useState, useEffect } from "react";
 import { withRouter, Switch, Route } from "react-router-dom";
 import { checkLoggedInUser } from "./helpers/checkLoggedInUser";
-
 import { connect } from "react-redux";
+
+import openSocket from 'socket.io-client';
 
 import "./App.css";
 import Navigation from "./users/components/Navigation/Navigation";
@@ -15,6 +16,7 @@ import SmallSpinner from "./users/components/UI/SmallSpinner/SmallSpinner";
 
 const Home = lazy(() => import("./users/containers/Home/Home"));
 const Product = lazy(() => import("./users/containers/Product/Product"));
+const Products = lazy(() => import("./users/containers/Products/Products"));
 const AuthPage = lazy(() =>
   import("./users/containers/AuthenticationPage/AuthPage")
 );
@@ -84,6 +86,7 @@ const App = props => {
         show: !state.show
       });
     }, 2000);
+    openSocket('http://localhost:5000');
     return () => setState({ ...state, show: false });
   }, []);
 
@@ -381,7 +384,7 @@ const App = props => {
     return (
       <React.Fragment>
         <div className="App" style={state.show ? null : { display: "none" }}>
-          <Navigation icons={state.companySocial} />
+          <Navigation icons={state.companySocial} {...props}/>
           <Switch>
             <Route
               path="/"
@@ -398,6 +401,15 @@ const App = props => {
               render={() => (
                 <Suspense fallback={<Spinner />}>
                   <Product {...props} show={state.show}/>
+                </Suspense>
+              )}
+            />
+            <Route
+              path="/products"
+              exact
+              render={() => (
+                <Suspense fallback={<Spinner />}>
+                  <Products {...props} show={state.show}/>
                 </Suspense>
               )}
             />

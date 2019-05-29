@@ -111,72 +111,160 @@ exports.addProduct = async (req, res) => {
 };
 
 exports.getProducts = async (req, res) => {
-	try {
-		// const products = await ProductModel.aggregate([
-		// 	{$match: {'subcategories.subName': "Man's Clothing"}},
-		// 	{$project: {
-		// 		'options': {$filter: {
-		// 			input: '$options',
-		// 			as: 'option',
-		// 			cond: {$eq: ['$$option.color', 'Aquamarine']}
-		// 		}},
-		// 	}}
-		// ]);
+	const getMinPrice = await ProductModel.aggregate([
+		[ { $match: { category: 'Electronics' } },
+			{
+			  $group:
+			  {
+				_id: {},
+				'minPrice': { $max: "$price" }
+			  }
+			}
+		  ]
+	]);
 
-		// const products = await ProductModel.find(
-		// 	{
-		// 		options: { $elemMatch: { 'options.discount': 20 } }
-		// 	},
-		// 	{
-		// 		options: { $elemMatch: { 'options.discount': 20 } }
-		// 	}
-		// )
-		// 	.sort('createdAt', -1)
-		// 	.select('name price year brand category smalldescription timestamps');
+	console.log(getMinPrice);
+};
 
-		const products = await ProductModel.aggregate([
-			{ $sample: { size: 4 } },
+exports.getBannerProducts = async (req, res) => {
+	try{
+		const bannerProducts = await ProductModel.aggregate([
+			{
+				$match: {
+					published: true,
+					featured: true,
+					dailyOffer: null,
+					weeklyOffer: null
+				}
+			},
 			{ $sort: { createdAt: -1 } },
-			{ $match: { published: true } }
+			{ $sample: { size: 4 } }
 		]);
-		// .sort({createdAt: 'desc'})
-		// .select(
-		// 	'name price year brand category smalldescription timestamps createdAt updatedAt'
-		// ).limit(2);
 
-		// const spliceEmptyOptions = products.map(product => product.options.length !== 0 ? product : null);
-
-		return res.json({ products });
-	} catch (err) {
+		return res.json({ bannerProducts })
+	}catch(err) {
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		return res.json({ failedMessage: err.message });
 	}
-};
+}
 
-exports.homePage = async (req, res) => {
-	try {
-		// const bannerProducts = await ProductModel.aggregate([
-		// 	{
-		// 		$match: {
-		// 			published: true,
-		// 			featured: true,
-		// 			dailyOffer: null,
-		// 			weeklyOffer: null
-		// 		}
-		// 	},
-		// 	{ $sort: { createdAt: -1 } },
-		// 	{ $sample: { size: 4 } }
-		// ]);
-		const newProducts = await ProductModel.aggregate([
-			{ $match: { published: true, dailyOffer: null, weeklyOffer: null } },
+exports.getFeaturedProducts = async (req, res) => {
+	try{
+		const featuredProducts = await ProductModel.aggregate([
+			{
+				$match: {
+					published: true,
+					featured: true,
+					dailyOffer: null,
+					weeklyOffer: null
+				}
+			},
 			{
 				$project: {
 					name: 1,
+					rating:1,
 					price: 1,
 					category: 1,
 					brand: 1,
 					smalldescription: 1,
-					createdAt: 1,
+					createdAt: -1,
+					'options.featuredPicture': 1,
+					"optionsSize": { $size: "$options" }
+				}
+			},
+			{ $sample: { size: 8 } }
+		]);
+
+		return res.json({ featuredProducts })
+	}catch(err) {
+		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
+		return res.json({ failedMessage: err.message });
+	}
+}
+
+exports.getTopSellingProducts = async (req, res) => {
+	try{
+		const topSellingProducts = await ProductModel.aggregate([
+			{ $match: { published: true, dailyOffer: null, weeklyOffer: null } },
+			{
+				$project: {
+					name: 1,
+					rating:1,
+					price: 1,
+					category: 1,
+					brand: 1,
+					smalldescription: 1,
+					createdAt: -1,
+					'options.featuredPicture': 1,
+					"optionsSize": { $size: "$options" }
+				}
+			},
+			{ $sample: { size: 8 } },
+			{ $sort: { numberOfsales: -1 } }
+		]);
+
+		return res.json({ topSellingProducts })
+	}catch(err) {
+		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
+		return res.json({ failedMessage: err.message });
+	}
+}
+
+exports.getOurProducts = async (req, res) => {
+	try{
+		const ourProducts = await ProductModel.aggregate([
+			{ $match: { published: true, dailyOffer: null, weeklyOffer: null } },
+			{ $sample: { size: 36 } }
+		]);
+
+		return res.json({ ourProducts })
+	}catch(err) {
+		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
+		return res.json({ failedMessage: err.message });
+	}
+}
+
+exports.getDailyOfferProducts = async (req, res) => {
+	try{
+		const dailyOffer = await ProductModel.aggregate([
+			{ $match: { published: true, 'dailyOffer.active': true } },
+			{ $sample: { size: 10 } }
+		]);
+
+		return res.json({ dailyOffer })
+	}catch(err) {
+		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
+		return res.json({ failedMessage: err.message });
+	}
+}
+
+exports.getWeeklyOfferProducts = async (req, res) => {
+	try{
+		const weeklyOffer = await ProductModel.aggregate([
+			{ $match: { published: true, 'weeklyOffer.active': true } },
+			{ $sample: { size: 10 } }
+		]);
+
+		return res.json({ weeklyOffer })
+	}catch(err) {
+		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
+		return res.json({ failedMessage: err.message });
+	}
+}
+
+exports.getNewProducts = async (req, res) => {
+	try {
+		const newProducts = await ProductModel.aggregate([
+			{ $match: { published: true } },
+			{
+				$project: {
+					name: 1,
+					rating:1,
+					price: 1,
+					category: 1,
+					brand: 1,
+					smalldescription: 1,
+					createdAt: -1,
 					'options.featuredPicture': 1,
 					"optionsSize": { $size: "$options" }
 				}
@@ -184,44 +272,9 @@ exports.homePage = async (req, res) => {
 			{ $sort: { createdAt: -1 } },
 			{ $sample: { size: 8 } }
 		]);
-		// const featuredProducts = await ProductModel.aggregate([
-		// 	{
-		// 		$match: {
-		// 			published: true,
-		// 			featured: true,
-		// 			dailyOffer: null,
-		// 			weeklyOffer: null
-		// 		}
-		// 	},
-		// 	{ $sample: { size: 8 } }
-		// ]);
-		// const topSellingProducts = await ProductModel.aggregate([
-		// 	{ $match: { published: true, dailyOffer: null, weeklyOffer: null } },
-		// 	{ $sample: { size: 8 } },
-		// 	{ $sort: { numberOfsales: -1 } }
-		// ]);
-		// const ourProducts = await ProductModel.aggregate([
-		// 	{ $match: { published: true, dailyOffer: null, weeklyOffer: null } },
-		// 	{ $sample: { size: 36 } }
-		// ]);
-		// const dailyOffer = await ProductModel.aggregate([
-		// 	{ $match: { published: true, 'dailyOffer.active': true } },
-		// 	{ $sample: { size: 10 } }
-		// ]);
-		// const weeklyOffer = await ProductModel.aggregate([
-		// 	{ $match: { published: true, 'weeklyOffer.active': true } },
-		// 	{ $sample: { size: 10 } }
-		// ]);
 
-		return res.json({
-			newProducts,
-			// featuredProducts,
-			// topSellingProducts,
-			// bannerProducts,
-			// ourProducts,
-			// dailyOffer,
-			// weeklyOffer
-		});
+
+		return res.json({ newProducts});
 	} catch (err) {
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		return res.json({ failedMessage: err.message });
@@ -230,13 +283,13 @@ exports.homePage = async (req, res) => {
 
 exports.getProduct = async (req, res) => {
 	try {
-		const product = await ProductModel.findById(req.query.id).select(
-			'subcategories options numberOfsales name price year brand category description smalldescription createdAt updatedAt wifi bluetooth -_id'
-		);
+
+		const product = await ProductModel.findOne({ _id: new ObjectId(req.query.id) });
+		
 		if (!product) {
 			return res.json({ failedMessage: 'Product not found with provided ID' });
 		}
-		return res.json({ product });
+		return res.json({product});
 	} catch (err) {
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		return res.json({ failedMessage: err.message });
@@ -244,10 +297,8 @@ exports.getProduct = async (req, res) => {
 };
 
 exports.searchForProduct = async ( req, res ) => { 
-	RegExp.escape = (s) => {
-		return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-	};
-	const expr = new RegExp( RegExp.escape( req.query.query ), 'ig' );
+
+	const expr = new RegExp( req.query.query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') , 'ig' );
 
 	if ( req.query.query.length === 0 ) { 
 		return res.json( { products: [] } );

@@ -10,9 +10,10 @@ const Options = props => {
 	const [Inputs] = useState([
 		{ type: 'number', label: 'Enter Quantity', placeholder: 'Enter Option Quantity', name: 'quantity', required: true },
 		{ type: 'number', label: 'Enter Aditional Price', placeholder: 'Enter Option Aditional Price', name: 'aditionalPrice', required: true },
-		{ type: 'number', label: 'Enter Discount', placeholder: 'Enter Option Discount', name: 'discount', required: true }
+		{ type: 'number', label: 'Enter Discount', placeholder: 'Enter Option Discount', name: 'discount', required: true },
+		{ type: 'text', label: 'Enter SKU', placeholder: 'Enter Option SKU', name: 'sku', required: true }
 	]);
-	const [inputs, setInputs] = useState({ quantity: 0, aditionalPrice: 0, discount: 0 });
+	const [inputs, setInputs] = useState({ quantity: 0, aditionalPrice: 0, discount: 0, sku: '' });
 	const [color, setColor] = useState('');
 	const [size, setSize] = useState('');
 	// computer
@@ -76,7 +77,7 @@ const Options = props => {
 	const addOption = e => {
 		e.preventDefault();
 		addProductOption();
-		setInputs({ quantity: 0, aditionalPrice: 0, discount: 0 });
+		setInputs({ quantity: 0, aditionalPrice: 0, discount: 0, sku: '' });
 	};
 
 	const addProductOption = () => {
@@ -111,7 +112,7 @@ const Options = props => {
 	};
 
 	const setOption = () => {
-		let option = { quantity: +inputs.quantity, aditionalPrice: +inputs.aditionalPrice, discount: +inputs.discount};
+		let option = { quantity: +inputs.quantity, aditionalPrice: +inputs.aditionalPrice, discount: +inputs.discount, sku: inputs.sku};
 		if (props.category !== 'Electronics') { option = { ...option, size }; } 
 		else if (subCatName === 'Desktop Computers') { option = { ...option, ram: +ram, graphics: +graphics, ssd: +ssd, hdd: +hdd, withMouse, withDisplay, withKeyboard }; } 
 		else if (subCatName === 'Laptops') { option = { ...option, ram: +ram, graphics: +graphics, ssd: +ssd, hdd: +hdd, resolution}; } 
