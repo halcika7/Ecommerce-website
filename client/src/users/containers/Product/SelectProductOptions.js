@@ -49,17 +49,18 @@ const SelectProductOptions = props => {
 		control: (base, state) => ({
 			...base,
 			// backgroundColor: 'transparent',
+			boxShadow: 'transparent',
 			borderColor: state.isFocused
-				? '#4f9ae6'
+				? '#ea7832'
 				: props.value
-				? '#4f9ae6'
-				: 'red',
+				? '#ea7832'
+				: '#ea7832',
 			'&:hover': {
 				borderColor: state.isFocused
-					? '#4f9ae6'
+					? '#ea7832'
 					: props.value
-					? '#4f9ae6'
-					: 'red'
+					? '#ea7832'
+					: '#ea7832'
 			}
 		})
 	};
@@ -68,17 +69,18 @@ const SelectProductOptions = props => {
 		control: (base, state) => ({
 			...base,
 			backgroundColor: 'transparent',
+			boxShadow: 'transparent',
 			borderColor: state.isFocused
-				? '#4f9ae6'
+				? '#ea7832'
 				: props.value
-				? '#4f9ae6'
-				: 'red',
+				? '#ea7832'
+				: '#ea7832',
 			'&:hover': {
 				borderColor: state.isFocused
-					? '#4f9ae6'
+					? '#ea7832'
 					: props.value
-					? '#4f9ae6'
-					: 'red'
+					? '#ea7832'
+					: '#ea7832'
 			}
 		})
 	};

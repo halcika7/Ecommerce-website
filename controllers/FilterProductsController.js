@@ -3,38 +3,47 @@ const ProductModel = require('../models/Product');
 const BrandModel = require('../models/Brand');
 
 exports.getProductsOnLoad = async (req, res) => {
+    // const findBy = returnQuery(req.query.options);
 	const category = req.query.category;
 	const subcategoryName = req.query.subcategoryName;
     const subcategory = req.query.subcategory;
 
 	try {
-        
+
         const findProducts = await ProductModel.find({ category, 'subcategories.subName': subcategoryName , 'subcategories.sub': subcategory, published: true });
-        const brands = await ProductModel.aggregate([
-            { $match: { category, 'subcategories.subName': subcategoryName , 'subcategories.sub': subcategory, published: true } },
+
+		return res.json({ products: findProducts });
+	} catch (err) {
+		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
+		return res.json({ failedMessage: err.message });
+	}
+};
+
+exports.filters = async (req,res) => {
+    const findBy = returnQuery(req.query.options);
+    const { category, subcategoryName, subcategory } = {...JSON.parse(req.query.options)};
+
+    try {
+
+        let filters = {};
+
+        const prices = await ProductModel.aggregate([
+            { $match: findBy },
+            { $group: { "_id": {}, "minPrice": { "$min": '$price' } ,"maxPrice": { "$max": '$price' } } },
+            {$limit: 1}
+        ]);
+        console.log(prices)
+        filters.price = { min: prices[0].minPrice, max: prices[0].maxPrice };
+
+        filters.brands = await ProductModel.aggregate([
+            { $match: findBy },
             { $group: { "_id": "$brand", "count": { "$sum": 1 } }},
             {$sort: {'_id': 1}},
         ]);
 
-        const dsf = await ProductModel.aggregate([
-            { $match: { category, 'subcategories.subName': subcategoryName , 'subcategories.sub': subcategory, published: true } },
-            { 
-                $group: { 
-                "_id": {}, 
-                "minPrice": { "$min": '$price' } ,
-                "maxPrice": { "$max": '$price' } 
-                }
-            },
-            {$limit: 1}
-        ]);
-
-        const {minPrice, maxPrice} = { ...dsf[0] }
-
-        let colors = null;
-
-        if(subcategory !== 'Games' || subcategory !== 'Projection Screens') {
-            colors = await ProductModel.aggregate([
-                { $match: {  category, 'subcategories.subName': subcategoryName , 'subcategories.sub': subcategory, published: true } },
+        if(subcategory !== 'Games' && subcategory !== 'Projection Screens') {
+            let colors = await ProductModel.aggregate([
+                { $match: findBy },
                 { $group:{_id: '$options.color',"colors": {$push:{ 'color':'$options.color',"count": { "$sum": 1 }}}}},
                 {$unwind:"$colors"},
                 {$unwind:"$colors.color"},
@@ -48,12 +57,13 @@ exports.getProductsOnLoad = async (req, res) => {
                 { $project: {_id: 0,'colors': 1 } },
             ]);
 
-            colors = colors.map(color => ({...color.colors}))
+            colors = colors.map(color => ({...color.colors}));
+            filters.colors = colors;
+        }
 
-            // console.log(JSON.stringify(colors))
-
-            const size = await ProductModel.aggregate([
-                { $match: {  category, 'subcategories.subName': subcategoryName , 'subcategories.sub': subcategory, published: true } },
+        if(category === 'Clothing' || category === 'Shoes') {
+            let sizes = await ProductModel.aggregate([
+                { $match: findBy },
                 { $group:{_id: '$options.options.size',"sizes": {$push:{ 'size':'$options.options.size',"count": { "$sum": 1 }}}}},
                 {$unwind:"$sizes"},
                 {$unwind:"$sizes.size"},
@@ -61,26 +71,260 @@ exports.getProductsOnLoad = async (req, res) => {
                 {$unwind:"$_id.Size"},
                 { $group: {_id: null,sizes: {$push: { size: '$_id.Size', count: '$count' } } ,count: { $sum:1 }}},
                 {$unwind:"$sizes"},
-                { $group: {_id: { Size: '$sizes.size' },uniqueColor: { $addToSet: '$_id' },count: { $sum: '$sizes.count' }}},
+                { $group: {_id: { Size: '$sizes.size' },uniqueSizes: { $addToSet: '$_id' },count: { $sum: '$sizes.count' }}},
                 {$unwind:"$_id.Size"},
-                { $group: {_id: null,sizes: {$push: { color: '$_id.Size', count: '$count' } } }},
+                { $group: {_id: null,sizes: {$push: { size: '$_id.Size', count: '$count' } } }},
                 {$unwind:"$sizes"},
+                {$sort: {'sizes.size': 1}},
                 { $project: {_id: 0,'sizes': 1} },
             ])
 
-            console.log(JSON.stringify(size))
-            // console.log(size)
-            const d = await numberOfReviewsHelper(category, subcategoryName,subcategory);
-
+            sizes = sizes.map(size => ({...size.sizes}))
+            filters.sizes = sizes;
         }
 
-		return res.json({ products: findProducts, brands, colors, minPrice, maxPrice });
-	} catch (err) {
-		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
-		return res.json({ failedMessage: err.message });
-	}
-};
+        if(subcategory === 'Games') {
+            let consoles = await ProductModel.aggregate([
+                { $match: findBy },
+                    { $group:{_id: '$options.console',"consoles": {$push:{ 'console':'$options.console',"count": { "$sum": 1 }}}}},
+                    {$unwind:"$consoles"},
+                    {$unwind:"$consoles.console"},
+                    { $group: {_id: { Console: '$consoles.console' },uniqueConsole: { $addToSet: '$_id' },count: { $sum:1 }}},
+                    {$unwind:"$uniqueConsole"},
+                    { $group: {_id: null,consoles: {$push: { console: '$_id.Console', count: '$count' } } ,count: { $sum:1 }}},
+                    {$unwind:"$consoles"},
+                    { $group: {_id: null,consoles: { $addToSet: '$consoles'} ,}},
+                    {$unwind:"$consoles"},
+                    {$sort: {'consoles.console': 1}},
+                    { $project: {_id: 0,'consoles': 1 } },
+            ])
+    
+            consoles = consoles.map(consoles => ({...consoles.consoles}));
+            filters.consoles = consoles;
+        }
 
+        if(subcategory === 'Projection Screens' || subcategory === 'Monitors' || subcategory === 'Televisions') {
+            if(subcategory === 'Projection Screens') {
+                let displays = await ProductModel.aggregate([
+                    { $match: findBy },
+                    { $group:{_id: '$options.display',"displays": {$push:{ 'display':'$options.display',"count": { "$sum": 1 }}}}},
+                    {$unwind:"$displays"},
+                    {$unwind:"$displays.display"},
+                    { $group: {_id: { Display: '$displays.display' },uniqueDisplays: { $addToSet: '$_id' },count: { $sum:1 }}},
+                    {$unwind:"$uniqueDisplays"},
+                    { $group: {_id: null,displays: {$push: { display: '$_id.Display', count: '$count' } } ,count: { $sum:1 }}},
+                    {$unwind:"$displays"},
+                    { $group: {_id: null,displays: { $addToSet: '$displays'} ,}},
+                    {$unwind:"$displays"},
+                    {$sort: {'displays.display': 1}},
+                    { $project: {_id: 0,'displays': 1 } },
+                ]);
+                displays = displays.map(display => ({...display.displays}));
+                filters.displays = [...displays];
+            }else {
+                let displays = await ProductModel.aggregate([
+                    { $match: findBy },
+                    { $group:{_id: '$options.options.display',"displays": {$push:{ 'display':'$options.options.display',"count": { "$sum": 1 }}}}},
+                    {$unwind:"$displays"},
+                    {$unwind:"$displays.display"},
+                    { $group: {_id: { Display: '$displays.display' },uniqueDisplays: { $addToSet: '$_id' },count: { $sum:1 }}},
+                    {$unwind:"$_id.Display"},
+                    { $group: {_id: null,displays: {$push: { display: '$_id.Display', count: '$count' } } ,count: { $sum:1 }}},
+                    {$unwind:"$displays"},
+                    { $group: {_id: { Display: '$displays.display' },uniqueDisplays: { $addToSet: '$_id' },count: { $sum: '$displays.count' }}},
+                    {$unwind:"$_id.Display"},
+                    { $group: {_id: null,displays: {$push: { display: '$_id.Display', count: '$count' } } }},
+                    {$unwind:"$displays"},
+                    {$sort: {'displays.display': 1}},
+                    { $project: {_id: 0,'displays': 1} },
+                ])
+    
+                displays = displays.map(display => ({...display.displays}))
+                filters.displays = [...displays];
+            }
+        }
+
+        if(subcategory === 'Desktop Computers' || subcategory === 'Laptops') {
+            let rams = await ProductModel.aggregate([
+                { $match: findBy },
+                { $group:{_id: '$options.options.ram',"rams": {$push:{ 'ram':'$options.options.ram',"count": { "$sum": 1 }}}}},
+                {$unwind:"$rams"},
+                {$unwind:"$rams.ram"},
+                { $group: {_id: { Ram: '$rams.ram' },uniqueRams: { $addToSet: '$_id' },count: { $sum:1 }}},
+                {$unwind:"$_id.Ram"},
+                { $group: {_id: null,rams: {$push: { ram: '$_id.Ram', count: '$count' } } ,count: { $sum:1 }}},
+                {$unwind:"$rams"},
+                { $group: {_id: { Ram: '$rams.ram' },uniqueRams: { $addToSet: '$_id' },count: { $sum: '$rams.count' }}},
+                {$unwind:"$_id.Ram"},
+                { $group: {_id: null,rams: {$push: { ram: '$_id.Ram', count: '$count' } } }},
+                {$unwind:"$rams"},
+                {$sort: {'rams.ram': 1}},
+                { $project: {_id: 0,'rams': 1} },
+            ])
+    
+            rams = rams.map(ram => ({...ram.rams}));
+            filters.rams = rams;
+
+            let graphics = await ProductModel.aggregate([
+                { $match: findBy },
+                { $group:{_id: '$options.options.graphics',"graphics": {$push:{ 'graphic':'$options.options.graphics',"count": { "$sum": 1 }}}}},
+                {$unwind:"$graphics"},
+                {$unwind:"$graphics.graphic"},
+                { $group: {_id: { Graphic: '$graphics.graphic' },uniqueGraphics: { $addToSet: '$_id' },count: { $sum:1 }}},
+                {$unwind:"$_id.Graphic"},
+                { $group: {_id: null,graphics: {$push: { graphic: '$_id.Graphic', count: '$count' } } ,count: { $sum:1 }}},
+                {$unwind:"$graphics"},
+                { $group: {_id: { Graphic: '$graphics.graphic' },uniqueGraphics: { $addToSet: '$_id' },count: { $sum: '$graphics.count' }}},
+                {$unwind:"$_id.Graphic"},
+                { $group: {_id: null,graphics: {$push: { graphic: '$_id.Graphic', count: '$count' } } }},
+                {$unwind:"$graphics"},
+                {$sort: {'graphics.graphic': 1}},
+                { $project: {_id: 0,'graphics': 1} },
+            ])
+    
+            graphics = graphics.map(graphic => ({...graphic.graphics}));
+            filters.graphics = graphics;
+
+            let ssds = await ProductModel.aggregate([
+                { $match: findBy },
+                { $group:{_id: '$options.options.ssd',"ssds": {$push:{ 'ssd':'$options.options.ssd',"count": { "$sum": 1 }}}}},
+                {$unwind:"$ssds"},
+                {$unwind:"$ssds.ssd"},
+                { $group: {_id: { SSD: '$ssds.ssd' },uniqueSSD: { $addToSet: '$_id' },count: { $sum:1 }}},
+                {$unwind:"$_id.SSD"},
+                { $group: {_id: null,ssds: {$push: { ssd: '$_id.SSD', count: '$count' } } ,count: { $sum:1 }}},
+                {$unwind:"$ssds"},
+                { $group: {_id: { SSD: '$ssds.ssd' },uniqueSSD: { $addToSet: '$_id' },count: { $sum: '$ssds.count' }}},
+                {$unwind:"$_id.SSD"},
+                { $group: {_id: null,ssds: {$push: { ssd: '$_id.SSD', count: '$count' } } }},
+                {$unwind:"$ssds"},
+                {$sort: {'ssds.ssd': 1}},
+                { $project: {_id: 0,'ssds': 1} },
+            ])
+    
+            ssds = ssds.map(ssd => ({...ssd.ssds}));
+            filters.ssds = ssds;
+
+            let hdds = await ProductModel.aggregate([
+                { $match: findBy },
+                { $group:{_id: '$options.options.hdd',"hdds": {$push:{ 'hdd':'$options.options.hdd',"count": { "$sum": 1 }}}}},
+                {$unwind:"$hdds"},
+                {$unwind:"$hdds.hdd"},
+                { $group: {_id: { HDD: '$hdds.hdd' },uniqueHDD: { $addToSet: '$_id' },count: { $sum:1 }}},
+                {$unwind:"$_id.HDD"},
+                { $group: {_id: null,hdds: {$push: { hdd: '$_id.HDD', count: '$count' } } ,count: { $sum:1 }}},
+                {$unwind:"$hdds"},
+                { $group: {_id: { HDD: '$hdds.hdd' },uniqueHDD: { $addToSet: '$_id' },count: { $sum: '$hdds.count' }}},
+                {$unwind:"$_id.HDD"},
+                { $group: {_id: null,hdds: {$push: { hdd: '$_id.HDD', count: '$count' } } }},
+                {$unwind:"$hdds"},
+                {$sort: {'hdds.hdd': 1}},
+                { $project: {_id: 0,'hdds': 1} },
+            ])
+    
+            hdds = hdds.map(hdd => ({...hdd.hdds}));
+            filters.hdds = hdds;
+        }
+
+        if(subcategory === 'Laptops' || subcategory === 'Monitors' || subcategory === 'Televisions') {
+            let resolutions = await ProductModel.aggregate([
+                { $match: findBy },
+                { $group:{_id: '$options.options.resolution',"resolutions": {$push:{ 'resolution':'$options.options.resolution',"count": { "$sum": 1 }}}}},
+                {$unwind:"$resolutions"},
+                {$unwind:"$resolutions.resolution"},
+                { $group: {_id: { Resolution: '$resolutions.resolution' },uniqueResolutions: { $addToSet: '$_id' },count: { $sum:1 }}},
+                {$unwind:"$_id.Resolution"},
+                { $group: {_id: null,resolutions: {$push: { resolution: '$_id.Resolution', count: '$count' } } ,count: { $sum:1 }}},
+                {$unwind:"$resolutions"},
+                { $group: {_id: { Resolution: '$resolutions.resolution' },uniqueResolutions: { $addToSet: '$_id' },count: { $sum: '$resolutions.count' }}},
+                {$unwind:"$_id.Resolution"},
+                { $group: {_id: null,resolutions: {$push: { resolution: '$_id.Resolution', count: '$count' } } }},
+                {$unwind:"$resolutions"},
+                {$sort: {'resolutions.resolution': 1}},
+                { $project: {_id: 0,'resolutions': 1} },
+            ])
+    
+            resolutions = resolutions.map(resolution => ({...resolution.resolutions}));
+            filters.resolutions = resolutions;
+        }
+
+        if(subcategory === 'Tablets' || subcategory === 'Phones') {
+            let memorys = await ProductModel.aggregate([
+                { $match: findBy },
+                { $group:{_id: '$options.options.memory',"memorys": {$push:{ 'memory':'$options.options.memory',"count": { "$sum": 1 }}}}},
+                {$unwind:"$memorys"},
+                {$unwind:"$memorys.memory"},
+                { $group: {_id: { Memory: '$memorys.memory' },uniqueMemorys: { $addToSet: '$_id' },count: { $sum:1 }}},
+                {$unwind:"$_id.Memory"},
+                { $group: {_id: null,memorys: {$push: { memory: '$_id.Memory', count: '$count' } } ,count: { $sum:1 }}},
+                {$unwind:"$memorys"},
+                { $group: {_id: { Memory: '$memorys.memory' },uniqueMemorys: { $addToSet: '$_id' },count: { $sum: '$memorys.count' }}},
+                {$unwind:"$_id.Memory"},
+                { $group: {_id: null,memorys: {$push: { memory: '$_id.Memory', count: '$count' } } }},
+                {$unwind:"$memorys"},
+                {$sort: {'memorys.memory': 1}},
+                { $project: {_id: 0,'memorys': 1} },
+            ])
+    
+            memorys = memorys.map(memory => ({...memory.memorys}));
+            filters.memorys = memorys;
+        }
+
+        if(subcategoryName === 'Headphones' || subcategoryName === 'Speakers') {
+            filters.wifi = await ProductModel.aggregate([
+                { $match: findBy },
+                { $group: { "_id": "$wifi", "count": { "$sum": 1 } }},
+                {$sort: {'_id': 1}},
+            ]);
+
+            filters.bluetooth = await ProductModel.aggregate([
+                { $match: findBy },
+                { $group: { "_id": "$bluetooth", "count": { "$sum": 1 } }},
+                {$sort: {'_id': 1}},
+            ]);
+        }
+
+        return res.json({ ...filters });
+    }catch (err) {
+        if (err.errmsg) return res.json({ failedMessage: err.errmsg });
+		return res.json({ failedMessage: err.message });
+    }
+}
+
+exports.filterProducts = async (req, res) => {
+    const { category, subcategoryName, subcategory, min, max, brand, color, size } = {...JSON.parse(req.query.options)};
+    const findBy = { 
+        category,
+        'subcategories.subName': subcategoryName,
+        'subcategories.sub': subcategory, 
+        published: true,
+        price: { $gte: min, $lte: max  },
+    }
+
+    if(brand && brand.length > 0) {
+        findBy.brand = { $in: brand }
+    }
+
+    if(color && color.length > 0) {
+        findBy['options.color'] = { $in: color } 
+    }
+
+    if(size && size.length > 0) {
+        findBy['options.options.size'] = { $in: size }
+    }
+
+    try {
+        const findProducts = await ProductModel.aggregate([
+            {$match: findBy},
+        ]);
+
+        return res.json({ products: findProducts })
+    } catch (err) {
+        console.log(err);
+        if (err.errmsg) return res.json({ failedMessage: err.errmsg });
+		return res.json({ failedMessage: err.message });
+    }
+}
 
 const numberOfReviewsHelper = async (category, subcategoryName, subcategory) => {
     try {
@@ -105,19 +349,40 @@ const numberOfReviewsHelper = async (category, subcategoryName, subcategory) => 
     }
 }
 
-exports.getBrands = async (req, res) => {
-    try {
-        const category = req.query.category;
-        const brands = await BrandModel.aggregate([
-            { $match: {  categories: category } },
-            {$project: {
-                name: 1,
-                _id:0
-            }}
-        ]);
-    } catch(err) {
-        if (err.errmsg) return res.json({ failedMessage: err.errmsg });
-		return res.json({ failedMessage: err.message });
-    }
-}
+const returnQuery = obj => {
+    const { category, subcategoryName, subcategory, min, max, brand, color, size, consoles, displays, ram, graphics, ssd, hdd, resolution, memory, wifi, bluetooth } = {...JSON.parse(obj)};
+    const findBy = { category, 'subcategories.subName': subcategoryName, 'subcategories.sub': subcategory,  published: true }
 
+    if(min !== undefined && max !== undefined) { findBy.price = { $gte: min, $lte: max  } }
+
+    if(brand && brand.length > 0) { findBy.brand = { $in: brand } }
+
+    if(subcategory !== 'Games' && subcategory !== 'Projection Screens' && color && color.length > 0) { findBy['options.color'] = { $in: color } }
+
+    if((category === 'Clothing' || category === 'Shoes') && size && size.length > 0) { findBy['options.options.size'] = { $in: size } }
+
+    if(subcategory === 'Games' && consoles && consoles.length > 0) { findBy['options.console'] = { $in: consoles }  }
+
+    if((subcategory === 'Projection Screens' || subcategory === 'Monitors' || subcategory === 'Televisions') && displays && displays.length > 0) {
+        const slug = subcategory === 'Projection Screens' ? 'options.display' : 'options.options.display';
+        findBy[slug] = { $in: displays };
+    }
+    
+    if((subcategory === 'Desktop Computers' || subcategory === 'Laptops') && ram && ram.length > 0) { findBy['options.options.ram'] = { $in: ram } }
+    
+    if((subcategory === 'Desktop Computers' || subcategory === 'Laptops') && graphics && graphics.length > 0) { findBy['options.options.graphics'] = { $in: graphics } }
+    
+    if((subcategory === 'Desktop Computers' || subcategory === 'Laptops') && ssd && ssd.length > 0) { findBy['options.options.ssd'] = { $in: ssd } }
+    
+    if((subcategory === 'Desktop Computers' || subcategory === 'Laptops') && hdd && hdd.length > 0) { findBy['options.options.hdd'] = { $in: hdd } }
+    
+    if((subcategory === 'Laptops' || subcategory === 'Monitors' || subcategory === 'Televisions') && resolution && resolution.length > 0) { findBy['options.options.resolution'] = { $in: resolution } }
+    
+    if((subcategory === 'Tablets' || subcategory === 'Phones') && memory && memory.length > 0) { findBy['options.options.memory'] = { $in: memory } }
+    
+    if((subcategoryName === 'Headphones' || subcategoryName === 'Speakers') && wifi !== undefined && wifi === true) { findBy.wifi = wifi }
+
+    if((subcategoryName === 'Headphones' || subcategoryName === 'Speakers') && bluetooth !== undefined && bluetooth === true) { findBy.bluetooth = bluetooth }
+
+    return findBy;
+}

@@ -46,11 +46,11 @@ const AboutProduct = (
                             <p className="sku">
                                 <span>Subcategories:</span>
                             </p>
-                            {category.sub.map(subcat => 
-                                <div className='multy-sub' key={subcat}>
-                                    <span>{subcat}</span>
-                                </div>
-                            ) }
+                            <div className='multy-sub' >
+                                {category.sub.map(subcat => 
+                                    <span key={subcat}>{subcat}</span>
+                                ) }
+                            </div>
                         </div> : 
                         <div className='one-sub'>
                             <p className="">
@@ -61,7 +61,7 @@ const AboutProduct = (
                     }
                 </React.Fragment>
             )}
-            {sku && 
+            {sku && discount > 0 &&
                 <p className="sku">
                     <span>Discount:</span> {discount}%
                 </p>

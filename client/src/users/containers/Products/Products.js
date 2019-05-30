@@ -9,46 +9,131 @@ import 'owl.carousel/dist/assets/owl.theme.default.css';
 import Breadcrumb from '../../components/UI/Breadcrumb/Breadcrumb';
 import Categories from './Categories/Categories';
 import Price from './Price/Price';
+import Brands from './Filters/Brands';
+import Colors from './Filters/Colors';
+import Sizes from './Filters/Sizes';
 
 const name = props => {
     const [products, setproducts] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [brands, setBrands] = useState([]);
+    const [colors, setColors] = useState([]);
+    const [sizes, setSizes] = useState([]);
 
     const [category, setCategory] = useState('');
     const [subcategoryName, setSubcategoryName] = useState('');
     const [subcategory, setSubcategory] = useState('');
 
-    const [price, setPrice] = useState({ min: 0, max: 0 });
+    const [fixedPrice, setFixedPrice] = useState({});
     
+    const [price, setPrice] = useState({});
+    const [choosenBrands, setChoosenBrands] = useState([]);
+    const [choosenColors, setChoosenColors] = useState([]);
+    const [choosenLabeledBy, setChoosenLabeledBy] = useState([]);
+
+    // console.log(props.match.params.id)
+    // console.log(props.location.search)
+
     useEffect(() => {
         setCategory(new URLSearchParams(props.location.search).get('category'));
         setSubcategoryName(new URLSearchParams(props.location.search).get('subcategoryName'));
         setSubcategory(new URLSearchParams(props.location.search).get('subcategory'));
         setCategories(props.categories);
         props.getProductsOnLoad({ category: new URLSearchParams(props.location.search).get('category'), subcategoryName: new URLSearchParams(props.location.search).get('subcategoryName'), subcategory: new URLSearchParams(props.location.search).get('subcategory') });
+        props.getFilters({ category: new URLSearchParams(props.location.search).get('category'), subcategoryName: new URLSearchParams(props.location.search).get('subcategoryName'), subcategory: new URLSearchParams(props.location.search).get('subcategory') });
     },[]);
 
     useEffect(() => {
 		setCategories(props.categories);
-	}, [props.categories]);
+    }, [props.categories]);
+    
+    useEffect(() => {
+		setBrands(props.brands);
+    }, [props.brands]);
+    
+    useEffect(() => {
+		setColors(props.allColors);
+    }, [props.allColors]);
+    
+    useEffect(() => {
+		setSizes(props.sizes);
+	}, [props.sizes]);
 
     useEffect(() => {
+        setPrice({})
+        setBrands([])
+        setColors([])
+        setSizes([])
+        setChoosenBrands([])
+        setChoosenColors([])
+        setChoosenLabeledBy([])
+        setFixedPrice({})
+        setSubcategory('')
+        setSubcategoryName('')
+        setCategory('')
         setCategory(new URLSearchParams(props.location.search).get('category'));
         setSubcategoryName(new URLSearchParams(props.location.search).get('subcategoryName'));
         setSubcategory(new URLSearchParams(props.location.search).get('subcategory'));
         setCategories(props.categories);
-        props.getProductsOnLoad({ category: new URLSearchParams(props.location.search).get('category'), subcategoryName: new URLSearchParams(props.location.search).get('subcategoryName'), subcategory: new URLSearchParams(props.location.search).get('subcategory') });
+        props.getProductsOnLoad({ 
+            category: new URLSearchParams(props.location.search).get('category'), 
+            subcategoryName: new URLSearchParams(props.location.search).get('subcategoryName'), 
+            subcategory: new URLSearchParams(props.location.search).get('subcategory') 
+        });
+        props.getFilters({ category: new URLSearchParams(props.location.search).get('category'), subcategoryName: new URLSearchParams(props.location.search).get('subcategoryName'), subcategory: new URLSearchParams(props.location.search).get('subcategory') });
     },[props.location.search]);
 
     useEffect(() => {
         setproducts(props.products);
     },[props.products]);
 
+    useEffect(() => {
+        setPrice({...props.price});
+        setFixedPrice({...props.price});
+    },[props.price]);
+
     const calculateDateDifferenece = data => {
 		const dateNow = Date.now();
 		const newDate = new Date(data).getTime();
 		return Math.ceil(Math.abs(dateNow - newDate) / (1000 * 3600 * 24));
     };
+
+    const filterChange = (e, filterName) => {
+        const name = e.currentTarget.name;
+        let newChoosenValues = null;
+        if(filterName === 'Brand') { newChoosenValues = [...choosenBrands] }
+        if(filterName === 'Color') { newChoosenValues = [...choosenColors] }
+        if(filterName === 'Size') { newChoosenValues = [...choosenLabeledBy] }
+
+        if(e.currentTarget.checked) {
+            newChoosenValues.push(name);
+        }else {
+            const findIndex = newChoosenValues.findIndex(value => value === name);
+            newChoosenValues.splice(findIndex, 1);
+        }
+
+        filterName === 'Brand' && setChoosenBrands(newChoosenValues);
+        filterName === 'Color' && setChoosenColors(newChoosenValues);
+        filterName === 'Size' && setChoosenLabeledBy(newChoosenValues);
+    }
+
+    const applyFilters = e => {
+        e.preventDefault();
+        const obj = {
+            category, 
+            subcategoryName, 
+            subcategory, 
+            min: price.min, 
+            max: price.max, 
+            brand:choosenBrands, 
+            color:choosenColors, 
+            size:choosenLabeledBy
+        };
+        props.filterProducts(obj);
+        props.getFilters(obj);
+    }
+
+    // console.log(props)
 
     return (
         <React.Fragment>
@@ -58,35 +143,14 @@ const name = props => {
                 <div className="row">
                     <div className="col-lg-3 col-md-4">
                         <Categories categories={categories} />
-                        <Price price={price} maxPrice={props.maxPrice} setPrice={setPrice}/>
+                        {Object.keys(price).length > 0 && <Price price={price} setPrice={setPrice} minValue={fixedPrice.min} maxValue={fixedPrice.max}/>}
+                        <Brands brands={brands} choosenBrands={choosenBrands} filterChange={filterChange}/>
+                        <Colors colors={colors} choosenColors={choosenColors} filterChange={filterChange} />
+                        {(category === 'Clothing' || category === 'Shoes') && 
+                            <Sizes sizes={sizes} choosenLabeledBy={choosenLabeledBy} filterChange={filterChange} />
+                        }
                         <div className="col-12">
-                            <p className="dropdown-category-links color">Brands<i className="fas fa-angle-down color"></i></p>
-                            <div className="category-search-list">
-                                <ul className="checkbox">
-                                    {props.brands.map((brand, index) =>
-                                        <li className="input-group" key={index}>
-                                            <input type="checkbox" name={brand._id} id={brand._id} />
-                                            <label htmlFor={brand._id}>{brand._id} ({brand.count})</label>
-                                        </li>
-                                    )}
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="col-12">
-                            <p className="dropdown-category-links color">Colors<i className="fas fa-angle-down color"></i></p>
-                            <div className="category-search-list">
-                                <ul className="checkbox">
-                                    {props.allColors.map((colors, index) =>
-                                        <li className="input-group" key={index}>
-                                            <input type="checkbox" name={colors.color} id={colors.color} />
-                                            <label htmlFor={colors.color}>{colors.color} ({colors.count})</label>
-                                        </li>
-                                    )}
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="col-12">
-                            <button type='button' className='mt-4 apply-filters' >Apply Filters</button>
+                            <button type='button' className='mt-4 apply-filters' onClick={applyFilters} >Apply Filters</button>
                         </div>
                     </div>
                     <div className="col-lg-9 col-md-8">
@@ -133,7 +197,7 @@ const name = props => {
                         <div className="col-12 heading">
                             <div className="row">
                                 <div className="col-12 col-sm-6">
-                                        <h5>Mobile & Tablet</h5>
+                                        <h5>{subcategoryName}</h5>
                                 </div>
                                 <div className="col-12 col-sm-6">
                                         <p>Showing 1–15 of 20 results</p>
@@ -313,13 +377,25 @@ const mapStateToProps = state => ({
     products: state.filteredProducts.products,
     brands: state.filteredProducts.brands,
     allColors: state.filteredProducts.colors,
-    minPrice: state.filteredProducts.minPrice,
-    maxPrice: state.filteredProducts.maxPrice,
+    sizes: state.filteredProducts.sizes,
+    graphics: state.filteredProducts.graphics,
+    hdds: state.filteredProducts.hdds,
+    rams: state.filteredProducts.rams,
+    ssds: state.filteredProducts.ssds,
+    resolutions: state.filteredProducts.resolutions,
+    memorys: state.filteredProducts.memorys,
+    displays: state.filteredProducts.displays,
+    wifi: state.filteredProducts.wifi,
+    bluetooth: state.filteredProducts.bluetooth,
+    consoles: state.filteredProducts.consoles,
+    price: state.filteredProducts.price,
     categories: state.category.allCategories
 })
 
 const mapDispatchToProps = dispatch => ({
-    getProductsOnLoad: (obj) => dispatch(actions.getProductsOnLoad(obj))
+    getProductsOnLoad: (obj) => dispatch(actions.getProductsOnLoad(obj)),
+    filterProducts: (obj) => dispatch(actions.filterProducts(obj)),
+    getFilters: (obj) => dispatch(actions.getFilters(obj))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(name)

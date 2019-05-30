@@ -5,5 +5,7 @@ const FilterProductsController = require('../../controllers/FilterProductsContro
 // Filter Products Routes
 
 router.get('/getproducts', FilterProductsController.getProductsOnLoad);
+router.get('/filterproducts', FilterProductsController.filterProducts);
+router.get('/filters', FilterProductsController.filters);
 
 module.exports = router;

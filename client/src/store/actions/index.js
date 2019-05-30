@@ -81,7 +81,9 @@ export {
 } from "./products/product";
 
 export {
-  getProductsOnLoad
+  getProductsOnLoad,
+  getFilters,
+  filterProducts
 } from "./products/filterproducts";
 
 export {
