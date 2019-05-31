@@ -56,7 +56,7 @@ const AddReview = props => {
                             <span className="number-star" id="number-star-5">
                                 {rating.count}
                                 <div className="progress">
-                                    <div className="progress-bar" role="progressbar" style={{width: rating.percent+'%'}}></div>
+                                    <div className="progress-bar" role="progressbar" style={rating.percent ? {width: rating.percent+'%'} : {width: '0%'}}></div>
                                 </div>
                             </span>
                         </li>

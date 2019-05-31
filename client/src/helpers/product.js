@@ -24,3 +24,17 @@ export const returnProductDataOnError = formData => {
     
     return productData;
 }
+
+export const helperForChoosenValues = (choosenValues, filterOption, setChoosenValue, property, setValues) => {
+	setValues(filterOption);
+	if(choosenValues.length > 0) {
+		const newChoosenValues = choosenValues.filter(value => {
+			const findIndex = filterOption.findIndex(val => val[property] === value);
+			if(findIndex !== -1) {
+				return value;
+			}
+			return false;
+		});
+		setChoosenValue(newChoosenValues);
+	} 
+}

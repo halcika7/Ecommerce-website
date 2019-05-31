@@ -1,0 +1,37 @@
+/* ikone iznad footera */
+
+.icons {
+    background-color: #151515;
+    padding: 40px 0px;
+  }
+  
+.icons > div > div div {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+.icons > div > div div>h5 {
+    color: #e5e5e5;
+  }
+  
+.icons > div > div div>i {
+    padding: 30px;
+    font-size: 40px;
+    color: #e5e5e5;
+    border-radius: 50%;
+    box-shadow: 0px 0px 6px rgb(255, 255, 255, 0.3);
+    margin-bottom: 10px;
+    transition: all .3s ease-in-out;
+  }
+  
+.icons > div > div div>i:hover {
+    box-shadow: 0px 0px 6px rgb(234, 120, 50);
+    color: rgb(234, 120, 50);
+  }
+  
+.icons > div > div div>p {
+    margin: 0;
+    padding: 0;
+    font-size: 13px;
+    color: #e5e5e5;
+  }

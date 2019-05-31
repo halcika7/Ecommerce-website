@@ -17,6 +17,7 @@ const initialState = {
 	bluetooth: [],
 	consoles: [],
 	price: { min: 0, max: 0 },
+	pages: { numberOfProducts: 0, numberOfPages: 0 },
 	successMessage: false,
 	failedMessage: false,
 	loading: false
@@ -47,6 +48,7 @@ const reducer = (state = initialState, action) => {
 			bluetooth: action.bluetooth ? action.bluetooth : state.bluetooth,
 			consoles: action.consoles ? action.consoles : state.consoles,
 			price: action.price ? action.price : state.price,
+			pages: action.pages ? action.pages : state.pages,
 			successMessage: action.successMessage ? action.successMessage : false,
 			loading: action.loading ? action.loading : false,
 		}),

@@ -40,6 +40,10 @@ const DescriptionAndReviews = props => {
         }
     }, [props.reviews]);
 
+    useEffect(() => {
+        props.getReviews(props.product._id);
+    }, [props.product]);
+
     return (
         <div className="container-fluid about-product">
             <ul className="nav nav-tabs" id="myTab" role="tablist">

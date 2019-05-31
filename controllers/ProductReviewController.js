@@ -31,8 +31,8 @@ exports.addReview = async (req, res, next, socket) => {
             .populate({path: 'replys.reviewId', populate: { path: 'reviewId'}})
             .populate({path: 'replys.userId', populate: { path: 'userId'}})
             socket.broadcast.emit('review', {action: 'create', review: findReview} );
-        
-            return res.json({ successMessage: 'Review Added !' });
+
+            return res.json({ successMessage: 'Review Added !', product: true });
 	} catch (err) {
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		return res.json({ failedMessage: err.message });
@@ -110,33 +110,30 @@ exports.addReply = async (req, res, next, socket) => {
 exports.deleteReview = async (req, res, next, socket) => {
     const id = req.query.id;
     const userId = req.query.userId;
+    const productId = req.query.productId;
+    console.log(productId)
     try {
         const findUser = await UserModel.findOne({ _id: ObjectId(userId) });
-
-        if(!findUser) {
-            return res.json({ failedMessage: 'No User with provided id found' });
-        }
-
+        if(!findUser) { return res.json({ failedMessage: 'No User with provided id found' }); }
         const dd = await ProductReviewModel.aggregate([
             { $match: { _id: new ObjectId(id), 'replys.reviewId': { $exists: true }, userId: ObjectId(userId) } },
-            // {$unwind:"$replys"},
-            { $group:{
-                _id: null,
-                "reviewIds":{$push:"$replys.reviewId"}
-            }},
-            { $project: {
-                _id: 0,
-                'reviewIds': 1
-            } },
+            { $group:{_id: null,"reviewIds":{$push:"$replys.reviewId"}}},
+            { $project: {_id: 0,'reviewIds': 1} },
             { $limit: 1 },
             {$unwind:"$reviewIds"},
         ]);
-        if(dd.length > 0) {
-            const deleteMany = await ProductReviewModel.deleteMany({ _id: { $in: dd[0].reviewIds } });
-        }
-        const deleteOne = await ProductReviewModel.deleteOne({ _id: new ObjectId(id) });
+        if(dd.length > 0) { await ProductReviewModel.deleteMany({ _id: { $in: dd[0].reviewIds } }); }
+        await ProductReviewModel.deleteOne({ _id: new ObjectId(id) });
+        const { avg, numOfReviews } = await numberOfReviewsHelper(productId);
+        console.log(avg)
+        console.log(numOfReviews)
+        await ProductModel.updateOne({ _id: new ObjectId(productId) }, {rating: { 
+            averageRating: Math.floor(avg), 
+            numberOfReviews: numOfReviews
+        }})
+
         socket.broadcast.emit('review', {action: 'deleteReview', id: id} );
-        return res.json({ successMessage: 'Review Deleted !' });
+        return res.json({ successMessage: 'Review Deleted !', product: productId });
     }catch(err) {
         if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		return res.json({ failedMessage: err.message });
@@ -237,7 +234,7 @@ const numberOfReviewsHelper = async (productId) => {
         const avg = parseFloat((totalSumOfRatings / numOfReviews).toFixed(2))
         const ratingsWithPercentages = elem.map(el => ({ ...el, percent: (el.count / numOfReviews) * 100 }));
 
-        return { numOfReviews, avg, ratingsWithPercentages };
+        return { numOfReviews, avg: Number.isNaN(avg) ? 0 : avg, ratingsWithPercentages };
     }catch (err){
         console.log(err);
     }

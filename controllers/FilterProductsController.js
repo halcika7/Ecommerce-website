@@ -1,39 +1,13 @@
 const ObjectId = require('mongoose').Types.ObjectId;
 const ProductModel = require('../models/Product');
-const BrandModel = require('../models/Brand');
-
-exports.getProductsOnLoad = async (req, res) => {
-    // const findBy = returnQuery(req.query.options);
-	const category = req.query.category;
-	const subcategoryName = req.query.subcategoryName;
-    const subcategory = req.query.subcategory;
-
-	try {
-
-        const findProducts = await ProductModel.find({ category, 'subcategories.subName': subcategoryName , 'subcategories.sub': subcategory, published: true });
-
-		return res.json({ products: findProducts });
-	} catch (err) {
-		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
-		return res.json({ failedMessage: err.message });
-	}
-};
+const { returnQuery } = require('../helpers/filterProductsHelper')
 
 exports.filters = async (req,res) => {
     const findBy = returnQuery(req.query.options);
     const { category, subcategoryName, subcategory } = {...JSON.parse(req.query.options)};
 
     try {
-
         let filters = {};
-
-        const prices = await ProductModel.aggregate([
-            { $match: findBy },
-            { $group: { "_id": {}, "minPrice": { "$min": '$price' } ,"maxPrice": { "$max": '$price' } } },
-            {$limit: 1}
-        ]);
-        console.log(prices)
-        filters.price = { min: prices[0].minPrice, max: prices[0].maxPrice };
 
         filters.brands = await ProductModel.aggregate([
             { $match: findBy },
@@ -264,8 +238,8 @@ exports.filters = async (req,res) => {
                 {$unwind:"$memorys"},
                 {$sort: {'memorys.memory': 1}},
                 { $project: {_id: 0,'memorys': 1} },
-            ])
-    
+            ]);
+
             memorys = memorys.map(memory => ({...memory.memorys}));
             filters.memorys = memorys;
         }
@@ -292,35 +266,28 @@ exports.filters = async (req,res) => {
 }
 
 exports.filterProducts = async (req, res) => {
-    const { category, subcategoryName, subcategory, min, max, brand, color, size } = {...JSON.parse(req.query.options)};
-    const findBy = { 
-        category,
-        'subcategories.subName': subcategoryName,
-        'subcategories.sub': subcategory, 
-        published: true,
-        price: { $gte: min, $lte: max  },
-    }
+    const { page, showPerPage, sortBy } = {...JSON.parse(req.query.options)}; // Page
+    const sortProducts = sortBy === 'price asc' ? { price: 1 } : 
+        sortBy === 'price desc' ? { price: -1 } : 
+        sortBy === 'year asc' ? { year: 1 } : 
+        sortBy === 'year desc' ? { year: -1 } : 
+        sortBy === 'popularity asc' ? { numberOfsales: 1 } : 
+        sortBy === 'popularity desc' ? { numberOfsales: -1 } : 
+        sortBy === 'rating asc' ? { 'rating.averageRating': 1 } : { 'rating.averageRating': -1 };
 
-    if(brand && brand.length > 0) {
-        findBy.brand = { $in: brand }
-    }
-
-    if(color && color.length > 0) {
-        findBy['options.color'] = { $in: color } 
-    }
-
-    if(size && size.length > 0) {
-        findBy['options.options.size'] = { $in: size }
-    }
-
+    const findBy = returnQuery(req.query.options);  
     try {
+        const getNumberOfProducts = await ProductModel.find(findBy).countDocuments();
         const findProducts = await ProductModel.aggregate([
             {$match: findBy},
+            {$project: { name: 1, rating:1, price: 1, category: 1, brand: 1, smalldescription: 1, createdAt: -1, 'options.featuredPicture': 1 }},
+            { $skip: ( showPerPage * page ) - showPerPage },
+            { $limit: showPerPage > getNumberOfProducts ? getNumberOfProducts : showPerPage },
+            { $sort: sortProducts }
         ]);
-
-        return res.json({ products: findProducts })
+        const numberOfPages = Math.ceil(getNumberOfProducts / showPerPage);
+        return res.json({ products: findProducts, pages: { numberOfProducts: getNumberOfProducts, numberOfPages } })
     } catch (err) {
-        console.log(err);
         if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		return res.json({ failedMessage: err.message });
     }
@@ -347,42 +314,4 @@ const numberOfReviewsHelper = async (category, subcategoryName, subcategory) => 
     }catch (err){
         console.log(err);
     }
-}
-
-const returnQuery = obj => {
-    const { category, subcategoryName, subcategory, min, max, brand, color, size, consoles, displays, ram, graphics, ssd, hdd, resolution, memory, wifi, bluetooth } = {...JSON.parse(obj)};
-    const findBy = { category, 'subcategories.subName': subcategoryName, 'subcategories.sub': subcategory,  published: true }
-
-    if(min !== undefined && max !== undefined) { findBy.price = { $gte: min, $lte: max  } }
-
-    if(brand && brand.length > 0) { findBy.brand = { $in: brand } }
-
-    if(subcategory !== 'Games' && subcategory !== 'Projection Screens' && color && color.length > 0) { findBy['options.color'] = { $in: color } }
-
-    if((category === 'Clothing' || category === 'Shoes') && size && size.length > 0) { findBy['options.options.size'] = { $in: size } }
-
-    if(subcategory === 'Games' && consoles && consoles.length > 0) { findBy['options.console'] = { $in: consoles }  }
-
-    if((subcategory === 'Projection Screens' || subcategory === 'Monitors' || subcategory === 'Televisions') && displays && displays.length > 0) {
-        const slug = subcategory === 'Projection Screens' ? 'options.display' : 'options.options.display';
-        findBy[slug] = { $in: displays };
-    }
-    
-    if((subcategory === 'Desktop Computers' || subcategory === 'Laptops') && ram && ram.length > 0) { findBy['options.options.ram'] = { $in: ram } }
-    
-    if((subcategory === 'Desktop Computers' || subcategory === 'Laptops') && graphics && graphics.length > 0) { findBy['options.options.graphics'] = { $in: graphics } }
-    
-    if((subcategory === 'Desktop Computers' || subcategory === 'Laptops') && ssd && ssd.length > 0) { findBy['options.options.ssd'] = { $in: ssd } }
-    
-    if((subcategory === 'Desktop Computers' || subcategory === 'Laptops') && hdd && hdd.length > 0) { findBy['options.options.hdd'] = { $in: hdd } }
-    
-    if((subcategory === 'Laptops' || subcategory === 'Monitors' || subcategory === 'Televisions') && resolution && resolution.length > 0) { findBy['options.options.resolution'] = { $in: resolution } }
-    
-    if((subcategory === 'Tablets' || subcategory === 'Phones') && memory && memory.length > 0) { findBy['options.options.memory'] = { $in: memory } }
-    
-    if((subcategoryName === 'Headphones' || subcategoryName === 'Speakers') && wifi !== undefined && wifi === true) { findBy.wifi = wifi }
-
-    if((subcategoryName === 'Headphones' || subcategoryName === 'Speakers') && bluetooth !== undefined && bluetooth === true) { findBy.bluetooth = bluetooth }
-
-    return findBy;
 }

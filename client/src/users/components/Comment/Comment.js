@@ -32,7 +32,7 @@ const Comment = props => {
 
     const deleteReview = e => {
         e.preventDefault();
-        props.deleteReview({id: props.review._id, userId: props.userId})
+        props.deleteReview({id: props.review._id, userId: props.userId, productId: props.review.productId})
     }
 
     const submitEditedReview = e => {

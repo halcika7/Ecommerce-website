@@ -9,6 +9,8 @@ import 'owl.carousel/dist/assets/owl.theme.default.css';
 import './Home.css';
 import Offer from '../../components/Offer/Offer';
 import SmallSpinner from '../../components/UI/SmallSpinner/SmallSpinner';
+import ProductBox from '../../components/UI/ProductBox/ProductBox';
+import FluidIcons from '../../components/UI/FluidIcons/FluidIcons';
 
 const Home = props => {
 	const [topColumn, setTopColumn] = useState([]);
@@ -128,73 +130,7 @@ const Home = props => {
 			<div className="container nav-main">
 				<h4>New Arrivals</h4>
 				<div className="row">
-					{props.product.newProducts.map((product, index) => {
-						const diff = calculateDateDifferenece(product.createdAt);
-						console.log(product)
-						return (
-							<div className="col-12 col-sm-6 col-md-4 col-lg-3" key={index}>
-								<div className="product-box">
-									<div className="imagebox">
-										{product.options.length > 1 ? (
-											<OwlCarousel
-												className="box-image owl-carousel owl-theme owl-loaded"
-												items={1}
-												margin={10}
-												lazyLoad={true}
-												dots={false}
-												animateIn={true}
-												responsiveClass={true}
-												nav={true}
-												>
-												{product.options.map((opt, index) => (
-													<Link to={`/product?id=${product._id}`} key={index}>
-														<img
-															className="owl-lazy"
-															data-src={opt.featuredPicture}
-															alt=""
-														/>
-													</Link>
-												))}
-											</OwlCarousel>
-										) : (
-											<Link to={`/product?id=${product._id}`} key={index}>
-												<img src={product.options[0].featuredPicture} alt="" />
-											</Link>
-										)}
-										<div className="box-content">
-											<p>{product.category}</p>
-											<Link to={`/product?id=${product._id}`}>
-												<p>{product.name}</p>
-											</Link>
-											<p className="new-price">
-												Starting from: ${product.price}
-											</p>
-										</div>
-										<div className="box-bottom">
-											<div className={"product rating rating-"+product.rating.averageRating}>
-												<i className="fas fa-star" />
-												<i className="fas fa-star" />
-												<i className="fas fa-star" />
-												<i className="fas fa-star" />
-												<i className="fas fa-star" />
-												<p>({product.rating.numberOfReviews})</p>
-											</div>
-											<p>
-												{product.smalldescription.length > 50
-													? product.smalldescription.slice(0, 50) + '...'
-													: product.smalldescription + '...'}
-											</p>
-										</div>
-										{diff < 32 && <span className="new-product">NEW</span>}
-										<p className="options-length">
-											{product.optionsSize}{' '}
-											{product.optionsSize === 1 ? 'option' : 'options'}
-										</p>
-									</div>
-								</div>
-							</div>
-						);
-					})}
+					<ProductBox products={props.product.newProducts} home />
 				</div>
 			</div>
 
@@ -203,70 +139,7 @@ const Home = props => {
 			<div className="container nav-main">
 				<h4>Featured Products</h4>
 				<div className="row">
-					{props.product.featuredProducts.map((product, index) => {
-						const diff = calculateDateDifferenece(product.createdAt);
-						return (
-							<div className="col-12 col-sm-6 col-md-4 col-lg-3" key={index}>
-								<div className="product-box">
-									<div className="imagebox">
-										{product.options.length > 1 ? (
-											<OwlCarousel
-												className="box-image owl-carousel owl-theme owl-loaded owl-height"
-												margin={10}
-												items={1}
-												lazyLoad={true}
-												dots={false}
-												animateIn={true}
-												nav={true}>
-												{product.options.map((opt, index) => (
-													<Link to={`/product?id=${product._id}`} key={index}>
-														<img
-															className="owl-lazy"
-															data-src={opt.featuredPicture}
-															alt=""
-														/>
-													</Link>
-												))}
-											</OwlCarousel>
-										) : (
-											<Link to={`/product?id=${product._id}`} key={index}>
-												<img src={product.options[0].featuredPicture} alt="" />
-											</Link>
-										)}
-										<div className="box-content">
-											<p>{product.category}</p>
-											<Link to={`/product?id=${product._id}`}>
-												<p>{product.name}</p>
-											</Link>
-											<p className="new-price">
-												Starting from: ${product.price}
-											</p>
-										</div>
-										<div className="box-bottom">
-											<div className={"product rating rating-"+product.rating.averageRating}>
-												<i className="fas fa-star" />
-												<i className="fas fa-star" />
-												<i className="fas fa-star" />
-												<i className="fas fa-star" />
-												<i className="fas fa-star" />
-												<p>({product.rating.numberOfReviews})</p>
-											</div>
-											<p>
-												{product.smalldescription.length > 50
-													? product.smalldescription.slice(0, 50) + '...'
-													: product.smalldescription + '...'}
-											</p>
-										</div>
-										{diff < 32 && <span className="new-product">NEW</span>}
-										<p className="options-length">
-											{product.options.length}{' '}
-											{product.options.length === 1 ? 'option' : 'options'}
-										</p>
-									</div>
-								</div>
-							</div>
-						);
-					})}
+					<ProductBox products={props.product.featuredProducts} home/>
 				</div>
 			</div>
 
@@ -275,70 +148,7 @@ const Home = props => {
 			<div className="container nav-main">
 				<h4>Top Selling Products</h4>
 				<div className="row">
-					{props.product.topSellingProducts.map((product, index) => {
-						const diff = calculateDateDifferenece(product.createdAt);
-						return (
-							<div className="col-12 col-sm-6 col-md-4 col-lg-3" key={index}>
-								<div className="product-box">
-									<div className="imagebox">
-										{product.options.length > 1 ? (
-											<OwlCarousel
-												className="box-image owl-carousel owl-theme owl-loaded owl-height"
-												margin={10}
-												items={1}
-												animateIn={true}
-												lazyLoad={true}
-												dots={false}
-												nav={true}>
-												{product.options.map((opt, index) => (
-													<Link to={`/product?id=${product._id}`} key={index}>
-														<img
-															className="owl-lazy"
-															data-src={opt.featuredPicture}
-															alt=""
-														/>
-													</Link>
-												))}
-											</OwlCarousel>
-										) : (
-											<Link to={`/product?id=${product._id}`} key={index}>
-												<img src={product.options[0].featuredPicture} alt="" />
-											</Link>
-										)}
-										<div className="box-content">
-											<p>{product.category}</p>
-											<Link to={`/product?id=${product._id}`}>
-												<p>{product.name}</p>
-											</Link>
-											<p className="new-price">
-												Starting from: ${product.price}
-											</p>
-										</div>
-										<div className="box-bottom">
-											<div className={"product rating rating-"+product.rating.averageRating}>
-												<i className="fas fa-star" />
-												<i className="fas fa-star" />
-												<i className="fas fa-star" />
-												<i className="fas fa-star" />
-												<i className="fas fa-star" />
-												<p>({product.rating.numberOfReviews})</p>
-											</div>
-											<p>
-												{product.smalldescription.length > 50
-													? product.smalldescription.slice(0, 50) + '...'
-													: product.smalldescription + '...'}
-											</p>
-										</div>
-										{diff < 32 && <span className="new-product">NEW</span>}
-										<p className="options-length">
-											{product.options.length}{' '}
-											{product.options.length === 1 ? 'option' : 'options'}
-										</p>
-									</div>
-								</div>
-							</div>
-						);
-					})}
+					<ProductBox products={props.product.topSellingProducts} home/>
 				</div>
 			</div>
 
@@ -449,32 +259,7 @@ const Home = props => {
 				</div>
 			</section>}
 
-			<div className="container-fluid icons">
-				<div className="container icons">
-					<div className="row">
-						<div className="col-12 col-sm-6 col-lg-3">
-							<i className="fas fa-truck" />
-							<h5>Worldwide Shipping</h5>
-							<p>Free Shipping On Order Over $100</p>
-						</div>
-						<div className="col-12 col-sm-6 col-lg-3">
-							<i className="fas fa-headphones" />
-							<h5>Order Online Service</h5>
-							<p>Free return products in 30 days</p>
-						</div>
-						<div className="col-12 col-sm-6 col-lg-3">
-							<i className="far fa-credit-card" />
-							<h5>Payment</h5>
-							<p>Secure System</p>
-						</div>
-						<div className="col-12 col-sm-6 col-lg-3">
-							<i className="fas fa-redo-alt" />
-							<h5>Return 30 Days</h5>
-							<p>Free return products in 30 days</p>
-						</div>
-					</div>
-				</div>
-			</div>
+			<FluidIcons />
 		</React.Fragment>
 	);
 };

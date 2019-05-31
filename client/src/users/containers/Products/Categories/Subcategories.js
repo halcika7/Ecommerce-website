@@ -1,17 +1,13 @@
 import React from 'react'
-import SubCategory from './SubCategory';
+import classes from '../Filters/Filters.module.css';
+import CategoryLi from './CategoryLi';
 
 const Subcategories = ({ categories }) => {
 
     return (
-        <ul className='categories'>
+        <ul className={classes.categories + ' categories'}>
             {categories.map((category, index) => 
-                <li key={index}>
-                    <span className="dropdown-category-links color"><i className="fas fa-angle-down color"></i>{category.name} ({category.subcategories.length})</span>
-                    {category.subcategories.map((subcategory, i) => 
-                        <SubCategory category={category.name} subcategory={subcategory} key={i} />
-                    )}
-                </li>
+                <CategoryLi category={category} key={index}/>
             )}
         </ul>
     )

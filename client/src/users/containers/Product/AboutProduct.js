@@ -39,13 +39,13 @@ const AboutProduct = (
             <p className="sku">
                 <span>Brand:</span> {brand}
             </p>
+            <p className="sku">
+                <span>Subcategories:</span>
+            </p>
             {subcategories.map((category, index) => 
                 <React.Fragment key={index}>
                     {Array.isArray(category.sub) ? 
                         <div className='multy'>
-                            <p className="sku">
-                                <span>Subcategories:</span>
-                            </p>
                             <div className='multy-sub' >
                                 {category.sub.map(subcat => 
                                     <span key={subcat}>{subcat}</span>

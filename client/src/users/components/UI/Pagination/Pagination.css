@@ -1,0 +1,101 @@
+/* pagination */
+@media (max-width: 576px){
+    .col-12.pagination{
+        display: block !important;
+        text-align: center;
+        max-width: 100% !important;
+    }
+
+    .col-12.pagination > span{
+        width: auto;
+    }
+
+    .col-12.pagination > nav{
+        padding: 20px 0 0 !important;
+    }
+
+    .col-12.pagination > nav > ul{
+        justify-content: center !important;
+        float: none !important;
+    }
+
+    .page-item:not(:first-child):not(:last-child){
+        display: none;
+    }
+
+    .page-item:first-child,
+    .page-item:last-child{
+        margin: 0 4px;
+    }
+}
+
+.col-12.pagination{
+    margin: 15px 0 30px 0;
+    border-top:1px solid #d5d5d5;
+    border-bottom:1px solid #d5d5d5;
+    padding:20px 0 20px;
+    border-radius:0px;
+    display: inline-flex;
+    z-index: 0;
+}
+
+.col-12.pagination > span{
+    margin: auto 0;
+    font-size: 14px;
+    color: #919191;
+    width: 100%;
+    word-wrap: normal;
+}
+
+.col-12.pagination > nav{
+    width: 100%;
+    justify-content: end;
+}
+
+.col-12.pagination > nav > ul{
+    margin: auto 0;
+    float: right;
+}
+
+.page-item > a{
+    color: #484848;
+    transition: all .3s ease-in-out;
+}
+
+.page-item:not(:first-child):not(:last-child) > a{
+    border-radius: 50% !important;
+    margin: 0 5px;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    border: 2px solid #d5d5d5;
+}
+
+.page-item:not(:first-child):not(:last-child) > a:hover{
+    background-color: rgb(234, 120, 50);
+    border: 2px solid transparent;
+    color: white;
+}
+
+.page-item.active > a.page-link {
+    background-color: rgb(234, 120, 50);
+    color: white;
+    border: 2px solid transparent;
+}
+
+.page-link:focus {
+    box-shadow: none;
+}
+
+.page-item:first-child > a, 
+.page-item:last-child > a, 
+.page-item:first-child > a:hover, 
+.page-item:last-child > a:hover{
+    border: none;
+    background-color: transparent;
+}
+
+.page-item:last-child > a:hover, .page-item:first-child > a:hover{
+    color: rgb(234, 120, 50);
+}
+/* end pagination */

@@ -74,6 +74,7 @@ export {
 export {
   addProduct,
   homePageProducts,
+  getBannerProducts,
   getProduct,
   getNewProducts,
   searchProducts,
@@ -81,7 +82,6 @@ export {
 } from "./products/product";
 
 export {
-  getProductsOnLoad,
   getFilters,
   filterProducts
 } from "./products/filterproducts";

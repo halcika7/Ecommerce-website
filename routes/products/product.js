@@ -41,8 +41,6 @@ router.post(
 	ProductController.addProduct
 );
 
-router.get('/getproducts', ProductController.getProducts);
-
 router.get('/getbannerproducts', ProductController.getBannerProducts);
 router.get('/getfeaturedproducts', ProductController.getFeaturedProducts);
 router.get('/gettopsellingproducts', ProductController.getTopSellingProducts);

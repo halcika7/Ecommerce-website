@@ -89,22 +89,21 @@
   font-size: 11px !important;
 }
 
-.container.images .row .col-md-4.about-product .review .stars .star-5 > i,
-.container.images .row .col-md-4.about-product .review .stars .star-4 > i:not(:last-child),
-.container.images .row .col-md-4.about-product .review .stars .star-3 > i:not(:nth-child(n+4)), 
-.container.images .row .col-md-4.about-product .review .stars .star-2 > i:not(:nth-child(n+3)), 
-.container.images .row .col-md-4.about-product .review .stars .star-1 > i:first-child > i{
+.container.images .row .col-md-4.about-product .review .stars .star-5>i,
+.container.images .row .col-md-4.about-product .review .stars .star-4>i:not(:last-child),
+.container.images .row .col-md-4.about-product .review .stars .star-3>i:not(:nth-child(n+4)),
+.container.images .row .col-md-4.about-product .review .stars .star-2>i:not(:nth-child(n+3)),
+.container.images .row .col-md-4.about-product .review .stars .star-1>i:first-child>i {
   color: rgb(234, 120, 50);
   margin-right: 2px;
-  }
-  
-  .container.images .row .col-md-4.about-product .review .stars .star-4> i:last-child,
-  .container.images .row .col-md-4.about-product .review .stars .star-3 > i:nth-last-child(-n+2),
-  .container.images .row .col-md-4.about-product .review .stars .star-2 > i:nth-last-child(-n+3),
-  .container.images .row .col-md-4.about-product .review .stars .star-1 > i:nth-last-child(-n+4)
-  {
+}
+
+.container.images .row .col-md-4.about-product .review .stars .star-4>i:last-child,
+.container.images .row .col-md-4.about-product .review .stars .star-3>i:nth-last-child(-n+2),
+.container.images .row .col-md-4.about-product .review .stars .star-2>i:nth-last-child(-n+3),
+.container.images .row .col-md-4.about-product .review .stars .star-1>i:nth-last-child(-n+4) {
   color: #838383;
-  }
+}
 
 .container.images .row .col-md-4.about-product .review .stars>p {
   font-size: 11px;
@@ -601,7 +600,7 @@
   color: #fff;
 }
 
-.multy-sub span{
+.multy-sub span {
   margin-bottom: 5px;
 }
 

@@ -1,0 +1,68 @@
+/* checkboxes */
+.checkbox,
+.categories{
+    overflow: hidden;
+    max-height: 200px !important;
+    overflow-y: auto;
+}
+
+.inputGroup{
+    position: relative;
+}
+
+.inputGroup > input[type="checkbox"]{
+    position: absolute;
+    left: 12px;
+    opacity: 0;
+}
+
+.inputGroup label{
+    cursor: pointer;
+    padding-left: 30px;
+    font-size: 16px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    color: #838383;
+}
+
+.inputGroup label:before{
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    left: 0;
+    border: 2px solid #e7e7e7;
+    border-radius: 4px;
+    background-color: #fff;
+    -webkit-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+    -o-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+    transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.inputGroup label:after{
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    left: 0;
+    top: 1px;
+    padding-left: 3px;
+    padding-top: 0px;
+    font-size: 11px;
+}
+
+input[type="checkbox"]:checked + label:before{
+    background-color: rgb(234, 120, 50) !important;
+}
+
+.inputGroup input[type="checkbox"]:checked + label:before{
+    background-color: rgb(234, 120, 50) !important;
+    border-color: rgb(234, 120, 50) !important;
+}
+
+li.inputGroup input[type="checkbox"]:checked + label:after{
+    color: #fff;
+    content: "\002713";
+    font-weight: bold;
+}

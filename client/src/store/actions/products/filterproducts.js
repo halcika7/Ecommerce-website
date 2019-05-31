@@ -1,22 +1,6 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
 
-export const getProductsOnLoad = ({ category, subcategoryName, subcategory }) => async dispatch => {
-	dispatch({ type: actionTypes.FILTER_PRODUCT_START });
-	const response = await axios.get(`/products/product/filter/getproducts?category=${category}&subcategoryName=${subcategoryName}&subcategory=${subcategory}`);
-	if (response.data.failedMessage) {
-		dispatch({
-			type: actionTypes.FILTER_PRODUCT_FAILED,
-			failedMessage: response.data.failedMessage
-		});
-	} else {
-		dispatch({
-			type: actionTypes.FILTER_PRODUCT_SUCCESS,
-			products: response.data.products
-		});
-	}
-};
-
 export const filterProducts = data => async dispatch => {
 	const options = JSON.stringify(data);
 	dispatch({ type: actionTypes.FILTER_PRODUCT_START });
@@ -29,7 +13,8 @@ export const filterProducts = data => async dispatch => {
 	} else {
 		dispatch({
 			type: actionTypes.FILTER_PRODUCT_SUCCESS,
-			products: response.data.products
+			products: response.data.products,
+			pages: response.data.pages
 		});
 	}
 };
@@ -59,7 +44,7 @@ export const getFilters = data => async dispatch => {
 			wifi: response.data.wifi ? response.data.wifi : [],
 			bluetooth: response.data.bluetooth ? response.data.bluetooth : [],
 			consoles: response.data.consoles ? response.data.consoles : [],
-			price: response.data.price ? response.data.price : { min: 0, max: 0 },
 		});
 	}
 }
+

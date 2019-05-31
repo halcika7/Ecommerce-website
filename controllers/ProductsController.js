@@ -110,22 +110,6 @@ exports.addProduct = async (req, res) => {
 	}
 };
 
-exports.getProducts = async (req, res) => {
-	const getMinPrice = await ProductModel.aggregate([
-		[ { $match: { category: 'Electronics' } },
-			{
-			  $group:
-			  {
-				_id: {},
-				'minPrice': { $max: "$price" }
-			  }
-			}
-		  ]
-	]);
-
-	console.log(getMinPrice);
-};
-
 exports.getBannerProducts = async (req, res) => {
 	try{
 		const bannerProducts = await ProductModel.aggregate([
@@ -168,8 +152,7 @@ exports.getFeaturedProducts = async (req, res) => {
 					brand: 1,
 					smalldescription: 1,
 					createdAt: -1,
-					'options.featuredPicture': 1,
-					"optionsSize": { $size: "$options" }
+					'options.featuredPicture': 1
 				}
 			},
 			{ $sample: { size: 8 } }
@@ -195,8 +178,7 @@ exports.getTopSellingProducts = async (req, res) => {
 					brand: 1,
 					smalldescription: 1,
 					createdAt: -1,
-					'options.featuredPicture': 1,
-					"optionsSize": { $size: "$options" }
+					'options.featuredPicture': 1
 				}
 			},
 			{ $sample: { size: 8 } },
@@ -265,8 +247,7 @@ exports.getNewProducts = async (req, res) => {
 					brand: 1,
 					smalldescription: 1,
 					createdAt: -1,
-					'options.featuredPicture': 1,
-					"optionsSize": { $size: "$options" }
+					'options.featuredPicture': 1
 				}
 			},
 			{ $sort: { createdAt: -1 } },
@@ -308,6 +289,7 @@ exports.searchForProduct = async ( req, res ) => {
 		
 		const products = await ProductModel.aggregate( [
 			{ $match: { published: true, $or: [{ name: { $regex: expr } },  {brand: { $regex: expr } }, {category: { $regex: expr } }]  } },
+			{ $limit: 12 },
 			{
 				$project: {
 					name: 1,

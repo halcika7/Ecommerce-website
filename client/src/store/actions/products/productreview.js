@@ -1,10 +1,14 @@
 import * as actionTypes from '../actionTypes';
+import { getProduct } from '../../actions';
 import axios from 'axios';
 
 export const addReview = reviewObject => async dispatch => {
 	dispatch({ type: actionTypes.REVIEW_START });
 	const response = await axios.post('/products/product/addreview', reviewObject);
 	dispatch(responseHelper(response));
+	if(response.data.product) {
+		dispatch(getProduct(reviewObject.productId))
+	}
 };
 
 export const editReview = ({ id, text }) => async dispatch => {
@@ -13,10 +17,13 @@ export const editReview = ({ id, text }) => async dispatch => {
 	dispatch(responseHelper(response));
 };
 
-export const deleteReview = ({ id, userId }) => async dispatch => {
+export const deleteReview = ({ id, userId, productId }) => async dispatch => {
 	dispatch({ type: actionTypes.REVIEW_START });
-	const response = await axios.delete(`/products/product/deletereview?id=${id}&userId=${userId}`);
+	const response = await axios.delete(`/products/product/deletereview?id=${id}&userId=${userId}&productId=${productId}`);
 	dispatch(responseHelper(response));
+	if(response.data.product) {
+		dispatch(getProduct(response.data.product))
+	}
 };
 
 export const addReply = replyObject => async dispatch => {
