@@ -267,7 +267,6 @@ const Product = props => {
 
         if((change === 'choosenHDD' && subCat === 'Laptops' && sizeIndex) || change === 'choosenWithKeyboard' || change === 'choosenSmart' || subCat === 'Clothing&Shoes' || subCat === 'Tablets&Phones' || change === 'other') {
             const option = product.options[firstIndex].options[sizeIndexx];
-            console.log(option)
             setNumberInStock( option.quantity );
             setAditionalPrice(option.aditionalPrice)
             setDiscount(option.discount)
@@ -276,10 +275,10 @@ const Product = props => {
         }
     }
 
-    const returnTimeouts = (value, setValue, third = null) => setTimeout(() => {
+    const returnTimeouts = (value, setValue, third = null) => {
         if(third !== null) {setFirstIndex(third);setOptionPictures(third);}
         setValue(value);
-    },500);
+    }
 
     return (
         <React.Fragment>
@@ -289,7 +288,7 @@ const Product = props => {
                     <Breadcrumb links={[ { link: '/', value: 'Home' }, { link: `/product?id=${productID}`, value: product.name } ]} />
                     <div className="container images">
                         <div className="row">
-                            {Object.keys(product).length > 0 && props.show && <ImageGalery images={product.options[optionPictures].pictures} />}
+                            {Object.keys(product).length > 0 && <ImageGalery images={product.options[optionPictures].pictures} />}
                             <div className="col-md-4 about-product">
                                 {subCat !== '' && 
                                     <AboutProduct 

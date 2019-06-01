@@ -3,8 +3,6 @@ import { withRouter, Switch, Route } from "react-router-dom";
 import { checkLoggedInUser } from "./helpers/checkLoggedInUser";
 import { connect } from "react-redux";
 
-import openSocket from 'socket.io-client';
-
 import "./App.css";
 import Navigation from "./users/components/Navigation/Navigation";
 import Footer from "./users/components/Footer/Footer";
@@ -86,7 +84,6 @@ const App = props => {
         show: !state.show
       });
     }, 2000);
-    openSocket('http://localhost:5000');
     return () => setState({ ...state, show: false });
   }, []);
 

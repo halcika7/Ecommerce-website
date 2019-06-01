@@ -266,7 +266,9 @@ exports.filters = async (req,res) => {
 }
 
 exports.filterProducts = async (req, res) => {
-    const { page, showPerPage, sortBy } = {...JSON.parse(req.query.options)}; // Page
+    const { page } = {...JSON.parse(req.query.options)} || 1; // Page
+    const { showPerPage } = {...JSON.parse(req.query.options)} || 12; // Page
+    const { sortBy } = {...JSON.parse(req.query.options)} || 'price asc'; // Page
     const sortProducts = sortBy === 'price asc' ? { price: 1 } : 
         sortBy === 'price desc' ? { price: -1 } : 
         sortBy === 'year asc' ? { year: 1 } : 
@@ -274,20 +276,26 @@ exports.filterProducts = async (req, res) => {
         sortBy === 'popularity asc' ? { numberOfsales: 1 } : 
         sortBy === 'popularity desc' ? { numberOfsales: -1 } : 
         sortBy === 'rating asc' ? { 'rating.averageRating': 1 } : { 'rating.averageRating': -1 };
-
+    
     const findBy = returnQuery(req.query.options);  
     try {
         const getNumberOfProducts = await ProductModel.find(findBy).countDocuments();
+        const limit = (showPerPage > getNumberOfProducts) ? getNumberOfProducts : showPerPage;
+        const skip = ( showPerPage * page ) - showPerPage;
+        console.log(limit)
+        console.log(skip)
         const findProducts = await ProductModel.aggregate([
-            {$match: findBy},
-            {$project: { name: 1, rating:1, price: 1, category: 1, brand: 1, smalldescription: 1, createdAt: -1, 'options.featuredPicture': 1 }},
-            { $skip: ( showPerPage * page ) - showPerPage },
-            { $limit: showPerPage > getNumberOfProducts ? getNumberOfProducts : showPerPage },
-            { $sort: sortProducts }
+            { $match: findBy},
+            { '$sort': sortProducts },
+            { '$skip': parseInt(skip) },
+            { '$limit': parseInt(limit) },
+            {$project: { name: 1, rating:1, price: 1, category: 1, brand: 1, smalldescription: 1, createdAt: -1, 'options.featuredPicture': 1 }}
         ]);
+
         const numberOfPages = Math.ceil(getNumberOfProducts / showPerPage);
         return res.json({ products: findProducts, pages: { numberOfProducts: getNumberOfProducts, numberOfPages } })
     } catch (err) {
+        console.log(err)
         if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		return res.json({ failedMessage: err.message });
     }

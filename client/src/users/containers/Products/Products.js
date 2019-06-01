@@ -79,7 +79,9 @@ const name = props => {
 
     useEffect(() => { setNumberOfProducts(props.pages.numberOfProducts) },[props.pages]);
 
-    useEffect(() => { applyFilters() },[pageNum, showPerPage, sortBy]);
+    useEffect(() => { applyFilters() },[pageNum]);
+    useEffect(() => { applyFilters() },[showPerPage]);
+    useEffect(() => { applyFilters() },[sortBy]);
 
     const setOptions = () => {
         setSubcategoryName(''); setFiltersApplyed(false);
@@ -108,39 +110,21 @@ const name = props => {
     }
 
     const applyFilters = (e = null) => {
-        if(e) {
-            e.preventDefault();
-            setFiltersApplyed(true);
-        }
+        if(e) { e.preventDefault(); setFiltersApplyed(true); }
         const obj = {
             category: new URLSearchParams(props.location.search).get('category'), 
             subcategoryName: new URLSearchParams(props.location.search).get('subcategoryName'), 
             subcategory: new URLSearchParams(props.location.search).get('subcategory'), 
-            brand: choosenBrands, color: choosenColors, size: choosenSizes,consoles: choosenConsoles,displays: choosenDisplays,ram: choosenRams,graphics: choosenGraphics,ssd: choosenSSDS,hdd: choosenHDDS,resolution: choosenResolutions, memory: choosenMemorys, wifi: choosenWifi, bluetooth: choosenBluetooth,
-            page: pageNum,
-            showPerPage,
-            sortBy
+            brand: choosenBrands, color: choosenColors, size: choosenSizes,consoles: choosenConsoles,displays: choosenDisplays,ram: choosenRams,graphics: choosenGraphics,ssd: choosenSSDS,hdd: choosenHDDS,resolution: choosenResolutions, memory: choosenMemorys, wifi: choosenWifi, bluetooth: choosenBluetooth, page: pageNum, showPerPage, sortBy
         };
         props.filterProducts(obj);
         props.getFilters(obj);
     }
 
-    const clearFilters = e => {
-        e.preventDefault();
-        setOptions();
-    }
-
+    const clearFilters = e => { e.preventDefault(); setOptions(); }
     const changePage = pageNum => setPageNum(pageNum);
-
-    const perPageNumber = e => {
-        setPageNum(1);
-        setShowPerPage(e.target.value)
-    };
-
-    const sortChange = e => {
-        setPageNum(1);
-        setSortBy(e.target.value);
-    }
+    const perPageNumber = e => { setPageNum(1); setShowPerPage(e.target.value) };
+    const sortChange = e => { setPageNum(1); setSortBy(e.target.value); setShowPerPage(12); }
 
     return (
         <React.Fragment>
@@ -167,39 +151,18 @@ const name = props => {
                     <div className="col-lg-9 col-md-8">
                         <div className="col-12 d-none d-md-block">
                             {props.banner.length > 0 ? (
-                                <OwlCarousel
-                                    className="owl-carousel-main owl-carousel owl-theme"
-                                    loop
-                                    margin={10}
-                                    dotsEach={true}
-                                    dots={true}
-                                    items={1}
-                                    animateIn={true}
-                                    lazyLoad={true}>
+                                <OwlCarousel className="owl-carousel-main owl-carousel owl-theme" loop margin={10} dotsEach={true} dots={true} items={1} animateIn={true} lazyLoad={true}>
                                     {props.banner.map((product, index) => (
                                         <div className="product" key={index}>
                                             <div className="left-part">
-                                                <h1>
-                                                    <Link to={`/product?id=${product._id}`}>{product.name}</Link>
-                                                </h1>
-                                                <div className="row">
-                                                    <div className="old-price">Starting from: ${product.price}</div>
-                                                </div>
+                                                <h1><Link to={`/product?id=${product._id}`}>{product.name}</Link></h1>
+                                                <div className="row"><div className="old-price">Starting from: ${product.price}</div></div>
                                             </div>
-                                            <div className="right-part">
-                                                <img
-                                                    className="owl-lazy"
-                                                    data-src={product.options[0].featuredPicture}
-                                                    alt={product.name}
-                                                />
-                                            </div>
+                                            <div className="right-part"><img className="owl-lazy" data-src={product.options[0].featuredPicture} alt={product.name} /></div>
                                         </div>
                                     ))}
                                 </OwlCarousel>
-                                ) : 
-                                <div className='card'>
-                                    <SmallSpinner />
-                                </div>
+                                ) : <div className='card'><SmallSpinner /></div>
                             }
                         </div>
                         <div className="col-12 heading"><h5>{subcategoryName}</h5></div>
@@ -208,16 +171,8 @@ const name = props => {
                                 <div className="row">
                                     <div className="col-12 col-sm-3 col-md-4 col-lg-3">
                                         <ul className="nav nav-tabs products" id="myTab" role="tablist">
-                                            <li className="nav-item">
-                                                <a className="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                                    <i className="fas fa-list"></i>
-                                                </a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a className="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">
-                                                    <i className="fas fa-ellipsis-h"></i>
-                                                </a>
-                                            </li>
+                                            <li className="nav-item"><a className="nav-link active" id="home-tab" data-toggle="tab" href="#home" ><i className="fas fa-list"></i></a></li>
+                                            <li className="nav-item"><a className="nav-link" id="profile-tab" data-toggle="tab" href="#profile"><i className="fas fa-ellipsis-h"></i></a></li>
                                         </ul>
                                     </div>
                                     <div className="col-12 col-sm-9 col-md-8 col-lg-9">
@@ -260,7 +215,6 @@ const name = props => {
             <FluidIcons />
         </React.Fragment>
     )
-
 }
 
 const mapStateToProps = state => ({
