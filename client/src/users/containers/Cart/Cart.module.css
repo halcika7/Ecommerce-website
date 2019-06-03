@@ -53,10 +53,6 @@
     background-color: rgb(234, 120, 50);
 }
 
-.productname{
-    padding: 25px 0;
-}
-
 .productname > .name{
     margin: auto 0;
 }
@@ -70,36 +66,48 @@
     max-height: 100px;
 }
 
-table{
+.container table{
     width: 100%;
     min-width: 750px;
     margin: 20px 0;
 }
 
-thead{
+.container thead{
     width: 100% !important;
     border-bottom: 1px solid #e5e5e5;
 }
 
-thead > tr > th{
-    padding: 0 0 15px;
+.container thead > tr > th{
+    padding: 5px 15px;
     white-space: nowrap;
     font-size: 13px;
     color: #484848;
     font-weight: 600;
 }
 
-tbody > tr{
+.container tbody > tr{
     padding-top: 30px;
+    border-bottom: 1px solid #e5e5e5;
 }
 
-tbody > tr > td:first-child{
-    width: 40% !important;
+.container tbody > tr > td {
+    margin-left: 10px;
+    padding: 15px;
 }
 
-tbody > tr > td:not(:first-child){
-    width: 15%;
+.container tbody > tr > td > p {
+    margin: 0;
 }
+
+.container tbody > tr > td:nth-child(7) > div{
+    max-height: 110px;
+    overflow-y: auto;
+    min-width: 150px;
+}
+
+/* tbody > tr > td:not(:first-child){
+    width: 100%; */
+/* } */
 
 .buttons{
     display: flex;
@@ -125,7 +133,7 @@ tbody > tr > td:not(:first-child){
     font-size: 20px;
 }
 
-td > input{
+.container td > input{
     border-radius: 30px;
     border: 1px solid grey;
     box-shadow: none;
@@ -134,7 +142,7 @@ td > input{
     max-width: 100px;
 }
 
-td > input:focus{
+.container td > input:focus{
     outline: none;
 }
 
@@ -145,7 +153,11 @@ td > input:focus{
     color: #919191;
 }
 
-td > h6.price{
+.options > p {
+    margin: 0;
+}
+
+.container td > h6.price{
     color: rgb(234, 120, 50);
     margin: auto 0;
 }

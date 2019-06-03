@@ -187,6 +187,26 @@ const Navigation = props => {
                 </div>
               </div>
             </li>
+            <li>
+              <div className="btn-group-vertical d-flex ">
+                <a
+                  href="/"
+                  onClick={toggleActiveClass}
+                  className="dropdown-toggle-split"
+                >
+                  <i className="fas fa-tags"></i>
+                  <p>Coupons</p>
+                </a>
+                <div className={classes.DropDown + " " + classes.MaxHeight100}>
+                  <Link to="/admindashboard/add-coupon">
+                    <p>Add Coupon</p>
+                  </Link>
+                  <Link to="/admindashboard/all-coupons">
+                    <p>All Coupons</p>
+                  </Link>
+                </div>
+              </div>
+            </li>
           </ul>
         </div>
       </div>

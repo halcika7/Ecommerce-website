@@ -13,6 +13,8 @@ import productReducer from "./products/product";
 import filterProductReducer from "./products/filterproducts";
 import productReviewReducer from "./products/productreview";
 import answerReducer from "./answers/answers";
+import cartReducer from "./cart/cart";
+import couponReducer from "./cart/coupon";
 
 export const combinedReducers = combineReducers({
   login: loginReducer,
@@ -28,5 +30,7 @@ export const combinedReducers = combineReducers({
   product: productReducer,
   filteredProducts: filterProductReducer,
   reviews: productReviewReducer,
-  answers: answerReducer
+  answers: answerReducer,
+  cart: cartReducer,
+  coupon: couponReducer
 });

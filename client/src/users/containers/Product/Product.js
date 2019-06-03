@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
 import './Product.css';
 
-import FooterSocialIcons from '../../components/UI/FooterSocialIcons/FooterSocialIcons';
 import ImageGalery from '../../components/UI/ImageGalery/ImageGalery';
 import SelectProductOptions from './SelectProductOptions';
 import SmallSpinner from '../../components/UI/SmallSpinner/SmallSpinner';
@@ -11,14 +11,11 @@ import Breadcrumb from '../../components/UI/Breadcrumb/Breadcrumb';
 import ProductButtons from './ProductButtons';
 import AboutProduct from './AboutProduct';
 import DescriptionAndReviews from './DescriptionAndReviews';
+import ResponseMessage from '../../components/UI/ResponseMessages/ResponseMessages';
+import SharingButtons from './SharingButtons';
 
 const Product = props => {
     const productID = props.match.params.id ? props.match.params.id : new URLSearchParams(props.location.search).get('id');
-
-    const [socialIcons] = useState([ 
-        {link: '/', icon: 'fab fa-facebook-f'}, {link: '/', icon: 'fab fa-twitter'}, {link: '/', icon: 'fab fa-instagram'}, {link: '/', icon: 'fab fa-pinterest'}, 
-        {link: '/', icon: 'fab fa-dribbble'}, {link: '/', icon: 'fab fa-google'}
-    ]);
 
     const [product, setProduct] = useState({});
     const [subCat, setSubCat] = useState('');
@@ -26,7 +23,6 @@ const Product = props => {
     const [sizeLabel, setSizeLabel] = useState('');
     const [optionLabeledBy, setOptionLabeledBy] = useState([]);
     const [sizes, setSizes] = useState( [] );
-
     // for computers and laptops
     const [graphics, setGraphics] = useState([]);
     const [ssd, setSSD] = useState([]);
@@ -82,11 +78,8 @@ const Product = props => {
     useEffect(() => {setProduct({ ...props.product.singleProduct })}, [props.product.singleProduct]);
 
     useEffect( () => {
-        if(numberInStock > 0) {
-            setInStock(true);
-        } else {
-            setInStock(false);
-        }
+        if(numberInStock > 0) { setInStock(true);} 
+        else { setInStock(false); }
     }, [numberInStock] );
     
     useEffect(() => {
@@ -140,28 +133,21 @@ const Product = props => {
     }, [choosenSize] );
     
     useEffect(() => { choosenGraphics && commonInUseEffects('choosenSize', 'Computers',false, 'ssd', 'choosenGraphics', setSSD) }, [choosenGraphics] );
-    
     useEffect( () => { choosenSSD && commonInUseEffects('choosenSSD', 'Computers',false, 'hdd', 'choosenSSD', setHDD) }, [choosenSSD] );
-    
     useEffect( () => {
-        if ( choosenHDD && (subCatName === 'Laptops') ) {
-            commonInUseEffects('choosenHDD','Laptops',false, 'resolution', 'choosenHDDL', setResolution);
-            setting('choosenHDD','Laptops', true);
-        }
+        ( choosenHDD && (subCatName === 'Laptops') ) && commonInUseEffects('choosenHDD','Laptops',false, 'resolution', 'choosenHDDL', setResolution);
         ( choosenHDD && subCatName === 'Desktop Computers' ) && commonInUseEffects('choosenHDD','Desktop',false, 'withMouse', 'choosenHDDD', setWithMouse);
     }, [choosenHDD]);
-
     useEffect( () => {choosenWithMouse && commonInUseEffects('choosenWithMouse',null,null, 'withDisplay', 'choosenWithMouse', setWithDisplay) }, [choosenWithMouse]);
-
     useEffect( () => {choosenWithDisplay && commonInUseEffects('choosenWithDisplay',null,null,'withKeyboard', 'choosenWithDisplay', setWithKeyboard) }, [choosenWithDisplay]);
-
     useEffect( () => { choosenWithKeyboard && setting('choosenWithKeyboard') }, [choosenWithKeyboard]);
-
-    useEffect( () => { choosenResolution && commonInUseEffects('choosenResolution',null,null,'threeD', 'choosenResolution', setThreeD) }, [choosenResolution]);
-
+    useEffect( () => { 
+        (choosenResolution && subCatName === 'Laptops') && setting('choosenHDD','Laptops', true);
+        (choosenResolution && subCatName !== 'Laptops') && commonInUseEffects('choosenResolution',null,null,'threeD', 'choosenResolution', setThreeD) ;
+    }, [choosenResolution]);
     useEffect( () => { choosenThreeD && commonInUseEffects('choosenThreeD',null,null,'smart', 'choosenThreeD', setSmart); }, [choosenThreeD]);
-
     useEffect( () => { choosenSmart && setting('choosenSmart') }, [choosenSmart]);
+    useEffect( () => { resets('all', true); window.scrollTo({ top: 0, behavior: 'smooth' }); }, [props.cart.successMessage])
 
     const commonInUseEffects = (first, second, third, fourth, fifth, setValue) => {
         const value = setting(first, second, third, fourth);
@@ -169,12 +155,12 @@ const Product = props => {
         returnTimeouts(value,setValue);
     }
 
-    const resets = change => {
-        (change === 'all') && setProduct({}); 
-        (change === 'all') && setSubCat(''); 
-        (change === 'all') && setSubCatName(''); 
-        (change === 'all') && setSizeLabel(''); 
-        (change === 'all') && setOptionLabeledBy([]); 
+    const resets = (change, addedToCart = null) => {
+        (change === 'all' && !addedToCart) && setProduct({}); 
+        (change === 'all' && !addedToCart) && setSubCat(''); 
+        (change === 'all' && !addedToCart) && setSubCatName(''); 
+        (change === 'all' && !addedToCart) && setSizeLabel(''); 
+        (change === 'all' && !addedToCart) && setOptionLabeledBy([]); 
         (change === 'all' || change === 'choosenLabeledBy') && setSizes([]); 
         (change === 'all' || change === 'choosenLabeledByDL' || change === 'choosenSizeDL') && setGraphics([]); 
         (change === 'all' || change === 'choosenLabeledByDL' || change === 'choosenSizeDL' || change === 'choosenGraphics') && setSSD([]); 
@@ -202,6 +188,7 @@ const Product = props => {
         (change === 'all') && setFirstIndex(0); 
         (change === 'all'|| change === 'choosenLabeledBy') && setNumberInStock(0); 
         (change === 'all'|| change === 'choosenLabeledBy') && setInStock(false);
+        (change === 'all' || addedToCart) && setSKU('');
     }
                         
     const newSizesArray = (index, property) => [...new Set(product.options[index].options.filter(option => option.quantity > 0 && option ).map(opt => opt[property]))].sort((a, b) => a - b);
@@ -275,13 +262,13 @@ const Product = props => {
         }
     }
 
-    const returnTimeouts = (value, setValue, third = null) => {
-        if(third !== null) {setFirstIndex(third);setOptionPictures(third);}
-        setValue(value);
-    }
+    const returnTimeouts = (value, setValue, third = null) => {if(third !== null) {setFirstIndex(third);setOptionPictures(third);} setValue(value); }
 
     return (
         <React.Fragment>
+            {props.cart.failedMessage && <ResponseMessage ClassName="Danger" message={props.cart.failedMessage} />}
+            {props.cart.successMessage && <ResponseMessage message={props.cart.successMessage} />}
+            {props.product.failedMessage && <Redirect to='/404' />}
             {Object.keys(product).length === 0 ?
                 <div className='card' style={{ minHeight: '60vh' }}><SmallSpinner /></div> :
                 <React.Fragment>
@@ -291,57 +278,41 @@ const Product = props => {
                             {Object.keys(product).length > 0 && <ImageGalery images={product.options[optionPictures].pictures} />}
                             <div className="col-md-4 about-product">
                                 {subCat !== '' && 
-                                    <AboutProduct 
-                                        name={product.name} 
-                                        numberOfSales={product.numberOfsales} 
-                                        category={product.category} 
-                                        brand={product.brand} 
-                                        inStock={inStock} 
-                                        numberInStock={numberInStock} 
-                                        price={product.price} 
-                                        aditionalPrice={aditionalPrice} 
-                                        discount={discount} 
-                                        subCat={subCat} 
-                                        wifi={product.wifi} 
-                                        bluetooth={product.bluetooth} 
-                                        rating={product.rating} 
-                                        createdAt={product.createdAt}
-                                        subcategories={product.subcategories}
-                                        sku={sku}/>
+                                    <AboutProduct  name={product.name}  numberOfSales={product.numberOfsales}  category={product.category}  brand={product.brand}  inStock={inStock}  numberInStock={numberInStock}  price={product.price}  aditionalPrice={aditionalPrice}  discount={discount}  subCat={subCat}  wifi={product.wifi}  bluetooth={product.bluetooth}  rating={product.rating}  createdAt={product.createdAt} subcategories={product.subcategories} sku={sku} dailyOffer={product.dailyOffer} weeklyOffer={product.weeklyOffer}/>
                                 }
                                 <div className="options">
                                     <div className="row">
                                         {optionLabeledBy.length > 0 && (subCatName !== 'Projection Screens' && subCatName !== 'Games') && 
-                                            <SelectProductOptions color={true} values={optionLabeledBy} change={setChoosenLabeledBy} value={choosenLabeledBy} label='Choose Product'/>
+                                            <SelectProductOptions color values={optionLabeledBy} change={setChoosenLabeledBy} value={choosenLabeledBy} label='Choose Product'/>
                                         }
                                         {(optionLabeledBy.length > 0 && subCatName === 'Games') && 
-                                            <SelectProductOptions size={true} values={optionLabeledBy} change={setChoosenLabeledBy} value={choosenLabeledBy} label='Choose Console'/>
+                                            <SelectProductOptions size values={optionLabeledBy} change={setChoosenLabeledBy} value={choosenLabeledBy} label='Choose Console'/>
                                         }
                                         {(optionLabeledBy.length > 0 && subCatName === 'Projection Screens') && 
-                                            <SelectProductOptions size={true} values={optionLabeledBy} change={setChoosenLabeledBy} value={choosenLabeledBy} label='Choose Display'/>
+                                            <SelectProductOptions size values={optionLabeledBy} change={setChoosenLabeledBy} value={choosenLabeledBy} label='Choose Display'/>
                                         }
-                                        {sizes.length > 0 && <SelectProductOptions size={true} values={sizes} change={setChoosenSize} value={choosenSize} label={sizeLabel} /> }
-                                        {graphics.length > 0 && <SelectProductOptions size={true} values={graphics} change={setChoosenGraphics} value={choosenGraphics} label={"Select Product Graphics"} /> }
-                                        {ssd.length > 0 && <SelectProductOptions size={true} values={ssd} change={setChoosenSSD} value={choosenSSD} label={"Select Product SSD"} /> }
-                                        {hdd.length > 0 && <SelectProductOptions size={true} values={hdd} change={setChoosenHDD} value={choosenHDD} label={"Select Product HDD"} /> }
+                                        {sizes.length > 0 && <SelectProductOptions size values={sizes} change={setChoosenSize} value={choosenSize} label={sizeLabel} /> }
+                                        {graphics.length > 0 && <SelectProductOptions size values={graphics} change={setChoosenGraphics} value={choosenGraphics} label={"Select Product Graphics"} /> }
+                                        {ssd.length > 0 && <SelectProductOptions size values={ssd} change={setChoosenSSD} value={choosenSSD} label={"Select Product SSD"} /> }
+                                        {hdd.length > 0 && <SelectProductOptions size values={hdd} change={setChoosenHDD} value={choosenHDD} label={"Select Product HDD"} /> }
                                         {resolution.length > 0 &&
-                                            <SelectProductOptions size={true} values={resolution} change={setChoosenResolution} value={choosenResolution} label={"Select Product Display Resolution"} />
+                                            <SelectProductOptions size values={resolution} change={setChoosenResolution} value={choosenResolution} label={"Select Product Display Resolution"} />
                                         }
                                         {withMouse.length > 0 &&
-                                            <SelectProductOptions size={true} values={withMouse} change={setChoosenWithMouse} value={choosenWithMouse} label="With extra mouse" />
+                                            <SelectProductOptions size values={withMouse} change={setChoosenWithMouse} value={choosenWithMouse} label="With extra mouse" />
                                         }
                                         {withDisplay.length > 0 &&
-                                            <SelectProductOptions size={true} values={withDisplay} change={setChoosenWithDisplay} value={choosenWithDisplay} label="With extra display" />
+                                            <SelectProductOptions size values={withDisplay} change={setChoosenWithDisplay} value={choosenWithDisplay} label="With extra display" />
                                         }
                                         {withKeyboard.length > 0 &&
-                                            <SelectProductOptions size={true} values={withKeyboard} change={setChoosenWithKeyboard} value={choosenWithKeyboard} label="With extra keyboard" />
+                                            <SelectProductOptions size values={withKeyboard} change={setChoosenWithKeyboard} value={choosenWithKeyboard} label="With extra keyboard" />
                                         }
-                                        {threeD.length > 0 && <SelectProductOptions size={true} values={threeD} change={setChoosenThreeD} value={choosenThreeD} label="Is 3D" /> }
-                                        {smart.length > 0 && <SelectProductOptions size={true} values={smart} change={setChoosenSmart} value={choosenSmart} label="Is Smart" /> }
+                                        {threeD.length > 0 && <SelectProductOptions size values={threeD} change={setChoosenThreeD} value={choosenThreeD} label="Is 3D" /> }
+                                        {smart.length > 0 && <SelectProductOptions size values={smart} change={setChoosenSmart} value={choosenSmart} label="Is Smart" /> }
                                     </div>
                                 </div>
-                                <ProductButtons inStock={inStock} />
-                                <FooterSocialIcons icons={socialIcons} />
+                                {(inStock && sku) && <ProductButtons inStock={inStock} sku={sku}/>}
+                                <SharingButtons link='https://imtec.ba/robotici-i-oprema/41009-makeblock-steam-kits-starter-robot-kit-ir-verzija-.html' />
                             </div>
                         </div>
                     </div>
@@ -354,7 +325,8 @@ const Product = props => {
 
 const mapStateToProps = state => {
     return {
-        product: state.product
+        product: state.product,
+        cart: state.cart
     }
 }
 

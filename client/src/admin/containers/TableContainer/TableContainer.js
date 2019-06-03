@@ -13,6 +13,8 @@ const TableContainer = props => {
   const [allCategories, setAllCategories] = useState(false);
   const [allPermissions, setAllPermissions] = useState(false);
   const [allRoles, setAllRoles] = useState(false);
+  const [allCoupons, setAllCoupons] = useState(false);
+  const [allAnswers, setAllAnswers] = useState(false);
 
   const [failedMessage, setFailedMessage] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
@@ -44,7 +46,15 @@ const TableContainer = props => {
       setAllCategoryIcons(props.icons.allCategoryIcons);
       props.getAllCategoryIcons();
     }
-  }, [props.Brands,props.Roles,props.Permissions,props.Users,props.Categories,props.Icons]);
+    if(props.Coupons === true) {
+      setAllCoupons(props.coupon.coupons);
+      props.getAllCoupons();
+    }
+    if(props.Answers === true) {
+      setAllAnswers(props.answers.answers);
+      props.getAllAnswers();
+    }
+  }, [props.Brands,props.Roles,props.Permissions,props.Users,props.Categories,props.Icons, props.Coupons, props.Answers]);
 
   useEffect(() => {
     if (props.Brands === true) {
@@ -65,7 +75,13 @@ const TableContainer = props => {
     if (props.Icons === true) {
       setAllCategoryIcons(props.icons.allCategoryIcons);
     }
-  }, [props.brand.allBrands,props.permissions.allPermissions,props.roles.Roles,props.users.Users,props.categories.allCategories,props.icons.allCategoryIcons]);
+    if(props.Coupons === true) {
+      setAllCoupons(props.coupon.coupons);
+    }
+    if(props.Answers === true) {
+      setAllAnswers(props.answers.answers);
+    }
+  }, [props.brand.allBrands,props.permissions.allPermissions,props.roles.Roles,props.users.Users,props.categories.allCategories,props.icons.allCategoryIcons,props.coupon.coupons,props.answers.answers]);
 
   useEffect(() => {
     if(props.Brands === true) {
@@ -86,7 +102,13 @@ const TableContainer = props => {
     if(props.Icons === true) {
       setFailedMessage(props.icons.failedMessage);
     }
-  }, [props.brand.failedMessage,props.permissions.failedMessage,props.roles.failedMessage,props.users.failedMessage,props.categories.failedMessage,props.icons.failedMessage]);
+    if(props.Coupons === true) {
+      setFailedMessage(props.coupon.failedMessage);
+    }
+    if(props.Answers === true) {
+      setFailedMessage(props.answers.failedMessage);
+    }
+  }, [props.brand.failedMessage,props.permissions.failedMessage,props.roles.failedMessage,props.users.failedMessage,props.categories.failedMessage,props.icons.failedMessage, props.coupon.failedMessage,props.answers.failedMessage]);
 
   useEffect(() => {
     if(props.Brands === true) {
@@ -107,7 +129,13 @@ const TableContainer = props => {
     if(props.Icons === true) {
       setSuccessMessage(props.icons.successMessage);
     }
-  }, [props.brand.successMessage,props.permissions.successMessage,props.roles.successMessage,props.users.successMessage,props.categories.successMessage,props.icons.successMessage]);
+    if(props.Coupons === true) {
+      setSuccessMessage(props.coupon.successMessage);
+    }
+    if(props.Answers === true) {
+      setSuccessMessage(props.answers.successMessage);
+    }
+  }, [props.brand.successMessage,props.permissions.successMessage,props.roles.successMessage,props.users.successMessage,props.categories.successMessage,props.icons.successMessage, props.coupon.successMessage,props.answers.successMessage]);
 
   useEffect(() => {
     if(props.Brands === true) {
@@ -128,7 +156,13 @@ const TableContainer = props => {
     if(props.Icons === true) {
       setLoading(props.icons.loading);
     }
-  }, [props.brand.loading,props.permissions.loading,props.roles.loading,props.users.loading,props.categories.loading,props.icons.loading]);
+    if(props.Coupons === true) {
+      setLoading(props.coupon.loading);
+    }
+    if(props.Answers === true) {
+      setLoading(props.answers.loading);
+    }
+  }, [props.brand.loading,props.permissions.loading,props.roles.loading,props.users.loading,props.categories.loading,props.icons.loading,props.coupon.loading,props.answers.loading]);
 
   const singleDelete = (e, id) => {
     e.preventDefault();
@@ -149,6 +183,12 @@ const TableContainer = props => {
     }
     if (props.Permissions) {
       props.deletePermission(id);
+    }
+    if (props.Coupons) {
+      props.deleteCoupon(id);
+    }
+    if (props.Answers) {
+      props.deleteAnswer(id);
     }
     setDeleteManyRecords([]);
   };
@@ -197,6 +237,8 @@ const TableContainer = props => {
                 {props.Icons && <h4>All Icons</h4>}
                 {props.Roles && <h4>All Roles</h4>}
                 {props.Permissions && <h4>All Permissions</h4>}
+                {props.Coupons && <h4>All Coupons</h4>}
+                {props.Answers && <h4>All Answers</h4>}
               </div>
               {(deleteManyRecords.length > 0 && !props.Users) && (
                 <div className="col-12 mt-20 pl-125">
@@ -262,6 +304,20 @@ const TableContainer = props => {
                   selectedDeleteData={deleteManyRecords}
                 />
               )}
+              {props.Coupons && (
+                <DataTable
+                  couponsData={allCoupons}
+                  click={singleDelete}
+                  loading={loading}
+                />
+              )}
+              {props.Answers && (
+                <DataTable
+                  answersData={allAnswers}
+                  click={singleDelete}
+                  loading={loading}
+                />
+              )}
             </div>
           )}
         </div>
@@ -277,7 +333,9 @@ const mapStateToProps = state => {
     categories: state.category,
     icons: state.categoryIcon,
     roles: state.roles,
-    permissions: state.permissions
+    permissions: state.permissions,
+    coupon: state.coupon,
+    answers: state.answers
   };
 };
 
@@ -291,18 +349,19 @@ const mapDispatchToProps = dispatch => {
     deleteManyCategories: ids => dispatch(actions.deleteManyCategories(ids)),
     getAllCategoryIcons: () => dispatch(actions.getAllCategoryIcons()),
     deleteCategoryIcon: id => dispatch(actions.deleteCategoryIcon(id)),
-    deleteManyCategoryIcons: ids =>
-      dispatch(actions.deleteManyCategoryIcons(ids)),
+    deleteManyCategoryIcons: ids => dispatch(actions.deleteManyCategoryIcons(ids)),
     getUsers: () => dispatch(actions.getAllUsers()),
     deleteUser: id => dispatch(actions.deleteUser(id)),
     getRoles: () => dispatch(actions.getRoles()),
     deleteRole: id => dispatch(actions.deleteUserRole(id)),
     deleteManyRoles: ids => dispatch(actions.deleteManyUserRoles(ids)),
     getAllPermissions: () => dispatch(actions.getAllPermissions()),
-    deletePermission: permission =>
-      dispatch(actions.deletePermission(permission)),
-    deleteManyPermissions: permissions =>
-      dispatch(actions.deleteManyPermissions(permissions))
+    deletePermission: permission => dispatch(actions.deletePermission(permission)),
+    deleteManyPermissions: permissions => dispatch(actions.deleteManyPermissions(permissions)),
+    getAllCoupons: () => dispatch(actions.getCoupons()),
+    deleteCoupon: id => dispatch(actions.deleteCoupon(id)),
+    getAllAnswers: () => dispatch(actions.getAllAnswers()),
+    deleteAnswer: (id) => dispatch(actions.deleteAnswer(id))
   };
 };
 

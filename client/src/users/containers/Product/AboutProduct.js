@@ -19,8 +19,11 @@ const AboutProduct = (
         rating, 
         createdAt, 
         subcategories, 
-        sku 
+        sku,
+        dailyOffer,
+        weeklyOffer
     }) => {
+        const date = dailyOffer ? new Date(dailyOffer.expires).toDateString() : weeklyOffer ? new Date(weeklyOffer.expires).toDateString() : null;
     return (
         <React.Fragment>
             <h4>{name}</h4>
@@ -33,6 +36,12 @@ const AboutProduct = (
                 </p>
             </div>
             <ProductReview inStock={inStock} numberInStock={numberInStock} rating={rating} />
+            {dailyOffer && 
+                <p>Product is on Daily discount and every product option is discounted by {dailyOffer.discount}%. This offer expires on {date}.</p>
+            }
+            {weeklyOffer && 
+                <p>Product is on Daily discount and every product option is discounted by {weeklyOffer.discount}%. This offer expires on {date}.</p>
+            }
             <p className="sku">
                 <span>Category:</span> {category}
             </p>

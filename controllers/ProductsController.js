@@ -308,3 +308,4 @@ exports.searchForProduct = async ( req, res ) => {
 		return res.json( { failedMessage: 'Something Happend' } )
 	}
 }
+		

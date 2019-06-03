@@ -10,6 +10,7 @@ const initialState = {
   errors: {},
   failedMessage: false,
   successMessage: false,
+  notFound: false,
   loading: false
 };
 
@@ -22,6 +23,7 @@ const reducer = (state = initialState, action) => {
     [actionTypes.ANSWER_FAILED]: updateObject(state, {
       failedMessage: action.failedMessage ? action.failedMessage : false,
       errors: action.errors ? action.errors : false,
+      notFound: action.notFound ? action.notFound : false,
       answerData: action.data ? action.data : initialState.answerData,
       loading: action.loading ? action.loading : false
     }),

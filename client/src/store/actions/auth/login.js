@@ -9,8 +9,6 @@ export const login = UserObj => async dispatch => {
 
   const response = await axios.post('/api/users/login', UserObj);
   
-  console.log(response.data);
-
 	if (response.data.errors) {
 		dispatch({
 			type: actionTypes.LOGIN_FAILED,
@@ -49,11 +47,9 @@ export const setCurrentUser = (decoded, rememberMe, message = false) => {
 	};
 };
 
-export const logoutUser = callBack => dispatch => {
+export const logoutUser = (callBack = null )=> dispatch => {
 	localStorage.removeItem('jwtToken');
 	setAuthToken(false);
-
-	console.log(callBack)
 
 	dispatch({
 		type: actionTypes.LOGOUT,

@@ -11,7 +11,7 @@ const ProductReview = ({ inStock, numberInStock, rating }) => {
                     <i className="fa fa-star"></i>
                     <i className="fa fa-star"></i>
                 </div>
-                <p>{rating.numberOfReviews === 1 ? (rating.numberOfReviews)+'review' : (rating.numberOfReviews)+'reviews'}</p>
+                <p>{rating.numberOfReviews === 1 ? (rating.numberOfReviews)+' review' : (rating.numberOfReviews)+' reviews'}</p>
             </div>
             <span className="availability">
                 <span className={inStock && numberInStock ? "badge valid" : 'badge notvalid'}>{inStock && numberInStock ? numberInStock + ' In Stock' : 'Out of stock'}</span>

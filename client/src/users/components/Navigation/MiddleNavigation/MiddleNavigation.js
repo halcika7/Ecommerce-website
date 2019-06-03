@@ -63,12 +63,12 @@ const MiddleNavigation = props => {
                 <div className={c.col12 + " " + c.colLg4 + " col-12 col-lg-4"}>
                     <div className={c.jumbotroneSearch}>
                         <div>
-                                <input type="text" id="search-input" className="search-input" autoComplete="off"
-                                    placeholder="Search"
-                                    onFocus={onSearchFocused}
-                                    onBlur={onSearchFocusOut}
-                                    onChange={searchChange}
-                                    value={value}
+                            <input type="text" id="search-input" className="search-input" autoComplete="off"
+                                placeholder="Search"
+                                onFocus={onSearchFocused}
+                                onBlur={onSearchFocusOut}
+                                onChange={searchChange}
+                                value={value}
                             />
                             <button aria-label="search"><i className="fas fa-search"></i></button>
 
@@ -83,8 +83,8 @@ const MiddleNavigation = props => {
                             <div className="span-link">
                                 <i className="fas fa-shopping-cart"
                                 onClick={shoppingCartClicked}></i>
-                                <span>{0}</span>
-                                <CartItems items={[]}/>
+                                <span>{props.cartItems.length}</span>
+                                <CartItems items={props.cartItems}/>
                             </div>
                         </div>
                     </div>
@@ -97,7 +97,8 @@ const MiddleNavigation = props => {
 const mapStateToProps = state => { 
     return {
         searchedProducts: state.product.searchedProducts,
-        loading: state.product.loading
+        loading: state.product.loading,
+        cartItems: state.cart.cartItems
     }
 }
 

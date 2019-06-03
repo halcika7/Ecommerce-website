@@ -6,10 +6,10 @@ const CouponSchema = new Schema({
     type: String,
     required: true
   },
-  couponType: {
+  type: {
     type: String,
     required: true,
-    default: "Percent"
+    default: "percent"
   },
   value: {
     type: Number,
@@ -22,4 +22,4 @@ const CouponSchema = new Schema({
   }
 });
 
-module.exports = User = mongoose.model("coupons", CouponSchema);
+module.exports = Coupon = mongoose.model("coupons", CouponSchema);

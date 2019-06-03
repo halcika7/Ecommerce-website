@@ -1,16 +1,17 @@
 import React, { useState, useEffect, lazy } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
-const SmallSpinner = lazy(() =>
-	import('../../../users/components/UI/SmallSpinner/SmallSpinner')
-);
-const ResponseMessage = lazy(() =>
-	import('../../../users/components/UI/ResponseMessages/ResponseMessages')
-);
+const SmallSpinner = lazy(() => import('../../../users/components/UI/SmallSpinner/SmallSpinner'));
+const ResponseMessage = lazy(() => import('../../../users/components/UI/ResponseMessages/ResponseMessages'));
 
 const AnswersToQuestions = props => {
     const [values, setValues] = useState({ question: '', answer: '' });
-    const [errors, setErrors] = useState({ question: '', answer: '' });
+	const [errors, setErrors] = useState({ question: '', answer: '' });
+	
+	useEffect(() => {
+		(props.view || props.edit) && props.getAnswer(new URLSearchParams(props.location.search).get('id'));
+	}, [])
 
     useEffect(() => {
         setValues({ ...props.answers.answerData });
@@ -21,18 +22,21 @@ const AnswersToQuestions = props => {
     }, [props.answers.errors]);
 
     const onFormSubmit = e => {
-        e.preventDefault();
-        props.addAnswer({ question: values.question, answer: values.answer });
+		e.preventDefault();
+		const id = new URLSearchParams(props.location.search).get('id');
+        props.addanswer && props.addAnswer({ question: values.question, answer: values.answer });
+        props.edit && props.updateAnswer({ question: values.question, answer: values.answer }, id);
     }
     
     const inputsOnChange = e => {
         const newValues = {...values};
         newValues[e.target.name] = e.target.value;
         setValues({ ...values, ...newValues });
-    }
-
+	}
+	
 	return (
 		<div className={'AdminProfile row'}>
+			{props.answers.notFound && <Redirect to='/admindashboard/404'/>}
             {props.answers.failedMessage && <ResponseMessage message={props.answers.failedMessage} ClassName="Danger" />}
             {props.answers.successMessage && <ResponseMessage message={props.answers.successMessage} />}
 			<div className={'col-12 mb-30'}>
@@ -45,10 +49,8 @@ const AnswersToQuestions = props => {
 						<div className="Card card text-white">
 							<div className="card-header">
 								{props.addanswer && <h4 className="text-white">Add Answer</h4>}
-                                    {/* {props.viewanswer && (
-                                <h4 className="text-white">{brandName} Brand</h4>
-                                )}
-                                {props.editbrand && <h4 className="text-white">Edit Brand</h4>} */}
+								{props.view && <h4 className="text-white">Perview Answer</h4>}
+								{props.edit && <h4 className="text-white">Update Answer with ID {new URLSearchParams(props.location.search).get('id')} </h4>}
 							</div>
 							<div className="card-body">
 								<div className="col-12">
@@ -59,7 +61,8 @@ const AnswersToQuestions = props => {
                                             value={values.question}
                                             onChange={inputsOnChange}
 											placeholder="Enter visitor Question"
-                                            className={errors.question ? 'invalid col-12' : 'col-12 mb-4'}
+											className={(errors.question || props.view) ? 'invalid col-12' : 'col-12 mb-4'}
+											disabled={props.view ? true : false}
 										/>
                                         {errors.question && <div className='invalid-feedback mb-4'>{errors.question}</div>}
 
@@ -69,15 +72,18 @@ const AnswersToQuestions = props => {
                                             onChange={inputsOnChange}
                                             value={values.answer}
 											placeholder="Enter visitor Question"
-											className={errors.answer ? 'invalid col-12' : 'col-12'}
+											className={(errors.question || props.view) ? 'invalid col-12' : 'col-12 mb-4'}
+											disabled={props.view ? true : false}
 										/>
                                         {errors.answer && <div className='invalid-feedback'>{errors.answer}</div>}
 
-										{!props.viewanswer && (
+										{!props.view ? (
 											<button className="btn btn-sm mt-20">
 												{props.addanswer ? 'Add New Answer' : 'Update Answer'}
 											</button>
-										)}
+										) :
+											<button className="btn btn-sm mt-20" onClick={e => props.history.goBack()}>Go back</button>
+										}
 									</form>
 								</div>
 							</div>
@@ -97,7 +103,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-        addAnswer: (answerObj) => dispatch(actions.addAnswer(answerObj))
+        addAnswer: (answerObj) => dispatch(actions.addAnswer(answerObj)),
+        getAnswer: (id) => dispatch(actions.getAnswer(id)),
+        updateAnswer: (obj,id) => dispatch(actions.updateAnswer(obj,id)),
     };
 };
 

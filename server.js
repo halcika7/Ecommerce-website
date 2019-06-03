@@ -21,12 +21,11 @@ const product = require("./routes/products/product");
 const filterproducts = require("./routes/products/filterproducts");
 const productreview = require("./routes/products/productreview")(io);
 const answers = require("./routes/answers/answers");
+const cart = require("./routes/cart/cart");
+const coupon = require("./routes/cart/coupon");
 
 // cron jobs
 const dailyWeeklyOffer = require('./cronJobs/product').dailyWeeklyOffer;
-
-
-
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/public", express.static(path.join(__dirname, "public")));
@@ -49,6 +48,8 @@ app.use("/products/product", product);
 app.use("/products/product/filter", filterproducts);
 app.use("/products/product", productreview);
 app.use("/answers/", answers);
+app.use("/cart/", cart);
+app.use("/cart/coupon/", coupon);
 
 const port = process.env.PORT || 5000;
 

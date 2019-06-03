@@ -606,3 +606,15 @@
   margin-bottom: 5px !important;
   margin-top: 5px !important;
 }
+
+.social-links label{
+  cursor: pointer;
+}
+
+.social-links label:not(:first-child){
+  margin-left: 10px;
+}
+
+.social-links label div:focus {
+  outline: none;
+}

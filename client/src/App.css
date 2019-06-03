@@ -8887,6 +8887,21 @@ input {
     opacity:0;
 }
 
+[data-placement="left"]::before {
+  left: -100% !important;
+  border-width: 4px 0px 6px 6px;
+  border-color: transparent rgba(0,0,0,0.7) transparent rgba(0,0,0,0.7);
+}
+
+[data-placement="left"]::after,
+[data-placement="left"]::before {
+  right: 40% !important;
+  top: 22%;
+  left: unset;
+  transform: translateX(-15%) translateY(0%);
+  border-top-right-radius: 0px !important;
+}
+
 [data-tooltip]:hover::after,[data-tooltip]:hover::before {
     opacity:1
 }

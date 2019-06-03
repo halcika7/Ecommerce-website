@@ -16,6 +16,8 @@ const Checkout = props => {
                     <div className="inline-nav">
                         <Link to="/">Home</Link>
                         <i className="fas fa-long-arrow-alt-right"></i>
+                        <a className="prevent-click" href="/cart">Cart</a>
+                        <i className="fas fa-long-arrow-alt-right"></i>
                         <a className="prevent-click" href="/">Checkout</a>
                     </div>
                 </div>

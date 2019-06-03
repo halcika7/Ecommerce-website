@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useState, useEffect } from "react";
 import { withRouter, Switch, Route } from "react-router-dom";
-import { checkLoggedInUser } from "./helpers/checkLoggedInUser";
+import { checkLoggedInUser, checkCart } from "./helpers/checkLoggedInUser";
 import { connect } from "react-redux";
 
 import "./App.css";
@@ -34,29 +34,20 @@ const AccountActivation = lazy(() =>
 
 // admin routes
 const Dashboard = lazy(() => import("./admin/containers/Dashboard/Dashboard"));
-const ProductsPage = lazy(() =>
-  import("./admin/containers/ProductsPage/ProductsPage")
-);
-const AddProduct = lazy(() =>
-  import("./admin/containers/AddProduct/AddProduct")
-);
+const ProductsPage = lazy(() => import("./admin/containers/ProductsPage/ProductsPage") );
+const AddProduct = lazy(() => import("./admin/containers/AddProduct/AddProduct") );
 const ViewUser = lazy(() => import("./admin/containers/User/User"));
 const AddUser = lazy(() => import("./admin/containers/AddUser/AddUser"));
 const UpdateRole = lazy(() => import("./admin/containers/Role/UpdateRole"));
 const AddRole = lazy(() => import("./admin/containers/Role/AddRole"));
 const AddCategory = lazy(() => import("./admin/containers/Category/Category"));
-const CategoryIcon = lazy(() =>
-  import("./admin/containers/CategoryIcons/CategoryIcon")
-);
+const CategoryIcon = lazy(() => import("./admin/containers/CategoryIcons/CategoryIcon") );
 const Brand = lazy(() => import("./admin/containers/Brand/Brand"));
-const Permission = lazy(() =>
-  import("./admin/containers/Permission/Permission")
-);
+const Permission = lazy(() => import("./admin/containers/Permission/Permission") );
 const AnswersToQuestions = lazy(() => import('./admin/containers/AnswersToQuestions/AnswersToQuestions'));
+const AddCoupon = lazy(() => import('./admin/containers/Coupons/AddCoupon'));
 
-const TableContainer = lazy(() =>
-  import("./admin/containers/TableContainer/TableContainer")
-);
+const TableContainer = lazy(() => import("./admin/containers/TableContainer/TableContainer") );
 
 const App = props => {
   const [state, setState] = useState({
@@ -77,19 +68,25 @@ const App = props => {
   });
 
   useEffect(() => {
-    checkLoggedInUser(props.history.push);
+    storageChanged();
     setTimeout(() => {
       setState({
         ...state,
         show: !state.show
       });
     }, 2000);
+    window.addEventListener('storage', storageChanged)
     return () => setState({ ...state, show: false });
   }, []);
 
   useEffect(() => {
-    checkLoggedInUser();
-  }, [props.location.pathname]);
+    storageChanged();
+  }, [props]);
+
+  const storageChanged = () => {
+    checkLoggedInUser(props.history.push);
+    checkCart();
+  }
 
   if (props.isAdmin && props.location.pathname.includes("admindashboard")) {
     return (
@@ -357,7 +354,53 @@ const App = props => {
                   exact
                   render={props => (
                     <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
-                      <AnswersToQuestions addanswer={true}/>
+                      <AnswersToQuestions addanswer={true} {...props}/>
+                    </Suspense>
+                  )}
+                />
+                <Route
+                  path="/admindashboard/view-answer"
+                  exact
+                  render={props => (
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
+                      <AnswersToQuestions view={true} {...props}/>
+                    </Suspense>
+                  )}
+                />
+                <Route
+                  path="/admindashboard/edit-answer"
+                  exact
+                  render={props => (
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
+                      <AnswersToQuestions edit={true} {...props}/>
+                    </Suspense>
+                  )}
+                />
+                <Route
+                  path="/admindashboard/all-answers"
+                  exact
+                  render={props => (
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
+                      <TableContainer Answers={true} />
+                    </Suspense>
+                  )}
+                />
+                {/* Coupons */}
+                <Route
+                  path="/admindashboard/add-coupon"
+                  exact
+                  render={props => (
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
+                      <AddCoupon />
+                    </Suspense>
+                  )}
+                />
+                <Route
+                  path="/admindashboard/all-coupons"
+                  exact
+                  render={props => (
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
+                      <TableContainer Coupons={true} />
                     </Suspense>
                   )}
                 />

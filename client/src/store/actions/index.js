@@ -104,5 +104,24 @@ export {
 
 export {
   addAnswer,
+  deleteAnswer,
+  getAnswer,
+  updateAnswer,
   getAllAnswers
 } from "./answers/answers";
+
+export {
+  addToCart,
+  moveToSaveForLater,
+  moveToCart,
+  deleteFromCart,
+  deleteFromSavedForLater,
+  updateCartItem,
+  setCart
+} from "./cart/cart";
+
+export {
+  addCoupon,
+  deleteCoupon,
+  getCoupons
+} from "./cart/coupon";

@@ -3,10 +3,7 @@ import { Link } from 'react-router-dom';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import ToolkitProvider, {
-	Search,
-	CSVExport
-} from 'react-bootstrap-table2-toolkit';
+import ToolkitProvider, { Search, CSVExport } from 'react-bootstrap-table2-toolkit';
 
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import './DataTable.css';
@@ -47,6 +44,16 @@ const DataTable = props => {
 			setFunction(props.permissionsData, setLength);
 		}
 	}, [props.permissionsData]);
+	useEffect(() => {
+		if (props.couponsData) {
+			setFunction(props.couponsData, setLength);
+		}
+	}, [props.couponsData]);
+	useEffect(() => {
+		if (props.answersData) {
+			setFunction(props.answersData, setLength);
+		}
+	}, [props.answersData]);
 
 	const setFunction = (Data, setDataLength) => {
 		let data = [];
@@ -74,7 +81,7 @@ const DataTable = props => {
 				}
 				if (isSelect === true) {
 					tableRows[index].checked = true;
-					!props.permissionsData
+					(!props.permissionsData && !props.couponsData)
 						? choosenValues.push(row._id)
 						: choosenValues.push(row.permission);
 					return;
@@ -88,7 +95,7 @@ const DataTable = props => {
 		if (e && !e.target.closest('tbody td:last-child')) {
 			const newDeleteMany = [...props.selectedDeleteData],
 				input = document.querySelectorAll("tbody input[type='checkbox']"),
-				index = !props.permissionsData
+				index = (!props.permissionsData && !props.couponsData)
 					? newDeleteMany.findIndex(name => name === row._id)
 					: newDeleteMany.findIndex(
 							permission => permission === row.permission
@@ -97,7 +104,7 @@ const DataTable = props => {
 				input[rowIndex].checked = isSelect ? true : false;
 			}
 			if (index === -1) {
-				!props.permissionsData
+				(!props.permissionsData && !props.couponsData)
 					? newDeleteMany.push(row._id)
 					: newDeleteMany.push(row.permission);
 			} else {
@@ -134,14 +141,18 @@ const DataTable = props => {
 		if (props.permissionsData) {
 			id = row.permission;
 		}
+		if (props.answersData) {
+			view = 'view-answer?id=';
+			edit += 'edit-answer?id=';
+		}
 		return (
 			<React.Fragment>
-				{!props.permissionsData && (
+				{(!props.permissionsData && !props.couponsData) && (
 					<Link className="btn btn-warning" to={`${view}${id}`}>
 						<i className="far fa-eye" />
 					</Link>
 				)}
-				{!props.permissionsData && (
+				{(!props.permissionsData && !props.couponsData) && (
 					<Link className="btn btn-primary" to={`${edit}${id}`}>
 						<i className="far fa-edit" />
 					</Link>
@@ -211,6 +222,13 @@ const DataTable = props => {
 			src = row.icon ? row.icon : row.name;
 		}
 		return <img src={src} alt={row.name} width={width} height={height} />;
+	};
+	const dateFormatter = (cell, row) => {
+		const date = new Date();
+		const expires = new Date(row.exparationDate);
+		const difference = Math.floor((Date.UTC(expires.getFullYear(), expires.getMonth(), expires.getDate()) - Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) ) /(1000 * 60 * 60 * 24));
+		console.log(difference)
+		return difference > 0 ? <span>Expires in {difference} {difference > 1 ? "day's" : 'day' }</span> : <span>Coupon expired</span>;
 	};
 
 	const [options] = useState({
@@ -510,6 +528,93 @@ const DataTable = props => {
 		}
 	];
 
+	const couponColumns = [
+		{
+			dataField: '_id',
+			text: 'ID',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'name',
+			text: 'Name',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'type',
+			text: 'Type',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'value',
+			text: 'Value',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'exparationDate',
+			formatter: dateFormatter,
+			text: 'Exparation Date',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'actions',
+			text: 'Actions',
+			formatter: buttonFormatter,
+			align: 'center',
+			headerAlign: 'center',
+			csvExport: false
+		}
+	];
+
+	const answersColumns = [
+		{
+			dataField: '_id',
+			text: 'ID',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'question',
+			text: 'Question',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'answer',
+			text: 'Answer',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'actions',
+			text: 'Actions',
+			formatter: buttonFormatter,
+			align: 'center',
+			headerAlign: 'center',
+			csvExport: false
+		}
+	];
+
 	return (
 		<div className="DataTable card-body col-12">
 			<React.Fragment>
@@ -620,6 +725,45 @@ const DataTable = props => {
 								</div>
 								<BootstrapTable
 									noDataIndication={() => <div>No data available</div>}
+									wrapperClasses={containerClass}
+									{...props.baseProps}
+									striped
+									hover
+									bordered={false}
+									filter={filterFactory()}
+									pagination={paginationFactory(options)}
+								/>
+							</React.Fragment>
+						)}
+					</ToolkitProvider>
+				)}
+
+				{length === false || props.loading || !props.couponsData ? null : (
+					<ToolkitProvider
+						bootstrap4
+						search
+						keyField="_id"
+						data={data}
+						columns={couponColumns}
+						exportCSV>
+						{props => (
+							<React.Fragment>
+								<div className="row mb-20 Spans">
+									<div className="col-sm-6">
+										<ExportCSVButton {...props.csvProps}>
+											Export CSV
+										</ExportCSVButton>
+									</div>
+									<div className="col-sm-6">
+										<SearchBar {...props.searchProps} tableId="1" />
+										<ClearSearchButton
+											{...props.searchProps}
+											className="btn-sm"
+										/>
+									</div>
+								</div>
+								<BootstrapTable
+									noDataIndication={() => <div>No Registers available</div>}
 									wrapperClasses={containerClass}
 									{...props.baseProps}
 									striped
@@ -746,6 +890,45 @@ const DataTable = props => {
 									bordered={false}
 									filter={filterFactory()}
 									selectRow={selectRow}
+									pagination={paginationFactory(options)}
+								/>
+							</React.Fragment>
+						)}
+					</ToolkitProvider>
+				)}
+
+				{length === false || props.loading || !props.answersData ? null : (
+					<ToolkitProvider
+						bootstrap4
+						search
+						keyField="_id"
+						data={data}
+						columns={answersColumns}
+						exportCSV>
+						{props => (
+							<React.Fragment>
+								<div className="row mb-20 Spans">
+									<div className="col-sm-6">
+										<ExportCSVButton {...props.csvProps}>
+											Export CSV
+										</ExportCSVButton>
+									</div>
+									<div className="col-sm-6">
+										<SearchBar {...props.searchProps} tableId="1" />
+										<ClearSearchButton
+											{...props.searchProps}
+											className="btn-sm"
+										/>
+									</div>
+								</div>
+								<BootstrapTable
+									noDataIndication={() => <div>No Registers available</div>}
+									wrapperClasses={containerClass}
+									{...props.baseProps}
+									striped
+									hover
+									bordered={false}
+									filter={filterFactory()}
 									pagination={paginationFactory(options)}
 								/>
 							</React.Fragment>

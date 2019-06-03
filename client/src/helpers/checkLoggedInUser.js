@@ -19,3 +19,7 @@ export const checkLoggedInUser = callBack => {
 export const clearResetState = () => {
   store.dispatch(actions.resetState());
 };
+
+export const checkCart = () => {
+    store.dispatch(actions.setCart());
+}
