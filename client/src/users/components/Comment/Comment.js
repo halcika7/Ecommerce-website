@@ -103,9 +103,9 @@ const Comment = props => {
                             }
                         </React.Fragment>
                     }
-                    <button onClick={e => setShowReplyComments(!showReplyComments)}>
+                    {props.review.replys.length > 0 &&<button onClick={e => setShowReplyComments(!showReplyComments)}>
                         Replays({props.review.replys.length})
-                    </button>
+                    </button>}
                 </div>
             </div>
             {(props.review.replys.length > 0 && showReplyComments ) && props.review.replys.map((reply, index) => 

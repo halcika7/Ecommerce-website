@@ -111,7 +111,6 @@ exports.deleteReview = async (req, res, next, socket) => {
     const id = req.query.id;
     const userId = req.query.userId;
     const productId = req.query.productId;
-    console.log(productId)
     try {
         const findUser = await UserModel.findOne({ _id: ObjectId(userId) });
         if(!findUser) { return res.json({ failedMessage: 'No User with provided id found' }); }
@@ -125,8 +124,6 @@ exports.deleteReview = async (req, res, next, socket) => {
         if(dd.length > 0) { await ProductReviewModel.deleteMany({ _id: { $in: dd[0].reviewIds } }); }
         await ProductReviewModel.deleteOne({ _id: new ObjectId(id) });
         const { avg, numOfReviews } = await numberOfReviewsHelper(productId);
-        console.log(avg)
-        console.log(numOfReviews)
         await ProductModel.updateOne({ _id: new ObjectId(productId) }, {rating: { 
             averageRating: Math.floor(avg), 
             numberOfReviews: numOfReviews

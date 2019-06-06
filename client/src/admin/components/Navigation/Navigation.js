@@ -64,7 +64,7 @@ const Navigation = props => {
                   <p>Products</p>
                 </a>
                 <div className={classes.DropDown}>
-                  <Link to="/admindashboard/products">
+                  <Link to="/admindashboard/all-products">
                     <p>Products</p>
                   </Link>
                   <Link to="/admindashboard/add-product">
@@ -175,7 +175,7 @@ const Navigation = props => {
                   className="dropdown-toggle-split"
                 >
                   <i className="far fa-question-circle" />
-                  <p>Answers to visitor questions</p>
+                  <p>Answers to questions & Terms and Conditions</p>
                 </a>
                 <div className={classes.DropDown + " " + classes.MaxHeight100}>
                   <Link to="/admindashboard/add-answer">
@@ -183,6 +183,12 @@ const Navigation = props => {
                   </Link>
                   <Link to="/admindashboard/all-answers">
                     <p>All Answers</p>
+                  </Link>
+                  <Link to="/admindashboard/add-term">
+                    <p>Add Term</p>
+                  </Link>
+                  <Link to="/admindashboard/all-terms">
+                    <p>All Terms and Conditions</p>
                   </Link>
                 </div>
               </div>
@@ -203,6 +209,26 @@ const Navigation = props => {
                   </Link>
                   <Link to="/admindashboard/all-coupons">
                     <p>All Coupons</p>
+                  </Link>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div className="btn-group-vertical d-flex ">
+                <a
+                  href="/"
+                  onClick={toggleActiveClass}
+                  className="dropdown-toggle-split"
+                >
+                  <i className="fas fa-compass"></i>
+                  <p>Stores</p>
+                </a>
+                <div className={classes.DropDown + " " + classes.MaxHeight100}>
+                  <Link to="/admindashboard/add-store">
+                    <p>Add Store</p>
+                  </Link>
+                  <Link to="/admindashboard/all-stores">
+                    <p>All Stores</p>
                   </Link>
                 </div>
               </div>

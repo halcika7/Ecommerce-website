@@ -25,7 +25,9 @@ const AnswersToQuestions = props => {
 		e.preventDefault();
 		const id = new URLSearchParams(props.location.search).get('id');
         props.addanswer && props.addAnswer({ question: values.question, answer: values.answer });
-        props.edit && props.updateAnswer({ question: values.question, answer: values.answer }, id);
+		props.edit && props.updateAnswer({ question: values.question, answer: values.answer }, id);
+		setValues({ question: '', answer: '' });
+		setErrors({ question: '', answer: '' });
     }
     
     const inputsOnChange = e => {

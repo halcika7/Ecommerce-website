@@ -9,7 +9,6 @@ const socketio = require('socket.io');
 
 const server = http.createServer(app);
 const io = socketio(server);
-
 // routes
 const users = require("./routes/api/users");
 const permissions = require("./routes/roles&permissions/permissions");
@@ -21,9 +20,10 @@ const product = require("./routes/products/product");
 const filterproducts = require("./routes/products/filterproducts");
 const productreview = require("./routes/products/productreview")(io);
 const answers = require("./routes/answers/answers");
+const terms = require("./routes/answers/terms");
 const cart = require("./routes/cart/cart");
 const coupon = require("./routes/cart/coupon");
-
+const stores = require("./routes/stores/stores");
 // cron jobs
 const dailyWeeklyOffer = require('./cronJobs/product').dailyWeeklyOffer;
 
@@ -48,16 +48,16 @@ app.use("/products/product", product);
 app.use("/products/product/filter", filterproducts);
 app.use("/products/product", productreview);
 app.use("/answers/", answers);
+app.use("/terms/", terms);
 app.use("/cart/", cart);
 app.use("/cart/coupon/", coupon);
+app.use("/stores/", stores);
 
 const port = process.env.PORT || 5000;
 
 mongoose
   .connect(db, { useNewUrlParser: true, useCreateIndex: true })
-  .then(() => {
-    console.log("MongoDB connected !")
-  })
+  .then(() => {console.log("MongoDB connected !")})
   .catch(err => console.log(err));
   
 server.listen(port, () => console.log(`Server running on port ${port}`));

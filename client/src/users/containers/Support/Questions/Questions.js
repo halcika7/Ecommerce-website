@@ -9,7 +9,7 @@ const questions = (props) => {
         <div className={c.container + " container " + c.accordion}>
             <div>
                 <div className={c.col12 + " col-12"}>
-                    <h4>Answers to Your Questions</h4>
+                    {props.questions.length > 0 ? <h4>Answers to Your Questions</h4> : <h4>No Answers to Your Questions</h4>}
                 </div>
 
                 {questions}

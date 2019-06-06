@@ -10,10 +10,20 @@ const UploadPicture = props => {
 		}
 	}, [props.predefinedPicture]);
 
+	useEffect(() => {
+		if(props.predefinedPictureNotFile) {
+			console.log('not file')
+			setUrl({imgSrc: "/"+props.predefinedPictureNotFile})
+		}
+	}, [props.predefinedPictureNotFile]);
+
 	const readURL = e => {
 		e.persist();
 		const file = e.target.files[0];
 		const name = e.target.name;
+		if(props.setPredefinedNotFile) {
+			props.setPredefinedNotFile(false);
+		}
 		helperFunction(file, name);
 	};
 
@@ -43,15 +53,18 @@ const UploadPicture = props => {
 		};
 	}
 
+	console.log(url);
+
 	return (
 		<React.Fragment>
-			<label className={classes.btn2}>
+			<label className={!props.disabled ? classes.btn2 : classes.btn2 + ' ' + classes.disabled}>
 				Upload Picture
 				<input
 					className={classes.input}
 					type="file"
 					onChange={readURL}
 					name={props.name}
+					disabled={props.disabled}
 				/>
 			</label>
 			<img

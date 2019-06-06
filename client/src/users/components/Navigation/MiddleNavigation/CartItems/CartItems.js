@@ -39,6 +39,17 @@ const cartItems = (props) => {
                     <p>Cart Is empty</p>
                 </ul>
             }
+            {Object.keys(props.cart.coupon).length > 0 && 
+                <React.Fragment>
+                    <div className='d-flex justify-content-between mt-2 mb-2 text-dark font-weight-light'>
+                        <span className='font-weight-bold'>Subtotal: </span> <p className='m-0'> ${props.cart.totals.subtotalBefore}</p>
+                    </div>
+                    <div className='d-flex justify-content-between mt-2 mb-2 text-dark font-weight-light'>
+                        <span className='font-weight-bold'>Code({props.cart.coupon.code}): </span> <p className='m-0'>-{(props.cart.coupon.type === 'percent') ? props.cart.coupon.value+'%' : '$'+props.cart.coupon.value}</p>
+                    </div>
+                    <hr style={{ borderTop: '1px solid rgba(0,0,0,0.1)', height: '1px' }}/>
+                </React.Fragment>
+            }
             <div className='d-flex justify-content-between mt-2 mb-2 text-dark font-weight-light'>
                 <span className='font-weight-bold'>Subtotal: </span> <p className='m-0'> ${props.cart.totals.subtotal}</p>
             </div>

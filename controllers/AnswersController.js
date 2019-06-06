@@ -45,8 +45,10 @@ exports.getAllAnswers = async (req, res) => {
 exports.deleteAnswer = async (req, res) => {
 	try {
 		const deleteAnswer = await AnswerModel.deleteOne({ _id: new ObjectId(req.query.id) });
+
+		const answers = await AnswerModel.find({});
 		
-		return res.json({ successMessage: 'Answer Deleted' });
+		return res.json({ successMessage: 'Answer Deleted', answers });
 	} catch(err) {
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
     return res.json({ failedMessage: err.message });
@@ -56,8 +58,6 @@ exports.deleteAnswer = async (req, res) => {
 exports.updateAnswer = async (req, res) => {
 	const id = req.query.id;
 	const { question, answer } = JSON.parse(req.query.object);
-	console.log(question)
-	console.log(answer)
 	try {
 		const findAnswer = await AnswerModel.findOne({ _id: {$ne: new ObjectId(id)}, question });
 		if(findAnswer) {
@@ -71,7 +71,6 @@ exports.updateAnswer = async (req, res) => {
 		return res.json({ successMessage: 'Answer Updated', answer: updatedAnswer })
 
 	} catch(err) {
-		console.log(err)
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
     return res.json({ failedMessage: err.message });
 	}

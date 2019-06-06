@@ -67,11 +67,6 @@
     margin: 0;
 }
 
-/* .DataTable > div > table  {
-    table-layout: auto;
-    display: block;
-} */
-
 .DataTable {
     margin-bottom: 20px;
     overflow-x: auto;
@@ -240,6 +235,25 @@
 .DataTable>.Spans>.table,
 .DataTable>.Spans~div {
     min-width: 1000px;
+}
+
+.DataTable>.Spans.Products,
+.DataTable>.Spans.Products>.table,
+.DataTable>.Spans.Products~div {
+    min-width: 1700px;
+}
+
+.Spans.Products tbody tr td,
+.Spans.Products thead tr th{
+    width: 100px !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.Spans.Products tbody tr td:last-child,
+.Spans.Products thead tr th:last-child{
+    width: 200px !important;
 }
 
 .Spans tbody tr td:nth-child(4)>div {

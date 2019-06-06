@@ -41,3 +41,9 @@ label.btn2:hover{
 label.btn2:hover::before {
     right: 78%;
 }
+
+label.btn2.disabled {
+    border: 1px solid red;
+    background-color: rgb(155, 150, 150);
+    cursor: not-allowed;
+}

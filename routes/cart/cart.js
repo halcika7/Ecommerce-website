@@ -10,5 +10,7 @@ router.patch('/updatecartitem', CartController.updateCartItem);
 router.post('/movetosaveforlater', CartController.moveToSaveForLater);
 router.post('/movetocart', CartController.moveToCart);
 router.delete('/deletefromsave', CartController.deleteFromSavedForLater);
+router.post('/applycoupon', CartController.applyCoupon);
+router.delete('/removecoupon', CartController.removeCoupon);
 
 module.exports = router;

@@ -1,27 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import {Link} from 'react-router-dom';
+import { connect } from 'react-redux'
+import * as actions from '../../../store/actions'
 
 import FooterSocialIcons from '../../components/UI/FooterSocialIcons/FooterSocialIcons';
 import ContactForm from './ContactForm/ContactForm';
+import Map from './Map'
 
 import c from './Contact.module.css';
+import SmallSpinner from '../../components/UI/SmallSpinner/SmallSpinner';
 
 const Contact = props => {
-    const [socialIcons] = useState([
-        {link: '/', icon: 'fab fa-facebook-f'},
-        {link: '/', icon: 'fab fa-twitter'},
-        {link: '/', icon: 'fab fa-instagram'},
-        {link: '/', icon: 'fab fa-pinterest'},
-        {link: '/', icon: 'fab fa-dribbble'},
-        {link: '/', icon: 'fab fa-google'}
-    ]);
+    const [socialIcons,setSocialIcons] = useState([]);
 
-    useEffect(() => { document.title = "Contact" }, []);
+    const [store, setStore] = useState({});
+
+    useEffect(() => { 
+        document.title = "Contact";
+        props.getStore();
+    }, []);
+
+    useEffect(() => { 
+        if(Object.keys(props.store).length > 0){
+            setStore({...props.store})
+            const links = Object.keys(props.store.links).map(link => {
+                if(link === 'facebook') {
+                    return { link: props.store.links[link], icon: 'fab fa-facebook-f' };
+                }
+                return { link: props.store.links[link], icon: 'fab fa-'+link };
+            })
+            setSocialIcons(links)
+        }
+    }, [props.store]);
 
     const cols = [c.col12,c.colsm6,c.collg3].join(' ');
 
     const cols2 = [c.colmd12,c.collg8].join(' ');
-    
+
     return(
         <React.Fragment>
             <section className="container-fluid breadcrum">
@@ -34,9 +49,11 @@ const Contact = props => {
                 </div>
             </section>
         
-            <section className="container google-map">
-                <div id="map-container" style={{height:'444px', backgroundColor: 'blue', marginTop: '15px'}}></div>
-            </section>
+            {Object.keys(store).length > 0 ? <section className="container google-map">
+                <div id="map-container" style={{height:'444px',marginTop: '15px', position: 'relative'}}>
+                    <Map location={store.location}/>
+                </div>
+            </section> : <SmallSpinner />}
         
             <div className={c.container + " container contact-info " + c.contactInfo}>
                 <div className={c.row + " row"}>
@@ -44,21 +61,21 @@ const Contact = props => {
                         <div className={c.col12 + " col-12"}>
                             <i className="fas fa-map-marker-alt"></i>
                             <h5>Address</h5>
-                            <p>$shop</p>
+                            <p>{store.address}</p>
                         </div>
                     </div>
                     <div className={cols + " col-12 col-sm-6 col-lg-3"}>
                         <div className={c.col12 + " col-12"}>
                             <i className="fas fa-phone-volume"></i>
                             <h5>Phone</h5>
-                            <p>$shop->phone_number</p>
+                            <p>{store.phone}</p>
                         </div>
                     </div>
                     <div className={cols + " col-12 col-sm-6 col-lg-3"}>
                         <div className={c.col12 + " col-12"}>
                             <i className="fas fa-envelope"></i>
                             <h5>Email</h5>
-                            <p>$shop->email</p>
+                            <p>{store.email}</p>
                         </div>
                     </div>
                     <div className={cols + " col-12 col-sm-6 col-lg-3"}>
@@ -82,4 +99,12 @@ const Contact = props => {
     );
 }
 
-export default Contact;
+const mapSatateToProps = state => ({
+    store: state.stores.store
+});
+
+const dispatchMapToProps = dispatch => ({
+    getStore: () => dispatch(actions.getStoreContact())
+});
+
+export default connect(mapSatateToProps, dispatchMapToProps)(Contact);

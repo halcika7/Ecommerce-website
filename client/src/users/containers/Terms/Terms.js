@@ -1,22 +1,17 @@
 import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../../store/actions';
 import {Link} from 'react-router-dom';
 import ContainerIcons from '../../components/UI/ContainerIcons/ContainerIcons';
 import Term from './Term/Term';
 
 import c from './Terms.module.css';
 
-const state = {
-    terms: [
-        {heading: 'What are Terms and Conditions', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent in accumsan dui. Donec imperdiet, nisl non pharetra convallis, nunc sapien laoreet massa, ac elementum arcu neque vitae enim. Praesent convallis leo est, scelerisque tincidunt magna ultricies eu. Ut placerat est a eros faucibus feugiat. Nullam a urna sit amet sem porttitor quis nibh. In hac habitasse platea dictumst. Donec sit amet auctor leo. Sed venenatis posuere risus quis dictum. Vivamus ullamcorper orci vitae eros tincidunt, a aliquet lacus Sed consectetur, est vel tincidunt imperdiet, justo est dignissim lorem, nec tincidunt lacus lacus ac risus. Cras pretium enim nec vestibulum aliquam. Vestibulum ante ipsum faucibus orci luctus et ultrices posuere cubilia Curae;'},
-        {heading: 'What are Terms and Conditions', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent in accumsan dui. Donec imperdiet, nisl non pharetra convallis, nunc sapien laoreet massa, ac elementum arcu neque vitae enim. Praesent convallis leo est, scelerisque tincidunt magna ultricies eu. Ut placerat est a eros faucibus feugiat. Nullam a urna sit amet sem porttitor quis nibh. In hac habitasse platea dictumst. Donec sit amet auctor leo. Sed venenatis posuere risus quis dictum. Vivamus ullamcorper orci vitae eros tincidunt, a aliquet lacus Sed consectetur, est vel tincidunt imperdiet, justo est dignissim lorem, nec tincidunt lacus lacus ac risus. Cras pretium enim nec vestibulum aliquam. Vestibulum ante ipsum faucibus orci luctus et ultrices posuere cubilia Curae;'}
-    ],
-}
-
 const Terms = props => {
 
-    useEffect(() => { document.title = "Terms" }, []);
+    useEffect(() => { document.title = "Terms"; props.getAllTerms() }, []);
 
-    const terms = state.terms.map((term,index) => <Term term={term} key={index} />);
+    const terms = props.terms.terms.map((term,index) => <Term term={term} key={index} />);
     
     return(
         <React.Fragment>
@@ -41,4 +36,12 @@ const Terms = props => {
     );
 }
 
-export default Terms;
+const mapStateToProps = state => ({
+    terms: state.terms
+})
+
+const dispatchToProps = dispatch => ({
+    getAllTerms: () => dispatch(actions.getAllTerms())
+})
+
+export default connect(mapStateToProps, dispatchToProps)(Terms);

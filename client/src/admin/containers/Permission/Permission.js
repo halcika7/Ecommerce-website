@@ -16,13 +16,6 @@ const Permission = props => {
     setPermission(props.permissions.permission);
     setModelNames(props.permissions.modelNames);
   }, [props.permissions]);
-  useEffect(() => {
-    if (props.permissions.error) {
-      setTimeout(() => {
-        props.history.goBack();
-      }, 4000);
-    }
-  }, [props.permissions.error]);
   const formSubmit = e => {
     e.preventDefault();
     props.addPermission(permission);

@@ -12,12 +12,6 @@
 
 /* end nav tabs */
 
-
-
-
-
-
-
 .container-fluid.carousel-main {
   background-color: #f5f5f5;
   margin: 0;
@@ -573,6 +567,7 @@
 .product-box.style1 {
   height: auto;
   margin-bottom: 33px;
+  margin-right: 30px;
   border-radius: 10px;
 }
 

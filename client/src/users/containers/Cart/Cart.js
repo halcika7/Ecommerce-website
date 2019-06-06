@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {Link} from 'react-router-dom';
 import { connect } from 'react-redux'
-import { deleteFromCart, updateCartItem, setCart, moveToSaveForLater, moveToCart, deleteFromSavedForLater } from '../../../store/actions'
+import { deleteFromCart, updateCartItem, setCart, moveToSaveForLater, moveToCart, deleteFromSavedForLater, applyCoupon, removeCoupon } from '../../../store/actions'
 import ContainerIcons from '../../components/UI/ContainerIcons/ContainerIcons';
 import c from './Cart.module.css';
 
 import ResponseMessage from '../../components/UI/ResponseMessages/ResponseMessages';
+import Coupon from './Coupon';
 
 const Cart = props => {
+
+    const [coupon, setCoupon] = useState('');
 
     useEffect(() => { document.title = "Cart" }, []);
 
@@ -28,6 +31,18 @@ const Cart = props => {
     const updateCartItem = (e, sku) => { e.preventDefault(); props.updateCartItem(sku, e.target.value); }
     const moveToSaveForLater = (e, sku) => { e.preventDefault(); props.moveToSaveForLater(sku); }
     const moveToCart = (e, sku) => { e.preventDefault(); props.moveToCart(sku); }
+
+    const applyCoupon = e => {
+        e.preventDefault();
+        props.applyCoupon(coupon);
+    }
+
+    const removeCoupon = e => {
+        e.preventDefault();
+        props.removeCoupon();
+    }
+
+    console.log(props.cart.coupon)
 
     return(
         <React.Fragment>
@@ -101,32 +116,27 @@ const Cart = props => {
                             </table> :
                             <h1>No Products in Cart</h1>
                         }
-                        {props.cart.cartItems.length > 0 && 
-                            <div className={c.col12 + " col-12"}>
-                                <div className={c.input}><input type="text" name="couponcode" id="couponcode" placeholder="Enter Coupon Code" /></div>
-                                <div className="button-add-coupon"><button className="btn btn-sm">Apply Coupon</button></div>
-                            </div>
-                        }
+                        {(Object.keys(props.cart.coupon).length === 0) && <Coupon setCoupon={setCoupon} applyCoupon={applyCoupon} />}
                     </div>
                     <div className={c.collg4 + " col-lg-4"}>
                         <div className={c.cart}>
                             <h4>Cart Totals</h4>
-                            <div className={c.subtotal}>
-                                <p>Subtotal:</p>
-                                <p className={c.pricesubtotal}>${props.cart.totals.subtotal}</p>
-                            </div>
-                            <div className={c.tax}>
-                                <p>Tax(17%):</p>
-                                <p className={c.taxmoney}>$ {props.cart.totals.tax}</p>
-                            </div>
-                            {/* <div className={c.couponcode}>
-                                <div>
-                                    <p>Code(4230589458):</p>
-                                    <button className="btn btn-sm btn-danger" data-toggle="data-tooltip" data-placement="top" data-tooltip="Remove Coupon">Remove</button>
-                                </div>
-                                <p className={c.minusmoney}>$212</p>
-                            </div> */}
-                            <hr/>
+                            {Object.keys(props.cart.coupon).length > 0 && 
+                                <React.Fragment>
+                                    <div className={c.subtotal}>
+                                        <p>Subtotal:</p>
+                                        <p className={c.pricesubtotal}>${props.cart.totals.subtotalBefore}</p>
+                                    </div>
+                                    <div className={c.couponcode}>
+                                        <div>
+                                            <p>Code({props.cart.coupon.code}):</p>
+                                            <button onClick={removeCoupon} className="btn btn-sm btn-danger" data-toggle="data-tooltip" data-tooltip="Remove Coupon">Remove</button>
+                                        </div>
+                                        <p className={c.minusmoney}>-{(props.cart.coupon.type === 'percent') ? props.cart.coupon.value+'%' : '$'+props.cart.coupon.value}</p>
+                                    </div>
+                                    <hr/>
+                                </React.Fragment>
+                            }
                             <div className={c.subtotal}>
                                 <p>Subtotal:</p>
                                 <p className={c.pricesubtotal}>$ {props.cart.totals.subtotal}</p>
@@ -225,7 +235,9 @@ const mapDispatchToProps = dispatch => {
         updateCartItem: (sku, value) => dispatch(updateCartItem(sku, value)),
         moveToSaveForLater: (sku) => dispatch(moveToSaveForLater(sku)),
         moveToCart: (sku) => dispatch(moveToCart(sku)),
-        setCart: () => dispatch(setCart())
+        setCart: () => dispatch(setCart()),
+        applyCoupon: (code) => dispatch(applyCoupon(code)),
+        removeCoupon: () => dispatch(removeCoupon())
     }
 }
 

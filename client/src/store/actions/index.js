@@ -76,6 +76,8 @@ export {
   homePageProducts,
   getBannerProducts,
   getProduct,
+  getAllProducts,
+  deleteProduct,
   getNewProducts,
   searchProducts,
   clearSingleProduct
@@ -111,13 +113,23 @@ export {
 } from "./answers/answers";
 
 export {
+  addTerm,
+  deleteTerm,
+  getTerm,
+  updateTerm,
+  getAllTerms
+} from "./answers/terms";
+
+export {
   addToCart,
   moveToSaveForLater,
   moveToCart,
   deleteFromCart,
   deleteFromSavedForLater,
   updateCartItem,
-  setCart
+  setCart,
+  applyCoupon,
+  removeCoupon
 } from "./cart/cart";
 
 export {
@@ -125,3 +137,13 @@ export {
   deleteCoupon,
   getCoupons
 } from "./cart/coupon";
+
+export {
+  addStore,
+  deleteStore,
+  updateStore,
+  getStore,
+  getStoreContact,
+  getStoresFront,
+  getStores
+} from "./stores/stores";

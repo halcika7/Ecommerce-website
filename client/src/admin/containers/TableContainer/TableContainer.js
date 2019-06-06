@@ -15,6 +15,9 @@ const TableContainer = props => {
   const [allRoles, setAllRoles] = useState(false);
   const [allCoupons, setAllCoupons] = useState(false);
   const [allAnswers, setAllAnswers] = useState(false);
+  const [allTerms, setAllTerms] = useState(false);
+  const [allStores, setAllStores] = useState(false);
+  const [allProducts, setAllProducts] = useState(false);
 
   const [failedMessage, setFailedMessage] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
@@ -54,7 +57,19 @@ const TableContainer = props => {
       setAllAnswers(props.answers.answers);
       props.getAllAnswers();
     }
-  }, [props.Brands,props.Roles,props.Permissions,props.Users,props.Categories,props.Icons, props.Coupons, props.Answers]);
+    if(props.Terms === true) {
+      setAllTerms(props.terms.terms);
+      props.getAllTerms();
+    }
+    if(props.Stores === true) {
+      setAllStores(props.stores.stores);
+      props.getStores();
+    }
+    if(props.Products === true) {
+      setAllProducts(props.products.products);
+      props.getAllProducts();
+    }
+  }, [props.Brands,props.Roles,props.Permissions,props.Users,props.Categories,props.Icons, props.Coupons, props.Answers, props.Terms,props.Stores,props.Products]);
 
   useEffect(() => {
     if (props.Brands === true) {
@@ -81,7 +96,16 @@ const TableContainer = props => {
     if(props.Answers === true) {
       setAllAnswers(props.answers.answers);
     }
-  }, [props.brand.allBrands,props.permissions.allPermissions,props.roles.Roles,props.users.Users,props.categories.allCategories,props.icons.allCategoryIcons,props.coupon.coupons,props.answers.answers]);
+    if(props.Terms === true) {
+      setAllTerms(props.terms.terms);
+    }
+    if(props.Stores === true) {
+      setAllStores(props.stores.stores);
+    }
+    if(props.Products === true) {
+      setAllProducts(props.products.products);
+    }
+  }, [props.brand.allBrands,props.permissions.allPermissions,props.roles.Roles,props.users.Users,props.categories.allCategories,props.icons.allCategoryIcons,props.coupon.coupons,props.answers.answers,props.terms.terms,props.stores.stores,props.products.products]);
 
   useEffect(() => {
     if(props.Brands === true) {
@@ -108,7 +132,16 @@ const TableContainer = props => {
     if(props.Answers === true) {
       setFailedMessage(props.answers.failedMessage);
     }
-  }, [props.brand.failedMessage,props.permissions.failedMessage,props.roles.failedMessage,props.users.failedMessage,props.categories.failedMessage,props.icons.failedMessage, props.coupon.failedMessage,props.answers.failedMessage]);
+    if(props.Terms === true) {
+      setFailedMessage(props.terms.failedMessage);
+    }
+    if(props.Stores === true) {
+      setFailedMessage(props.stores.failedMessage);
+    }
+    if(props.Products === true) {
+      setFailedMessage(props.products.failedMessage);
+    }
+  }, [props.brand.failedMessage,props.permissions.failedMessage,props.roles.failedMessage,props.users.failedMessage,props.categories.failedMessage,props.icons.failedMessage, props.coupon.failedMessage,props.answers.failedMessage,props.terms.failedMessage,props.stores.failedMessage,props.products.failedMessage]);
 
   useEffect(() => {
     if(props.Brands === true) {
@@ -135,7 +168,16 @@ const TableContainer = props => {
     if(props.Answers === true) {
       setSuccessMessage(props.answers.successMessage);
     }
-  }, [props.brand.successMessage,props.permissions.successMessage,props.roles.successMessage,props.users.successMessage,props.categories.successMessage,props.icons.successMessage, props.coupon.successMessage,props.answers.successMessage]);
+    if(props.Terms === true) {
+      setSuccessMessage(props.terms.successMessage);
+    }
+    if(props.Stores === true) {
+      setSuccessMessage(props.stores.successMessage);
+    }
+    if(props.Products === true) {
+      setSuccessMessage(props.products.successMessage);
+    }
+  }, [props.brand.successMessage,props.permissions.successMessage,props.roles.successMessage,props.users.successMessage,props.categories.successMessage,props.icons.successMessage, props.coupon.successMessage,props.answers.successMessage,props.terms.successMessage,props.stores.successMessage,props.products.successMessage]);
 
   useEffect(() => {
     if(props.Brands === true) {
@@ -162,9 +204,18 @@ const TableContainer = props => {
     if(props.Answers === true) {
       setLoading(props.answers.loading);
     }
-  }, [props.brand.loading,props.permissions.loading,props.roles.loading,props.users.loading,props.categories.loading,props.icons.loading,props.coupon.loading,props.answers.loading]);
+    if(props.Terms === true) {
+      setLoading(props.terms.loading);
+    }
+    if(props.Stores === true) {
+      setLoading(props.stores.loading);
+    }
+    if(props.Products === true) {
+      setLoading(props.products.loading);
+    }
+  }, [props.brand.loading,props.permissions.loading,props.roles.loading,props.users.loading,props.categories.loading,props.icons.loading,props.coupon.loading,props.answers.loading,props.terms.loading,props.stores.loading,props.products.loading]);
 
-  const singleDelete = (e, id) => {
+  const singleDelete = (e, id, name=null) => {
     e.preventDefault();
     if (props.Brands) {
       props.deleteBrand(id);
@@ -189,6 +240,15 @@ const TableContainer = props => {
     }
     if (props.Answers) {
       props.deleteAnswer(id);
+    }
+    if (props.Terms) {
+      props.deleteTerm(id);
+    }
+    if (props.Stores) {
+      props.deleteStore(id);
+    }
+    if (props.Products) {
+      props.deleteProduct(id, name);
     }
     setDeleteManyRecords([]);
   };
@@ -239,6 +299,9 @@ const TableContainer = props => {
                 {props.Permissions && <h4>All Permissions</h4>}
                 {props.Coupons && <h4>All Coupons</h4>}
                 {props.Answers && <h4>All Answers</h4>}
+                {props.Terms && <h4>All Terms</h4>}
+                {props.Stores && <h4>All Stores</h4>}
+                {props.Products && <h4>All Products</h4>}
               </div>
               {(deleteManyRecords.length > 0 && !props.Users) && (
                 <div className="col-12 mt-20 pl-125">
@@ -318,6 +381,27 @@ const TableContainer = props => {
                   loading={loading}
                 />
               )}
+              {props.Terms && (
+                <DataTable
+                  termsData={allTerms}
+                  click={singleDelete}
+                  loading={loading}
+                />
+              )}
+              {props.Stores && (
+                <DataTable
+                  storesData={allStores}
+                  click={singleDelete}
+                  loading={loading}
+                />
+              )}
+              {props.Products && (
+                <DataTable
+                  productsData={allProducts}
+                  click={singleDelete}
+                  loading={loading}
+                />
+              )}
             </div>
           )}
         </div>
@@ -335,7 +419,10 @@ const mapStateToProps = state => {
     roles: state.roles,
     permissions: state.permissions,
     coupon: state.coupon,
-    answers: state.answers
+    answers: state.answers,
+    terms: state.terms,
+    stores: state.stores,
+    products: state.product
   };
 };
 
@@ -361,7 +448,13 @@ const mapDispatchToProps = dispatch => {
     getAllCoupons: () => dispatch(actions.getCoupons()),
     deleteCoupon: id => dispatch(actions.deleteCoupon(id)),
     getAllAnswers: () => dispatch(actions.getAllAnswers()),
-    deleteAnswer: (id) => dispatch(actions.deleteAnswer(id))
+    deleteAnswer: (id) => dispatch(actions.deleteAnswer(id)),
+    getAllTerms: () => dispatch(actions.getAllTerms()),
+    deleteTerm: id => dispatch(actions.deleteTerm(id)),
+    getStores: () => dispatch(actions.getStores()),
+    deleteStore: id => dispatch(actions.deleteStore(id)),
+    getAllProducts: () => dispatch(actions.getAllProducts()),
+    deleteProduct: (id, name) => dispatch(actions.deleteProduct(id, name))
   };
 };
 

@@ -17,14 +17,15 @@
     font-size: 14px;
 }
 
-.container.checkout .row .colmd7 input, .container.checkout .row .colmd7 select{
+/* .container.checkout .row .colmd7 input, 
+.container.checkout .row .colmd7 select {
     border: 2px solid #e5e5e5;
     height: 40px;
     border-radius: 30px;
     padding: 0 15px;
     color: #919191;
     width: 100%;
-}
+} */
 
 .container.checkout .row .colmd7 textarea{
     resize: none;

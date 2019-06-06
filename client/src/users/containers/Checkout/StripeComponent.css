@@ -1,0 +1,29 @@
+.StripeElement {
+    margin: 0 !important;
+}
+
+input:focus,
+.StripeElement--focus {
+  box-shadow: rgba(50, 50, 93, 0.109804) 0px 4px 6px, rgba(0, 0, 0, 0.0784314) 0px 1px 3px;
+  -webkit-transition: all 150ms ease;
+  transition: all 150ms ease;
+}
+
+input,
+.StripeElement {
+  display: block;
+  padding: 10px 14px;
+  font-size: 1em;
+  font-family: 'Source Code Pro', monospace;
+  border: 2px solid #e5e5e5;
+  border-radius: 5px;
+}
+
+.container .row .col-md-7 input, 
+.container .row .col-md-7 select {
+    height: 40px;
+    border: 2px solid #e5e5e5;
+    color: #919191;
+    width: 100%;
+    outline: 0;
+}

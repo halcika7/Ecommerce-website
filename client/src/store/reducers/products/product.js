@@ -12,6 +12,7 @@ const initialState = {
 	ourProducts: [],
 	singleProduct: {},
 	searchedProducts: [],
+	products: [],
 	errors: false,
 	errorName: '',
 	successMessage: false,
@@ -22,6 +23,7 @@ const initialState = {
 const reducer = (state = initialState, action) => {
 	const actions = {
 		[actionTypes.PRODUCT_START]: updateObject(state, {
+			...initialState,
 			loading: true
 		}),
 		[actionTypes.PRODUCT_FAILED]: updateObject(state, {
@@ -43,6 +45,7 @@ const reducer = (state = initialState, action) => {
 			ourProducts: action.ourProducts ? action.ourProducts : state.ourProducts,
 			singleProduct: action.singleProduct ? action.singleProduct : state.singleProduct,
 			searchedProducts: action.searchedProducts ? action.searchedProducts : state.searchedProducts,
+			products: action.products ? action.products : state.products,
 			dailyOffer: action.dailyOffer ? action.dailyOffer : state.dailyOffer,
 			weeklyOffer: action.weeklyOffer ? action.weeklyOffer : state.weeklyOffer
 		}),

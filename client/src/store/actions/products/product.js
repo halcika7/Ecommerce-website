@@ -3,7 +3,7 @@ import axios from 'axios';
 import { returnProductDataOnError } from '../../../helpers/product';
 
 export const addProduct = (formData, config) => async dispatch => {
-	dispatch({ type: actionTypes.PRODUCT_START });
+	// dispatch({ type: actionTypes.PRODUCT_START });
 	const productData = returnProductDataOnError(formData);
 	const response = await axios.post(
 		'/products/product/addproduct',
@@ -31,7 +31,7 @@ export const addProduct = (formData, config) => async dispatch => {
 };
 
 export const getBannerProducts = () => async dispatch => {
-	dispatch({ type: actionTypes.PRODUCT_START });
+	// dispatch({ type: actionTypes.PRODUCT_START });
 	const response = await axios.get('/products/product/getbannerproducts');
 	if (response.data.failedMessage) {
 		dispatch({
@@ -47,7 +47,7 @@ export const getBannerProducts = () => async dispatch => {
 };
 
 export const getFeaturedProducts = () => async dispatch => {
-	dispatch({ type: actionTypes.PRODUCT_START });
+	// dispatch({ type: actionTypes.PRODUCT_START });
 	const response = await axios.get('/products/product/getfeaturedproducts');
 	if (response.data.failedMessage) {
 		dispatch({
@@ -63,7 +63,7 @@ export const getFeaturedProducts = () => async dispatch => {
 };
 
 export const getTopSellingProducts = () => async dispatch => {
-	dispatch({ type: actionTypes.PRODUCT_START });
+	// dispatch({ type: actionTypes.PRODUCT_START });
 	const response = await axios.get('/products/product/gettopsellingproducts');
 	if (response.data.failedMessage) {
 		dispatch({
@@ -79,7 +79,7 @@ export const getTopSellingProducts = () => async dispatch => {
 };
 
 export const getOurProducts = () => async dispatch => {
-	dispatch({ type: actionTypes.PRODUCT_START });
+	// dispatch({ type: actionTypes.PRODUCT_START });
 	const response = await axios.get('/products/product/getourproducts');
 	if (response.data.failedMessage) {
 		dispatch({
@@ -95,7 +95,7 @@ export const getOurProducts = () => async dispatch => {
 };
 
 export const getDailyOfferProducts = () => async dispatch => {
-	dispatch({ type: actionTypes.PRODUCT_START });
+	// dispatch({ type: actionTypes.PRODUCT_START });
 	const response = await axios.get('/products/product/getdailyofferproducts');
 	if (response.data.failedMessage) {
 		dispatch({
@@ -111,7 +111,7 @@ export const getDailyOfferProducts = () => async dispatch => {
 };
 
 export const getWeeklyOfferProducts = () => async dispatch => {
-	dispatch({ type: actionTypes.PRODUCT_START });
+	// dispatch({ type: actionTypes.PRODUCT_START });
 	const response = await axios.get('/products/product/getweeklyofferproducts');
 	if (response.data.failedMessage) {
 		dispatch({
@@ -127,7 +127,7 @@ export const getWeeklyOfferProducts = () => async dispatch => {
 };
 
 export const getNewProducts = () => async dispatch => {
-	dispatch({ type: actionTypes.PRODUCT_START });
+	// dispatch({ type: actionTypes.PRODUCT_START });
 	const response = await axios.get('/products/product/getnewproducts');
 	if (response.data.failedMessage) {
 		dispatch({
@@ -153,7 +153,7 @@ export const homePageProducts = () => async dispatch => {
 };
 
 export const getProduct = id => async dispatch => {
-	dispatch({ type: actionTypes.PRODUCT_START });
+	// dispatch({ type: actionTypes.PRODUCT_START });
 	const response = await axios.get('/products/product/getproduct?id=' + id);
 	if (response.data.failedMessage) {
 		dispatch({
@@ -168,6 +168,39 @@ export const getProduct = id => async dispatch => {
 	}
 };
 
+export const getAllProducts = id => async dispatch => {
+	dispatch({ type: actionTypes.PRODUCT_START });
+	const response = await axios.get('/products/product/getallproducts');
+	if (response.data.failedMessage) {
+		dispatch({
+			type: actionTypes.PRODUCT_FAILED,
+			failedMessage: response.data.failedMessage
+		});
+	} else {
+		dispatch({
+			type: actionTypes.PRODUCT_SUCCESS,
+			products: response.data.products
+		});
+	}
+};
+
+export const deleteProduct = (id, name) => async dispatch => {
+	dispatch({ type: actionTypes.PRODUCT_START });
+	const response = await axios.delete(`/products/product/deleteproduct?id=${id}&name=${name}`);
+	if (response.data.failedMessage) {
+		dispatch({
+			type: actionTypes.PRODUCT_FAILED,
+			failedMessage: response.data.failedMessage
+		});
+	} else {
+		dispatch({
+			type: actionTypes.PRODUCT_SUCCESS,
+			successMessage: response.data.successMessage,
+			products: response.data.products
+		});
+	}
+};
+
 export const clearSingleProduct = () => async dispatch => {
 	dispatch({
 		type: actionTypes.PRODUCT_SUCCESS,
@@ -176,7 +209,7 @@ export const clearSingleProduct = () => async dispatch => {
 };
 
 export const searchProducts = query => async dispatch => {
-	dispatch({ type: actionTypes.PRODUCT_START });
+	// dispatch({ type: actionTypes.PRODUCT_START });
 	const response = await axios.get('/products/product/serachforproduct?query=' + query);
 	if (response.data.failedMessage) {
 		dispatch({

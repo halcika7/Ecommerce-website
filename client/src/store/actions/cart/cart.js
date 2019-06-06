@@ -9,11 +9,35 @@ export const addToCart = sku => async dispatch => {
     if(response.data.successMessage) {
         localStorage.setItem('cart', JSON.stringify(response.data.token))
         const decoded = jwt_decode(response.data.token);
-        dispatch({  type: actionTypes.CART_SUCCESS, cartItems: decoded.items, totals: decoded.cartPrice, successMessage: response.data.successMessage });
+        dispatch({  type: actionTypes.CART_SUCCESS, cartItems: decoded.items, totals: decoded.cartPrice, coupon: decoded.coupon, successMessage: response.data.successMessage });
     }else {
         dispatch({  type: actionTypes.CART_FAILED, failedMessage: response.data.failedMessage });
     }
 
+};
+
+export const applyCoupon = code => async dispatch => {
+    const cartItems = JSON.stringify(localStorage.getItem('cart'));
+    const response = await axios.post(`/cart/applycoupon?code=${code}&cartItems=${cartItems}`);
+    if(response.data.successMessage) {
+        localStorage.setItem('cart', JSON.stringify(response.data.token))
+        const decoded = jwt_decode(response.data.token);
+        dispatch({  type: actionTypes.CART_SUCCESS, cartItems: decoded.items, totals: decoded.cartPrice,coupon: decoded.coupon, successMessage: response.data.successMessage });
+    }else {
+        dispatch({  type: actionTypes.CART_FAILED, failedMessage: response.data.failedMessage });
+    }
+};
+
+export const removeCoupon = () => async dispatch => {
+    const cartItems = JSON.stringify(localStorage.getItem('cart'));
+    const response = await axios.delete(`/cart/removecoupon?cartItems=${cartItems}`);
+    if(response.data.successMessage) {
+        localStorage.setItem('cart', JSON.stringify(response.data.token))
+        const decoded = jwt_decode(response.data.token);
+        dispatch({  type: actionTypes.CART_SUCCESS, cartItems: decoded.items, totals: decoded.cartPrice,coupon: decoded.coupon, successMessage: response.data.successMessage });
+    }else {
+        dispatch({  type: actionTypes.CART_FAILED, failedMessage: response.data.failedMessage });
+    }
 };
 
 export const moveToSaveForLater = sku => async dispatch => {
@@ -31,6 +55,7 @@ export const moveToSaveForLater = sku => async dispatch => {
             cartItems: decodedCart.items,
             saveForLaterItems: decodedSave.savedForLater,
             totals: decodedCart.cartPrice,
+            coupon: decodedCart.coupon,
             successMessage: response.data.successMessage
         });
     }else {
@@ -54,6 +79,7 @@ export const moveToCart = sku => async dispatch => {
             cartItems: decodedCart.items,
             saveForLaterItems: decodedSave.savedForLater,
             totals: decodedCart.cartPrice,
+            coupon: decodedCart.coupon,
             successMessage: response.data.successMessage
         });
     }else {
@@ -73,6 +99,7 @@ export const deleteFromCart = sku => async dispatch => {
             type: actionTypes.CART_SUCCESS,
             cartItems: decoded.items,
             totals: decoded.cartPrice,
+            coupon: decoded.coupon,
             successMessage: response.data.successMessage
         });
     }else {
@@ -110,6 +137,7 @@ export const updateCartItem = (sku, value) => async dispatch => {
             type: actionTypes.CART_SUCCESS,
             cartItems: decoded.items,
             totals: decoded.cartPrice,
+            coupon: decoded.coupon,
             successMessage: response.data.successMessage
         });
     }
@@ -131,13 +159,15 @@ export const setCart = () => async dispatch => {
         dispatch({ 
             type: actionTypes.CART_SUCCESS,
             cartItems: decoded.items,
-            totals: decoded.cartPrice
+            totals: decoded.cartPrice,
+            coupon: decoded.coupon
         });
     } else {
         dispatch({ 
             type: actionTypes.CART_SUCCESS,
             cartItems: [],
-            totals: {subtotal: 0, total: 0, tax: 0}
+            totals: {subtotal: 0, total: 0, tax: 0},
+            coupon: {}
         });
     }
     if(localStorage.getItem('saveforlater')) {

@@ -280,10 +280,8 @@ exports.filterProducts = async (req, res) => {
     const findBy = returnQuery(req.query.options);  
     try {
         const getNumberOfProducts = await ProductModel.find(findBy).countDocuments();
-        const limit = (showPerPage > getNumberOfProducts) ? getNumberOfProducts : showPerPage;
+        const limit = ((showPerPage > getNumberOfProducts) && getNumberOfProducts > 0) ? getNumberOfProducts : showPerPage;
         const skip = ( showPerPage * page ) - showPerPage;
-        console.log(limit)
-        console.log(skip)
         const findProducts = await ProductModel.aggregate([
             { $match: findBy},
             { '$sort': sortProducts },

@@ -3,6 +3,7 @@ import { updateObject } from "../../../helpers/updateObject";
 
 const initialState = {
   cartItems: [],
+  coupon: {},
   saveForLaterItems: [],
   totals: {},
   failedMessage: false,
@@ -23,6 +24,7 @@ const reducer = (state = initialState, action) => {
     [actionTypes.CART_SUCCESS]: updateObject(state, {
       successMessage: action.successMessage ? action.successMessage : false,
       cartItems: action.cartItems ? action.cartItems : state.cartItems,
+      coupon: action.coupon ? action.coupon : state.coupon,
       saveForLaterItems: action.saveForLaterItems ? action.saveForLaterItems : state.saveForLaterItems,
       totals: action.totals ? action.totals : state.totals,
     }),

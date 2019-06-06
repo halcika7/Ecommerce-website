@@ -29,7 +29,9 @@ export const addAnswer = answerObj => async dispatch => {
 export const getAllAnswers = () => async dispatch => {
 	dispatch({ type: actionTypes.ANSWER_START });
 
-    const response = await axios.get('/answers/getallanswers');
+	const token = localStorage.jwtToken;
+
+    const response = await axios.get('/answers/getallanswers',  { headers: { Authorization: token } });
 
 	if (response.data.failedMessage) {
 		dispatch({
@@ -75,7 +77,8 @@ export const deleteAnswer = id => async dispatch => {
 	} else {
 		dispatch({
 			type: actionTypes.ANSWER_SUCCESS,
-			successMessage: response.data.successMessage
+			successMessage: response.data.successMessage,
+			answers: response.data.answers
 		});
 	}
 };

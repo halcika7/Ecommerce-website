@@ -50,7 +50,10 @@ router.get('/getweeklyofferproducts', ProductController.getWeeklyOfferProducts);
 router.get('/getnewproducts', ProductController.getNewProducts);
 
 router.get( '/getproduct', ProductController.getProduct );
+router.get( '/getallproducts', ProductController.getAllProducts );
 
 router.get( '/serachforproduct', ProductController.searchForProduct );
+
+router.delete( '/deleteproduct', ProductController.deleteProduct );
 
 module.exports = router;

@@ -13,8 +13,10 @@ import productReducer from "./products/product";
 import filterProductReducer from "./products/filterproducts";
 import productReviewReducer from "./products/productreview";
 import answerReducer from "./answers/answers";
+import termReducer from "./answers/terms";
 import cartReducer from "./cart/cart";
 import couponReducer from "./cart/coupon";
+import storeReducer from "./stores/stores";
 
 export const combinedReducers = combineReducers({
   login: loginReducer,
@@ -31,6 +33,8 @@ export const combinedReducers = combineReducers({
   filteredProducts: filterProductReducer,
   reviews: productReviewReducer,
   answers: answerReducer,
+  terms: termReducer,
   cart: cartReducer,
-  coupon: couponReducer
+  coupon: couponReducer,
+  stores: storeReducer,
 });

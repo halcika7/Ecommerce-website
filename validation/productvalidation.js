@@ -159,8 +159,6 @@ exports.addProductValidation = async (data, files) => {
 	) {
 		data.wifi = !isEmpty(data.wifi) ? data.wifi : '';
 		data.bluetooth = !isEmpty(data.bluetooth) ? data.bluetooth : '';
-		console.log(data.wifi)
-		console.log(data.bluetooth)
 		if (Validator.isEmpty(data.wifi)) {
 			errors.wifi = 'Wifi is required';
 		} else if (

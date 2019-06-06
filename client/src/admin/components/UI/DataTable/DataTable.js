@@ -54,6 +54,21 @@ const DataTable = props => {
 			setFunction(props.answersData, setLength);
 		}
 	}, [props.answersData]);
+	useEffect(() => {
+		if (props.termsData) {
+			setFunction(props.termsData, setLength);
+		}
+	}, [props.termsData]);
+	useEffect(() => {
+		if (props.storesData) {
+			setFunction(props.storesData, setLength);
+		}
+	}, [props.storesData]);
+	useEffect(() => {
+		if (props.productsData) {
+			setFunction(props.productsData, setLength);
+		}
+	}, [props.productsData]);
 
 	const setFunction = (Data, setDataLength) => {
 		let data = [];
@@ -116,6 +131,7 @@ const DataTable = props => {
 
 	const buttonFormatter = (cell, row) => {
 		let id = row._id,
+			name = row.name,
 			view = '/admindashboard/',
 			edit = '/admindashboard/';
 		if (props.usersData) {
@@ -145,6 +161,18 @@ const DataTable = props => {
 			view = 'view-answer?id=';
 			edit += 'edit-answer?id=';
 		}
+		if (props.termsData) {
+			view = 'view-term?id=';
+			edit += 'edit-term?id=';
+		}
+		if (props.storesData) {
+			view = 'view-store?id=';
+			edit += 'edit-store?id=';
+		}
+		if (props.productsData) {
+			view = 'view-product?id=';
+			edit += 'edit-product?id=';
+		}
 		return (
 			<React.Fragment>
 				{(!props.permissionsData && !props.couponsData) && (
@@ -160,7 +188,7 @@ const DataTable = props => {
 				<button
 					className="btn btn-danger"
 					type="button"
-					onClick={e => props.click(e, id)}>
+					onClick={e => props.click(e, id, name)}>
 					<i className="far fa-trash-alt" />
 				</button>
 			</React.Fragment>
@@ -209,12 +237,34 @@ const DataTable = props => {
 			<span className={customClass}>{row.emailConfirmation.toString()}</span>
 		);
 	};
+	const featuredFormatter = (cell, row) => {
+		const customClass = row.featured ? 'Confirmed' : 'NotConfirmed';
+		return (
+			<span className={customClass}>{row.featured.toString()}</span>
+		);
+	};
+	const publishedFormatter = (cell, row) => {
+		const customClass = row.published ? 'Confirmed' : 'NotConfirmed';
+		return (
+			<span className={customClass}>{row.published.toString()}</span>
+		);
+	};
 	const imgFormatter = (cell, row) => {
 		let src = '',
 			width = '30',
 			height = '30';
 		if (props.usersData) {
 			src = `/${row.profilePicture}`;
+			width = '50';
+			height = '50';
+		}
+		if (props.storesData) {
+			src = `/${row.picture}`;
+			width = '50';
+			height = '50';
+		}
+		if (props.productsData) {
+			src = `/${row.featuredPicture}`;
 			width = '50';
 			height = '50';
 		}
@@ -245,9 +295,9 @@ const DataTable = props => {
 		)
 	});
 
-	const containerClass = !props.usersData
-		? 'table-responsive Spans'
-		: 'table-responsive UsersTable';
+	const containerClass = props.usersData
+		? 'table-responsive UsersTable'
+		: props.productsData ? 'table-responsive Spans Products' : 'table-responsive Spans';
 	const selectRow = !props.usersData
 		? {
 				mode: 'checkbox',
@@ -615,6 +665,221 @@ const DataTable = props => {
 		}
 	];
 
+	const termsColumns = [
+		{
+			dataField: '_id',
+			text: 'ID',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'term',
+			text: 'Term',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'text',
+			text: 'Text',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'actions',
+			text: 'Actions',
+			formatter: buttonFormatter,
+			align: 'center',
+			headerAlign: 'center',
+			csvExport: false
+		}
+	];
+
+	const storesColumns = [
+		{
+			dataField: '_id',
+			text: 'ID',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'address',
+			text: 'Address',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'city',
+			text: 'City',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'country',
+			text: 'Country',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'email',
+			text: 'Email',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'phone',
+			text: 'Phone',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'picture',
+			formatter: imgFormatter,
+			text: 'Store Picture',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true,
+			csvExport: false
+		},
+		{
+			dataField: 'actions',
+			text: 'Actions',
+			formatter: buttonFormatter,
+			align: 'center',
+			headerAlign: 'center',
+			csvExport: false
+		}
+	];
+
+	const productsColumns = [
+		{
+			dataField: '_id',
+			text: 'ID',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'name',
+			text: 'Name',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'prodRating',
+			text: 'Product Rating',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'price',
+			text: 'Price',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'category',
+			text: 'Category',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'brand',
+			text: 'Brand',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'year',
+			text: 'Year',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'numberOfsales',
+			text: 'Number of sales',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'numberOfOptions',
+			text: 'Number of options',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'published',
+			text: 'Published',
+			formatter: publishedFormatter,
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'featured',
+			text: 'Featured',
+			formatter: featuredFormatter,
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'featuredPicture',
+			formatter: imgFormatter,
+			text: 'Product picture',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true,
+			csvExport: false
+		},
+		{
+			dataField: 'actions',
+			text: 'Actions',
+			formatter: buttonFormatter,
+			align: 'center',
+			headerAlign: 'center',
+			csvExport: false
+		}
+	];
+
 	return (
 		<div className="DataTable card-body col-12">
 			<React.Fragment>
@@ -924,6 +1189,124 @@ const DataTable = props => {
 								<BootstrapTable
 									noDataIndication={() => <div>No Registers available</div>}
 									wrapperClasses={containerClass}
+									{...props.baseProps}
+									striped
+									hover
+									bordered={false}
+									filter={filterFactory()}
+									pagination={paginationFactory(options)}
+								/>
+							</React.Fragment>
+						)}
+					</ToolkitProvider>
+				)}
+
+				{length === false || props.loading || !props.termsData ? null : (
+					<ToolkitProvider
+						bootstrap4
+						search
+						keyField="_id"
+						data={data}
+						columns={termsColumns}
+						exportCSV>
+						{props => (
+							<React.Fragment>
+								<div className="row mb-20 Spans">
+									<div className="col-sm-6">
+										<ExportCSVButton {...props.csvProps}>
+											Export CSV
+										</ExportCSVButton>
+									</div>
+									<div className="col-sm-6">
+										<SearchBar {...props.searchProps} tableId="1" />
+										<ClearSearchButton
+											{...props.searchProps}
+											className="btn-sm"
+										/>
+									</div>
+								</div>
+								<BootstrapTable
+									noDataIndication={() => <div>No Registers available</div>}
+									wrapperClasses={containerClass}
+									{...props.baseProps}
+									striped
+									hover
+									bordered={false}
+									filter={filterFactory()}
+									pagination={paginationFactory(options)}
+								/>
+							</React.Fragment>
+						)}
+					</ToolkitProvider>
+				)}
+
+				{length === false || props.loading || !props.storesData ? null : (
+					<ToolkitProvider
+						bootstrap4
+						search
+						keyField="_id"
+						data={data}
+						columns={storesColumns}
+						exportCSV>
+						{props => (
+							<React.Fragment>
+								<div className="row mb-20 Spans">
+									<div className="col-sm-6">
+										<ExportCSVButton {...props.csvProps}>
+											Export CSV
+										</ExportCSVButton>
+									</div>
+									<div className="col-sm-6">
+										<SearchBar {...props.searchProps} tableId="1" />
+										<ClearSearchButton
+											{...props.searchProps}
+											className="btn-sm"
+										/>
+									</div>
+								</div>
+								<BootstrapTable
+									noDataIndication={() => <div>No Registers available</div>}
+									wrapperClasses={containerClass}
+									{...props.baseProps}
+									striped
+									hover
+									bordered={false}
+									filter={filterFactory()}
+									pagination={paginationFactory(options)}
+								/>
+							</React.Fragment>
+						)}
+					</ToolkitProvider>
+				)}
+
+				{length === false || props.loading || !props.productsData ? null : (
+					<ToolkitProvider
+						bootstrap4
+						search
+						keyField="_id"
+						data={data}
+						columns={productsColumns}
+						exportCSV>
+						{props => (
+							<React.Fragment>
+								<div className="row mb-20 Spans">
+									<div className="col-sm-6">
+										<ExportCSVButton {...props.csvProps}>
+											Export CSV
+										</ExportCSVButton>
+									</div>
+									<div className="col-sm-6">
+										<SearchBar {...props.searchProps} tableId="1" />
+										<ClearSearchButton
+											{...props.searchProps}
+											className="btn-sm"
+										/>
+									</div>
+								</div>
+								<BootstrapTable
+									noDataIndication={() => <div>No Registers available</div>}
+									wrapperClasses={containerClass}
+									style={{ minWidth: '2500px' }}
 									{...props.baseProps}
 									striped
 									hover
