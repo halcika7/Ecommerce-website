@@ -5,7 +5,7 @@
   }
   
   .product-box {
-    height: 300px;
+    height: 350px;
     margin-bottom: 30px;
     overflow: hidden;
     text-align: center;
@@ -213,6 +213,7 @@
   
   .imagebox .box-bottom p {
     margin-bottom: 5px;
+    word-break: break-all;
   }
   
   .imagebox>span.new-product,

@@ -13,7 +13,7 @@ const fileStorage = multer.diskStorage({
 		cb(null, directory);
 	},
 	filename: (req, file, cb) => {
-		cb(null, `${new Date().getTime()}.${file.originalname.split('.').pop()}`);
+		cb(null, `${new Date().getTime() * Math.random()}.${file.originalname.split('.').pop()}`);
 	}
 });
 

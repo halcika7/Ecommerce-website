@@ -143,6 +143,7 @@ export const getNewProducts = () => async dispatch => {
 };
 
 export const homePageProducts = () => async dispatch => {
+	dispatch({ type: actionTypes.PRODUCT_START });
 	dispatch(getBannerProducts());
 	dispatch(getFeaturedProducts());
 	dispatch(getTopSellingProducts());

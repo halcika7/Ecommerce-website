@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {Link} from 'react-router-dom';
-import {
-  CardNumberElement,
-  CardExpiryElement,
-  CardCVCElement,
-  PostalCodeElement,
-  injectStripe,
-} from 'react-stripe-elements'
+import { CardNumberElement, CardExpiryElement, CardCVCElement, injectStripe } from 'react-stripe-elements'
 
 import c from './Checkout.module.css';
 import './StripeComponent.css'
@@ -14,34 +7,24 @@ import './StripeComponent.css'
 const StripeComponent = props => {
 
     const [name, setName] = useState('');
+    const [cardElementErrors, setCardElementsErrors] = useState({ cardNumber: '', cardExpiry: '', cardCvc: '' });
+    const [inputs, setInputs] = useState({ firstName: '', lastName: '', email: '', telephone: '', country: '', address: '', city: '', zip: '' });
 
-    const handleBlur = () => {
-        console.log('[blur]');
-      };
-      const handleChange = (change) => {
-        console.log('[change]', change);
-      };
-      const handleClick = () => {
-        console.log('[click]');
-      };
-      const handleFocus = () => {
-        console.log('[focus]');
-      };
-      const handleReady = () => {
-        console.log('[ready]');
-      };
+    const handleChange = (change) => {
+        if(change.error && Object.keys(change.error).length > 0) {
+            setCardElementsErrors({ ...cardElementErrors, [change.elementType]: change.error.message})
+        }
+    };
 
-      const handlePayment = async e => {
-          e.preventDefault();
-          try {
-              let token = await props.stripe.createToken({ name, amount:1000 })
-              console.log(token);
-          }catch(err) {
-              console.log(err);
-          }
-      }
-
-      console.log(props)
+    const handlePayment = async e => {
+        e.preventDefault();
+        try {
+            let token = await props.stripe.createToken({ name })
+            console.log(token);
+        }catch(err) {
+            console.log(err);
+        }
+    }
 
     return(
         <div className={c.container + " container " + c.checkout}>
@@ -51,11 +34,11 @@ const StripeComponent = props => {
                     <div className={c.row + " row"}>
                         <div className="col-12 col-md-6">
                             <label>First Name</label>
-                            <input type="text" name="Name" placeholder='Enter your name'/>
+                            <input type="text" name="firstName" placeholder='Enter your name'/>
                         </div>
                         <div className="col-12 col-md-6">
                             <label>Last Name</label>
-                            <input type="text" name="Lname" placeholder='Enter Last Name' />
+                            <input type="text" name="lastName" placeholder='Enter Last Name' />
                         </div>
                         <div className="col-12 col-md-6">
                             <label>Email</label>
@@ -63,7 +46,7 @@ const StripeComponent = props => {
                         </div>
                         <div className="col-12 col-md-6">
                             <label>Telephone</label>
-                            <input type="tel" name="tel" placeholder='Enter Phone number'/>
+                            <input type="tel" name="telephone" placeholder='Enter Phone number'/>
                         </div>
                         <div className="col-12">
                             <label>Country</label>
@@ -90,34 +73,28 @@ const StripeComponent = props => {
                     <div className={c.row + " row"}>
                         <div className="col-12">
                             <label>Name on card</label>
-                            <input type="text" onChange={e => setName(e.target.value)} value={name} name="nameOnCard" placeholder='Enter name on card'/>
+                            <input type="text" onChange={e => setName(e.target.value)} value={name} name="nameOnCard" placeholder='Enter name on card' autoComplete='false'/>
                         </div>
                         <div className="col-12">
                             <label>Credit card number</label>
                             <CardNumberElement
-                                onBlur={handleBlur}
                                 onChange={handleChange}
-                                onFocus={handleFocus}
-                                onReady={handleReady}
                             />
+                            {cardElementErrors.cardNumber && <div className='invalid-feedback'>{ cardElementErrors.cardNumber }</div>}
                         </div>
                         <div className="col-12">
                             <label>Expiration</label>
                             <CardExpiryElement
-                                onBlur={handleBlur}
                                 onChange={handleChange}
-                                onFocus={handleFocus}
-                                onReady={handleReady}
                             />
+                            {cardElementErrors.cardExpiry && <div className='invalid-feedback'>{ cardElementErrors.cardExpiry }</div>}
                         </div>
                         <div className="col-12">
                             <label>CVC</label>
                             <CardCVCElement
-                                onBlur={handleBlur}
                                 onChange={handleChange}
-                                onFocus={handleFocus}
-                                onReady={handleReady}
                             />
+                            {cardElementErrors.cardCvc && <div className='invalid-feedback'>{ cardElementErrors.cardCvc }</div>}
                         </div>
                     </div>
                     <label>Order Notes</label>

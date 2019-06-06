@@ -9181,6 +9181,7 @@ ul{
 }
 
 input.invalid,
+.StripeElement--invalid,
 input:invalid,
 select.invalid,
 select:invalid,
@@ -9190,7 +9191,8 @@ textarea:invalid {
     background: transparent;
 }
 
-.invalid ~ .invalid-feedback {
+.invalid ~ .invalid-feedback,
+.StripeElement--invalid ~ .invalid-feedback {
   display: block;
 }
 

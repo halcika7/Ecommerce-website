@@ -24,8 +24,6 @@ const Checkout = props => {
         const response = await axios.get('https://restcountries.eu/rest/v2/all?fields=name');
         const newCountries = response.data.map(country => country.name);
         setCountries(newCountries);
-        // const cities = await axios.get("https://wft-geo-db.p.rapidapi.com/v1/geo/cities");
-        // console.log(cities)
     }
 
     return(
