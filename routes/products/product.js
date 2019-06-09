@@ -6,7 +6,11 @@ const ProductController = require('../../controllers/ProductsController');
 
 const fileStorage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		const directory = `public/images/temp/product`;
+		let directory = `public/images/temp`;
+		if (!fs.existsSync(directory)) {
+			fs.mkdirSync(directory);
+		}
+		directory= `${product}/product`;
 		if (!fs.existsSync(directory)) {
 			fs.mkdirSync(directory);
 		}
