@@ -810,7 +810,7 @@ const Product = props => {
 								{inStock && sku && (
 									<ProductButtons inStock={inStock} sku={sku} />
 								)}
-								<SharingButtons link="https://imtec.ba/robotici-i-oprema/41009-makeblock-steam-kits-starter-robot-kit-ir-verzija-.html" />
+								<SharingButtons link={`https://polar-earth-72216.herokuapp.com/product?id=${productID}`} />
 							</div>
 						</div>
 					</div>
