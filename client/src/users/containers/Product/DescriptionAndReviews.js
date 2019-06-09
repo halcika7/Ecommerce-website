@@ -14,7 +14,7 @@ const DescriptionAndReviews = props => {
 
 	useEffect(() => {
 		props.getReviews(props.product._id);
-		const socket = openSocket('http://0.0.0.0:5000');
+		const socket = openSocket('https://polar-earth-72216.herokuapp.com');
 		socket.on('review', data => {
 			if (data.action === 'create') {
 				props.updateAddReview(data.review);
