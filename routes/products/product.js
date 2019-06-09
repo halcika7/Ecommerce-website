@@ -10,7 +10,7 @@ const fileStorage = multer.diskStorage({
 		if (!fs.existsSync(directory)) {
 			fs.mkdirSync(directory);
 		}
-		directory= `${product}/product`;
+		directory= `${directory}/product`;
 		if (!fs.existsSync(directory)) {
 			fs.mkdirSync(directory);
 		}
