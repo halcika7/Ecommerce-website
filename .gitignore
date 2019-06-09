@@ -1,4 +1,4 @@
-config/keys.js
+# config/keys.js
 config/keysproduction.js
 client/node_modules
 node_modules
