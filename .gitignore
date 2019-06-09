@@ -1,6 +1,4 @@
-/node_modules
-/config/keys.js
-
-/client/node_modules
-
-# /public/images
+config/keys.js
+config/keysproduction.js
+client/node_modules
+node_modules
