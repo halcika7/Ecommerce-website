@@ -83,7 +83,7 @@ const Navigation = props => {
                   <i
                     className={classes.TimIcons + " " + classes.IconSingle02}
                   />
-                  <p>Users</p>
+                  <p>Users and Orders</p>
                 </a>
                 <div className={classes.DropDown}>
                   <Link to="/admindashboard/all-users">
@@ -91,6 +91,9 @@ const Navigation = props => {
                   </Link>
                   <Link to="/admindashboard/add-user">
                     <p>Add User</p>
+                  </Link>
+                  <Link to="/admindashboard/all-orders">
+                    <p>All Orders</p>
                   </Link>
                 </div>
               </div>

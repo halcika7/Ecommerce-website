@@ -42,6 +42,7 @@ const BottomNavigation = props => {
 		}
 	]);
 	const [categories, setCategories] = useState([]);
+	const [showCategories, setShowCategories] = useState(false);
 
 	useEffect(() => {
 		props.getAllCategories();
@@ -102,7 +103,6 @@ const BottomNavigation = props => {
 				li.classList.toggle(c.active);
 			}
 		});
-		console.log(e.currentTarget.parentElement.clientHeight);
 		e.currentTarget.classList.toggle(c.active);
 	};
 
@@ -155,11 +155,11 @@ const BottomNavigation = props => {
 								<p
 									className={
 										c.navLink + ' nav-link ' + c.dropdownNavCategoryLinks
-									}>
+									} onClick={e => setShowCategories(!showCategories)}>
 									Categories<i className="fas fa-angle-right" />
 								</p>
-								<div className={c.categoryNavSearchList}>
-									<CategorySearchList />
+								<div className={c.categoryNavSearchList} style={showCategories ? { height: '100%' } : { height: '0' }}>
+									<CategorySearchList categories={categories} />
 								</div>
 							</li>
 						</ul>

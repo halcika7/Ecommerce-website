@@ -1,11 +1,9 @@
 import jwt_decode from "jwt-decode";
 import { store } from "../store/store";
-import setAuthToken from "./setAuthToken";
 import * as actions from "../store/actions";
 
 export const checkLoggedInUser = callBack => {
   if (localStorage.jwtToken) {
-    setAuthToken(localStorage.jwtToken);
     const decoded = jwt_decode(localStorage.jwtToken);
     store.dispatch(actions.setCurrentUser(decoded));
     store.dispatch(actions.getLoggedInUserPhoto(decoded.id));

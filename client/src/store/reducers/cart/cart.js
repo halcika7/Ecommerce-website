@@ -6,6 +6,8 @@ const initialState = {
   coupon: {},
   saveForLaterItems: [],
   totals: {},
+  inputs: {},
+  errors: {firstName: '', lastName: '', email: '', telephone: '', country: '', address: '', city: '', zip: '', products: [], coupon: {}},
   failedMessage: false,
   successMessage: false,
 };
@@ -17,7 +19,9 @@ const reducer = (state = initialState, action) => {
     }),
     [actionTypes.CART_FAILED]: updateObject(state, {
       failedMessage: action.failedMessage ? action.failedMessage : false,
+      errors: action.errors ? {...initialState.errors,...action.errors} : initialState.errors,
       cartItems: action.cartItems ? action.cartItems : state.cartItems,
+      inputs: action.inputs ? action.inputs : {},
       saveForLaterItems: action.saveForLaterItems ? action.saveForLaterItems : state.saveForLaterItems,
       totals: action.totals ? action.totals : state.totals,
     }),

@@ -149,7 +149,7 @@ const name = props => {
                         {filtersApplyed && <div className="col-12"><button type='button' className='mt-4 apply-filters' onClick={clearFilters} >Clear Filters</button></div>}
                     </div>
                     <div className="col-lg-9 col-md-8">
-                        <div className="col-12 d-none d-md-block">
+                        <div className="col-12 d-none d-md-block mt-4">
                             {props.banner.length > 0 ? (
                                 <OwlCarousel className="owl-carousel-main owl-carousel owl-theme" loop margin={10} dotsEach={true} dots={true} items={1} animateIn={true} lazyLoad={true}>
                                     {props.banner.map((product, index) => (
@@ -201,10 +201,24 @@ const name = props => {
                             </div>
                             <div className="tab-content" id="myTabContent">
                                 <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                    <div className="row" >{products.length === 0 ? <h3>No products found</h3> : <ProductBox products={products} larger/>}</div>
+                                    <div className="row" >
+                                        {products.length === 0 ? 
+                                            <h3>No products found</h3> : 
+                                            !props.loading ? 
+                                                <ProductBox products={products} larger/> : 
+                                                <SmallSpinner />
+                                        }
+                                    </div>
                                 </div>
                                 <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                    <div className='row'>{products.length === 0 ? <h3>No products found</h3> : <ProductBoxHorizontal products={products} />}</div>
+                                    <div className='row'>
+                                        {products.length === 0 ? 
+                                            <h3>No products found</h3> : 
+                                            !props.loading ? 
+                                                <ProductBoxHorizontal products={products} /> :
+                                                <SmallSpinner />
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -234,7 +248,8 @@ const mapStateToProps = state => ({
     consoles: state.filteredProducts.consoles,
     pages: state.filteredProducts.pages,
     categories: state.category.allCategories,
-    banner: state.product.bannerProducts
+    banner: state.product.bannerProducts,
+    loading: state.filteredProducts.loading
 })
 
 const mapDispatchToProps = dispatch => ({

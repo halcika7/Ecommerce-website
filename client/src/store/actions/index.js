@@ -129,7 +129,8 @@ export {
   updateCartItem,
   setCart,
   applyCoupon,
-  removeCoupon
+  removeCoupon,
+  processPayment
 } from "./cart/cart";
 
 export {
@@ -147,3 +148,16 @@ export {
   getStoresFront,
   getStores
 } from "./stores/stores";
+
+export {
+  getAllUserOrders,
+  getAllOrders,
+  getOrder,
+  deleteOrder,
+  deleteUserOrder,
+  updateOrder
+} from "./orders/orders";
+
+export {
+  getDashboard
+} from "./dashboard/dashboard";

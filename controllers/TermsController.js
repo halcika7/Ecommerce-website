@@ -4,7 +4,6 @@ const validateTerm = require('../validation/terms');
 
 exports.addTerm = async (req, res) => {
     const { errors, isValid } = validateTerm(req.body);
-    console.log('sdijfojfisdjof');
 	if (!isValid) { return res.json(errors);}
 
 	const {term, text} = req.body;
@@ -46,23 +45,20 @@ exports.getAllTerms = async (req, res) => {
 
 exports.deleteTerm = async (req, res) => {
 	try {
-		await TermsModel.deleteOne({ _id: new ObjectId(req.query.id) });
-
+		const deleted = await TermsModel.deleteOne({ _id: new ObjectId(req.query.id) });
+		if(deleted.n === 0) { return res.json({ failedMessage: 'No Terms deleted' }); }
 		const terms = await TermsModel.find({});
 		
-		return res.json({ successMessage: 'Term Deleted', terms });
 	} catch(err) {
-        console.log(err)
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
-    return res.json({ failedMessage: err.message });
+    	return res.json({ failedMessage: err.message });
 	}
 }
 
 exports.updateTerm = async (req, res) => {
-    // needs mofiing
-	const id = req.query.id;
-	const { term, text } = JSON.parse(req.query.object);
 	try {
+		const id = req.query.id;
+		const { term, text } = JSON.parse(req.query.object);
 		const findTerm = await TermsModel.findOne({ _id: {$ne: new ObjectId(id)}, term });
 		if(findTerm) {
 			return res.json({failedMessage: 'Term already added!'});

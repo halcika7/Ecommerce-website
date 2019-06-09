@@ -12,7 +12,6 @@
     "jwt-decode": "^2.2.0",
     "npm": "^6.9.0",
     "react": "^16.8.2",
-    "react-bootstrap-table": "^4.3.1",
     "react-bootstrap-table-next": "^3.1.1",
     "react-bootstrap-table2-filter": "^1.1.9",
     "react-bootstrap-table2-paginator": "^2.0.6",
@@ -48,7 +47,5 @@
     "not op_mini all"
   ],
   "proxy": "http://localhost:5000",
-  "devDependencies": {
-    "faker": "^4.1.0"
-  }
+  "devDependencies": {}
 }

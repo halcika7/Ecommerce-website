@@ -8,11 +8,11 @@ const ActivateAccountController = require('../../controllers/ActivateAccountCont
 
 const fileStorage = multer.diskStorage({
     destination: (req,file,cb) => {
-        let directory = `public/images/${req.body.username}/`;
+        let directory = `public/images/users/`;
         if (!fs.existsSync(directory)){
             fs.mkdirSync(directory);
         }
-        directory = `${directory}profileImage/`;
+        directory = `${directory}${req.body.username}/`;
         if (!fs.existsSync(directory)){
             fs.mkdirSync(directory);
         }

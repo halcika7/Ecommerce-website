@@ -15,6 +15,7 @@
   "author": "Haris Beslic",
   "license": "ISC",
   "dependencies": {
+    "@easypost/api": "^3.6.6",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "concurrently": "^4.1.0",
@@ -30,6 +31,7 @@
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "socket.io": "^2.2.0",
+    "stripe": "^7.1.0",
     "validator": "^10.11.0"
   },
   "devDependencies": {

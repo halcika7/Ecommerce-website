@@ -1,6 +1,7 @@
 import React from "react";
 
-const LatestOrders = props => {
+const LatestOrders = ({ orders }) => {
+  console.log(orders)
   return (
     <div className="col-xl-8 mb-30">
       <div className="card">
@@ -9,10 +10,11 @@ const LatestOrders = props => {
             Latest Trasaction
           </h4>
           <div className="table-responsive">
-            <table className="table table-hover">
+            <table className="table table-hover" style={{ color: '#fff' }}>
               <thead>
                 <tr>
-                  <th scope="col">(#) Id</th>
+                  <th scope="col">Order Id</th>
+                  <th scope="col">User Id</th>
                   <th scope="col">Name</th>
                   <th scope="col">Date</th>
                   <th scope="col">Amount</th>
@@ -22,31 +24,27 @@ const LatestOrders = props => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">#14256</th>
-                  <td>
-                    <div>
-                      <img
-                        src="https://content-static.upwork.com/uploads/2014/10/01073427/profilephoto1.jpg"
-                        alt=""
-                        className="thumb-md rounded-circle mr-2"
-                      />{" "}
-                      Philip Smead
-                    </div>
-                  </td>
-                  <td>15/1/2018</td>
-                  <td>$94</td>
-                  <td>
-                    <span className="badge badge-success">Delivered</span>
-                  </td>
-                  <td>
-                    <div>
-                      <a href="/" className="btn btn-primary btn-sm">
-                        Edit
-                      </a>
-                    </div>
-                  </td>
-                </tr>
+                {orders.map((order, index) =>
+                  <tr key={index}>
+                    <th scope="row">{order._id}</th>
+                    <th scope="row">{order.userId}</th>
+                    <td>
+                      {order.firstName} {order.lastName}
+                    </td>
+                    <td>{order.email}</td>
+                    <td>${order.payed}</td>
+                    <td>
+                      <span className={order.shipped ? "badge badge-success" : 'badge badge-danger'}>{order.shipped.toString().toUpperCase()}</span>
+                    </td>
+                    <td>
+                      <div>
+                        <a href="/" className="btn btn-primary btn-sm">
+                          Edit
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

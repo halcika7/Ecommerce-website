@@ -13,6 +13,7 @@ import AdminFooter from "./admin/components/Footer/Footer";
 import SmallSpinner from "./users/components/UI/SmallSpinner/SmallSpinner";
 
 const Home = lazy(() => import("./users/containers/Home/Home"));
+const Profile = lazy(() => import("./users/containers/Profile/Profile"));
 const Product = lazy(() => import("./users/containers/Product/Product"));
 const Products = lazy(() => import("./users/containers/Products/Products"));
 const AuthPage = lazy(() => import("./users/containers/AuthenticationPage/AuthPage"));
@@ -40,6 +41,7 @@ const AnswersToQuestions = lazy(() => import('./admin/containers/AnswersToQuesti
 const TermBack = lazy(() => import('./admin/containers/Terms/Terms'));
 const AddCoupon = lazy(() => import('./admin/containers/Coupons/AddCoupon'));
 const Store = lazy(() => import('./admin/containers/Store/Store'));
+const Order = lazy(() => import('./admin/containers/Order/Order'));
 
 const TableContainer = lazy(() => import("./admin/containers/TableContainer/TableContainer") );
 
@@ -118,6 +120,25 @@ const App = props => {
                 <Route path="/admindashboard/all-users" exact render={props => (
                     <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
                       <TableContainer Users={true} />
+                    </Suspense>
+                  )}
+                />
+                {/* Orders */}
+                <Route path="/admindashboard/all-orders" exact render={props => (
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
+                      <TableContainer Orders={true} />
+                    </Suspense>
+                  )}
+                />
+                <Route path="/admindashboard/view-order" exact render={props => (
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
+                      <Order view {...props} />
+                    </Suspense>
+                  )}
+                />
+                <Route path="/admindashboard/edit-order" exact render={props => (
+                    <Suspense fallback={<div className="Card bg-white"><SmallSpinner /></div>}>
+                      <Order edit {...props} />
                     </Suspense>
                   )}
                 />
@@ -361,6 +382,12 @@ const App = props => {
                 </Suspense>
               )}
             />
+            <Route path="/profile" exact render={() => (
+                <Suspense fallback={<Spinner />}>
+                  <Profile {...props} />
+                </Suspense>
+              )}
+            />
             <Route path="/product" exact render={() => (
                 <Suspense fallback={<Spinner />}>
                   <Product {...props} show={state.show}/>
@@ -417,7 +444,7 @@ const App = props => {
             />
             <Route path="/checkout" exact render={() => (
                 <Suspense fallback={<Spinner />}>
-                  <Checkout />
+                  <Checkout {...props}/>
                 </Suspense>
               )}
             />

@@ -615,7 +615,7 @@
 .product-box.style1 .imagebox.style1 .box-image img {
   width: 100%;
   height: auto;
-  max-height: 150px;
+  height: 200px;
   object-fit: cover;
   object-position: top;
 }

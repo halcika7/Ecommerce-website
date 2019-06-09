@@ -24,7 +24,6 @@ const cartItems = (props) => {
                             <Link to={`/product?id=${item._id}`} >
                                 <h6>{item.name}</h6>
                             </Link>
-                            <span>SKU: {item.sku}</span>
                             <p> {item.quantity} x ${item.price} </p>
                             <span 
                                 className={c.span} 

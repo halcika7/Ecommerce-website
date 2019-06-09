@@ -17,6 +17,8 @@ import termReducer from "./answers/terms";
 import cartReducer from "./cart/cart";
 import couponReducer from "./cart/coupon";
 import storeReducer from "./stores/stores";
+import orderReducer from "./orders/orders";
+import dashboardReducer from "./dashboard/dashboard";
 
 export const combinedReducers = combineReducers({
   login: loginReducer,
@@ -37,4 +39,6 @@ export const combinedReducers = combineReducers({
   cart: cartReducer,
   coupon: couponReducer,
   stores: storeReducer,
+  orders: orderReducer,
+  dashboard: dashboardReducer
 });

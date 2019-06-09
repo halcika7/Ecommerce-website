@@ -1,5 +1,5 @@
 .StripeElement {
-    margin: 0 !important;
+  margin: 0 !important;
 }
 
 input:focus,
@@ -19,11 +19,11 @@ input,
   border-radius: 5px;
 }
 
-.container .row .col-md-7 input, 
+.container .row .col-md-7 input,
 .container .row .col-md-7 select {
-    height: 40px;
-    border: 2px solid #e5e5e5;
-    color: #919191;
-    width: 100%;
-    outline: 0;
+  height: 40px;
+  border: 2px solid #e5e5e5;
+  color: #919191;
+  width: 100%;
+  outline: 0;
 }

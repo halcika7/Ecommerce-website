@@ -17,16 +17,6 @@
     font-size: 14px;
 }
 
-/* .container.checkout .row .colmd7 input, 
-.container.checkout .row .colmd7 select {
-    border: 2px solid #e5e5e5;
-    height: 40px;
-    border-radius: 30px;
-    padding: 0 15px;
-    color: #919191;
-    width: 100%;
-} */
-
 .container.checkout .row .colmd7 textarea{
     resize: none;
     border: 2px solid #e5e5e5;
@@ -107,6 +97,7 @@
 
 .products{
     overflow-x: auto;
+    overflow-y: hidden;
     margin-bottom: 50px;
 }
 
@@ -117,12 +108,15 @@
 .products .heading > div{
     display: flex;
     justify-content: space-between;
-    min-width: 400px;
+    min-width: 800px;
 }
 
 .products .heading > div.options > p{
     text-align: start;
-    width: 33%;
+    width: 100%;
+    margin: 0;
+    margin-right: 10px;
+    min-width: 150px !important;
 }
 
 .products .heading > div.options > p{
@@ -140,8 +134,11 @@
 }
 
 .products .heading > .details div{
-    max-width: 33%;
-    width: 33%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-right: 10px;
 }
 
 .products .heading > .details > div > p{
@@ -149,6 +146,7 @@
     font-size: 14px;
     color: #919191;
     margin: 0;
+    min-width: 150px !important;
 }
 /* kraj desni dio */
 
@@ -157,4 +155,13 @@
       max-width: 100%;
       margin: 0;
     }
+}
+
+.Options {
+    flex-direction: column;
+    max-height: 60px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-width: 160px !important;
+    margin-right: 20px;
 }

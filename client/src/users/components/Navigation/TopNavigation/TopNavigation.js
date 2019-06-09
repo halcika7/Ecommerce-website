@@ -75,15 +75,15 @@ const TopNavigation = props => {
                         <li className={c.dropdownMenuItems}>
                             <a href="/" className={c.dropdownLink + ' dropdown-link'}
                             onClick={showNotificationsMenu}>
-                                <img src={user.profilePicture} width="20" height="20" alt="" />
+                                {props.profilePicture && <img src={props.profilePicture} width="20" height="20" alt="" />}
                                 {user.username}
                             </a>
                             <div className={c.profileMenu}>
                                 <ul>
                                     <li>
-                                        <a href="/">Visit Profile</a>
+                                        {user.role.isAdmin ? <Link to={`/admindashboard/profile?id=${props.userState.id}`}>Visit Profile</Link> : <Link to={`/profile?id=${props.userState.id}`}>Visit Profile</Link>}
                                     </li>
-                                    {user.isAdmin && 
+                                    {user.role.isAdmin && 
                                     <li>
                                         <Link to="/admindashboard/dashboard">Go to Dashboard</Link>
                                     </li>}
@@ -141,6 +141,7 @@ const TopNavigation = props => {
 const mapStateToProps = state => {
     return {
         userState: state.login.User,
+        profilePicture: state.user.profilePicture,
         isAuthenticated: state.login.isAuthenticated
     }
 }

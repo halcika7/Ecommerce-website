@@ -69,6 +69,11 @@ const DataTable = props => {
 			setFunction(props.productsData, setLength);
 		}
 	}, [props.productsData]);
+	useEffect(() => {
+		if (props.ordersData) {
+			setFunction(props.ordersData, setLength);
+		}
+	}, [props.ordersData]);
 
 	const setFunction = (Data, setDataLength) => {
 		let data = [];
@@ -172,6 +177,10 @@ const DataTable = props => {
 		if (props.productsData) {
 			view = 'view-product?id=';
 			edit += 'edit-product?id=';
+		}
+		if (props.ordersData) {
+			view = 'view-order?id=';
+			edit += 'edit-order?id=';
 		}
 		return (
 			<React.Fragment>
@@ -880,6 +889,86 @@ const DataTable = props => {
 		}
 	];
 
+	const ordersColumns = [
+		{
+			dataField: '_id',
+			text: 'ID',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'userId',
+			text: 'User Id',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'address',
+			text: 'Address',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'city',
+			text: 'City',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'country',
+			text: 'Country',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'email',
+			text: 'Email',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'payed',
+			text: 'Money paid $',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'shipped',
+			text: 'Shipped',
+			filter: textFilter(),
+			align: 'center',
+			headerAlign: 'center',
+			sort: true
+		},
+		{
+			dataField: 'actions',
+			text: 'Actions',
+			formatter: buttonFormatter,
+			align: 'center',
+			headerAlign: 'center',
+			csvExport: false
+		}
+	];
+
+	const rowStyleFormat = (row, rowIndex) => ({ 
+        backgroundColor: row.shipped ? 'palegreen' : 'tomato',
+        color: row.shipped ? 'black' : 'white' 
+    });
+
 	return (
 		<div className="DataTable card-body col-12">
 			<React.Fragment>
@@ -1307,6 +1396,47 @@ const DataTable = props => {
 									noDataIndication={() => <div>No Registers available</div>}
 									wrapperClasses={containerClass}
 									style={{ minWidth: '2500px' }}
+									{...props.baseProps}
+									striped
+									hover
+									bordered={false}
+									filter={filterFactory()}
+									pagination={paginationFactory(options)}
+								/>
+							</React.Fragment>
+						)}
+					</ToolkitProvider>
+				)}
+
+				{length === false || props.loading || !props.ordersData ? null : (
+					<ToolkitProvider
+						bootstrap4
+						search
+						keyField="_id"
+						data={data}
+						columns={ordersColumns}
+						exportCSV>
+						{props => (
+							<React.Fragment>
+								<div className="row mb-20 Spans">
+									<div className="col-sm-6">
+										<ExportCSVButton {...props.csvProps}>
+											Export CSV
+										</ExportCSVButton>
+									</div>
+									<div className="col-sm-6">
+										<SearchBar {...props.searchProps} tableId="1" />
+										<ClearSearchButton
+											{...props.searchProps}
+											className="btn-sm"
+										/>
+									</div>
+								</div>
+								<BootstrapTable
+									noDataIndication={() => <div>No Registers available</div>}
+									wrapperClasses={containerClass}
+									style={{ minWidth: '2500px' }}
+									rowStyle={rowStyleFormat}
 									{...props.baseProps}
 									striped
 									hover

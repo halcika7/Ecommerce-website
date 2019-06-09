@@ -120,18 +120,6 @@ const Navbar = props => {
 									<span className="d-lg-none d-md-block">Search</span>
 								</button>
 							</div>
-							<li className="dropdown nav-item">
-								<a
-									href="/"
-									onClick={toggleDropdown}
-									className={
-										classes.dropdownToggle + ' dropdown-toggle nav-link'
-									}>
-									<div className="notification d-none d-lg-block d-xl-block" />
-									<i className="fas fa-bell" />
-									<p className="d-lg-none">Notifications</p>
-								</a>
-							</li>
 							<li className="nav-item dropdown">
 								<a
 									className="nav-link dropdown-toggle"

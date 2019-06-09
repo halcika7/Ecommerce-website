@@ -60,14 +60,11 @@ const OrderSchema = new Schema({
                 type: String,
                 required: true
             },
-            discount: {
-                type: Number,
+            name: {
+                type: String,
                 required: true
             },
-            total: {
-                type: Number,
-                required: true
-            }
+            options:{}
         }
     ],
     coupon : {
@@ -84,7 +81,19 @@ const OrderSchema = new Schema({
         value: {
             type: Number
         }
+    },
+    shipped: {
+      type: Boolean,
+      default: false
+    },
+    show: {
+      type: Boolean,
+      default: true
     }
-});
+},
+{
+  timestamps: true
+}
+);
 
 module.exports = Order = mongoose.model('orders', OrderSchema);

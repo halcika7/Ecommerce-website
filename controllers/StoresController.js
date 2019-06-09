@@ -6,18 +6,12 @@ const {addStoreValidation} = require('../validation/stores');
 exports.addStore = async (req, res) => {
     const { address, country, city, location, weekHours, satHours, email, phone, links } = JSON.parse(req.body.options);
     const { errors, isValid } = await addStoreValidation(req.body, req.file);
-	if (!isValid) {
-		return res.json(errors);
-    }
+	if (!isValid) { return res.json(errors); }
 
     try {
-
         const addStore = new StoresModel({ address,picture: req.file.path, country, city, location, weekHours, saturdayHours: satHours, email, phone, links });
-
         await addStore.save();
-
         return res.json({ successMessage: 'Store added' });
-
     }catch (err) {
         if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		return res.json({ failedMessage: err.message });

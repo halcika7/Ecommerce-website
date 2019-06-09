@@ -18,6 +18,7 @@ const TableContainer = props => {
   const [allTerms, setAllTerms] = useState(false);
   const [allStores, setAllStores] = useState(false);
   const [allProducts, setAllProducts] = useState(false);
+  const [allOrders, setAllOrders] = useState(false);
 
   const [failedMessage, setFailedMessage] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
@@ -69,7 +70,11 @@ const TableContainer = props => {
       setAllProducts(props.products.products);
       props.getAllProducts();
     }
-  }, [props.Brands,props.Roles,props.Permissions,props.Users,props.Categories,props.Icons, props.Coupons, props.Answers, props.Terms,props.Stores,props.Products]);
+    if(props.Orders === true) {
+      setAllOrders(props.orders.orders);
+      props.getAllOrders();
+    }
+  }, [props.Brands,props.Roles,props.Permissions,props.Users,props.Categories,props.Icons, props.Coupons, props.Answers, props.Terms,props.Stores,props.Products, props.Orders]);
 
   useEffect(() => {
     if (props.Brands === true) {
@@ -105,7 +110,10 @@ const TableContainer = props => {
     if(props.Products === true) {
       setAllProducts(props.products.products);
     }
-  }, [props.brand.allBrands,props.permissions.allPermissions,props.roles.Roles,props.users.Users,props.categories.allCategories,props.icons.allCategoryIcons,props.coupon.coupons,props.answers.answers,props.terms.terms,props.stores.stores,props.products.products]);
+    if(props.Orders === true) {
+      setAllOrders(props.orders.orders);
+    }
+  }, [props.brand.allBrands,props.permissions.allPermissions,props.roles.Roles,props.users.Users,props.categories.allCategories,props.icons.allCategoryIcons,props.coupon.coupons,props.answers.answers,props.terms.terms,props.stores.stores,props.products.products, props.orders.orders]);
 
   useEffect(() => {
     if(props.Brands === true) {
@@ -141,7 +149,10 @@ const TableContainer = props => {
     if(props.Products === true) {
       setFailedMessage(props.products.failedMessage);
     }
-  }, [props.brand.failedMessage,props.permissions.failedMessage,props.roles.failedMessage,props.users.failedMessage,props.categories.failedMessage,props.icons.failedMessage, props.coupon.failedMessage,props.answers.failedMessage,props.terms.failedMessage,props.stores.failedMessage,props.products.failedMessage]);
+    if(props.Orders === true) {
+      setFailedMessage(props.orders.failedMessage);
+    }
+  }, [props.brand.failedMessage,props.permissions.failedMessage,props.roles.failedMessage,props.users.failedMessage,props.categories.failedMessage,props.icons.failedMessage, props.coupon.failedMessage,props.answers.failedMessage,props.terms.failedMessage,props.stores.failedMessage,props.products.failedMessage, props.orders.failedMessage]);
 
   useEffect(() => {
     if(props.Brands === true) {
@@ -177,7 +188,10 @@ const TableContainer = props => {
     if(props.Products === true) {
       setSuccessMessage(props.products.successMessage);
     }
-  }, [props.brand.successMessage,props.permissions.successMessage,props.roles.successMessage,props.users.successMessage,props.categories.successMessage,props.icons.successMessage, props.coupon.successMessage,props.answers.successMessage,props.terms.successMessage,props.stores.successMessage,props.products.successMessage]);
+    if(props.Orders === true) {
+      setSuccessMessage(props.orders.successMessage);
+    }
+  }, [props.brand.successMessage,props.permissions.successMessage,props.roles.successMessage,props.users.successMessage,props.categories.successMessage,props.icons.successMessage, props.coupon.successMessage,props.answers.successMessage,props.terms.successMessage,props.stores.successMessage,props.products.successMessage, props.orders.successMessage]);
 
   useEffect(() => {
     if(props.Brands === true) {
@@ -213,7 +227,10 @@ const TableContainer = props => {
     if(props.Products === true) {
       setLoading(props.products.loading);
     }
-  }, [props.brand.loading,props.permissions.loading,props.roles.loading,props.users.loading,props.categories.loading,props.icons.loading,props.coupon.loading,props.answers.loading,props.terms.loading,props.stores.loading,props.products.loading]);
+    if(props.Orders === true) {
+      setLoading(props.orders.loading);
+    }
+  }, [props.brand.loading,props.permissions.loading,props.roles.loading,props.users.loading,props.categories.loading,props.icons.loading,props.coupon.loading,props.answers.loading,props.terms.loading,props.stores.loading,props.products.loading, props.orders.loading]);
 
   const singleDelete = (e, id, name=null) => {
     e.preventDefault();
@@ -249,6 +266,9 @@ const TableContainer = props => {
     }
     if (props.Products) {
       props.deleteProduct(id, name);
+    }
+    if (props.Orders) {
+      props.deleteOrder(id);
     }
     setDeleteManyRecords([]);
   };
@@ -302,6 +322,7 @@ const TableContainer = props => {
                 {props.Terms && <h4>All Terms</h4>}
                 {props.Stores && <h4>All Stores</h4>}
                 {props.Products && <h4>All Products</h4>}
+                {props.Orders && <h4>All Orders</h4>}
               </div>
               {(deleteManyRecords.length > 0 && !props.Users) && (
                 <div className="col-12 mt-20 pl-125">
@@ -402,6 +423,13 @@ const TableContainer = props => {
                   loading={loading}
                 />
               )}
+              {props.Orders && (
+                <DataTable
+                  ordersData={allOrders}
+                  click={singleDelete}
+                  loading={loading}
+                />
+              )}
             </div>
           )}
         </div>
@@ -422,7 +450,8 @@ const mapStateToProps = state => {
     answers: state.answers,
     terms: state.terms,
     stores: state.stores,
-    products: state.product
+    products: state.product,
+    orders: state.orders
   };
 };
 
@@ -454,7 +483,9 @@ const mapDispatchToProps = dispatch => {
     getStores: () => dispatch(actions.getStores()),
     deleteStore: id => dispatch(actions.deleteStore(id)),
     getAllProducts: () => dispatch(actions.getAllProducts()),
-    deleteProduct: (id, name) => dispatch(actions.deleteProduct(id, name))
+    deleteProduct: (id, name) => dispatch(actions.deleteProduct(id, name)),
+    getAllOrders: () => dispatch(actions.getAllOrders()),
+    deleteOrder: (id) => dispatch(actions.deleteOrder(id))
   };
 };
 

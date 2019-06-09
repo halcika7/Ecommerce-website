@@ -6,7 +6,7 @@ const secret = require('../config/keys').secretOrKey;
 // dodana funkcionalnost kupona
 exports.addToCart = async (req, res) => {
     const sku = req.query.sku;
-    const token = req.query.cartItems !== 'null' ? req.query.cartItems.split(' ')[1].slice(0,-3) : '';
+    const token = req.query.cartItems !== 'null' ? req.query.cartItems.split(' ')[1] : '';
     const decoded = jwt.decode(token);
     const cartItems = decoded ? decoded.items : [];
     const couponQuery = decoded ? decoded.coupon : {};
@@ -62,7 +62,7 @@ exports.addToCart = async (req, res) => {
 exports.deleteFromCart = async (req, res) => {
     try {
         const sku = req.query.sku;
-        const token = req.query.cartItems !== 'null' ? req.query.cartItems.split(' ')[1].slice(0,-3) : '';
+        const token = req.query.cartItems !== 'null' ? req.query.cartItems.split(' ')[1] : '';
         const decoded = jwt.decode(token);
         const cartItems = decoded ? decoded.items : [];
         const findIndex = cartItems.findIndex(item => item.sku === sku);
@@ -97,7 +97,7 @@ exports.deleteFromCart = async (req, res) => {
 exports.updateCartItem = async (req, res) => {
     const sku = req.query.sku;
     const value = JSON.parse(req.query.value);
-    const token = req.query.cartItems !== 'null' ? req.query.cartItems.split(' ')[1].slice(0,-3) : '';
+    const token = req.query.cartItems !== 'null' ? req.query.cartItems.split(' ')[1] : '';
     const decoded = jwt.decode(token);
     const cartItems = decoded ? decoded.items : [];
     const couponQuery = decoded ? decoded.coupon : {};
@@ -146,8 +146,8 @@ exports.updateCartItem = async (req, res) => {
 
 exports.moveToSaveForLater = async (req, res) => {
     const sku = req.query.sku;
-    const token = req.query.cartItems !== 'null' ? req.query.cartItems.split(' ')[1].slice(0,-3) : '';
-    const tokenSave = req.query.saveForLaterItems !== "null" ? req.query.saveForLaterItems.split(' ')[1].slice(0,-3) : '';
+    const token = req.query.cartItems !== 'null' ? req.query.cartItems.split(' ')[1] : '';
+    const tokenSave = req.query.saveForLaterItems !== "null" ? req.query.saveForLaterItems.split(' ')[1] : '';
     const decodedCartItems = jwt.decode(token);
     const decodedSaveForLaterItems = jwt.decode(tokenSave);
     const cartItems = decodedCartItems ? decodedCartItems.items : [];
@@ -190,8 +190,8 @@ exports.moveToSaveForLater = async (req, res) => {
 
 exports.moveToCart = async (req, res) => {
     const sku = req.query.sku;
-    const token = req.query.cartItems !== 'null' ? req.query.cartItems.split(' ')[1].slice(0,-3) : '';
-    const tokenSave = req.query.saveForLaterItems !== "null" ? req.query.saveForLaterItems.split(' ')[1].slice(0,-3) : '';
+    const token = req.query.cartItems !== 'null' ? req.query.cartItems.split(' ')[1] : '';
+    const tokenSave = req.query.saveForLaterItems !== "null" ? req.query.saveForLaterItems.split(' ')[1] : '';
     const decodedCartItems = jwt.decode(token);
     const decodedSaveForLaterItems = jwt.decode(tokenSave);
     const cartItems = decodedCartItems ? decodedCartItems.items : [];
@@ -233,7 +233,7 @@ exports.moveToCart = async (req, res) => {
 
 exports.deleteFromSavedForLater = async (req, res) => {
     const sku = req.query.sku;
-    const tokenSave = req.query.saveForLaterItems !== "null" ? req.query.saveForLaterItems.split(' ')[1].slice(0,-3) : '';
+    const tokenSave = req.query.saveForLaterItems !== "null" ? req.query.saveForLaterItems.split(' ')[1] : '';
     const decodedSaveForLaterItems = jwt.decode(tokenSave);
     const savedForLaterItems = decodedSaveForLaterItems ? decodedSaveForLaterItems.savedForLater : [];
     const findIndexSave = savedForLaterItems.findIndex(item => item.sku === sku);
@@ -253,7 +253,7 @@ exports.deleteFromSavedForLater = async (req, res) => {
 }
 
 exports.applyCoupon = async (req, res) => {
-    const token = req.query.cartItems !== 'null' ? req.query.cartItems.split(' ')[1].slice(0,-3) : '';
+    const token = req.query.cartItems !== 'null' ? req.query.cartItems.split(' ')[1] : '';
     const decoded = jwt.decode(token);
     const cartItems = decoded ? decoded.items : [];
 
@@ -283,7 +283,7 @@ exports.applyCoupon = async (req, res) => {
 }
 
 exports.removeCoupon = async (req, res) => {
-    const token = req.query.cartItems !== 'null' ? req.query.cartItems.split(' ')[1].slice(0,-3) : '';
+    const token = req.query.cartItems !== 'null' ? req.query.cartItems.split(' ')[1] : '';
     const decoded = jwt.decode(token);
     const cartItems = decoded ? decoded.items : [];
 

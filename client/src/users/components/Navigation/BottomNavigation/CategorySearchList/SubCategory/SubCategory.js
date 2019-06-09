@@ -1,28 +1,18 @@
-import React from 'react';
-import SubSubCategory from './SubSubCategory/SubSubCategory';
+import React, { useState } from 'react';
+import SubSubCategory from './SubSubCategory';
 
 import c from '../../../Navigation.module.css';
 
-const subCategory = (props) => {
-    let link = <a href={props.categ.link}  target="_self" rel="noopener">{props.categ.name}</a>;
-    if (props.categ.subCategories !== undefined) {
-        const subsubcateg = props.categ.subCategories.map(cat => {
-            return <SubSubCategory categ={cat} key={cat.index}/>;
-        });
-        link = (
-            <React.Fragment>
-                <span className={c.dropdownNavCategoryLinks}><i className="fas fa-angle-right"></i>{props.categ.name} ({props.categ.subCategories.length})</span>
-                <div className={c.categoryNavSearchList + " " +c.sub}>
-                    <ul className={c.catChild}>
-                        {subsubcateg}
-                    </ul>
-                </div>
-            </React.Fragment>
-        );
-    }
+const subCategory = ({ category }) => {
+    const [showCategories, setShowCategories] = useState(false);
     return (
-        <li key={props.categ.index}>
-            {link}
+        <li className="dropdownLi d-block" >
+            <span className={c.dropdownNavCategoryLinks} onClick={e => setShowCategories(!showCategories)}><i className="fas fa-angle-right"></i>{category.name}</span>
+            <div className={c.categoryNavSearchList + " " +c.sub} style={showCategories ? { height: '100%' } : { height: '0' }}>
+                {category.subcategories.map((categ, index) =>
+                    <SubSubCategory categ={categ} key={index} categoryName={category.name} />
+                )}
+            </div>
         </li>
     );
 }

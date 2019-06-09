@@ -118,33 +118,22 @@ exports.loginUser = async (req, res) => {
 
 exports.resetPassword = async (req, res) => {
 	const { errors, isValid } = validatePasswords(req.body);
-	if (!isValid) {
-		return res.json(errors);
-	}
+	if (!isValid) { return res.json(errors); }
 	try {
 		const user = await UserModel.findOne({ email: req.body.email });
+		if(!user) { return res.json({ failedMessage: 'User not found!' }) }
 		const expiresIn = new Date(user.resetPassword.expiresIn).getTime();
 		if (expiresIn < Date.now()) {
-			errors.errors.expiredToken =
-				'Token has expired please make request again !!';
+			errors.errors.expiredToken = 'Token has expired please make request again !!';
 			return res.json(errors);
 		}
 		const byCrypt = await bcrypt.compare(req.body.password, user.password);
-		if (byCrypt) {
-			return res.json({
-				successMessage: 'Provided password is already in use'
-			});
+		if (byCrypt) { return res.json({ failedMessage: 'Provided password is already in use'});
 		}
 		const hash = await bcrypt.hash(req.body.password, 10);
-		await UserModel.updateOne(
-			{ email: req.body.email },
-			{ resetPassword: {}, password: hash }
-		);
-		return res.json({
-			successMessage: 'Password has bees successfuly changed'
-		});
+		await UserModel.updateOne({ email: req.body.email },{ resetPassword: {}, password: hash });
+		return res.json({ successMessage: 'Password has bees successfuly changed' });
 	} catch (err) {
-		console.log(err);
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		else if(err.message) return res.json({ failedMessage: err.message });
 		else return res.json({ failedMessage: err });
@@ -153,14 +142,18 @@ exports.resetPassword = async (req, res) => {
 
 exports.updateProfilePicture = async (req, res) => {
 	try {
-		if (!req.file) {
-			return res.json({ failedMessage: 'Attached file is not an image.' });
-		}
+		if (!req.file && !req.body.file) { return res.json({ failedMessage: 'Attached file is not an image.' });}
 		const user = await UserModel.findOne({ username: req.body.username });
-		if (user.profilePicture === req.file.path) {
-			return res.json({
-				failedMessage: 'Selected picture is same as the one u already use !'
-			});
+		if(!user) { return res.json({ failedMessage: 'User not found' }) }
+		if(req.body.file) {
+			if (user.profilePicture === req.body.file.path) {
+				return res.json({ failedMessage: 'Selected picture is same as the one u already use !'});
+			}
+		}
+		if(req.file) {
+			if (user.profilePicture === req.file.path) {
+				return res.json({ failedMessage: 'Selected picture is same as the one u already use !'});
+			}
 		}
 		if (user.profilePicture !== '') {
 			await fs.remove(`${user.profilePicture}`);
@@ -185,6 +178,7 @@ exports.getProfilePicture = async (req, res) => {
 		const user = await UserModel.findOne({
 			_id: new ObjectId(req.query.id)
 		}).select('profilePicture -_id');
+		if(!user) { return res.json({ failedMessage: 'User not found' }) }
 		return res.json({ profilePicture: user.profilePicture });
 	} catch (err) {
 		return res.json({ failedMessage: err.message });
@@ -192,12 +186,12 @@ exports.getProfilePicture = async (req, res) => {
 };
 
 exports.updatePassword = async (req, res) => {
+	console.log(req.body)
 	const { errors, isValid } = validatePasswords(req.body);
-	if (!isValid) {
-		return res.json(errors);
-	}
+	if (!isValid) { return res.json(errors); }
 	try {
 		const user = await UserModel.findOne({ username: req.body.username });
+		if(!user) { return res.json({ failedMessage: 'User not found!' }) }
 		const byCrypt = await bcrypt.compare(req.body.password, user.password);
 		if (byCrypt) {
 			return res.json({ failedMessage: 'Provided password is already in use' });
@@ -217,18 +211,12 @@ exports.updatePassword = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
 	const { errors, isValid } = addUserValidation(req.body);
-	if (!isValid) {
-		return res.json({ failedMessage: { ...errors.errors } });
-	}
+	if (!isValid) { return res.json({ failedMessage: { ...errors.errors } }); }
 	try {
-		const userId = req.body.id,
-			roleId = req.body.role,
-			userInfo =
-				Object.keys(req.body.userInfo).length > 0 ? req.body.userInfo : null;
+		const userId = req.body.id, roleId = req.body.role,
+			userInfo = Object.keys(req.body.userInfo).length > 0 ? req.body.userInfo : null;
 		const findUser = await UserModel.findOne({ _id: ObjectId(userId) });
-		const findByNameOrMail = await UserModel.findOne({
-			$or: [{ email: req.body.email }, { username: req.body.username }]
-		});
+		const findByNameOrMail = await UserModel.findOne({ $or: [{ email: req.body.email }, { username: req.body.username }]});
 		if (
 			findByNameOrMail &&
 			findUser.email !== findByNameOrMail.email &&
@@ -312,9 +300,7 @@ exports.deleteUser = async (req, res) => {
 
 exports.addNewUser = async (req, res) => {
 	const { errors, isValid } = addUserValidation(req.body);
-	if (!isValid) {
-		return res.json(errors);
-	}
+	if (!isValid) { return res.json(errors); }
 
 	try {
 		const user = await UserModel.find({

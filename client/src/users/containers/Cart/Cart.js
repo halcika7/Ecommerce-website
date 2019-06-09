@@ -75,15 +75,19 @@ const Cart = props => {
                                                             <img src={item.featuredPicture} alt={item.name} />
                                                         </Link>
                                                     </div>
-                                                    <div className={c.name}><Link to={`/product?id=${item.id}`}>{item.name}</Link></div>
+                                                    <div className={(props.productErrors.length > 0 && props.productErrors[index].error) ? 'invalid ' + c.name : c.name}><Link to={`/product?id=${item.id}`}>{item.name}</Link></div>
+                                                    {props.productErrors.length > 0 && <div className='invalid-feedback'>{ props.productErrors[index].error }</div>}
                                                 </div>
                                             </td>
                                             <td>{item.sku}</td>
                                             <td>
                                                 {item.display && <p>{item.display}''</p>}
                                                 {item.console && <p>{item.console}</p>}
-                                                {item.color && 
+                                                {(item.color && item.color.toLowerCase() !== 'white') && 
                                                     <p style={{ backgroundColor: item.color.toLowerCase(), color: 'white', mixBlendMode: 'difference', padding: '5px', borderRadius: '5px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{item.color}</p>
+                                                }
+                                                {(item.color && item.color.toLowerCase() === 'white') && 
+                                                    <p style={{ backgroundColor: item.color.toLowerCase(), color: 'black', padding: '5px', borderRadius: '5px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{item.color}</p>
                                                 }
                                             </td>
                                             <td>
@@ -116,7 +120,7 @@ const Cart = props => {
                             </table> :
                             <h1>No Products in Cart</h1>
                         }
-                        {(Object.keys(props.cart.coupon).length === 0) && <Coupon setCoupon={setCoupon} applyCoupon={applyCoupon} />}
+                        {(Object.keys(props.cart.coupon).length === 0) && <Coupon setCoupon={setCoupon} applyCoupon={applyCoupon}/>}
                     </div>
                     <div className={c.collg4 + " col-lg-4"}>
                         <div className={c.cart}>
@@ -127,13 +131,14 @@ const Cart = props => {
                                         <p>Subtotal:</p>
                                         <p className={c.pricesubtotal}>${props.cart.totals.subtotalBefore}</p>
                                     </div>
-                                    <div className={c.couponcode}>
+                                    <div className={Object.keys(props.couponErrors).length > 0 ? 'invalid ' + c.couponcode: c.couponcode}>
                                         <div>
                                             <p>Code({props.cart.coupon.code}):</p>
                                             <button onClick={removeCoupon} className="btn btn-sm btn-danger" data-toggle="data-tooltip" data-tooltip="Remove Coupon">Remove</button>
                                         </div>
                                         <p className={c.minusmoney}>-{(props.cart.coupon.type === 'percent') ? props.cart.coupon.value+'%' : '$'+props.cart.coupon.value}</p>
                                     </div>
+                                    {Object.keys(props.couponErrors).length > 0 && <div className='invalid-feedback'>{ props.couponErrors }</div>}
                                     <hr/>
                                 </React.Fragment>
                             }
@@ -224,7 +229,9 @@ const Cart = props => {
 
 const mapStateToProps = state => {
     return {
-        cart: state.cart
+        cart: state.cart,
+        productErrors: state.cart.errors.products,
+        couponErrors: state.cart.errors.coupon
     }
 }
 

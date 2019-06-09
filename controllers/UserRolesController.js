@@ -6,9 +6,7 @@ const ObjectId = require("mongoose").Types.ObjectId;
 exports.addUserRole = async (req, res) => {
   try {
     const { failedMessage, isValid } = validateRole(req.body.name);
-    if (!isValid) {
-      return res.json(failedMessage);
-    }
+    if (!isValid) { return res.json(failedMessage); }
     const newRole = new UserRolesModel({
       name: req.body.name,
       isAdmin: req.body.isAdmin,
@@ -114,11 +112,12 @@ exports.getRole = async (req, res) => {
     );
     if (!response) {
       return res.json({
-        error: `Role with id = ${req.body.id} was not found !`
+        failedMessage: `Role with provided id was not found !`
       });
     }
     return res.json(response);
   } catch (err) {
+    console.log(err);
     return res.json({ failedMessage: true });
   }
 };

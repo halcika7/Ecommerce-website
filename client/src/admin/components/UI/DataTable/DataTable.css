@@ -244,7 +244,7 @@
 }
 
 .Spans.Products tbody tr td,
-.Spans.Products thead tr th{
+.Spans.Products thead tr th {
     width: 100px !important;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -252,7 +252,7 @@
 }
 
 .Spans.Products tbody tr td:last-child,
-.Spans.Products thead tr th:last-child{
+.Spans.Products thead tr th:last-child {
     width: 200px !important;
 }
 

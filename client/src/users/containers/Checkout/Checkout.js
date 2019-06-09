@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
-import {
-  Elements,
-  StripeProvider
-} from 'react-stripe-elements'
+import { Elements, StripeProvider } from 'react-stripe-elements'
 
 import ContainerIcons from '../../components/UI/ContainerIcons/ContainerIcons';
-
-import c from './Checkout.module.css';
 import StripeComponent from './StripeComponent';
 
 const Checkout = props => {
@@ -21,8 +16,8 @@ const Checkout = props => {
     }, []);
 
     const getAllCountries = async () => {
-        const response = await axios.get('https://restcountries.eu/rest/v2/all?fields=name');
-        const newCountries = response.data.map(country => country.name);
+        const response = await axios.get('https://restcountries.eu/rest/v2/all?fields=name;alpha2Code');
+        const newCountries = response.data.map(country => ({name: country.name, code: country.alpha2Code}));
         setCountries(newCountries);
     }
 
@@ -42,7 +37,7 @@ const Checkout = props => {
 
             <StripeProvider apiKey={process.env.REACT_APP_STRIPE_KEY}>
                 <Elements>
-                    <StripeComponent  countries={countries}/>
+                    <StripeComponent callBack={props.history.push} countries={countries}/>
                 </Elements>
             </StripeProvider>
 

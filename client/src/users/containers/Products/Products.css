@@ -128,6 +128,15 @@ span.dropdown-category-links:hover{
     color: rgb(234, 120, 50) !important;
 }
 
+.col-lg-9.col-md-8 > .col-12.d-none.d-md-block .owl-carousel .product .left-part h1 > a{
+    font-size: 1.2rem !important;
+}
+
+.col-lg-9.col-md-8 > .col-12.d-none.d-md-block .owl-carousel .product .right-part img{
+    max-height: 150px;
+    max-width: 150px;
+}
+
 .carousel-control-next.products, 
 .carousel-control-prev.products{
     display: none !important;

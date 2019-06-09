@@ -12,7 +12,6 @@ const UploadPicture = props => {
 
 	useEffect(() => {
 		if(props.predefinedPictureNotFile) {
-			console.log('not file')
 			setUrl({imgSrc: "/"+props.predefinedPictureNotFile})
 		}
 	}, [props.predefinedPictureNotFile]);
@@ -20,6 +19,7 @@ const UploadPicture = props => {
 	const readURL = e => {
 		e.persist();
 		const file = e.target.files[0];
+		console.log(file)
 		const name = e.target.name;
 		if(props.setPredefinedNotFile) {
 			props.setPredefinedNotFile(false);
@@ -52,8 +52,6 @@ const UploadPicture = props => {
 			}, 4000);
 		};
 	}
-
-	console.log(url);
 
 	return (
 		<React.Fragment>

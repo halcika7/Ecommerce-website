@@ -45,6 +45,7 @@ exports.getAllAnswers = async (req, res) => {
 exports.deleteAnswer = async (req, res) => {
 	try {
 		const deleteAnswer = await AnswerModel.deleteOne({ _id: new ObjectId(req.query.id) });
+		if(deleteAnswer.n === 0) { return res.json({ failedMessage: 'Answer not deleted' }) }
 
 		const answers = await AnswerModel.find({});
 		
@@ -56,9 +57,9 @@ exports.deleteAnswer = async (req, res) => {
 }
 
 exports.updateAnswer = async (req, res) => {
-	const id = req.query.id;
-	const { question, answer } = JSON.parse(req.query.object);
 	try {
+		const id = req.query.id;
+		const { question, answer } = JSON.parse(req.query.object);
 		const findAnswer = await AnswerModel.findOne({ _id: {$ne: new ObjectId(id)}, question });
 		if(findAnswer) {
 			return res.json({failedMessage: 'Question already answered !'});

@@ -188,7 +188,7 @@ const Product = props => {
         (change === 'all') && setFirstIndex(0); 
         (change === 'all'|| change === 'choosenLabeledBy') && setNumberInStock(0); 
         (change === 'all'|| change === 'choosenLabeledBy') && setInStock(false);
-        (change === 'all' || addedToCart) && setSKU('');
+        (change === 'all' || addedToCart || change === 'choosenLabeledBy' || change === 'choosenLabeledByDL' || change === 'choosenSizeDL' || change === 'choosenGraphics' || change === 'choosenSSD' || change === 'choosenHDDD' || change === 'choosenWithMouse' || change === 'choosenWithDisplay' || change === 'choosenThreeD') && setSKU('');
     }
                         
     const newSizesArray = (index, property) => [...new Set(product.options[index].options.filter(option => option.quantity > 0 && option ).map(opt => opt[property]))].sort((a, b) => a - b);

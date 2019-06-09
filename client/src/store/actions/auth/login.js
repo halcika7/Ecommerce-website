@@ -1,7 +1,6 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
-import setAuthToken from '../../../helpers/setAuthToken';
 import { getLoggedInUserPhoto } from '../index';
 
 export const login = UserObj => async dispatch => {
@@ -29,7 +28,6 @@ export const login = UserObj => async dispatch => {
 
 		localStorage.setItem('jwtToken', token);
 		// Set Token to Auth Header
-		setAuthToken(token);
 		// decode token
 		const decoded = jwt_decode(token);
 
@@ -49,7 +47,6 @@ export const setCurrentUser = (decoded, rememberMe, message = false) => {
 
 export const logoutUser = (callBack = null )=> dispatch => {
 	localStorage.removeItem('jwtToken');
-	setAuthToken(false);
 
 	dispatch({
 		type: actionTypes.LOGOUT,

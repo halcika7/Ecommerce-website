@@ -1,0 +1,101 @@
+.wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    min-height: 100vh;
+    z-index: 2000;
+    font-family: 'Source Code Pro', monospace !important;
+}
+
+.backdrop {
+    position: fixed;
+    right: 0;
+    left: 0;
+    min-height: 100vh;
+    width: 100%;
+    z-index: 2001;
+    background-color: rgba(0, 0, 0, 0.297);
+}
+
+.modal {
+    height: 80vh;
+    width: 1000px;
+    max-width: 100%;
+    margin: auto;
+    background-color: aliceblue;
+    z-index: 2100;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 10px;
+}
+
+.heading {
+    font-size: 2em !important;
+    margin: 10px 0;
+}
+
+.col {
+    border-bottom: 1px solid #d5d5d5d5;
+    padding-bottom: 15px;
+}
+
+.close {
+    font-size: 30px;
+    position: absolute;
+    top: 15px;
+    right: 30px;
+}
+
+.close > i {
+    cursor: pointer;
+}
+
+.flexRow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.flexProduct {
+    width: 50%;
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.productName {
+    max-width: 50%;
+}
+
+.productName > img {
+    width: 100%;
+    height: auto;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+@media (max-width: 500px) {
+    .modal h4 {
+        font-size: 1em;
+    }
+    .heading{
+        font-size: 1.2em !important;
+    }
+    .close {
+        top: 10px;
+        right: 15px;
+    }
+}
+
+@media (max-width: 750px) {
+    .flexProduct {
+        width: 1000%;
+    }
+}

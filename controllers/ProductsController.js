@@ -243,7 +243,6 @@ exports.deleteProduct = async (req, res) => {
 		return res.json({ successMessage: 'Product Deleted', products });
 
 	} catch(err) {
-		console.log(err);
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		return res.json({ failedMessage: err.message });
 	}

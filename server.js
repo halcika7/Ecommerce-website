@@ -23,7 +23,10 @@ const answers = require("./routes/answers/answers");
 const terms = require("./routes/answers/terms");
 const cart = require("./routes/cart/cart");
 const coupon = require("./routes/cart/coupon");
+const checkout = require("./routes/cart/checkout");
 const stores = require("./routes/stores/stores");
+const orders = require("./routes/orders/orders");
+const dashboard = require("./routes/dashboard/dashboard");
 // cron jobs
 const dailyWeeklyOffer = require('./cronJobs/product').dailyWeeklyOffer;
 
@@ -51,12 +54,15 @@ app.use("/answers/", answers);
 app.use("/terms/", terms);
 app.use("/cart/", cart);
 app.use("/cart/coupon/", coupon);
+app.use("/cart/checkout/", checkout);
 app.use("/stores/", stores);
+app.use("/order/", orders);
+app.use("/dashboard/", dashboard);
 
 const port = process.env.PORT || 5000;
 
 mongoose
-  .connect(db, { useNewUrlParser: true, useCreateIndex: true })
+  .connect(db, { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false })
   .then(() => {console.log("MongoDB connected !")})
   .catch(err => console.log(err));
   

@@ -1,60 +1,56 @@
+const OrderModel = require('../models/Order');
+const UserModel = require('../models/User');
 const ProductModel = require('../models/Product');
-const CouponModel = require('../models/Coupon');
-const jwt = require('jsonwebtoken');
-const secret = require('../config/keys').secretOrKey;
+const ObjectId = require("mongoose").Types.ObjectId;
+const stripeKey = require('../config/keys').stripeSecretKey;
+const validatePayment = require('../validation/payment');
+const stripe = require('stripe')(stripeKey);
 
 // dodana funkcionalnost kupona
 exports.payment = async (req, res) => {
-    const sku = req.query.sku;
-    const token = req.query.cartItems !== 'null' ? req.query.cartItems.split(' ')[1].slice(0,-3) : '';
-    const decoded = jwt.decode(token);
-    const cartItems = decoded ? decoded.items : [];
-    const couponQuery = decoded ? decoded.coupon : {};
-    const findIndex = cartItems.findIndex(item => item.sku === sku);
-
-    if(findIndex !== -1) { return res.json({ failedMessage: 'Item already in cart' }); }
-
-	try {
-        const checkCoupon = await checkCouponObj(couponQuery);
-		const findSkuOption = await ProductModel.aggregate([
-			{$match: { 'options.options.sku': sku, 'options.options.quantity': { $gt: 0 } }},
-			{$unwind: '$options'},
-			{$unwind: '$options.options'},
-			{$match: { 'options.options.sku': sku, 'options.options.quantity': { $gt: 0 } }},
-			{$unwind: '$options'},
-			{$unwind: '$options.options'},
-			{$project: { _id:1, name: 1, price: 1, 'options.options':1, 'options.featuredPicture':1, 'options.color':1, 'options.console': 1, 'options.display': 1 }}
-        ]);
-
-		const product = {...findSkuOption.map(product => ({ ...product, ...product.options, sku, price: product.price, name: product.name, quantity: 1 }))[0]}
-        product.aditionalPrice = product.options.aditionalPrice;
-        product.discount = product.options.discount;
-        product.total =  product.discount > 0 ? (product.price + product.aditionalPrice) - ( (product.price + product.aditionalPrice) * (product.discount / 100)) : (product.price + product.aditionalPrice);
-        product.quantity = 1;
-        delete product.options.aditionalPrice;
-        delete product.options.discount;
-        delete product.options.quantity;
-        delete product.options.sku;
-
-        cartItems.push(product);
-
-        const subtotalBefore = +(Math.round((cartItems.reduce((acc, curr) => acc + curr.total, 0)) + "e+2")  + "e-2");
-        const cartSubtotal = (checkCoupon && checkCoupon.type === 'percent') ? 
-            cartItems.reduce((acc, curr) => acc + curr.total, 0) - (cartItems.reduce((acc, curr) => acc + curr.total, 0) * (checkCoupon.value/100)) :
-            (checkCoupon && checkCoupon.type === 'value') ? cartItems.reduce((acc, curr) => acc + curr.total, 0) - checkCoupon.value :
-            cartItems.reduce((acc, curr) => acc + curr.total, 0);
-        const tax = +(Math.round((cartSubtotal * 0.17) + "e+2")  + "e-2");
-        const cartTotal = +(Math.round((cartSubtotal + tax) + "e+2")  + "e-2");
-
-        const coupon = checkCoupon ? {...checkCoupon} : {};
-
-        const cartPrice = {subtotalBefore, subtotal: +(Math.round((cartSubtotal) + "e+2")  + "e-2"), total: cartTotal, tax };
-
-        const jwtToken = await jwt.sign({items: cartItems, cartPrice, coupon}, secret, null);
-
-        return res.json({ token: 'Bearer ' + jwtToken, successMessage: 'Item added to cart' });
-	} catch (err) {
+    if(!req.body.cart) { return res.json({ failedMessage: 'No items in cart' }); }
+    const { errors, items, userData, coupon, cartPrice, tokenId, isValid } = await validatePayment(req.body);
+    if (!isValid) { return res.json(errors); }
+    try {
+        const findUser = await UserModel.findOne({ _id: ObjectId(userData.userId) });
+        if(!findUser) { return res.json({ failedMessage: 'We could not find user...' }) }
+        const makeCharge = await stripe.charges.create({
+            amount: cartPrice.total * 100,
+            currency: 'usd',
+            source: tokenId,
+            description: 'Successfull order'
+        });
+        items.forEach(async item => {
+            try {
+                const quantity = item.quantity;
+                await ProductModel.findOneAndUpdate({ "options.options.sku": item.sku }, 
+                    {$inc: { numberOfsales: quantity,"options.$.options.$[option].quantity": -quantity}},
+                    { arrayFilters: [ { 'option.sku': item.sku } ] });
+            } catch (err) {
+                console.log('err',err);
+            }
+        })
+        const orderedItems = items.map(item => {
+            const product = { sku: item.sku, name: item.name, picture: item.featuredPicture, quantity: item.quantity, options: { 
+                    ...item.options,
+                    color: item.color ? item.color : null,
+                    display: item.display ? item.display : null,
+                    console: item.console ? item.console : null,
+                }
+            }
+            !item.color && delete product.options.color;
+            !item.display && delete product.options.display;
+            !item.console && delete product.options.console;
+            return product;
+        });
+        const couponApplied = Object.keys(coupon).length > 0 ? { applied: true, code: coupon.code, value: coupon.value, couponType: coupon.type } : { applied: false };
+        const newOrder = new OrderModel({
+            userId: userData.userId, firstName: userData.firstName, lastName: userData.lastName, email: userData.email, telephone: userData.telephone, country: userData.country, address: userData.address, city: userData.city, zip: userData.zip, orderNotes: userData.notes, payed: cartPrice.total, coupon: couponApplied, products: orderedItems
+        });
+        await newOrder.save();
+        return res.json({ successMessage: 'Successfull order !!' });
+    }catch (err) {
         if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		return res.json({ failedMessage: err.message });
-	}
+    }
 }

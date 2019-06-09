@@ -1,0 +1,375 @@
+.container.profile{
+    margin-bottom: 120px;
+}
+
+.container.profile .row .col-12.col-md-3 > ul > li{
+    position: relative;
+    width: 100%;
+}
+
+.container.profile .row .col-12.col-md-3 > ul > li > a{
+    position: relative;
+    width: 100%;
+    border-radius: 0 !important;
+    color: rgb(234, 120, 50) !important;
+    transition: all .3s ease-in-out;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.container.profile .row .col-12.col-md-3 > ul > li > a > span{
+    margin-left: auto;
+    padding: 0 10px;
+    border: 2px solid rgb(234, 120, 50);
+    font-weight: bold;
+}
+
+.container.profile .row .col-12.col-md-3 > ul > li > a.active,
+.container.profile .row .col-12.col-md-3 > ul > li > a:hover{
+    color: #fff !important;
+    background-color: #2d2d2d !important;
+}
+
+.profile-picture{
+    padding: 15px 0 15px 0;
+}
+
+.profile-picture > img{
+    border-radius: 20px;
+}
+
+.tab-content .tab-pane > h5{
+    color: #2d2d2d;
+    border-bottom: 1px solid #d5d5d5;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    margin: 15px 10px 35px 0px;
+}
+
+.tab-content .tab-pane > .col-12 > .form-group  label {
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.tab-content .tab-pane > .col-12 > .form-group input,
+.tab-content .tab-pane > .col-12 > .form-group select{
+    width: 80%;
+    display: block;
+    padding: 10px 14px;
+    font-size: 1em;
+    font-family: 'Source Code Pro', monospace;
+    border: 2px solid #e5e5e5;
+    border-radius: 5px;
+    transition: all .3s ease-in-out;
+}
+
+.tab-content .tab-pane > .col-12 > .form-group select {
+    height: 40px;
+}
+
+.tab-content .tab-pane > .col-12 > .form-group input:focus,
+.tab-content .tab-pane > .col-12 > .form-group select:focus{
+    box-shadow: rgba(50, 50, 93, 0.109804) 0px 4px 6px, rgba(0, 0, 0, 0.0784314) 0px 1px 3px;
+    -webkit-transition: all 150ms ease;
+    transition: all 150ms ease;
+}
+
+.tab-content .tab-pane > .col-12 > button {
+    padding: 10px 14px;
+    font-size: 1em;
+    font-family: 'Source Code Pro', monospace;
+    border: 2px solid #e5e5e5;
+    border-radius: 5px;
+    transition: all .3s ease-in-out;
+    background-color: #d5d5d5;
+    color: #2d2d2d;
+    margin-top: 10px;
+    box-shadow: rgba(50, 50, 93, 0.109804) 0px 4px 6px, rgba(0, 0, 0, 0.0784314) 0px 1px 3px;
+}
+
+.tab-content .tab-pane > .col-12 > button:hover,
+.tab-content .tab-pane > .col-12 > button:active{
+    background-color: rgb(234, 120, 50);
+    color: white;
+    box-shadow: none !important;
+}
+
+.tab-content .tab-pane > .col-12 > button:focus{
+    box-shadow: none;
+}
+
+
+@media (max-width: 1200px){
+    .container.profile{
+      max-width: 100%;
+      margin: 0;
+      margin-bottom: 120px;
+    }
+}
+
+@media (max-width: 768px){
+    
+}
+
+@media (max-width: 360px){
+    .container.profile .row .col-12.col-md-3 > ul > li > a{
+        width: 100%;
+    }
+
+    .tab-content .tab-pane > .col-12 > .form-group input,
+    .tab-content .tab-pane > .col-12 > .form-group select{
+        width: 100%;
+    }
+}
+
+
+
+/* pagination */
+@media (max-width: 576px){
+
+    .pagination > span{
+        width: auto;
+    }
+
+    .page-item:first-child > a, .page-item:last-child >a{
+        padding: 8px 0;
+    }
+}
+
+@media (max-width: 768px){
+
+    .dataTables_paginate.paging_simple_numbers,
+    .col-sm-12.col-md-5{
+        border: none !important;
+    }
+
+}
+
+.dataTables_wrapper:nth-child(2) > .row{
+    justify-content: center !important;
+}
+
+.dataTables_paginate.paging_simple_numbers{
+    margin:100px 0 0px 0;
+    border-top:1px solid #d5d5d5;
+    border-bottom:1px solid #d5d5d5;
+    padding:20px 0 16px;
+    border-radius:0px !important;
+    display: inline-flex !important;
+    width: 100% !important;
+}
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination{
+    justify-content: flex-start !important;
+}
+
+.dataTables_wrapper .row .col-sm-12.col-md-6{
+    overflow: hidden !important;
+}
+
+.col-sm-12.col-md-5{
+    border-top:1px solid #d5d5d5;
+    border-bottom:1px solid #d5d5d5;
+    border-radius:0px !important;
+    height: 82px;
+    position: relative;
+}
+
+.col-sm-12.col-md-5,
+.col-sm-12.col-md-7{
+    padding: 0;
+    margin: 0;
+}
+
+.row .col-sm-12.col-md-5 > .dataTables_info{
+    position: absolute;
+    padding: 0 !important;
+    top: 36%;
+    color: #6c757d;
+}
+
+.dataTables_paginate.paging_simple_numbers .pagination{
+    width: 100% !important;
+}
+
+.pagination li{
+    float: right !important;
+}
+
+.page-item > a{
+    color: #484848;
+    transition: all .3s ease-in-out;
+}
+
+.page-item:not(:first-child):not(:last-child) > a{
+    border-radius: 50% !important;
+    margin: 0 5px;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    border: 2px solid #d5d5d5;
+}
+
+.page-item:not(:first-child):not(:last-child) > a:hover,
+.page-item:not(:first-child):not(:last-child) > a:active,
+.page-item:not(:first-child):not(:last-child) > a:focus{
+    background-color: rgb(234, 120, 50);
+    border: 2px solid transparent !important;
+    color: white;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.page-item.active > a.page-link{
+    background-color: rgb(234, 120, 50);
+    color: white;
+    border: 2px solid transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.page-item:first-child > a, .page-item:last-child > a, .page-item:first-child > a:hover, .page-item:last-child > a:hover{
+    border: none;
+    background-color: transparent;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.page-item:last-child > a:hover, .page-item:first-child > a:hover{
+    color: rgb(234, 120, 50);
+}
+/* end pagination */
+
+/* datatables */
+
+table,thead > tr > th,tfoot > tr > th{
+    border-color: #d5d5d5 !important;
+}
+
+.tab-pane table {
+    font-size: 1em !important;
+    font-family: 'Source Code Pro', monospace !important;
+    min-width: 800px;
+    overflow-x: auto;
+    
+}
+
+.tab-pane table thead > tr > th label {
+    display: block;
+}
+
+.tab-pane table tbody > tr > td{
+    text-overflow: ellipsis !important;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.tab-pane table tbody > tr > td > button{
+    margin-left: 10px;
+}
+
+.tab-pane table tbody > tr > td > button > i{
+    color: #2d2d2d;
+}
+
+/* end datatables */
+
+/* wishlist */
+
+/* pagination */
+@media (max-width: 576px){
+    .col-12.pagination{
+        display: block !important;
+        text-align: center;
+        max-width: 100% !important;
+    }
+
+    .col-12.pagination > span{
+        width: auto;
+    }
+
+    .col-12.pagination > nav{
+        padding: 20px 0 0 !important;
+    }
+
+    .col-12.pagination > nav > ul{
+        justify-content: center !important;
+        float: none !important;
+    }
+
+    .page-item:not(:first-child):not(:last-child){
+        display: none;
+    }
+
+    .page-item:first-child,
+    .page-item:last-child{
+        margin: 0 4px;
+    }
+}
+
+.col-12.pagination{
+    margin:100px 0 0px 0;
+    border-top:1px solid #d5d5d5;
+    border-bottom:1px solid #d5d5d5;
+    padding:20px 0 20px;
+    border-radius:0px;
+    display: inline-flex;
+}
+
+.col-12.pagination > span{
+    margin: auto 0;
+    font-size: 14px;
+    color: #919191;
+    width: 100%;
+    word-wrap: normal;
+}
+
+.col-12.pagination > nav{
+    width: 100%;
+    justify-content: end;
+}
+
+.col-12.pagination > nav > ul{
+    margin: auto 0;
+    float: right;
+}
+
+.page-item > a{
+    color: #484848;
+    transition: all .3s ease-in-out;
+}
+
+.page-item:not(:first-child):not(:last-child) > a{
+    border-radius: 50% !important;
+    margin: 0 5px;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    border: 2px solid #d5d5d5;
+}
+
+.page-item:not(:first-child):not(:last-child) > a:hover{
+    background-color: rgb(234, 120, 50);
+    border: 2px solid transparent;
+    color: white;
+}
+
+.page-item.active > a.page-link{
+    background-color: rgb(234, 120, 50);
+    color: white;
+    border: 2px solid transparent;
+}
+
+.page-item:first-child > a, .page-item:last-child > a, .page-item:first-child > a:hover, .page-item:last-child > a:hover{
+    border: none;
+    background-color: transparent;
+}
+
+.page-item:last-child > a:hover, .page-item:first-child > a:hover{
+    color: rgb(234, 120, 50);
+}
+/* end pagination */
+/* wishlist */
