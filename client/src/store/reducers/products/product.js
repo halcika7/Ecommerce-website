@@ -36,15 +36,23 @@ const reducer = (state = initialState, action) => {
 		[actionTypes.PRODUCT_SUCCESS]: updateObject(state, {
 			successMessage: action.successMessage ? action.successMessage : false,
 			loading: action.loading ? action.loading : false,
-			featuredProducts: action.featuredProducts ? action.featuredProducts : state.featuredProducts,
+			featuredProducts: action.featuredProducts
+				? action.featuredProducts
+				: state.featuredProducts,
 			topSellingProducts: action.topSellingProducts
 				? action.topSellingProducts
 				: state.topSellingProducts,
 			newProducts: action.newProducts ? action.newProducts : state.newProducts,
-			bannerProducts: action.bannerProducts ? action.bannerProducts : state.bannerProducts,
+			bannerProducts: action.bannerProducts
+				? action.bannerProducts
+				: state.bannerProducts,
 			ourProducts: action.ourProducts ? action.ourProducts : state.ourProducts,
-			singleProduct: action.singleProduct ? action.singleProduct : state.singleProduct,
-			searchedProducts: action.searchedProducts ? action.searchedProducts : state.searchedProducts,
+			singleProduct: action.singleProduct
+				? action.singleProduct
+				: state.singleProduct,
+			searchedProducts: action.searchedProducts
+				? action.searchedProducts
+				: state.searchedProducts,
 			products: action.products ? action.products : state.products,
 			dailyOffer: action.dailyOffer ? action.dailyOffer : state.dailyOffer,
 			weeklyOffer: action.weeklyOffer ? action.weeklyOffer : state.weeklyOffer

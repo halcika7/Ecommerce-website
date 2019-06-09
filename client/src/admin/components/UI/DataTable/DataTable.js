@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import ToolkitProvider, { Search, CSVExport } from 'react-bootstrap-table2-toolkit';
+import ToolkitProvider, {
+	Search,
+	CSVExport
+} from 'react-bootstrap-table2-toolkit';
 
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import './DataTable.css';
@@ -15,64 +18,40 @@ const DataTable = props => {
 	const [data, setData] = useState([]);
 	const [length, setLength] = useState(false);
 	useEffect(() => {
-		if (props.usersData) {
-			setFunction(props.usersData, setLength);
-		}
+		props.usersData && setFunction(props.usersData, setLength);
 	}, [props.usersData]);
 	useEffect(() => {
-		if (props.categoriesData) {
-			setFunction(props.categoriesData, setLength);
-		}
+		props.categoriesData && setFunction(props.categoriesData, setLength);
 	}, [props.categoriesData]);
 	useEffect(() => {
-		if (props.iconsData) {
-			setFunction(props.iconsData, setLength);
-		}
+		props.iconsData && setFunction(props.iconsData, setLength);
 	}, [props.iconsData]);
 	useEffect(() => {
-		if (props.brandsData) {
-			setFunction(props.brandsData, setLength);
-		}
+		props.brandsData && setFunction(props.brandsData, setLength);
 	}, [props.brandsData]);
 	useEffect(() => {
-		if (props.rolesData) {
-			setFunction(props.rolesData, setLength);
-		}
+		props.rolesData && setFunction(props.rolesData, setLength);
 	}, [props.rolesData]);
 	useEffect(() => {
-		if (props.permissionsData) {
-			setFunction(props.permissionsData, setLength);
-		}
+		props.permissionsData && setFunction(props.permissionsData, setLength);
 	}, [props.permissionsData]);
 	useEffect(() => {
-		if (props.couponsData) {
-			setFunction(props.couponsData, setLength);
-		}
+		props.couponsData && setFunction(props.couponsData, setLength);
 	}, [props.couponsData]);
 	useEffect(() => {
-		if (props.answersData) {
-			setFunction(props.answersData, setLength);
-		}
+		props.answersData && setFunction(props.answersData, setLength);
 	}, [props.answersData]);
 	useEffect(() => {
-		if (props.termsData) {
-			setFunction(props.termsData, setLength);
-		}
+		props.termsData && setFunction(props.termsData, setLength);
 	}, [props.termsData]);
 	useEffect(() => {
-		if (props.storesData) {
-			setFunction(props.storesData, setLength);
-		}
+		props.storesData && setFunction(props.storesData, setLength);
 	}, [props.storesData]);
 	useEffect(() => {
-		if (props.productsData) {
-			setFunction(props.productsData, setLength);
-		}
+		props.productsData && setFunction(props.productsData, setLength);
 	}, [props.productsData]);
 	useEffect(() => {
-		if (props.ordersData) {
-			setFunction(props.ordersData, setLength);
-		}
+		props.ordersData && setFunction(props.ordersData, setLength);
 	}, [props.ordersData]);
 
 	const setFunction = (Data, setDataLength) => {
@@ -101,7 +80,7 @@ const DataTable = props => {
 				}
 				if (isSelect === true) {
 					tableRows[index].checked = true;
-					(!props.permissionsData && !props.couponsData)
+					!props.permissionsData && !props.couponsData
 						? choosenValues.push(row._id)
 						: choosenValues.push(row.permission);
 					return;
@@ -115,16 +94,17 @@ const DataTable = props => {
 		if (e && !e.target.closest('tbody td:last-child')) {
 			const newDeleteMany = [...props.selectedDeleteData],
 				input = document.querySelectorAll("tbody input[type='checkbox']"),
-				index = (!props.permissionsData && !props.couponsData)
-					? newDeleteMany.findIndex(name => name === row._id)
-					: newDeleteMany.findIndex(
-							permission => permission === row.permission
-					  );
+				index =
+					!props.permissionsData && !props.couponsData
+						? newDeleteMany.findIndex(name => name === row._id)
+						: newDeleteMany.findIndex(
+								permission => permission === row.permission
+						  );
 			if (e.target.type !== 'checkbox') {
 				input[rowIndex].checked = isSelect ? true : false;
 			}
 			if (index === -1) {
-				(!props.permissionsData && !props.couponsData)
+				!props.permissionsData && !props.couponsData
 					? newDeleteMany.push(row._id)
 					: newDeleteMany.push(row.permission);
 			} else {
@@ -184,12 +164,12 @@ const DataTable = props => {
 		}
 		return (
 			<React.Fragment>
-				{(!props.permissionsData && !props.couponsData) && (
+				{!props.permissionsData && !props.couponsData && (
 					<Link className="btn btn-warning" to={`${view}${id}`}>
 						<i className="far fa-eye" />
 					</Link>
 				)}
-				{(!props.permissionsData && !props.couponsData) && (
+				{!props.permissionsData && !props.couponsData && (
 					<Link className="btn btn-primary" to={`${edit}${id}`}>
 						<i className="far fa-edit" />
 					</Link>
@@ -248,15 +228,11 @@ const DataTable = props => {
 	};
 	const featuredFormatter = (cell, row) => {
 		const customClass = row.featured ? 'Confirmed' : 'NotConfirmed';
-		return (
-			<span className={customClass}>{row.featured.toString()}</span>
-		);
+		return <span className={customClass}>{row.featured.toString()}</span>;
 	};
 	const publishedFormatter = (cell, row) => {
 		const customClass = row.published ? 'Confirmed' : 'NotConfirmed';
-		return (
-			<span className={customClass}>{row.published.toString()}</span>
-		);
+		return <span className={customClass}>{row.published.toString()}</span>;
 	};
 	const imgFormatter = (cell, row) => {
 		let src = '',
@@ -285,9 +261,19 @@ const DataTable = props => {
 	const dateFormatter = (cell, row) => {
 		const date = new Date();
 		const expires = new Date(row.exparationDate);
-		const difference = Math.floor((Date.UTC(expires.getFullYear(), expires.getMonth(), expires.getDate()) - Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) ) /(1000 * 60 * 60 * 24));
-		console.log(difference)
-		return difference > 0 ? <span>Expires in {difference} {difference > 1 ? "day's" : 'day' }</span> : <span>Coupon expired</span>;
+		const difference = Math.floor(
+			(Date.UTC(expires.getFullYear(), expires.getMonth(), expires.getDate()) -
+				Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())) /
+				(1000 * 60 * 60 * 24)
+		);
+		console.log(difference);
+		return difference > 0 ? (
+			<span>
+				Expires in {difference} {difference > 1 ? "day's" : 'day'}
+			</span>
+		) : (
+			<span>Coupon expired</span>
+		);
 	};
 
 	const [options] = useState({
@@ -306,7 +292,9 @@ const DataTable = props => {
 
 	const containerClass = props.usersData
 		? 'table-responsive UsersTable'
-		: props.productsData ? 'table-responsive Spans Products' : 'table-responsive Spans';
+		: props.productsData
+		? 'table-responsive Spans Products'
+		: 'table-responsive Spans';
 	const selectRow = !props.usersData
 		? {
 				mode: 'checkbox',
@@ -964,10 +952,10 @@ const DataTable = props => {
 		}
 	];
 
-	const rowStyleFormat = (row, rowIndex) => ({ 
-        backgroundColor: row.shipped ? 'palegreen' : 'tomato',
-        color: row.shipped ? 'black' : 'white' 
-    });
+	const rowStyleFormat = (row, rowIndex) => ({
+		backgroundColor: row.shipped ? 'palegreen' : 'tomato',
+		color: row.shipped ? 'black' : 'white'
+	});
 
 	return (
 		<div className="DataTable card-body col-12">

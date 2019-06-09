@@ -29,7 +29,9 @@ const reducer = (state = initialState, action) => {
 		}),
 		[actionTypes.CATEGORY_ICON_SUCCESS]: updateObject(state, {
 			successMessage: action.successMessage,
-			allCategoryIcons: action.categoryIcons ? action.categoryIcons : state.allCategoryIcons,
+			allCategoryIcons: action.categoryIcons
+				? action.categoryIcons
+				: state.allCategoryIcons,
 			name: action.name ? action.name : '',
 			loading: action.loading ? action.loading : false
 		}),

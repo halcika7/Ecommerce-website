@@ -133,7 +133,10 @@ const BottomNavigation = props => {
 									{categories.map((category, index) => (
 										<li className="dropdownLi" onClick={liOnClick} key={index}>
 											<img src={category.icon} alt="" /> {category.name}
-											<DropdownMenu data={category.subcategories} category={category.name} />
+											<DropdownMenu
+												data={category.subcategories}
+												category={category.name}
+											/>
 										</li>
 									))}
 								</ul>
@@ -155,10 +158,14 @@ const BottomNavigation = props => {
 								<p
 									className={
 										c.navLink + ' nav-link ' + c.dropdownNavCategoryLinks
-									} onClick={e => setShowCategories(!showCategories)}>
-									Categories<i className="fas fa-angle-right" />
+									}
+									onClick={e => setShowCategories(!showCategories)}>
+									Categories
+									<i className="fas fa-angle-right" />
 								</p>
-								<div className={c.categoryNavSearchList} style={showCategories ? { height: '100%' } : { height: '0' }}>
+								<div
+									className={c.categoryNavSearchList}
+									style={showCategories ? { height: '100%' } : { height: '0' }}>
 									<CategorySearchList categories={categories} />
 								</div>
 							</li>

@@ -42,9 +42,7 @@ const SelectCategory = ({
 							}
 							styles={categoryStyles}
 							value={
-								value === ''
-									? { label: 'Select Category' }
-									: { label: value }
+								value === '' ? { label: 'Select Category' } : { label: value }
 							}
 							required
 							disabled={disabled}

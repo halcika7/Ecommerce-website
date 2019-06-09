@@ -8,8 +8,8 @@ const ToggleSwitchButton = props => (
 		<label className="text-white d-block">{props.name}</label>
 		<label className={classes.toggleCheck + ' text-white'}>
 			<input
-				className={classnames(classes.toggleCheckbox , {
-					'invalid': props.error
+				className={classnames(classes.toggleCheckbox, {
+					invalid: props.error
 				})}
 				type="checkbox"
 				checked={props.value}
@@ -17,7 +17,7 @@ const ToggleSwitchButton = props => (
 				disabled={props.disabled}
 			/>
 			<span className={classes.toggleCheckText} />
-      	{props.error && <div className='invalid-feedback'>{props.error}</div>}
+			{props.error && <div className="invalid-feedback">{props.error}</div>}
 		</label>
 	</React.Fragment>
 );

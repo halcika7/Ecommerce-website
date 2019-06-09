@@ -6,19 +6,19 @@ const LightboxModal = ({ images, setShow, i }) => {
 	const [Images, setImages] = useState([]);
 	const [index, setIndex] = useState(0);
 	const [translate, setTranslate] = useState(0);
-    
+
 	const [bounceRight, setBounceRight] = useState(false);
 	const [bounceLeft, setBounceLeft] = useState(false);
-    
+
 	const [thumbBounceRight, setThumbBounceRight] = useState(false);
 	const [thumbBounceLeft, setThumbBounceLeft] = useState(false);
 
 	useEffect(() => {
 		document.getElementById('modal').focus();
-        document.querySelector('body').classList = 'no-scroll';
+		document.querySelector('body').classList = 'no-scroll';
 		return () => {
 			document.getElementById('modal').blur();
-            document.querySelector('body').classList = '';
+			document.querySelector('body').classList = '';
 		};
 	}, []);
 
@@ -53,7 +53,7 @@ const LightboxModal = ({ images, setShow, i }) => {
 	};
 
 	const thumbnails = (e, name, i = null) => {
-        e.preventDefault();
+		e.preventDefault();
 		const diff = Math.floor(images.length / 9) * 900 - 900;
 
 		if (name === 'picture') {
@@ -73,7 +73,7 @@ const LightboxModal = ({ images, setShow, i }) => {
 			setThumbBounceLeft(true);
 			setTimeout(() => setThumbBounceLeft(false), 1000);
 		}
-    };
+	};
 
 	return (
 		<div
@@ -103,11 +103,11 @@ const LightboxModal = ({ images, setShow, i }) => {
 							<span className="img-alt show" />
 						</div>
 						<div className="number-imgs">
-							<span className="img-active show">{index + 1}</span> / 
-							 <span className="img-length show">{Images.length}</span>
+							<span className="img-active show">{index + 1}</span> /
+							<span className="img-length show">{Images.length}</span>
 						</div>
 					</div>
-					{Images.length > 1 &&
+					{Images.length > 1 && (
 						<React.Fragment>
 							<div className="arrow" onClick={e => onKeyUp(e, 'left')}>
 								<i className="fas fa-arrow-left" />
@@ -116,7 +116,7 @@ const LightboxModal = ({ images, setShow, i }) => {
 								<i className="fas fa-arrow-right" />
 							</div>
 						</React.Fragment>
-					}
+					)}
 				</div>
 				<div className="thumbnails">
 					{Images.length > 9 && (

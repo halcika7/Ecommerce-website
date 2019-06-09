@@ -178,8 +178,8 @@ const User = props => {
 	};
 
 	const setAccountConfirmed = value =>
-    setInputValues({ ...inputValues, confirmed: value });
-    
+		setInputValues({ ...inputValues, confirmed: value });
+
 	return (
 		<div className="AdminProfile row">
 			{props.failedMessage ? (

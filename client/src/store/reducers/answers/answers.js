@@ -1,42 +1,42 @@
-import * as actionTypes from "../../actions/actionTypes";
-import { updateObject } from "../../../helpers/updateObject";
+import * as actionTypes from '../../actions/actionTypes';
+import { updateObject } from '../../../helpers/updateObject';
 
 const initialState = {
-  answerData: {
-    question: "",
-    answer: ""
-  },
-  answers: [],
-  errors: {},
-  failedMessage: false,
-  successMessage: false,
-  notFound: false,
-  loading: false
+	answerData: {
+		question: '',
+		answer: ''
+	},
+	answers: [],
+	errors: {},
+	failedMessage: false,
+	successMessage: false,
+	notFound: false,
+	loading: false
 };
 
 const reducer = (state = initialState, action) => {
-  const actions = {
-    [actionTypes.ANSWER_START]: updateObject(state, {
-      ...initialState,
-      loading: true
-    }),
-    [actionTypes.ANSWER_FAILED]: updateObject(state, {
-      failedMessage: action.failedMessage ? action.failedMessage : false,
-      errors: action.errors ? action.errors : false,
-      notFound: action.notFound ? action.notFound : false,
-      answerData: action.data ? action.data : initialState.answerData,
-      loading: action.loading ? action.loading : false
-    }),
-    [actionTypes.ANSWER_SUCCESS]: updateObject(state, {
-      successMessage: action.successMessage ? action.successMessage : false,
-      answerData: action.data ? action.data : initialState.answerData,
-      answers: action.answers ? action.answers : initialState.answers,
-      loading: action.loading ? action.loading : false
-    }),
-    default: state
-  };
+	const actions = {
+		[actionTypes.ANSWER_START]: updateObject(state, {
+			...initialState,
+			loading: true
+		}),
+		[actionTypes.ANSWER_FAILED]: updateObject(state, {
+			failedMessage: action.failedMessage ? action.failedMessage : false,
+			errors: action.errors ? action.errors : false,
+			notFound: action.notFound ? action.notFound : false,
+			answerData: action.data ? action.data : initialState.answerData,
+			loading: action.loading ? action.loading : false
+		}),
+		[actionTypes.ANSWER_SUCCESS]: updateObject(state, {
+			successMessage: action.successMessage ? action.successMessage : false,
+			answerData: action.data ? action.data : initialState.answerData,
+			answers: action.answers ? action.answers : initialState.answers,
+			loading: action.loading ? action.loading : false
+		}),
+		default: state
+	};
 
-  return actions[action.type] || actions.default;
+	return actions[action.type] || actions.default;
 };
 
 export default reducer;

@@ -39,9 +39,11 @@ const ChangeProfilePicture = props => {
 								</div>
 							</div>
 						</div>
-						{image && <button type="submit" className="btn-fill btn btn-primary">
-							Update Profile Picture
-						</button>}
+						{image && (
+							<button type="submit" className="btn-fill btn btn-primary">
+								Update Profile Picture
+							</button>
+						)}
 					</form>
 				</div>
 			</div>

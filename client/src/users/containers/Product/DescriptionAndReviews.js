@@ -6,122 +6,159 @@ import openSocket from 'socket.io-client';
 import Comment from '../../components/Comment/Comment';
 
 const DescriptionAndReviews = props => {
-    const productID = props.match.params.id ? props.match.params.id : new URLSearchParams(props.location.search).get('id');
+	const productID = props.match.params.id
+		? props.match.params.id
+		: new URLSearchParams(props.location.search).get('id');
 
-    const [productReviews, setProductReviews] = useState([]);
+	const [productReviews, setProductReviews] = useState([]);
 
-    useEffect(() => {
-        props.getReviews(props.product._id);
-        const socket = openSocket('http://0.0.0.0:5000');
-        socket.on('review', data => {
-            if(data.action === 'create') {
-                props.updateAddReview(data.review)
-            }
-            if(data.action === 'deleteReview') {
-                props.updateDeleteReview(data.id)
-            }
-            if(data.action === 'deleteReply') {
-                props.updateDeleteReply(data.ids)
-            }
-            if(data.action === 'editReview' || data.action === 'editReply') {
-                props.updateEditReview(data.review)
-            }
-            if(data.action === 'reply') {
-                props.updateAddReply(data.review)
-            }
-        })
-        return () => socket.disconnect();
-    },[]);
-    
-    useEffect(() => {
-        if(props.reviews.length > 0 || props.reviews.length === 0) {
-            const newReviews = props.reviews.filter(review => review.productId === productID && review);
-            setProductReviews(newReviews)
-        }
-    }, [props.reviews]);
+	useEffect(() => {
+		props.getReviews(props.product._id);
+		const socket = openSocket('http://0.0.0.0:5000');
+		socket.on('review', data => {
+			if (data.action === 'create') {
+				props.updateAddReview(data.review);
+			}
+			if (data.action === 'deleteReview') {
+				props.updateDeleteReview(data.id);
+			}
+			if (data.action === 'deleteReply') {
+				props.updateDeleteReply(data.ids);
+			}
+			if (data.action === 'editReview' || data.action === 'editReply') {
+				props.updateEditReview(data.review);
+			}
+			if (data.action === 'reply') {
+				props.updateAddReply(data.review);
+			}
+		});
+		return () => socket.disconnect();
+	}, []);
 
-    useEffect(() => {
-        props.getReviews(props.product._id);
-    }, [props.product]);
+	useEffect(() => {
+		if (props.reviews.length > 0 || props.reviews.length === 0) {
+			const newReviews = props.reviews.filter(
+				review => review.productId === productID && review
+			);
+			setProductReviews(newReviews);
+		}
+	}, [props.reviews]);
 
-    return (
-        <div className="container-fluid about-product">
-            <ul className="nav nav-tabs" id="myTab" role="tablist">
-                <li className="nav-item">
-                    <a className="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">Description</a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="true">Reviews</a>
-                </li>
-            </ul>
-            <div className="tab-content" id="myTabContent">
-                <div className="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col description" dangerouslySetInnerHTML={{ __html: props.product.description }} />
-                        </div>
-                    </div>
-                </div>
-                <div className="tab-pane fade show active" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                    <div className="container">
-                        <AddReview productId={props.product._id} />
-                        <div className="row comments" style={{ margin: '0px' }}>
-                            <div className="blog-post-comments">
-                                <ol className="blog-comment">
-                                    {productReviews.map((review, index) => 
-                                        <Comment 
-                                            review={review} 
-                                            key={index} 
-                                            userId={props.userId} 
-                                            addReply={props.addReply} 
-                                            deleteReview={props.deleteReview}
-                                            deleteReply={props.deleteReply}
-                                            editReview={props.editReview}
-                                            editReply={props.editReply}/>
-                                    )}
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-}
+	useEffect(() => {
+		props.getReviews(props.product._id);
+	}, [props.product]);
+
+	return (
+		<div className="container-fluid about-product">
+			<ul className="nav nav-tabs" id="myTab" role="tablist">
+				<li className="nav-item">
+					<a
+						className="nav-link"
+						id="home-tab"
+						data-toggle="tab"
+						href="#home"
+						role="tab"
+						aria-controls="home"
+						aria-selected="false">
+						Description
+					</a>
+				</li>
+				<li className="nav-item">
+					<a
+						className="nav-link active"
+						id="contact-tab"
+						data-toggle="tab"
+						href="#contact"
+						role="tab"
+						aria-controls="contact"
+						aria-selected="true">
+						Reviews
+					</a>
+				</li>
+			</ul>
+			<div className="tab-content" id="myTabContent">
+				<div
+					className="tab-pane fade"
+					id="home"
+					role="tabpanel"
+					aria-labelledby="home-tab">
+					<div className="container">
+						<div className="row">
+							<div
+								className="col description"
+								dangerouslySetInnerHTML={{ __html: props.product.description }}
+							/>
+						</div>
+					</div>
+				</div>
+				<div
+					className="tab-pane fade show active"
+					id="contact"
+					role="tabpanel"
+					aria-labelledby="contact-tab">
+					<div className="container">
+						<AddReview productId={props.product._id} />
+						<div className="row comments" style={{ margin: '0px' }}>
+							<div className="blog-post-comments">
+								<ol className="blog-comment">
+									{productReviews.map((review, index) => (
+										<Comment
+											review={review}
+											key={index}
+											userId={props.userId}
+											addReply={props.addReply}
+											deleteReview={props.deleteReview}
+											deleteReply={props.deleteReply}
+											editReview={props.editReview}
+											editReply={props.editReply}
+										/>
+									))}
+								</ol>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+};
 
 const mapStateToProps = state => {
-    return {
-        reviews: state.reviews.productReviews,
-        userId: state.login.User.id
-    }
-}
+	return {
+		reviews: state.reviews.productReviews,
+		userId: state.login.User.id
+	};
+};
 
 const mapDispatchToProps = dispatch => {
-    return {
-        getReviews: (id) => dispatch(actions.getReviews(id)),
+	return {
+		getReviews: id => dispatch(actions.getReviews(id)),
 
-        addReply: (replyObject) => dispatch(actions.addReply(replyObject)),
+		addReply: replyObject => dispatch(actions.addReply(replyObject)),
 
-        editReview: (reviewObject) => dispatch(actions.editReview(reviewObject)),
+		editReview: reviewObject => dispatch(actions.editReview(reviewObject)),
 
-        editReply: (reviewObject) => dispatch(actions.editReply(reviewObject)),
+		editReply: reviewObject => dispatch(actions.editReply(reviewObject)),
 
-        deleteReview: (id) => dispatch(actions.deleteReview(id)),
+		deleteReview: id => dispatch(actions.deleteReview(id)),
 
-        deleteReply: (id) => dispatch(actions.deleteReply(id)),
+		deleteReply: id => dispatch(actions.deleteReply(id)),
 
-        clearReviews: () => dispatch(actions.clearReviews()),
+		clearReviews: () => dispatch(actions.clearReviews()),
 
-        updateAddReview: (data) => dispatch(actions.updateAddReview(data)),
+		updateAddReview: data => dispatch(actions.updateAddReview(data)),
 
-        updateEditReview: (data) => dispatch(actions.updateEditReview(data)),
+		updateEditReview: data => dispatch(actions.updateEditReview(data)),
 
-        updateDeleteReview: (id) => dispatch(actions.updateDeleteReview(id)),
-        
-        updateDeleteReply: (id) => dispatch(actions.updateDeleteReply(id)),
+		updateDeleteReview: id => dispatch(actions.updateDeleteReview(id)),
 
-        updateAddReply: (data) => dispatch(actions.updateAddReply(data))
-    }
-}
+		updateDeleteReply: id => dispatch(actions.updateDeleteReply(id)),
 
-export default connect(mapStateToProps, mapDispatchToProps)(DescriptionAndReviews);
+		updateAddReply: data => dispatch(actions.updateAddReply(data))
+	};
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(DescriptionAndReviews);

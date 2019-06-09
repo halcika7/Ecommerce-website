@@ -4,7 +4,9 @@ import axios from 'axios';
 export const filterProducts = data => async dispatch => {
 	const options = JSON.stringify(data);
 	dispatch({ type: actionTypes.FILTER_PRODUCT_START });
-	const response = await axios.get(`/products/product/filter/filterproducts?options=${options}`);
+	const response = await axios.get(
+		`/products/product/filter/filterproducts?options=${options}`
+	);
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.FILTER_PRODUCT_FAILED,
@@ -22,7 +24,9 @@ export const filterProducts = data => async dispatch => {
 export const getFilters = data => async dispatch => {
 	const options = JSON.stringify(data);
 	dispatch({ type: actionTypes.FILTER_PRODUCT_START });
-	const response = await axios.get(`/products/product/filter/filters?options=${options}`);
+	const response = await axios.get(
+		`/products/product/filter/filters?options=${options}`
+	);
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.FILTER_PRODUCT_FAILED,
@@ -43,8 +47,7 @@ export const getFilters = data => async dispatch => {
 			displays: response.data.displays ? response.data.displays : [],
 			wifi: response.data.wifi ? response.data.wifi : [],
 			bluetooth: response.data.bluetooth ? response.data.bluetooth : [],
-			consoles: response.data.consoles ? response.data.consoles : [],
+			consoles: response.data.consoles ? response.data.consoles : []
 		});
 	}
-}
-
+};

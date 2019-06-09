@@ -39,7 +39,9 @@ const SelectProductOptions = props => {
 					? chroma.contrast(color, 'white') > 2
 						? 'white'
 						: 'black'
-					: data.value === 'black' ? 'white' : 'black',
+					: data.value === 'black'
+					? 'white'
+					: 'black',
 				cursor: isDisabled ? 'not-allowed' : 'default'
 			};
 		},
@@ -87,13 +89,16 @@ const SelectProductOptions = props => {
 
 	useEffect(() => {
 		let newOpt = null;
-		if(props.color) {
-			newOpt = props.values.map(color => ({ label: color, value: color.toLowerCase() }))
-			setColors(newOpt)
+		if (props.color) {
+			newOpt = props.values.map(color => ({
+				label: color,
+				value: color.toLowerCase()
+			}));
+			setColors(newOpt);
 		}
-		if(props.size) {
+		if (props.size) {
 			newOpt = props.values.map(val => ({ label: val, value: val }));
-			setSizes(newOpt)
+			setSizes(newOpt);
 		}
 	}, [props]);
 

@@ -3,49 +3,49 @@ const { Schema } = mongoose;
 
 const ProductReviewSchema = new Schema(
 	{
-        productId: {
+		productId: {
 			type: String
-        },
-        userId: {
+		},
+		userId: {
 			type: Schema.Types.ObjectId,
 			ref: 'users',
 			required: true
-        },
-        replys: [
-            {
-                reviewId: {
-                    type: Schema.Types.ObjectId,
-                    ref: 'reviews'
-                },
-                userId: {
-                    type: Schema.Types.ObjectId,
-                    ref: 'users'
-                },
-            }
-        ],
-        rating: {
-            type: Number,
-            min: 1,
-            max:5,
-        },
-        text: {
-            type: String,
-            required: true
-        },
-        likes: [
-            {
-                userId:  String
-            }
-        ],
-        dislikes: [
-            {
-                userId:  String
-            }
-        ]
+		},
+		replys: [
+			{
+				reviewId: {
+					type: Schema.Types.ObjectId,
+					ref: 'reviews'
+				},
+				userId: {
+					type: Schema.Types.ObjectId,
+					ref: 'users'
+				}
+			}
+		],
+		rating: {
+			type: Number,
+			min: 1,
+			max: 5
+		},
+		text: {
+			type: String,
+			required: true
+		},
+		likes: [
+			{
+				userId: String
+			}
+		],
+		dislikes: [
+			{
+				userId: String
+			}
+		]
 	},
 	{
 		timestamps: true
 	}
 );
 
-module.exports = ProductReview = mongoose.model( 'reviews', ProductReviewSchema );
+module.exports = ProductReview = mongoose.model('reviews', ProductReviewSchema);

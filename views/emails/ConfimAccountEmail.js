@@ -1,4 +1,9 @@
-exports.confirmAccountEmail = (username, token, email, password) => `<!DOCTYPE html>
+exports.confirmAccountEmail = (
+	username,
+	token,
+	email,
+	password
+) => `<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -245,7 +250,7 @@ td.beforeHeading > h1 {
                 <td align="left" bgcolor="#ffffff" class="beforeHeading">
                   <p>Email: ${email}</p>
                   <p>Username: ${username}</p>
-                    ${password === null ? `` : `<p>Password: ${password}</p>` }
+                    ${password === null ? `` : `<p>Password: ${password}</p>`}
                 </td>
             </tr>
             </table>
@@ -337,4 +342,4 @@ td.beforeHeading > h1 {
 
 </body>
 
-</html>`
+</html>`;

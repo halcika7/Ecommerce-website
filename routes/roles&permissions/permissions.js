@@ -7,6 +7,9 @@ router.post('/addpermission', PermissionController.addPermission);
 router.get('/getallpermissions', PermissionController.getAllPermissions);
 router.get('/getallmodelnames', PermissionController.getAllModelNames);
 router.delete('/deletepermission', PermissionController.deletePermission);
-router.delete('/deletemanypermissions', PermissionController.deleteManyPermissions);
+router.delete(
+	'/deletemanypermissions',
+	PermissionController.deleteManyPermissions
+);
 
 module.exports = router;

@@ -6,8 +6,8 @@ import { getLoggedInUserPhoto } from '../index';
 export const login = UserObj => async dispatch => {
 	dispatch({ type: actionTypes.LOGIN_START });
 
-  const response = await axios.post('/api/users/login', UserObj);
-  
+	const response = await axios.post('/api/users/login', UserObj);
+
 	if (response.data.errors) {
 		dispatch({
 			type: actionTypes.LOGIN_FAILED,
@@ -45,12 +45,12 @@ export const setCurrentUser = (decoded, rememberMe, message = false) => {
 	};
 };
 
-export const logoutUser = (callBack = null )=> dispatch => {
+export const logoutUser = (callBack = null) => dispatch => {
 	localStorage.removeItem('jwtToken');
 
 	dispatch({
 		type: actionTypes.LOGOUT,
-		User: {role:{isAdmin: false}}
+		User: { role: { isAdmin: false } }
 	});
 
 	callBack('/authentication');

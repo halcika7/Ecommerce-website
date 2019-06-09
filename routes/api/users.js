@@ -7,33 +7,37 @@ const EmailController = require('../../controllers/EmailController');
 const ActivateAccountController = require('../../controllers/ActivateAccountController');
 
 const fileStorage = multer.diskStorage({
-    destination: (req,file,cb) => {
-        let directory = `public/images/users/`;
-        if (!fs.existsSync(directory)){
-            fs.mkdirSync(directory);
-        }
-        directory = `${directory}${req.body.username}/`;
-        if (!fs.existsSync(directory)){
-            fs.mkdirSync(directory);
-        }
-        cb(null, directory)
-    },
-    filename: (req,file,cb) => {
-        cb(null, `${file.originalname}`)
-    },
+	destination: (req, file, cb) => {
+		let directory = `public/images/users/`;
+		if (!fs.existsSync(directory)) {
+			fs.mkdirSync(directory);
+		}
+		directory = `${directory}${req.body.username}/`;
+		if (!fs.existsSync(directory)) {
+			fs.mkdirSync(directory);
+		}
+		cb(null, directory);
+	},
+	filename: (req, file, cb) => {
+		cb(null, `${file.originalname}`);
+	}
 });
 
-const fileFilter = (req,file,cb) => {
-    if(file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg'){
-        cb(null,true);
-    }else {
-        cb(null,false);
-    }
+const fileFilter = (req, file, cb) => {
+	if (
+		file.mimetype === 'image/png' ||
+		file.mimetype === 'image/jpg' ||
+		file.mimetype === 'image/jpeg'
+	) {
+		cb(null, true);
+	} else {
+		cb(null, false);
+	}
 };
 
 const multerProfilePicture = multer({
-    storage: fileStorage, 
-    fileFilter 
+	storage: fileStorage,
+	fileFilter
 });
 
 // User Routes
@@ -49,9 +53,16 @@ router.post('/resetpassword', UserController.resetPassword);
 
 router.post('/activateaccount', ActivateAccountController.activateAccount);
 
-router.post('/resendactivateaccount', ActivateAccountController.resendActivationMail);
+router.post(
+	'/resendactivateaccount',
+	ActivateAccountController.resendActivationMail
+);
 
-router.put('/updateprofilepicture', multerProfilePicture.single('profilePicture') , UserController.updateProfilePicture);
+router.put(
+	'/updateprofilepicture',
+	multerProfilePicture.single('profilePicture'),
+	UserController.updateProfilePicture
+);
 
 router.get('/getuserphoto', UserController.getProfilePicture);
 

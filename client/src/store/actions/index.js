@@ -1,163 +1,154 @@
-export { login, setCurrentUser, logoutUser } from "./auth/login";
+export { login, setCurrentUser, logoutUser } from './auth/login';
 export {
-  register,
-  activateAccount,
-  resendActivationLink
-} from "./auth/register";
+	register,
+	activateAccount,
+	resendActivationLink
+} from './auth/register';
 
-export { resetUserPasswordEmail } from "./auth/resetPasswordEmail";
-
-export {
-  resetPassword,
-  resetState,
-  updatePassword
-} from "./auth/resetpassword";
+export { resetUserPasswordEmail } from './auth/resetPasswordEmail';
 
 export {
-  getAllUsers,
-  getSingleUser,
-  deleteUser,
-  addNewUser,
-  updateUser,
-  userUpdateProfilePicture,
-  getLoggedInUserPhoto
-} from "./auth/user";
+	resetPassword,
+	resetState,
+	updatePassword
+} from './auth/resetpassword';
 
 export {
-  addNewPermission,
-  getAllPermissions,
-  getAllModelNames,
-  deleteManyPermissions,
-  deletePermission
-} from "./roles&permissions/permissions";
+	getAllUsers,
+	getSingleUser,
+	deleteUser,
+	addNewUser,
+	updateUser,
+	userUpdateProfilePicture,
+	getLoggedInUserPhoto
+} from './auth/user';
 
 export {
-  addRole,
-  getRoles,
-  deleteUserRole,
-  getUserRole,
-  deleteManyUserRoles,
-  updateUserRole
-} from "./roles&permissions/userRoles";
+	addNewPermission,
+	getAllPermissions,
+	getAllModelNames,
+	deleteManyPermissions,
+	deletePermission
+} from './roles&permissions/permissions';
 
 export {
-  addCategory,
-  getAllCategories,
-  getCategory,
-  editCategory,
-  deleteCategory,
-  deleteManyCategories,
-  clearState
-} from "./products/category";
+	addRole,
+	getRoles,
+	deleteUserRole,
+	getUserRole,
+	deleteManyUserRoles,
+	updateUserRole
+} from './roles&permissions/userRoles';
 
 export {
-  addCategoryIcon,
-  getAllCategoryIcons,
-  getCategoryIcon,
-  editCategoryIcon,
-  deleteCategoryIcon,
-  deleteManyCategoryIcons,
-  clearStateIcons
-} from "./products/categoryicon";
+	addCategory,
+	getAllCategories,
+	getCategory,
+	editCategory,
+	deleteCategory,
+	deleteManyCategories,
+	clearState
+} from './products/category';
 
 export {
-  addBrand,
-  getAllBrands,
-  getBrand,
-  getBrandByCategory,
-  editBrand,
-  deleteBrand,
-  deleteManyBrands,
-  clearBrandState
-} from "./products/brand";
+	addCategoryIcon,
+	getAllCategoryIcons,
+	getCategoryIcon,
+	editCategoryIcon,
+	deleteCategoryIcon,
+	deleteManyCategoryIcons,
+	clearStateIcons
+} from './products/categoryicon';
 
 export {
-  addProduct,
-  homePageProducts,
-  getBannerProducts,
-  getProduct,
-  getAllProducts,
-  deleteProduct,
-  getNewProducts,
-  searchProducts,
-  clearSingleProduct
-} from "./products/product";
+	addBrand,
+	getAllBrands,
+	getBrand,
+	getBrandByCategory,
+	editBrand,
+	deleteBrand,
+	deleteManyBrands,
+	clearBrandState
+} from './products/brand';
 
 export {
-  getFilters,
-  filterProducts
-} from "./products/filterproducts";
+	addProduct,
+	homePageProducts,
+	getBannerProducts,
+	getProduct,
+	getAllProducts,
+	deleteProduct,
+	getNewProducts,
+	searchProducts,
+	clearSingleProduct
+} from './products/product';
+
+export { getFilters, filterProducts } from './products/filterproducts';
 
 export {
-  addReview,
-  editReview,
-  deleteReview,
-  updateAddReview,
-  updateEditReview,
-  updateDeleteReview,
-  addReply,
-  editReply,
-  deleteReply,
-  updateAddReply,
-  updateDeleteReply,
-  getReviews,
-  clearReviews
-} from "./products/productreview";
+	addReview,
+	editReview,
+	deleteReview,
+	updateAddReview,
+	updateEditReview,
+	updateDeleteReview,
+	addReply,
+	editReply,
+	deleteReply,
+	updateAddReply,
+	updateDeleteReply,
+	getReviews,
+	clearReviews
+} from './products/productreview';
 
 export {
-  addAnswer,
-  deleteAnswer,
-  getAnswer,
-  updateAnswer,
-  getAllAnswers
-} from "./answers/answers";
+	addAnswer,
+	deleteAnswer,
+	getAnswer,
+	updateAnswer,
+	getAllAnswers
+} from './answers/answers';
 
 export {
-  addTerm,
-  deleteTerm,
-  getTerm,
-  updateTerm,
-  getAllTerms
-} from "./answers/terms";
+	addTerm,
+	deleteTerm,
+	getTerm,
+	updateTerm,
+	getAllTerms
+} from './answers/terms';
 
 export {
-  addToCart,
-  moveToSaveForLater,
-  moveToCart,
-  deleteFromCart,
-  deleteFromSavedForLater,
-  updateCartItem,
-  setCart,
-  applyCoupon,
-  removeCoupon,
-  processPayment
-} from "./cart/cart";
+	addToCart,
+	moveToSaveForLater,
+	moveToCart,
+	deleteFromCart,
+	deleteFromSavedForLater,
+	updateCartItem,
+	setCart,
+	applyCoupon,
+	removeCoupon,
+	processPayment
+} from './cart/cart';
+
+export { addCoupon, deleteCoupon, getCoupons } from './cart/coupon';
 
 export {
-  addCoupon,
-  deleteCoupon,
-  getCoupons
-} from "./cart/coupon";
+	addStore,
+	deleteStore,
+	updateStore,
+	getStore,
+	getStoreContact,
+	getStoresFront,
+	getStores
+} from './stores/stores';
 
 export {
-  addStore,
-  deleteStore,
-  updateStore,
-  getStore,
-  getStoreContact,
-  getStoresFront,
-  getStores
-} from "./stores/stores";
+	getAllUserOrders,
+	getAllOrders,
+	getOrder,
+	deleteOrder,
+	deleteUserOrder,
+	updateOrder
+} from './orders/orders';
 
-export {
-  getAllUserOrders,
-  getAllOrders,
-  getOrder,
-  deleteOrder,
-  deleteUserOrder,
-  updateOrder
-} from "./orders/orders";
-
-export {
-  getDashboard
-} from "./dashboard/dashboard";
+export { getDashboard } from './dashboard/dashboard';

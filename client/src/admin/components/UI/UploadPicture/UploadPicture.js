@@ -5,34 +5,35 @@ const UploadPicture = props => {
 	const [url, setUrl] = useState({ imgSrc: 'http://placehold.it/180' });
 
 	useEffect(() => {
-		if(props.predefinedPicture) {
+		if (props.predefinedPicture) {
 			helperFunction(props.predefinedPicture);
 		}
 	}, [props.predefinedPicture]);
 
 	useEffect(() => {
-		if(props.predefinedPictureNotFile) {
-			setUrl({imgSrc: "/"+props.predefinedPictureNotFile})
+		if (props.predefinedPictureNotFile) {
+			setUrl({ imgSrc: '/' + props.predefinedPictureNotFile });
 		}
 	}, [props.predefinedPictureNotFile]);
 
 	const readURL = e => {
 		e.persist();
 		const file = e.target.files[0];
-		console.log(file)
 		const name = e.target.name;
-		if(props.setPredefinedNotFile) {
+		if (props.setPredefinedNotFile) {
 			props.setPredefinedNotFile(false);
 		}
 		helperFunction(file, name);
 	};
 
-	const helperFunction = (file, name=null) => {
+	const helperFunction = (file, name = null) => {
 		if (!file.type.match('image')) return;
 		const reader = new FileReader();
 		reader.readAsDataURL(file);
 
-		setUrl({ imgSrc: 'https://media3.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif' });
+		setUrl({
+			imgSrc: 'https://media3.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif'
+		});
 		props.showButton && props.showButton(false);
 
 		reader.onloadend = e => {
@@ -41,21 +42,23 @@ const UploadPicture = props => {
 					imgSrc: reader.result
 				});
 
-				if(props.predefinedPicture || props.predefinedPicture === '') {
+				if (props.predefinedPicture || props.predefinedPicture === '') {
 					props.change(file, props.index);
-				}else {
+				} else {
 					props.change(name, file);
 				}
 
 				props.showButton && props.showButton(true);
-	
 			}, 4000);
 		};
-	}
+	};
 
 	return (
 		<React.Fragment>
-			<label className={!props.disabled ? classes.btn2 : classes.btn2 + ' ' + classes.disabled}>
+			<label
+				className={
+					!props.disabled ? classes.btn2 : classes.btn2 + ' ' + classes.disabled
+				}>
 				Upload Picture
 				<input
 					className={classes.input}

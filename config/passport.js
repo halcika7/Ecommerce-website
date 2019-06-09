@@ -9,13 +9,15 @@ opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = secret;
 
 module.exports = passport => {
-    passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
-        try {
-            const user = await UserModel.findById(jwt_payload.id)
-            if(user) return done(null, user);
-            return done(null, false);
-        }catch (err) {
-            return console.log(err);
-        }
-    }));
+	passport.use(
+		new JwtStrategy(opts, async (jwt_payload, done) => {
+			try {
+				const user = await UserModel.findById(jwt_payload.id);
+				if (user) return done(null, user);
+				return done(null, false);
+			} catch (err) {
+				return console.log(err);
+			}
+		})
+	);
 };

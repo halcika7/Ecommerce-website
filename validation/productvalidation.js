@@ -162,18 +162,22 @@ exports.addProductValidation = async (data, files) => {
 		if (Validator.isEmpty(data.wifi)) {
 			errors.wifi = 'Wifi is required';
 		} else if (
-			(JSON.parse(data.wifi) !== true && data.wifi !== true || (typeof data.wifi === 'string' && data.wifi !== 'true')) &&
-			(JSON.parse(data.wifi) !== false && data.wifi !== false || (typeof data.wifi === 'string' && data.wifi !== 'false'))
+			((JSON.parse(data.wifi) !== true && data.wifi !== true) ||
+				(typeof data.wifi === 'string' && data.wifi !== 'true')) &&
+			((JSON.parse(data.wifi) !== false && data.wifi !== false) ||
+				(typeof data.wifi === 'string' && data.wifi !== 'false'))
 		) {
 			errors.wifi = 'Wifi has to be an Boolean';
 		}
 		if (Validator.isEmpty(data.bluetooth)) {
 			errors.bluetooth = 'Bluetooth is required';
 		} else if (
-			(JSON.parse(data.bluetooth) !== true && data.bluetooth !== true || (typeof data.bluetooth === 'string' && data.bluetooth !== 'true') ) &&
-			(JSON.parse(data.bluetooth) !== false && data.bluetooth !== false || (typeof data.bluetooth === 'string' && data.bluetooth !== 'false'))
-			) {
-				errors.bluetooth = 'Bluetooth has to be an Boolean';
+			((JSON.parse(data.bluetooth) !== true && data.bluetooth !== true) ||
+				(typeof data.bluetooth === 'string' && data.bluetooth !== 'true')) &&
+			((JSON.parse(data.bluetooth) !== false && data.bluetooth !== false) ||
+				(typeof data.bluetooth === 'string' && data.bluetooth !== 'false'))
+		) {
+			errors.bluetooth = 'Bluetooth has to be an Boolean';
 		}
 	}
 
@@ -214,133 +218,138 @@ exports.addProductValidation = async (data, files) => {
 
 		if (!isEmpty(option.options)) {
 			const promises = await option.options.map(async opt => {
-					const optError = {};
-					const findSKU = await ProductModel.find({ 'options.options.sku': opt.sku });
-					if (Validator.isEmpty(opt.sku) || opt.sku.length < 10) {
-						optError.sku =
-							'Option sku is required and must be at least 10 characters long';
+				const optError = {};
+				const findSKU = await ProductModel.find({
+					'options.options.sku': opt.sku
+				});
+				if (Validator.isEmpty(opt.sku) || opt.sku.length < 10) {
+					optError.sku =
+						'Option sku is required and must be at least 10 characters long';
+				}
+				if (findSKU.length !== 0) {
+					optError.sku = 'Option sku is already in use';
+				}
+				if (!parseInt(opt.quantity) > 0) {
+					optError.quantity =
+						'Option quantity must be integer and more than zero value..';
+				}
+				if (!(parseInt(opt.aditionalPrice) >= 0)) {
+					optError.aditionalPrice =
+						'Option aditional price must be integer and biger or equal to 0';
+				}
+				if (!(parseInt(opt.discount) >= 0 && parseInt(opt.discount) <= 99)) {
+					optError.discount =
+						'Option discount must be integer and biger or equal to 0';
+				}
+				if (
+					!Validator.isEmpty(data.category) &&
+					data.category !== 'Electronics'
+				) {
+					if (isEmpty(opt.size)) {
+						optError.size = 'Option size is required';
 					}
-					if(findSKU.length !==0) {
-						optError.sku =
-							'Option sku is already in use';
+				}
+				if (
+					!errors.subcategories &&
+					(subcategories[0].sub === 'Desktop Computers' ||
+						subcategories[0].sub === 'Laptops')
+				) {
+					if (isEmpty(opt.ram)) {
+						optError.ram = 'Ram size is required';
+					} else if (isNaN(opt.ram)) {
+						optError.ram = 'Ram size has to be an Integer';
 					}
-					if (!parseInt(opt.quantity) > 0) {
-						optError.quantity =
-							'Option quantity must be integer and more than zero value..';
+					if (isEmpty(opt.graphics)) {
+						optError.graphics = 'Graphics size is required';
+					} else if (isNaN(opt.graphics)) {
+						optError.graphics = 'Graphics size has to be an Integer';
 					}
-					if (!(parseInt(opt.aditionalPrice) >= 0)) {
-						optError.aditionalPrice =
-							'Option aditional price must be integer and biger or equal to 0';
+					if (isEmpty(opt.ssd)) {
+						optError.ssd = 'SSD size is required';
+					} else if (isNaN(opt.ssd)) {
+						optError.ssd = 'SSD size has to be an Integer';
 					}
-					if (!(parseInt(opt.discount) >= 0 && parseInt(opt.discount) <= 99)) {
-						optError.discount =
-							'Option discount must be integer and biger or equal to 0';
+					if (isEmpty(opt.hdd)) {
+						optError.hdd = 'HDD size is required';
+					} else if (isNaN(opt.hdd)) {
+						optError.hdd = 'HDD size has to be an Integer';
 					}
-					if (
-						!Validator.isEmpty(data.category) &&
-						data.category !== 'Electronics'
-					) {
-						if (isEmpty(opt.size)) {
-							optError.size = 'Option size is required';
+					if (subcategories[0].sub === 'Desktop Computers') {
+						if (isEmpty(opt.withDisplay)) {
+							optError.withDisplay = 'Display is required';
+						} else if (
+							(JSON.parse(opt.withDisplay) !== true ||
+								opt.withDisplay !== true) &&
+							(JSON.parse(opt.withDisplay) !== false ||
+								opt.withDisplay !== false)
+						) {
+							optError.withDisplay = 'Display has to be an Boolean';
 						}
-					}
-					if (
-						!errors.subcategories &&
-						(subcategories[0].sub === 'Desktop Computers' ||
-							subcategories[0].sub === 'Laptops')
-					) {
-						if (isEmpty(opt.ram)) {
-							optError.ram = 'Ram size is required';
-						} else if (isNaN(opt.ram)) {
-							optError.ram = 'Ram size has to be an Integer';
+						if (isEmpty(opt.withKeyboard)) {
+							optError.withKeyboard = 'Keyboard is required';
+						} else if (
+							(JSON.parse(opt.withKeyboard) !== true ||
+								opt.withKeyboard !== true) &&
+							(JSON.parse(opt.withKeyboard) !== false ||
+								opt.withKeyboard !== false)
+						) {
+							optError.withKeyboard = 'Keyboard has to be an Boolean';
 						}
-						if (isEmpty(opt.graphics)) {
-							optError.graphics = 'Graphics size is required';
-						} else if (isNaN(opt.graphics)) {
-							optError.graphics = 'Graphics size has to be an Integer';
-						}
-						if (isEmpty(opt.ssd)) {
-							optError.ssd = 'SSD size is required';
-						} else if (isNaN(opt.ssd)) {
-							optError.ssd = 'SSD size has to be an Integer';
-						}
-						if (isEmpty(opt.hdd)) {
-							optError.hdd = 'HDD size is required';
-						} else if (isNaN(opt.hdd)) {
-							optError.hdd = 'HDD size has to be an Integer';
-						}
-						if (subcategories[0].sub === 'Desktop Computers') {
-							if (isEmpty(opt.withDisplay)) {
-								optError.withDisplay = 'Display is required';
-							} else if (
-								(JSON.parse(opt.withDisplay) !== true || opt.withDisplay !== true) &&
-								(JSON.parse(opt.withDisplay) !== false || opt.withDisplay !== false)
-							) {
-								optError.withDisplay = 'Display has to be an Boolean';
-							}
-							if (isEmpty(opt.withKeyboard)) {
-								optError.withKeyboard = 'Keyboard is required';
-							} else if (
-								(JSON.parse(opt.withKeyboard) !== true || opt.withKeyboard !== true) &&
-								(JSON.parse(opt.withKeyboard) !== false || opt.withKeyboard !== false)
-							) {
-								optError.withKeyboard = 'Keyboard has to be an Boolean';
-							}
-							if (isEmpty(opt.withMouse)) {
-								optError.withMouse = 'Mouse is required';
-							} else if (
-								(JSON.parse(opt.withMouse) !== true || opt.withMouse !== true) &&
-								(JSON.parse(opt.withMouse) !== false || opt.withMouse !== false)
-							) {
-								optError.withMouse = 'Mouse has to be an Boolean';
-							}
-						}
-						if (subcategories[0].sub === 'Laptops') {
-							if (isEmpty(opt.resolution)) {
-								optError.resolution = 'Resolution is required';
-							}
-						}
-					}
-					if (
-						!errors.subcategories &&
-						(subcategories[0].sub === 'Tablets' ||
-							subcategories[0].sub === 'Phones')
-					) {
-						if (isEmpty(opt.memory)) {
-							optError.memory = 'Memory size is required';
-						} else if (isNaN(opt.memory)) {
-							optError.memory = 'Memory size has to be an Integer';
+						if (isEmpty(opt.withMouse)) {
+							optError.withMouse = 'Mouse is required';
+						} else if (
+							(JSON.parse(opt.withMouse) !== true || opt.withMouse !== true) &&
+							(JSON.parse(opt.withMouse) !== false || opt.withMouse !== false)
+						) {
+							optError.withMouse = 'Mouse has to be an Boolean';
 						}
 					}
-					if (
-						!errors.subcategories &&
-						(subcategories[0].sub === 'Monitors' ||
-							subcategories[0].sub === 'Televisions')
-					) {
-						if (isEmpty(opt.display)) {
-							optError.display = 'Display size is required';
-						}
+					if (subcategories[0].sub === 'Laptops') {
 						if (isEmpty(opt.resolution)) {
 							optError.resolution = 'Resolution is required';
 						}
-						if (isEmpty(opt.smart)) {
-							optError.smart = 'Smart is required';
-						} else if (
-							(JSON.parse(opt.smart) !== true || opt.smart !== true) &&
-								(JSON.parse(opt.smart) !== false || opt.smart !== false)
-						) {
-							optError.smart = 'Smart has to be an Boolean';
-						}
-						if (isEmpty(opt.threeD)) {
-							optError.threeD = '3D is required';
-						} else if (
-							(JSON.parse(opt.threeD) !== true || opt.threeD !== true) &&
-								(JSON.parse(opt.threeD) !== false || opt.threeD !== false)
-						) {
-							optError.threeD = '3D has to be an Boolean';
-						}
 					}
-					return optError;
+				}
+				if (
+					!errors.subcategories &&
+					(subcategories[0].sub === 'Tablets' ||
+						subcategories[0].sub === 'Phones')
+				) {
+					if (isEmpty(opt.memory)) {
+						optError.memory = 'Memory size is required';
+					} else if (isNaN(opt.memory)) {
+						optError.memory = 'Memory size has to be an Integer';
+					}
+				}
+				if (
+					!errors.subcategories &&
+					(subcategories[0].sub === 'Monitors' ||
+						subcategories[0].sub === 'Televisions')
+				) {
+					if (isEmpty(opt.display)) {
+						optError.display = 'Display size is required';
+					}
+					if (isEmpty(opt.resolution)) {
+						optError.resolution = 'Resolution is required';
+					}
+					if (isEmpty(opt.smart)) {
+						optError.smart = 'Smart is required';
+					} else if (
+						(JSON.parse(opt.smart) !== true || opt.smart !== true) &&
+						(JSON.parse(opt.smart) !== false || opt.smart !== false)
+					) {
+						optError.smart = 'Smart has to be an Boolean';
+					}
+					if (isEmpty(opt.threeD)) {
+						optError.threeD = '3D is required';
+					} else if (
+						(JSON.parse(opt.threeD) !== true || opt.threeD !== true) &&
+						(JSON.parse(opt.threeD) !== false || opt.threeD !== false)
+					) {
+						optError.threeD = '3D has to be an Boolean';
+					}
+				}
+				return optError;
 			});
 			optionErr.options = await Promise.all(promises);
 			const bool = optionErr.options.find(err => Object.keys(err).length !== 0);

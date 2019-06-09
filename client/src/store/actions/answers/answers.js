@@ -4,7 +4,7 @@ import axios from 'axios';
 export const addAnswer = answerObj => async dispatch => {
 	dispatch({ type: actionTypes.ANSWER_START });
 
-    const response = await axios.post('/answers/addanswer', answerObj);
+	const response = await axios.post('/answers/addanswer', answerObj);
 
 	if (response.data.errors) {
 		dispatch({
@@ -31,7 +31,9 @@ export const getAllAnswers = () => async dispatch => {
 
 	const token = localStorage.jwtToken;
 
-    const response = await axios.get('/answers/getallanswers',  { headers: { Authorization: token } });
+	const response = await axios.get('/answers/getallanswers', {
+		headers: { Authorization: token }
+	});
 
 	if (response.data.failedMessage) {
 		dispatch({
@@ -40,8 +42,8 @@ export const getAllAnswers = () => async dispatch => {
 		});
 	} else {
 		dispatch({
-            type: actionTypes.ANSWER_SUCCESS,
-            answers: response.data.answers
+			type: actionTypes.ANSWER_SUCCESS,
+			answers: response.data.answers
 		});
 	}
 };
@@ -49,7 +51,7 @@ export const getAllAnswers = () => async dispatch => {
 export const getAnswer = id => async dispatch => {
 	dispatch({ type: actionTypes.ANSWER_START });
 
-    const response = await axios.get('/answers/getanswer?id=' + id);
+	const response = await axios.get('/answers/getanswer?id=' + id);
 
 	if (response.data.failedMessage) {
 		dispatch({
@@ -59,15 +61,15 @@ export const getAnswer = id => async dispatch => {
 		});
 	} else {
 		dispatch({
-            type: actionTypes.ANSWER_SUCCESS,
-            data: response.data.answer
+			type: actionTypes.ANSWER_SUCCESS,
+			data: response.data.answer
 		});
 	}
 };
 
 export const deleteAnswer = id => async dispatch => {
 	dispatch({ type: actionTypes.ANSWER_START });
-    const response = await axios.delete('/answers/deleteanswer?id=' + id);
+	const response = await axios.delete('/answers/deleteanswer?id=' + id);
 
 	if (response.data.failedMessage) {
 		dispatch({
@@ -87,9 +89,11 @@ export const updateAnswer = (answerObj, id) => async dispatch => {
 	dispatch({ type: actionTypes.ANSWER_START });
 	const obj = JSON.stringify(answerObj);
 
-    const response = await axios.patch(`/answers/updateanswer?object=${obj}&id=${id}`);
+	const response = await axios.patch(
+		`/answers/updateanswer?object=${obj}&id=${id}`
+	);
 
-	 if (response.data.failedMessage) {
+	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.ANSWER_FAILED,
 			data: answerObj,

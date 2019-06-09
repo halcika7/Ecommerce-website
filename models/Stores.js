@@ -6,11 +6,11 @@ const StoresSchema = new Schema({
 		type: String,
 		required: true,
 		unique: true
-    },
-    picture: {
-        type: String,
-        required: true
-    },
+	},
+	picture: {
+		type: String,
+		required: true
+	},
 	city: {
 		type: String,
 		required: true
@@ -18,25 +18,25 @@ const StoresSchema = new Schema({
 	country: {
 		type: String,
 		required: true
-    },
-    location: {},
-    weekHours: {
-        from: String,
-        to: String
-    },
-    saturdayHours: {
-        from: String,
-        to: String
-    },
-    email: {
-        type: String,
-        required: true
-    },
-    phone: {
-        type: String,
-        required: true
-    },
-    links: {}
+	},
+	location: {},
+	weekHours: {
+		from: String,
+		to: String
+	},
+	saturdayHours: {
+		from: String,
+		to: String
+	},
+	email: {
+		type: String,
+		required: true
+	},
+	phone: {
+		type: String,
+		required: true
+	},
+	links: {}
 });
 
 module.exports = Stores = mongoose.model('stores', StoresSchema);

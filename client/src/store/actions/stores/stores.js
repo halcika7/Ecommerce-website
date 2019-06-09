@@ -1,11 +1,11 @@
-import * as actionTypes from "../actionTypes";
-import axios from "axios";
+import * as actionTypes from '../actionTypes';
+import axios from 'axios';
 import { returnStoresDataOnError } from '../../../helpers/stores';
 
 export const addStore = (formData, config) => async dispatch => {
 	dispatch({ type: actionTypes.STORE_START });
-    const storeData = returnStoresDataOnError(formData);
-	const response = await axios.post('/stores/addstore',formData,config);
+	const storeData = returnStoresDataOnError(formData);
+	const response = await axios.post('/stores/addstore', formData, config);
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.STORE_FAILED,
@@ -37,8 +37,8 @@ export const getStores = () => async dispatch => {
 	} else {
 		dispatch({
 			type: actionTypes.STORE_SUCCESS,
-            successMessage: response.data.successMessage,
-            stores: response.data.stores
+			successMessage: response.data.successMessage,
+			stores: response.data.stores
 		});
 	}
 };
@@ -54,48 +54,48 @@ export const getStoresFront = () => async dispatch => {
 	} else {
 		dispatch({
 			type: actionTypes.STORE_SUCCESS,
-            successMessage: response.data.successMessage,
-            stores: response.data.stores
+			successMessage: response.data.successMessage,
+			stores: response.data.stores
 		});
 	}
 };
 
-export const getStore = (id) => async dispatch => {
+export const getStore = id => async dispatch => {
 	dispatch({ type: actionTypes.STORE_START });
-    const response = await axios.get('/stores/getstore?id=' + id);
-    const options = {...response.data.store};
+	const response = await axios.get('/stores/getstore?id=' + id);
+	const options = { ...response.data.store };
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.STORE_FAILED,
-            failedMessage: response.data.failedMessage,
-            notFound: true
+			failedMessage: response.data.failedMessage,
+			notFound: true
 		});
 	} else {
 		dispatch({
 			type: actionTypes.STORE_SUCCESS,
-            storeData: {options}
+			storeData: { options }
 		});
 	}
 };
 
 export const getStoreContact = () => async dispatch => {
 	dispatch({ type: actionTypes.STORE_START });
-    const response = await axios.get('/stores/getstorecontact');
+	const response = await axios.get('/stores/getstorecontact');
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.STORE_FAILED,
-            failedMessage: response.data.failedMessage,
-            notFound: true
+			failedMessage: response.data.failedMessage,
+			notFound: true
 		});
 	} else {
 		dispatch({
 			type: actionTypes.STORE_SUCCESS,
-            store: response.data.store
+			store: response.data.store
 		});
 	}
 };
 
-export const deleteStore = (id) => async dispatch => {
+export const deleteStore = id => async dispatch => {
 	dispatch({ type: actionTypes.STORE_START });
 	const response = await axios.delete('/stores/deletestore?id=' + id);
 	if (response.data.failedMessage) {
@@ -106,16 +106,16 @@ export const deleteStore = (id) => async dispatch => {
 	} else {
 		dispatch({
 			type: actionTypes.STORE_SUCCESS,
-            successMessage: response.data.successMessage,
-            stores: response.data.stores
+			successMessage: response.data.successMessage,
+			stores: response.data.stores
 		});
 	}
 };
 
 export const updateStore = (formData, config) => async dispatch => {
 	dispatch({ type: actionTypes.STORE_START });
-    const storeData = returnStoresDataOnError(formData);
-	const response = await axios.patch('/stores/updatestore',formData,config);
+	const storeData = returnStoresDataOnError(formData);
+	const response = await axios.patch('/stores/updatestore', formData, config);
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.STORE_FAILED,
@@ -129,11 +129,11 @@ export const updateStore = (formData, config) => async dispatch => {
 			errors: response.data.errors
 		});
 	} else {
-        const options = {...response.data.store};
+		const options = { ...response.data.store };
 		dispatch({
 			type: actionTypes.STORE_SUCCESS,
-            successMessage: response.data.successMessage,
-            storeData: {options}
+			successMessage: response.data.successMessage,
+			storeData: { options }
 		});
 	}
 };

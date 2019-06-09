@@ -33,8 +33,8 @@ const reducer = (state = initialState, action) => {
 			loading: action.loading ? action.loading : false
 		}),
 		[actionTypes.FILTER_PRODUCT_SUCCESS]: updateObject(state, {
-            products: action.products ? action.products : state.products,
-            brands: action.brands ? action.brands : state.brands,
+			products: action.products ? action.products : state.products,
+			brands: action.brands ? action.brands : state.brands,
 			sizes: action.sizes ? action.sizes : state.sizes,
 			colors: action.colors ? action.colors : state.colors,
 			graphics: action.graphics ? action.graphics : state.graphics,
@@ -50,7 +50,7 @@ const reducer = (state = initialState, action) => {
 			price: action.price ? action.price : state.price,
 			pages: action.pages ? action.pages : state.pages,
 			successMessage: action.successMessage ? action.successMessage : false,
-			loading: action.loading ? action.loading : false,
+			loading: action.loading ? action.loading : false
 		}),
 		default: state
 	};

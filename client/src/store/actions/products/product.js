@@ -187,7 +187,9 @@ export const getAllProducts = id => async dispatch => {
 
 export const deleteProduct = (id, name) => async dispatch => {
 	dispatch({ type: actionTypes.PRODUCT_START });
-	const response = await axios.delete(`/products/product/deleteproduct?id=${id}&name=${name}`);
+	const response = await axios.delete(
+		`/products/product/deleteproduct?id=${id}&name=${name}`
+	);
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.PRODUCT_FAILED,
@@ -211,25 +213,25 @@ export const clearSingleProduct = () => async dispatch => {
 
 export const searchProducts = query => async dispatch => {
 	// dispatch({ type: actionTypes.PRODUCT_START });
-	const response = await axios.get('/products/product/serachforproduct?query=' + query);
+	const response = await axios.get(
+		'/products/product/serachforproduct?query=' + query
+	);
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.PRODUCT_FAILED,
 			failedMessage: response.data.failedMessage
 		});
 	} else {
-
 		dispatch({
 			type: actionTypes.PRODUCT_SUCCESS,
 			loading: true
 		});
 
-		setTimeout( () => { 
+		setTimeout(() => {
 			dispatch({
 				type: actionTypes.PRODUCT_SUCCESS,
 				searchedProducts: response.data.products
 			});
-		}, 1000)
-
+		}, 1000);
 	}
 };

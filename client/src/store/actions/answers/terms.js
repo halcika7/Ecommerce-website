@@ -4,7 +4,7 @@ import axios from 'axios';
 export const addTerm = termObj => async dispatch => {
 	dispatch({ type: actionTypes.TERM_START });
 
-    const response = await axios.post('/terms/addterm', termObj);
+	const response = await axios.post('/terms/addterm', termObj);
 
 	if (response.data.errors) {
 		dispatch({
@@ -38,8 +38,8 @@ export const getAllTerms = () => async dispatch => {
 		});
 	} else {
 		dispatch({
-            type: actionTypes.TERM_SUCCESS,
-            terms: response.data.terms
+			type: actionTypes.TERM_SUCCESS,
+			terms: response.data.terms
 		});
 	}
 };
@@ -47,7 +47,7 @@ export const getAllTerms = () => async dispatch => {
 export const getTerm = id => async dispatch => {
 	dispatch({ type: actionTypes.TERM_START });
 
-    const response = await axios.get('/terms/getterm?id=' + id);
+	const response = await axios.get('/terms/getterm?id=' + id);
 
 	if (response.data.failedMessage) {
 		dispatch({
@@ -57,15 +57,15 @@ export const getTerm = id => async dispatch => {
 		});
 	} else {
 		dispatch({
-            type: actionTypes.TERM_SUCCESS,
-            data: response.data.term
+			type: actionTypes.TERM_SUCCESS,
+			data: response.data.term
 		});
 	}
 };
 
 export const deleteTerm = id => async dispatch => {
 	dispatch({ type: actionTypes.TERM_START });
-    const response = await axios.delete('/terms/deleteterm?id=' + id);
+	const response = await axios.delete('/terms/deleteterm?id=' + id);
 
 	if (response.data.failedMessage) {
 		dispatch({
@@ -85,9 +85,11 @@ export const updateTerm = (termObj, id) => async dispatch => {
 	dispatch({ type: actionTypes.TERM_START });
 	const obj = JSON.stringify(termObj);
 
-    const response = await axios.patch(`/answers/updateanswer?object=${obj}&id=${id}`);
+	const response = await axios.patch(
+		`/answers/updateanswer?object=${obj}&id=${id}`
+	);
 
-	 if (response.data.failedMessage) {
+	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.TERM_FAILED,
 			data: termObj,

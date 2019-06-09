@@ -9,12 +9,12 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 const app = (
-    <Provider store={store}>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
-    </Provider>
+	<Provider store={store}>
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>
+	</Provider>
 );
 
-ReactDOM.render( app, document.getElementById('root'));
+ReactDOM.render(app, document.getElementById('root'));
 serviceWorker.unregister();

@@ -2,7 +2,11 @@ import React from 'react';
 import UploadPicture from '../../../components/UI/UploadPicture/UploadPicture';
 import UploadPictures from '../../../components/UI/UploadPictures/UploadPictures';
 
-const ChoosePictures = ({ changeFeaturedPicture, changePictures, setShowButton }) => {
+const ChoosePictures = ({
+	changeFeaturedPicture,
+	changePictures,
+	setShowButton
+}) => {
 	return (
 		<React.Fragment>
 			<label className="d-block">Featured Picture</label>

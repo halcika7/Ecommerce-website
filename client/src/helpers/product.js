@@ -1,14 +1,18 @@
 export const returnProductDataOnError = formData => {
-    const productData = {pictures: []};
+	const productData = { pictures: [] };
 	for (const pair of formData.entries()) {
-		if(pair[0] === 'options' || pair[0] === 'subcategories' || pair[0] === 'published') {
+		if (
+			pair[0] === 'options' ||
+			pair[0] === 'subcategories' ||
+			pair[0] === 'published'
+		) {
 			productData[pair[0]] = JSON.parse(pair[1]);
-		}else if(pair[0] === 'pictures') {
+		} else if (pair[0] === 'pictures') {
 			productData.pictures.push(pair[1]);
-		}else {
+		} else {
 			productData[pair[0]] = pair[1];
 		}
-	 }
+	}
 	productData.options = productData.options.map(option => {
 		const newOpt = { ...option };
 		const findFeaturedPictureInFiles = productData.pictures.find(
@@ -17,24 +21,32 @@ export const returnProductDataOnError = formData => {
 		if (findFeaturedPictureInFiles) {
 			newOpt.featuredPicture = findFeaturedPictureInFiles;
 		}
-		newOpt.pictures = option.pictures.map(picture => productData.pictures.find(file => file.name === picture));
+		newOpt.pictures = option.pictures.map(picture =>
+			productData.pictures.find(file => file.name === picture)
+		);
 		return newOpt;
 	});
-    delete productData.pictures;
-    
-    return productData;
-}
+	delete productData.pictures;
 
-export const helperForChoosenValues = (choosenValues, filterOption, setChoosenValue, property, setValues) => {
+	return productData;
+};
+
+export const helperForChoosenValues = (
+	choosenValues,
+	filterOption,
+	setChoosenValue,
+	property,
+	setValues
+) => {
 	setValues(filterOption);
-	if(choosenValues.length > 0) {
+	if (choosenValues.length > 0) {
 		const newChoosenValues = choosenValues.filter(value => {
 			const findIndex = filterOption.findIndex(val => val[property] === value);
-			if(findIndex !== -1) {
+			if (findIndex !== -1) {
 				return value;
 			}
 			return false;
 		});
 		setChoosenValue(newChoosenValues);
-	} 
-}
+	}
+};

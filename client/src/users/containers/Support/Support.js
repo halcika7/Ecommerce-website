@@ -8,8 +8,8 @@ import ContainerIcons from '../../components/UI/ContainerIcons/ContainerIcons';
 
 const Support = props => {
 	useEffect(() => {
-        document.title = 'Support';
-        props.getAllAnswers();
+		document.title = 'Support';
+		props.getAllAnswers();
 	}, []);
 
 	return (

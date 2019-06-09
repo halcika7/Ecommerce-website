@@ -1,8 +1,8 @@
 import React from 'react';
 import c from './Question.module.css';
 
-const question = (props) => {
-    const toggleAnswer = (event, classAct) => {
+const question = props => {
+	const toggleAnswer = (event, classAct) => {
 		event.preventDefault();
 		const parent = event.currentTarget;
 		parent.classList.toggle(classAct);
@@ -41,18 +41,21 @@ const question = (props) => {
 			s.classList = 'collapse show';
 		}
 	};
-    return(
-        <div className={c.col12 + " col-12"}>
-        
-            <div className={c.accordionlink + " accordion-link"} onClick={(e) => toggleAnswer(e,c.active)}>
-                <a href="/" className="">{props.question.question}</a>
-            </div>
-        
-            <div className={"collapse"}>
-                <div className={c.answer}>{props.question.answer}</div>
-            </div>
-        </div>
-    );
-}
+	return (
+		<div className={c.col12 + ' col-12'}>
+			<div
+				className={c.accordionlink + ' accordion-link'}
+				onClick={e => toggleAnswer(e, c.active)}>
+				<a href="/" className="">
+					{props.question.question}
+				</a>
+			</div>
+
+			<div className={'collapse'}>
+				<div className={c.answer}>{props.question.answer}</div>
+			</div>
+		</div>
+	);
+};
 
 export default question;

@@ -5,17 +5,17 @@ const ProductSchema = new Schema(
 	{
 		name: {
 			type: String,
-      required: true,
-      unique: true
-    },
-    price: {
-      type: Number,
-      required: true
-    },
-    year: {
-      type: Number,
-      required: true
-    },
+			required: true,
+			unique: true
+		},
+		price: {
+			type: Number,
+			required: true
+		},
+		year: {
+			type: Number,
+			required: true
+		},
 		brand: {
 			type: String,
 			required: true
@@ -23,76 +23,76 @@ const ProductSchema = new Schema(
 		category: {
 			type: String,
 			required: true
-    },
-    published: {
+		},
+		published: {
 			type: Boolean,
-      required: true,
-      default: false
-    },
-    featured: {
-      type: Boolean,
-      required: true,
-      default: false
-    },
-    description: {
+			required: true,
+			default: false
+		},
+		featured: {
+			type: Boolean,
+			required: true,
+			default: false
+		},
+		description: {
 			type: String,
 			required: true
-    },
-    smalldescription: {
+		},
+		smalldescription: {
 			type: String,
 			required: true
-    },
-    wifi: {
-      type: Boolean
-    },
-    bluetooth: {
-      type: Boolean
-    },
-    subcategories: {
-      type: Array,
-      required: true
-    },
-    options: {
-      type: Array,
-      required: true
-    },
-    dailyOffer: {
-      active: {
-        type: Boolean
-      },
-      expires: {
-        type: Date
-      },
-      discount: Number
-    },
-    weeklyOffer: {
-      active: {
-        type: Boolean
-      },
-      expires: {
-        type: Date
-      },
-      discount: Number
-    },
-    numberOfsales: {
-      type: Number,
-      required: true,
-      default: 0
-    },
-    rating: {
-      averageRating: {
-        type: Number,
-        default: 0
-      },
-      numberOfReviews: {
-        type: Number,
-        default: 0
-      }
-    }
+		},
+		wifi: {
+			type: Boolean
+		},
+		bluetooth: {
+			type: Boolean
+		},
+		subcategories: {
+			type: Array,
+			required: true
+		},
+		options: {
+			type: Array,
+			required: true
+		},
+		dailyOffer: {
+			active: {
+				type: Boolean
+			},
+			expires: {
+				type: Date
+			},
+			discount: Number
+		},
+		weeklyOffer: {
+			active: {
+				type: Boolean
+			},
+			expires: {
+				type: Date
+			},
+			discount: Number
+		},
+		numberOfsales: {
+			type: Number,
+			required: true,
+			default: 0
+		},
+		rating: {
+			averageRating: {
+				type: Number,
+				default: 0
+			},
+			numberOfReviews: {
+				type: Number,
+				default: 0
+			}
+		}
 	},
 	{
 		timestamps: true
 	}
 );
 
-module.exports = Product = mongoose.model( 'products', ProductSchema );
+module.exports = Product = mongoose.model('products', ProductSchema);

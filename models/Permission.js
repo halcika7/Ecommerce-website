@@ -1,17 +1,17 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const PermissionSchema = new Schema({
-  slug: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  permission: {
-    type: String,
-    required: true,
-    unique: true
-  }
+	slug: {
+		type: String,
+		required: true,
+		unique: true
+	},
+	permission: {
+		type: String,
+		required: true,
+		unique: true
+	}
 });
 
-module.exports = Permission = mongoose.model("permissions", PermissionSchema);
+module.exports = Permission = mongoose.model('permissions', PermissionSchema);

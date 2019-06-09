@@ -1,6 +1,6 @@
-import { createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
-import { combinedReducers } from "./reducers";
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import { combinedReducers } from './reducers';
 
 // const composeEnhancers =
 //   process.env.NODE_ENV === "development"
