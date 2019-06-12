@@ -3,7 +3,11 @@
 ##Client Side == Client-server pattern
 
 ```
-This pattern consists of two parties; a server and multiple clients. The server component will provide services to multiple client components. Clients request services from the server and the server provides relevant services to those clients. Furthermore, the server continues to listen to client requests.On the front end we have users pages and admin pages which represents these multile clients.
+This pattern consists of two parties; a server and multiple clients. 
+The server component will provide services to multiple client components. 
+Clients request services from the server and the server provides relevant services to those clients. 
+Furthermore, the server continues to listen to client requests.
+On the front end we have users pages and admin pages which represents these multile clients.
 ```
 
 ##Server Side == Model-view-controller pattern
