@@ -1,12 +1,20 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
+import { logoutUser } from '../auth/login';
 
-export const addNewPermission = permission => async dispatch => {
+export const addNewPermission = (permission, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.PERMISSION_START });
+	const token = localStorage.jwtToken;
 	const response = await axios.post(
 		'/rolespermissions/permissions/addpermission',
-		{ permission }
+		{ permission },
+		{
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.PERMISSION_FAILED,
@@ -21,14 +29,21 @@ export const addNewPermission = permission => async dispatch => {
 			loading: true
 		});
 	}
-	setTimeout(() => dispatch(getAllModelNames()), 4000);
+	setTimeout(() => dispatch(getAllModelNames(callBack)), 4000);
 };
 
-export const getAllPermissions = () => async dispatch => {
+export const getAllPermissions = callBack => async dispatch => {
 	dispatch({ type: actionTypes.PERMISSION_START });
+	const token = localStorage.jwtToken;
 	const response = await axios.get(
-		'/rolespermissions/permissions/getallpermissions'
+		'/rolespermissions/permissions/getallpermissions',
+		{
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.PERMISSION_FAILED,
@@ -42,11 +57,18 @@ export const getAllPermissions = () => async dispatch => {
 	}
 };
 
-export const getAllModelNames = () => async dispatch => {
+export const getAllModelNames = callBack => async dispatch => {
 	dispatch({ type: actionTypes.PERMISSION_START });
+	const token = localStorage.jwtToken;
 	const response = await axios.get(
-		'/rolespermissions/permissions/getallmodelnames'
+		'/rolespermissions/permissions/getallmodelnames',
+		{
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 
 	if (response.data.error) {
 		dispatch({
@@ -67,11 +89,18 @@ export const getAllModelNames = () => async dispatch => {
 	}
 };
 
-export const deletePermission = permission => async dispatch => {
+export const deletePermission = (permission, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.PERMISSION_START });
+	const token = localStorage.jwtToken;
 	const response = await axios.delete(
-		'/rolespermissions/permissions/deletepermission?permission=' + permission
+		`/rolespermissions/permissions/deletepermission?permission=${permission}`,
+		{
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.PERMISSION_FAILED,
@@ -86,17 +115,26 @@ export const deletePermission = permission => async dispatch => {
 		});
 	}
 	setTimeout(() => {
-		dispatch(getAllPermissions());
+		dispatch(getAllPermissions(callBack));
 	}, 4000);
 };
 
-export const deleteManyPermissions = permissions => async dispatch => {
+export const deleteManyPermissions = (
+	permissions,
+	callBack
+) => async dispatch => {
+	const token = localStorage.jwtToken;
 	let queryString = '/rolespermissions/permissions/deletemanypermissions?';
 	permissions.forEach((permission, index) => {
 		queryString += `permission${index}=${permission}&`;
 	});
 	dispatch({ type: actionTypes.PERMISSION_START });
-	const response = await axios.delete(queryString);
+	const response = await axios.delete(queryString, {
+		headers: { Authorization: token }
+	});
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.PERMISSION_FAILED,
@@ -111,6 +149,6 @@ export const deleteManyPermissions = permissions => async dispatch => {
 		});
 	}
 	setTimeout(() => {
-		dispatch(getAllPermissions());
+		dispatch(getAllPermissions(callBack));
 	}, 4000);
 };

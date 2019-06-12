@@ -18,7 +18,8 @@ const ReplyComment = props => {
 		props.editReply({
 			id: props.reply.reviewId._id,
 			text: editedReplyText,
-			reviewId: props.reviewId
+			reviewId: props.reviewId,
+			callBack: props.push
 		});
 		setEditComment(false);
 	};
@@ -29,7 +30,7 @@ const ReplyComment = props => {
 
 	const deleteReply = e => {
 		e.preventDefault();
-		props.deleteReply({ id: props.reply.reviewId._id, userId: props.userId });
+		props.deleteReply({ id: props.reply.reviewId._id, userId: props.userId, callBack: props.push });
 	};
 
 	return (

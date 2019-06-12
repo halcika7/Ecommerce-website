@@ -18,7 +18,7 @@ const UpdateRole = props => {
 	useEffect(() => {
 		const id = new URLSearchParams(props.location.search).get('id');
 		props.getRole(id);
-		props.getPermissions();
+		props.getPermissions(props.history.push);
 	}, []);
 	useEffect(() => {
 		setRole({ ...props.roleState });
@@ -45,7 +45,7 @@ const UpdateRole = props => {
 			isAdmin,
 			permissions: choosenPermissions
 		};
-		props.updateRole(roleData);
+		props.updateRole(roleData, props.history.push);
 	};
 
 	if (props.failedMessage === true) {
@@ -136,8 +136,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return {
 		getRole: id => dispatch(actions.getUserRole(id)),
-		getPermissions: () => dispatch(actions.getAllPermissions()),
-		updateRole: data => dispatch(actions.updateUserRole(data))
+		getPermissions: callBack => dispatch(actions.getAllPermissions(callBack)),
+		updateRole: (data, callBack) => dispatch(actions.updateUserRole(data, callBack))
 	};
 };
 

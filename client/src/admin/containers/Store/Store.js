@@ -48,7 +48,7 @@ const Store = props => {
 
 	useEffect(() => {
 		!props.addstore &&
-			props.getStore(new URLSearchParams(props.location.search).get('id'));
+			props.getStore(new URLSearchParams(props.location.search).get('id'), props.history.push);
 		!props.addstore && setPredefinedNotFile(true);
 	}, []);
 
@@ -143,8 +143,8 @@ const Store = props => {
 				new URLSearchParams(props.location.search).get('id')
 			);
 		const config = { headers: { 'content-type': 'multipart/form-data' } };
-		props.addstore && props.addStore(formData, config);
-		props.edit && props.updateStore(formData, config);
+		props.addstore && props.addStore(formData, config, props.history.push);
+		props.edit && props.updateStore(formData, config, props.history.push);
 		setFormatedAddress('');
 		setEmail('');
 		setCountry('');
@@ -174,8 +174,6 @@ const Store = props => {
 			setSaturdayTo(e.target.value);
 		}
 	};
-
-	console.log(picture);
 
 	return (
 		<div className={'AdminProfile row'}>
@@ -471,11 +469,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		addStore: (formData, config) =>
-			dispatch(actions.addStore(formData, config)),
-		updateStore: (formData, config) =>
-			dispatch(actions.updateStore(formData, config)),
-		getStore: id => dispatch(actions.getStore(id))
+		addStore: (formData, config, callBack) =>
+			dispatch(actions.addStore(formData, config, callBack)),
+		updateStore: (formData, config, callBack) =>
+			dispatch(actions.updateStore(formData, config, callBack)),
+		getStore: (id, callBack) => dispatch(actions.getStore(id, callBack))
 	};
 };
 

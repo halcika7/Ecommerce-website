@@ -108,13 +108,13 @@ const User = props => {
 	]);
 
 	useEffect(() => {
-		props.getUser(userID, props.UserID, profile);
+		props.getUser(userID, props.UserID, profile, props.history.push);
 		if (!(props.profile && userID !== props.UserID)) {
 			props.getRoles();
 		}
 	}, []);
 	useEffect(() => {
-		props.getUser(userID, props.UserID, profile);
+		props.getUser(userID, props.UserID, profile, props.history.push);
 		if (!(props.profile && userID !== props.UserID)) {
 			props.getRoles();
 		}
@@ -174,7 +174,7 @@ const User = props => {
 				delete userData.userInfo[data];
 			}
 		}
-		props.updateUser(userData);
+		props.updateUser(userData, props.history.push);
 	};
 
 	const setAccountConfirmed = value =>
@@ -409,13 +409,14 @@ const User = props => {
 			!(props.profile && userID !== props.UserID) ? (
 				<React.Fragment>
 					{props.profile === true && props.User !== undefined ? (
-						<AdminNewPassword userName={props.User.username} />
+						<AdminNewPassword userName={props.User.username} push={props.history.push} />
 					) : null}
 					{props.profile === true && props.User !== undefined ? (
 						<AdminChangeProfilePicture
 							submit={props.updateUserPicture}
 							username={user.username}
 							id={user._id}
+							push={props.history.push}
 						/>
 					) : null}
 				</React.Fragment>
@@ -442,11 +443,12 @@ const mapStateToProps = state => {
 const dispatchMapToProps = dispatch => {
 	return {
 		getRoles: () => dispatch(actions.getRoles()),
-		getUser: (id, id2, profile) =>
-			dispatch(actions.getSingleUser(id, id2, profile)),
-		updateUser: userData => dispatch(actions.updateUser(userData)),
-		updateUserPicture: (formData, config, id) =>
-			dispatch(actions.userUpdateProfilePicture(formData, config, id))
+		getUser: (id, id2, profile, callBack) =>
+			dispatch(actions.getSingleUser(id, id2, profile, callBack)),
+		updateUser: (userData, callBack) =>
+			dispatch(actions.updateUser(userData, callBack)),
+		updateUserPicture: (formData, config, id, callBack) =>
+			dispatch(actions.userUpdateProfilePicture(formData, config, id, callBack))
 	};
 };
 

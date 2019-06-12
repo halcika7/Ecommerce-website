@@ -20,9 +20,7 @@ exports.payment = async (req, res) => {
 		tokenId,
 		isValid
 	} = await validatePayment(req.body);
-	if (!isValid) {
-		return res.json(errors);
-	}
+	if (!isValid) { return res.json(errors); }
 	try {
 		const findUser = await UserModel.findOne({
 			_id: ObjectId(userData.userId)

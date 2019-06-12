@@ -10,7 +10,7 @@ const PrivateRoute = ({ PageToLoad, isAuthenticated, ...rest }) => (
 		render={props =>
 			isAuthenticated ? (
 				<Suspense fallback={<Spinner />}>
-					<PageToLoad />
+					<PageToLoad {...props}/>
 				</Suspense>
 			) : (
 				<Redirect to="/authentication" />

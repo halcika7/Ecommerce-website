@@ -8,6 +8,7 @@ const getTokenEXP = require('../helpers/getTokenEXP').getDecodedTokenEXP;
 exports.activateAccount = async (req, res) => {
 	try {
 		const user = await UserModel.findOne({ email: req.body.email });
+		if(!user) { return res.json({ failedMessage: 'Failed to find user' }); }
 		const expiresIn = new Date(
 			user.emailConfirmation.tokenExparation
 		).getTime();
@@ -19,7 +20,7 @@ exports.activateAccount = async (req, res) => {
 				} Token has expired please click button "Send Activation Link"`
 			});
 
-		await UserModel.updateOne(
+		const updateUser = await UserModel.updateOne(
 			{ email: req.body.email },
 			{
 				emailConfirmation: {
@@ -29,6 +30,7 @@ exports.activateAccount = async (req, res) => {
 				}
 			}
 		);
+		if(updateUser.nModified === 0) { return res.json({ failedMessage: 'Failed to update your email confirmation' }); }
 		return res.json({
 			successMessage: `${user.username} you activated account successfully`
 		});
@@ -59,6 +61,9 @@ exports.resendActivationMail = async (req, res) => {
 					}
 				}
 			);
+
+			if(user.nModified === 0) { return res.json({ failedMessage: 'Failed to update user email confirmation' }); }
+
 			sendActivationEmail(user, 'Bearer ' + jwtToken);
 			return res.json({
 				successMessage: `Please ${

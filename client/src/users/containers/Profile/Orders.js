@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import {
 	getAllUserOrders,
-	getOrder,
 	deleteUserOrder
 } from '../../../store/actions';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -17,7 +16,7 @@ const { SearchBar } = Search;
 
 const Orders = props => {
 	useEffect(() => {
-		props.getOrders(props.userId);
+		props.getOrders(props.userId, props.push);
 	}, []);
 
 	const [options] = useState({
@@ -101,7 +100,7 @@ const Orders = props => {
 
 	const deleteOrder = (e, id) => {
 		e.preventDefault();
-		props.deleteOrder(id, props.userId);
+		props.deleteOrder(id, props.userId, props.push);
 	};
 
 	return (
@@ -159,9 +158,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-	getOrders: id => dispatch(getAllUserOrders(id)),
-	getOrder: id => dispatch(getOrder(id)),
-	deleteOrder: (id, userId) => dispatch(deleteUserOrder(id, userId))
+	getOrders: (id, callBack) => dispatch(getAllUserOrders(id, callBack)),
+	deleteOrder: (id, userId, callBack) => dispatch(deleteUserOrder(id, userId, callBack))
 });
 
 export default connect(

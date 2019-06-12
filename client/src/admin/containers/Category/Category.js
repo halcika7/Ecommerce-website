@@ -76,11 +76,11 @@ const Category = props => {
 		setSubCategories([]);
 		setAllSubCategories([]);
 		if (props.addcategory) {
-			props.addCategory(catData);
+			props.addCategory(catData, props.history.push);
 		}
 		if (props.editcategory) {
 			const id = new URLSearchParams(props.location.search).get('id');
-			props.editCategory(id, catData);
+			props.editCategory(id, catData, props.history.push);
 		}
 	};
 
@@ -120,12 +120,12 @@ const Category = props => {
 	const startFunction = () => {
 		if (!props.addcategory) {
 			const id = new URLSearchParams(props.location.search).get('id');
-			props.getCategory(id);
-			props.getAllCategoryIcons();
+			props.getCategory(id, props.history.push);
+			props.getAllCategoryIcons(props.history.push);
 		}
 		if (props.addcategory) {
 			props.clearState();
-			props.getAllCategoryIcons();
+			props.getAllCategoryIcons(props.history.push);
 		}
 	};
 
@@ -326,11 +326,11 @@ const mapStateToProps = state => {
 
 const dispatchMapToProps = dispatch => {
 	return {
-		addCategory: data => dispatch(actions.addCategory(data)),
-		getCategory: id => dispatch(actions.getCategory(id)),
-		editCategory: (id, data) => dispatch(actions.editCategory(id, data)),
+		addCategory: (data, callBack) => dispatch(actions.addCategory(data, callBack)),
+		getCategory: (id, callBack) => dispatch(actions.getCategory(id, callBack)),
+		editCategory: (id, data, callBack) => dispatch(actions.editCategory(id, data, callBack)),
 		clearState: () => dispatch(actions.clearState()),
-		getAllCategoryIcons: () => dispatch(actions.getAllCategoryIcons())
+		getAllCategoryIcons: callBack => dispatch(actions.getAllCategoryIcons(callBack))
 	};
 };
 

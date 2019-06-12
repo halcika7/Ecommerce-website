@@ -9,15 +9,14 @@ const Order = props => {
 	const orderId = props.match.params.id
 		? props.match.params.id
 		: new URLSearchParams(props.location.search).get('id');
-
 	const [order, setOrder] = useState({});
 	const [shipped, setShipped] = useState(false);
 
 	useEffect(() => {
-		props.getOrder(orderId);
+		props.getOrder(orderId, props.history.push);
 	}, []);
 	useEffect(() => {
-		props.getOrder(orderId);
+		props.getOrder(orderId, props.history.push);
 	}, [props.location.search, props.match.params]);
 	useEffect(() => {
 		if (Object.keys(props.orders.order).length > 0) {
@@ -28,7 +27,7 @@ const Order = props => {
 
 	const updateOrder = e => {
 		e.preventDefault();
-		props.updateOrder(orderId, shipped);
+		props.updateOrder(orderId, shipped, props.history.push);
 	};
 
 	return (
@@ -152,8 +151,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-	getOrder: id => dispatch(getOrder(id)),
-	updateOrder: (id, value) => dispatch(updateOrder(id, value))
+	getOrder: (id, callBack) => dispatch(getOrder(id, callBack)),
+	updateOrder: (id, value, callBack) =>
+		dispatch(updateOrder(id, value, callBack))
 });
 
 export default connect(

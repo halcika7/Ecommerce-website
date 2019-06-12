@@ -27,7 +27,7 @@ const Comment = props => {
 			text: replyText,
 			userId: props.userId,
 			reviewId: props.review._id
-		});
+		}, props.push);
 		setReplyText('');
 		setShowReply(false);
 		setShowReplyComments(true);
@@ -38,13 +38,14 @@ const Comment = props => {
 		props.deleteReview({
 			id: props.review._id,
 			userId: props.userId,
-			productId: props.review.productId
+			productId: props.review.productId,
+			callBack: props.push
 		});
 	};
 
 	const submitEditedReview = e => {
 		e.preventDefault();
-		props.editReview({ id: props.review._id, text: editedReviewText });
+		props.editReview({ id: props.review._id, text: editedReviewText, callBack: props.push });
 		setEditComment(false);
 	};
 
@@ -155,6 +156,7 @@ const Comment = props => {
 						showReplyComments={showReplyComments}
 						editReply={props.editReply}
 						deleteReply={props.deleteReply}
+						push={props.push}
 					/>
 				))}
 		</li>

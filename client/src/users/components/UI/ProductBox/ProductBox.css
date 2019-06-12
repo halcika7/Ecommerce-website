@@ -463,3 +463,143 @@
   margin-right: 10px;
 }
 /* end horizontal products */
+
+/* mightlike */
+
+.owl-carousel-1.owl-carousel .owl-stage-outer .owl-stage .owl-item .col-12{
+  border: 2px solid #d5d5d5 !important;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: start;
+  transition: all .3s ease-in;
+}
+
+.owl-carousel-1.owl-carousel .owl-stage-outer .owl-stage .owl-item .col-12:hover{
+  border: 2px solid rgb(234, 120, 50) !important;
+}
+
+.owl-carousel-1.owl-carousel .owl-stage-outer .owl-stage .owl-item .col-12 > a > img{
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.owl-carousel-1.owl-carousel .owl-stage-outer .owl-stage .owl-item .col-12 > p{
+  width: 100%;
+  color: #d5d5d5;
+  margin-top: 10px;
+  position: relative;
+}
+
+.owl-carousel-1.owl-carousel .owl-stage-outer .owl-stage .owl-item .col-12 > a > h6{
+  margin-top: 7px;
+  margin-bottom: 7px;
+  font-size: 15px;
+  color: #111;
+  word-wrap: break-word;
+  width: 100%;
+}
+
+.owl-carousel-1.owl-carousel .owl-stage-outer .owl-stage .owl-item .col-12 > a:hover > h6,.owl-carousel-1.owl-carousel .owl-stage-outer .owl-stage .owl-item .col-12 > a:hover{
+  color:  rgb(234, 120, 50);
+  text-decoration: none;
+}
+
+.owl-carousel-1.owl-carousel .owl-stage-outer .owl-stage .owl-item .col-12 .product.rating{
+  justify-content: start;
+}
+
+.owl-carousel-1.owl-carousel .owl-stage-outer .owl-stage .owl-item .col-12 > .row{
+  justify-content: start;
+  padding-left: 14px;
+}
+
+.owl-carousel-1.owl-carousel .owl-stage-outer .owl-stage .owl-item .col-12 > .row > p.new-price {
+  color: rgb(234, 120, 50);
+  font-size: 18px;
+  padding-right: 10px;
+  margin: auto 0;
+}
+
+.owl-carousel-1.owl-carousel > .owl-nav{
+  position: absolute;
+  top: 50% !important;
+  transform:translate(0%,-50%);
+  width: 100% !important;
+  -webkit-transform:translate(0%,-50%);
+  -moz-transform:translate(0%,-50%);
+  -ms-transform:translate(0%,-50%);
+  -o-transform:translate(0%,-50%);
+}
+
+.owl-carousel-1.owl-carousel > .owl-nav > .owl-prev,
+.owl-carousel-1.owl-carousel > .owl-nav > .owl-next{
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  border: 2px solid #d5d5d5 !important;
+  border-radius: 50% !important;
+  background-color: white !important;
+  width: 43px;
+  height: 43px;
+  position: absolute;
+  margin: 0;
+}
+
+.owl-carousel-1.owl-carousel > .owl-nav > .owl-next{
+  right: -15px;
+  left: auto;
+}
+
+.owl-carousel-1.owl-carousel > .owl-nav > .owl-prev{
+  left: -15px;
+  right: auto;
+}
+
+.owl-carousel-1.owl-carousel > .owl-nav > button:hover{
+  border: 2px solid rgb(234, 120, 50) !important;
+}
+
+.owl-carousel-1.owl-carousel > .owl-nav > button:focus{
+  outline: none;
+}
+
+.owl-carousel-1.owl-carousel > .owl-nav > button:hover > span:before{
+  color: rgb(234, 120, 50) !important;
+  font-family:'Font Awesome 5 Free';
+  font-weight: 900;
+  font-size: 25px;
+}
+
+.owl-carousel-1.owl-carousel > .owl-nav > .owl-prev > span:before,
+.owl-carousel-1.owl-carousel > .owl-nav > .owl-next > span:before{
+  font-family:'Font Awesome 5 Free';
+  font-weight: 900;
+  font-size: 25px;
+  color: #919191 !important;
+  transition: all 0.3s ease-in-out;
+}
+
+.owl-carousel-1.owl-carousel > .owl-nav > .owl-prev > span:before{
+  content: '\f104';
+}
+
+.owl-carousel-1.owl-carousel > .owl-nav > .owl-next > span:before{
+  content: '\f105';
+}
+
+.owl-carousel-1.owl-carousel .options-length {
+  position: absolute !important;
+  top: 5%;
+  right: 10%;
+  display: none;
+  color: white;
+  background-color: transparent;
+  mix-blend-mode: difference;
+  width: auto !important;
+}
+
+.owl-carousel-1.owl-carousel .col-12:hover .options-length {
+  display: block;
+}

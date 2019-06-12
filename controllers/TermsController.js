@@ -55,6 +55,7 @@ exports.deleteTerm = async (req, res) => {
 			return res.json({ failedMessage: 'No Terms deleted' });
 		}
 		const terms = await TermsModel.find({});
+		return res.json({ terms, successMessage: 'Term deleted' });
 	} catch (err) {
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		return res.json({ failedMessage: err.message });
@@ -72,11 +73,9 @@ exports.updateTerm = async (req, res) => {
 		if (findTerm) {
 			return res.json({ failedMessage: 'Term already added!' });
 		}
-
-		await TermsModel.updateOne({ _id: new ObjectId(id) }, { term, text });
-
+		const updateTerm = await TermsModel.updateOne({ _id: new ObjectId(id) }, { term, text });
+		if(updateTerm.nModified === 0) { return res.json({ failedMessage: 'Term not updated' }); } 
 		const updatedTerm = await TermsModel.findOne({ _id: new ObjectId(id) });
-
 		return res.json({ successMessage: 'Term Updated', term: updatedTerm });
 	} catch (err) {
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });

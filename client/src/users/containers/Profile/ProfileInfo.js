@@ -9,7 +9,8 @@ const ProfileInfo = ({
 	updatePassword,
 	username,
 	id,
-	updateProfilePicture
+	updateProfilePicture,
+	push
 }) => {
 	const [url, setUrl] = useState({ imgSrc: 'http://placehold.it/180' });
 	const [img, setImg] = useState({});
@@ -45,7 +46,7 @@ const ProfileInfo = ({
 		formData.append('profilePicture', img);
 		const config = { headers: { 'content-type': 'multipart/form-data' } };
 
-		updateProfilePicture(formData, config, id);
+		updateProfilePicture(formData, config, id, push);
 		setUrl({ imgSrc: 'http://placehold.it/180' });
 	};
 

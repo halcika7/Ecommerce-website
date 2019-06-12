@@ -11,7 +11,7 @@ import UsersWidget from '../../components/UI/UsersWidget/UsersWidget';
 
 const Dashboard = props => {
 	useEffect(() => {
-		props.getDashboard();
+		props.getDashboard(props.history.push);
 	}, []);
 
 	return (
@@ -58,7 +58,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-	getDashboard: () => dispatch(getDashboard())
+	getDashboard: callBack => dispatch(getDashboard(callBack))
 });
 
 export default connect(

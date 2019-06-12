@@ -1,4 +1,3 @@
-const ObjectId = require('mongoose').Types.ObjectId;
 const ProductModel = require('../models/Product');
 const { returnQuery } = require('../helpers/filterProductsHelper');
 
@@ -638,55 +637,5 @@ exports.filterProducts = async (req, res) => {
 		console.log(err);
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		return res.json({ failedMessage: err.message });
-	}
-};
-
-const numberOfReviewsHelper = async (
-	category,
-	subcategoryName,
-	subcategory
-) => {
-	try {
-		const elem = await ProductModel.aggregate([
-			{
-				$match: {
-					category,
-					'subcategories.subName': subcategoryName,
-					'subcategories.sub': subcategory,
-					published: true
-				}
-			},
-			{ $group: { _id: '$rating.averageRating', count: { $sum: 1 } } }
-		]);
-		if (elem.findIndex(elem => elem._id === 5) === -1) {
-			elem.push({ _id: 5, count: 0 });
-		}
-		if (elem.findIndex(elem => elem._id === 4) === -1) {
-			elem.push({ _id: 4, count: 0 });
-		}
-		if (elem.findIndex(elem => elem._id === 3) === -1) {
-			elem.push({ _id: 3, count: 0 });
-		}
-		if (elem.findIndex(elem => elem._id === 2) === -1) {
-			elem.push({ _id: 2, count: 0 });
-		}
-		if (elem.findIndex(elem => elem._id === 1) === -1) {
-			elem.push({ _id: 1, count: 0 });
-		}
-		elem.sort((a, b) => b._id - a._id);
-		const numOfReviews = elem.reduce((acc, val) =>
-			Object.keys(acc).length ? acc.count + val.count : acc + val.count
-		);
-		const totalSumOfRatings = elem.reduce((acc, val) =>
-			Object.keys(acc).length
-				? acc._id * acc.count + val._id * val.count
-				: acc + val._id * val.count
-		);
-		const avg = parseFloat((totalSumOfRatings / numOfReviews).toFixed(2));
-		const ratingsWithPercentages = elem.map(el => ({ ...el }));
-
-		return { numOfReviews, avg, ratingsWithPercentages };
-	} catch (err) {
-		console.log(err);
 	}
 };

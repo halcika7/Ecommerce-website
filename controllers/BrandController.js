@@ -75,10 +75,10 @@ exports.deleteBrand = async (req, res) => {
 		});
 		if (deletedBrand.n !== 1) {
 			return res.json({
-				failedMessage: 'Something happened and category was not deleted'
+				failedMessage: 'Something happened and brand was not deleted'
 			});
 		}
-		return res.json({ successMessage: 'Category successfully deleted !' });
+		return res.json({ successMessage: 'Brand successfully deleted !' });
 	} catch (err) {
 		if (err.errmsg) return res.json({ error: err.errmsg });
 		return res.json({ failedMessage: err.message });

@@ -8,7 +8,7 @@ const Permission = props => {
 	const [permission, setPermission] = useState('');
 	const [modelNames, setModelNames] = useState([]);
 	useEffect(() => {
-		props.getAllModelNames();
+		props.getAllModelNames(props.history.push);
 		setPermission(props.permissions.permission);
 		setModelNames(props.permissions.modelNames);
 	}, []);
@@ -18,7 +18,7 @@ const Permission = props => {
 	}, [props.permissions]);
 	const formSubmit = e => {
 		e.preventDefault();
-		props.addPermission(permission);
+		props.addPermission(permission, props.history.push);
 	};
 
 	return (
@@ -84,8 +84,8 @@ const mapStateToProps = state => {
 
 const dispatchMapToProps = dispatch => {
 	return {
-		addPermission: permission => dispatch(actions.addNewPermission(permission)),
-		getAllModelNames: () => dispatch(actions.getAllModelNames())
+		addPermission: (permission, callBack) => dispatch(actions.addNewPermission(permission, callBack)),
+		getAllModelNames: callBack => dispatch(actions.getAllModelNames(callBack))
 	};
 };
 

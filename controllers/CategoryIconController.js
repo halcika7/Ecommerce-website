@@ -5,9 +5,7 @@ const validateIcon = require('../helpers/iconshelper').validateicon;
 
 exports.addCategoryIcon = async (req, res) => {
 	const resValidation = validateIcon(req.body.name);
-	if (resValidation) {
-		return res.json(resValidation);
-	}
+	if (resValidation) { return res.json(resValidation); }
 	try {
 		const categoryIcon = new CategoryIconModel({ name: req.body.name });
 		await categoryIcon.save();

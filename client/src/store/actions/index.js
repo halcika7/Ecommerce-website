@@ -130,7 +130,7 @@ export {
 	processPayment
 } from './cart/cart';
 
-export { addCoupon, deleteCoupon, getCoupons } from './cart/coupon';
+export { addCoupon, deleteCoupon, getCoupons, getCoupon, updateCoupon } from './cart/coupon';
 
 export {
 	addStore,

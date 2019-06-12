@@ -1,10 +1,19 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
+import { logoutUser } from '../auth/login';
 
-export const addAnswer = answerObj => async dispatch => {
+export const addAnswer = (answerObj, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.ANSWER_START });
 
-	const response = await axios.post('/answers/addanswer', answerObj);
+	const token = localStorage.jwtToken;
+
+	const response = await axios.post('/answers/addanswer', answerObj, {
+		headers: { Authorization: token }
+	});
+
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 
 	if (response.data.errors) {
 		dispatch({
@@ -29,11 +38,7 @@ export const addAnswer = answerObj => async dispatch => {
 export const getAllAnswers = () => async dispatch => {
 	dispatch({ type: actionTypes.ANSWER_START });
 
-	const token = localStorage.jwtToken;
-
-	const response = await axios.get('/answers/getallanswers', {
-		headers: { Authorization: token }
-	});
+	const response = await axios.get('/answers/getallanswers');
 
 	if (response.data.failedMessage) {
 		dispatch({
@@ -48,10 +53,17 @@ export const getAllAnswers = () => async dispatch => {
 	}
 };
 
-export const getAnswer = id => async dispatch => {
+export const getAnswer = (id, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.ANSWER_START });
+	const token = localStorage.jwtToken;
 
-	const response = await axios.get('/answers/getanswer?id=' + id);
+	const response = await axios.get('/answers/getanswer?id=' + id, {
+		headers: { Authorization: token }
+	});
+
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 
 	if (response.data.failedMessage) {
 		dispatch({
@@ -67,9 +79,16 @@ export const getAnswer = id => async dispatch => {
 	}
 };
 
-export const deleteAnswer = id => async dispatch => {
+export const deleteAnswer = (id, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.ANSWER_START });
-	const response = await axios.delete('/answers/deleteanswer?id=' + id);
+	const token = localStorage.jwtToken;
+	const response = await axios.delete('/answers/deleteanswer?id=' + id, {
+		headers: { Authorization: token }
+	});
+
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 
 	if (response.data.failedMessage) {
 		dispatch({
@@ -85,13 +104,22 @@ export const deleteAnswer = id => async dispatch => {
 	}
 };
 
-export const updateAnswer = (answerObj, id) => async dispatch => {
+export const updateAnswer = (answerObj, id, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.ANSWER_START });
 	const obj = JSON.stringify(answerObj);
+	const token = localStorage.jwtToken;
 
 	const response = await axios.patch(
-		`/answers/updateanswer?object=${obj}&id=${id}`
+		`/answers/updateanswer?object=${obj}&id=${id}`,
+		null,
+		{
+			headers: { Authorization: token }
+		}
 	);
+
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 
 	if (response.data.failedMessage) {
 		dispatch({

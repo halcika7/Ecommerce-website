@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const secret = require('../config/keys').secretOrKey;
 
-module.exports = (req, res, next) => {
+module.exports = (req, res, next, permission=null) => {
 	const token = req
 		.header('Authorization')
 		.slice(7)
@@ -13,6 +13,10 @@ module.exports = (req, res, next) => {
 	}
 	try {
 		const decoded = jwt.verify(token, secret);
+		if(permission) {
+			const includes = decoded.role.permissions.includes(permission);
+			if(!includes) { return res.json({ failedMessage: 'Permission denied' }) };
+		}
 		req.userdata = decoded.user;
 		next();
 	} catch (err) {

@@ -30,11 +30,14 @@ const NewPassword = props => {
 		setPasswords({ ...passwords, [e.target.name]: e.target.value });
 	const formSubmit = e => {
 		e.preventDefault();
-		props.updatePassword({
-			password: passwords.password,
-			password2: passwords.password2,
-			username: props.userName
-		});
+		props.updatePassword(
+			{
+				password: passwords.password,
+				password2: passwords.password2,
+				username: props.userName
+			},
+			props.push
+		);
 	};
 
 	return (
@@ -85,7 +88,7 @@ const mapStateToProps = state => {
 
 const dispatchMapToProps = dispatch => {
 	return {
-		updatePassword: passwords => dispatch(actions.updatePassword(passwords))
+		updatePassword: (passwords, callBack) => dispatch(actions.updatePassword(passwords, callBack))
 	};
 };
 

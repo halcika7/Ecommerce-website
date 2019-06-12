@@ -1,10 +1,18 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
+import { logoutUser } from '../auth/login';
 
-export const addTerm = termObj => async dispatch => {
+export const addTerm = (termObj, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.TERM_START });
+	const token = localStorage.jwtToken;
 
-	const response = await axios.post('/terms/addterm', termObj);
+	const response = await axios.post('/terms/addterm', termObj, {
+		headers: { Authorization: token }
+	});
+
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 
 	if (response.data.errors) {
 		dispatch({
@@ -28,7 +36,6 @@ export const addTerm = termObj => async dispatch => {
 
 export const getAllTerms = () => async dispatch => {
 	dispatch({ type: actionTypes.TERM_START });
-
 	const response = await axios.get('/terms/getallterms');
 
 	if (response.data.failedMessage) {
@@ -44,10 +51,17 @@ export const getAllTerms = () => async dispatch => {
 	}
 };
 
-export const getTerm = id => async dispatch => {
+export const getTerm = (id, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.TERM_START });
+	const token = localStorage.jwtToken;
 
-	const response = await axios.get('/terms/getterm?id=' + id);
+	const response = await axios.get('/terms/getterm?id=' + id, {
+		headers: { Authorization: token }
+	});
+
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 
 	if (response.data.failedMessage) {
 		dispatch({
@@ -63,9 +77,16 @@ export const getTerm = id => async dispatch => {
 	}
 };
 
-export const deleteTerm = id => async dispatch => {
+export const deleteTerm = (id, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.TERM_START });
-	const response = await axios.delete('/terms/deleteterm?id=' + id);
+	const token = localStorage.jwtToken;
+	const response = await axios.delete(`/terms/deleteterm?id=${id}`, {
+		headers: { Authorization: token }
+	});
+
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 
 	if (response.data.failedMessage) {
 		dispatch({
@@ -81,14 +102,21 @@ export const deleteTerm = id => async dispatch => {
 	}
 };
 
-export const updateTerm = (termObj, id) => async dispatch => {
+export const updateTerm = (termObj, id, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.TERM_START });
 	const obj = JSON.stringify(termObj);
-
+	const token = localStorage.jwtToken;
 	const response = await axios.patch(
-		`/answers/updateanswer?object=${obj}&id=${id}`
+		`/terms/updateterm?object=${obj}&id=${id}`,
+		null,
+		{
+			headers: { Authorization: token }
+		}
 	);
 
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.TERM_FAILED,

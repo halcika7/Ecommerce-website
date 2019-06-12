@@ -1,15 +1,23 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
 import { returnProductDataOnError } from '../../../helpers/product';
+import { logoutUser } from '../auth/login';
 
-export const addProduct = (formData, config) => async dispatch => {
-	// dispatch({ type: actionTypes.PRODUCT_START });
+export const addProduct = (formData, config, callBack) => async dispatch => {
+	dispatch({ type: actionTypes.PRODUCT_START });
+	const token = localStorage.jwtToken;
 	const productData = returnProductDataOnError(formData);
+	const configuration = {
+		headers: { Authorization: token, ...config.headers }
+	};
 	const response = await axios.post(
 		'/products/product/addproduct',
 		formData,
-		config
+		configuration
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.PRODUCT_FAILED,
@@ -164,7 +172,8 @@ export const getProduct = id => async dispatch => {
 	} else {
 		dispatch({
 			type: actionTypes.PRODUCT_SUCCESS,
-			singleProduct: response.data.product
+			singleProduct: response.data.product,
+			similarProducts: response.data.similarProducts
 		});
 	}
 };
@@ -185,11 +194,18 @@ export const getAllProducts = id => async dispatch => {
 	}
 };
 
-export const deleteProduct = (id, name) => async dispatch => {
+export const deleteProduct = (id, name, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.PRODUCT_START });
+	const token = localStorage.jwtToken;
 	const response = await axios.delete(
-		`/products/product/deleteproduct?id=${id}&name=${name}`
+		`/products/product/deleteproduct?id=${id}&name=${name}`,
+		{
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.PRODUCT_FAILED,

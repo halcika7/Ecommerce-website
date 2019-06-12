@@ -260,11 +260,33 @@ exports.getProduct = async (req, res) => {
 		const product = await ProductModel.findOne({
 			_id: new ObjectId(req.query.id)
 		});
+
 		if (!product) {
 			return res.json({ failedMessage: 'Product not found with provided ID' });
 		}
-		return res.json({ product });
+
+		const similarProducts = await ProductModel.aggregate([
+			{
+				$match: {
+					category: product.category,
+					_id: { $ne: new ObjectId(req.query.id) }
+				}
+			},
+			{ $sample: { size: 15 } },
+			{ $limit: 15 },
+			{
+				$project: {
+					name: 1,
+					rating: 1,
+					price: 1,
+					brand: 1,
+					'options.featuredPicture': 1
+				}
+			}
+		]);
+		return res.json({ product, similarProducts });
 	} catch (err) {
+		console.log(err);
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		return res.json({ failedMessage: err.message });
 	}

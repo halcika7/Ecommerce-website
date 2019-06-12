@@ -1,12 +1,20 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
+import { logoutUser } from '../auth/login';
 
-export const addRole = role => async dispatch => {
+export const addRole = (role, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.ROLE_START });
+	const token = localStorage.jwtToken;
 	const response = await axios.post(
 		'/rolespermissions/roles/adduserrole',
-		role
+		role,
+		{
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.ROLE_FAILED,
@@ -33,11 +41,18 @@ export const getRoles = () => async dispatch => {
 	}
 };
 
-export const deleteUserRole = id => async dispatch => {
+export const deleteUserRole = (id, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.ROLE_START });
+	const token = localStorage.jwtToken;
 	const response = await axios.delete(
-		`/rolespermissions/roles/deleterole?id=${id}`
+		`/rolespermissions/roles/deleterole?id=${id}`,
+		{
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.ROLE_FAILED,
@@ -53,13 +68,19 @@ export const deleteUserRole = id => async dispatch => {
 	setTimeout(() => dispatch(getRoles()), 4000);
 };
 
-export const deleteManyUserRoles = ids => async dispatch => {
+export const deleteManyUserRoles = (ids, callBack) => async dispatch => {
+	const token = localStorage.jwtToken;
 	let queryString = '/rolespermissions/roles/deletemanyroles?';
 	ids.forEach((id, index) => {
 		queryString += `id${index}=${id}&`;
 	});
 	dispatch({ type: actionTypes.ROLE_START });
-	const response = await axios.delete(queryString);
+	const response = await axios.delete(queryString, {
+		headers: { Authorization: token }
+	});
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.ROLE_FAILED,
@@ -91,12 +112,19 @@ export const getUserRole = id => async dispatch => {
 	}
 };
 
-export const updateUserRole = data => async dispatch => {
+export const updateUserRole = (data, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.ROLE_START });
+	const token = localStorage.jwtToken;
 	const response = await axios.patch(
 		'/rolespermissions/roles/updaterole',
-		data
+		data,
+		{
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.ROLE_FAILED,

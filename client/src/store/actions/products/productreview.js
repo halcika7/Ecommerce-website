@@ -1,57 +1,111 @@
 import * as actionTypes from '../actionTypes';
 import { getProduct } from '../../actions';
 import axios from 'axios';
+import { logoutUser } from '../auth/login';
 
-export const addReview = reviewObject => async dispatch => {
+export const addReview = (reviewObject, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.REVIEW_START });
+	const token = localStorage.jwtToken;
 	const response = await axios.post(
 		'/products/product/addreview',
-		reviewObject
+		reviewObject,
+		{
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	dispatch(responseHelper(response));
 	if (response.data.product) {
 		dispatch(getProduct(reviewObject.productId));
 	}
 };
 
-export const editReview = ({ id, text }) => async dispatch => {
+export const editReview = ({ id, text, callBack }) => async dispatch => {
 	dispatch({ type: actionTypes.REVIEW_START });
+	const token = localStorage.jwtToken;
 	const response = await axios.patch(
-		`/products/product/editreview?id=${id}&text=${text}`
+		`/products/product/editreview?id=${id}&text=${text}`,
+		null,
+		{
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	dispatch(responseHelper(response));
 };
 
-export const deleteReview = ({ id, userId, productId }) => async dispatch => {
+export const deleteReview = ({
+	id,
+	userId,
+	productId,
+	callBack
+}) => async dispatch => {
 	dispatch({ type: actionTypes.REVIEW_START });
+	const token = localStorage.jwtToken;
 	const response = await axios.delete(
-		`/products/product/deletereview?id=${id}&userId=${userId}&productId=${productId}`
+		`/products/product/deletereview?id=${id}&userId=${userId}&productId=${productId}`,
+		{
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	dispatch(responseHelper(response));
 	if (response.data.product) {
 		dispatch(getProduct(response.data.product));
 	}
 };
 
-export const addReply = replyObject => async dispatch => {
+export const addReply = (replyObject, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.REVIEW_START });
-	const response = await axios.post('/products/product/addreply', replyObject);
+	const token = localStorage.jwtToken;
+	const response = await axios.post('/products/product/addreply', replyObject, {
+		headers: { Authorization: token }
+	});
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	dispatch(responseHelper(response));
 };
 
-export const editReply = ({ id, text, reviewId }) => async dispatch => {
+export const editReply = ({
+	id,
+	text,
+	reviewId,
+	callBack
+}) => async dispatch => {
 	dispatch({ type: actionTypes.REVIEW_START });
+	const token = localStorage.jwtToken;
 	const response = await axios.patch(
-		`/products/product/editreply?id=${id}&text=${text}&reviewId=${reviewId}`
+		`/products/product/editreply?id=${id}&text=${text}&reviewId=${reviewId}`,
+		null,
+		{
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	dispatch(responseHelper(response));
 };
 
-export const deleteReply = ({ id, userId }) => async dispatch => {
+export const deleteReply = ({ id, userId, callBack }) => async dispatch => {
 	dispatch({ type: actionTypes.REVIEW_START });
+	const token = localStorage.jwtToken;
 	const response = await axios.delete(
-		`/products/product/deletereply?id=${id}&userId=${userId}`
+		`/products/product/deletereply?id=${id}&userId=${userId}`,
+		{
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	dispatch(responseHelper(response));
 };
 

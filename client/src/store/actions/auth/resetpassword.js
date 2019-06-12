@@ -1,5 +1,6 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
+import { logoutUser } from '../index';
 
 export const resetPassword = passwords => async dispatch => {
 	dispatch({ type: actionTypes.RESETPASSWORD_START, passwords: passwords });
@@ -38,10 +39,16 @@ export const resetState = () => dispatch => {
 	dispatch({ type: actionTypes.RESETPASSWORD_CLEAR });
 };
 
-export const updatePassword = passwords => async dispatch => {
+export const updatePassword = (passwords, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.PROFILE_PASSWORD_UPDATE_START });
+	const token = localStorage.jwtToken;
 
-	const response = await axios.put('/api/users/updatepassword', passwords);
+	const response = await axios.put('/api/users/updatepassword', passwords, {
+		headers: { Authorization: token }
+	});
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 
 	if (response.data.errors) {
 		dispatch({

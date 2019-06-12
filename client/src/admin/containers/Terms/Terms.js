@@ -15,7 +15,10 @@ const Terms = props => {
 
 	useEffect(() => {
 		(props.view || props.edit) &&
-			props.getTerm(new URLSearchParams(props.location.search).get('id'));
+			props.getTerm(
+				new URLSearchParams(props.location.search).get('id'),
+				props.history.push
+			);
 	}, []);
 
 	useEffect(() => {
@@ -34,9 +37,12 @@ const Terms = props => {
 	const onFormSubmit = e => {
 		e.preventDefault();
 		const id = new URLSearchParams(props.location.search).get('id');
-		props.addterm && props.addTerm({ term: values.term, text: values.text });
-		props.edit &&
-			props.updateTerm({ term: values.term, text: values.text }, id);
+		props.addterm &&
+			props.addTerm(
+				{ term: values.term, text: values.text },
+				props.history.push
+			);
+		props.edit && props.updateTerm({ term: values.term, text: values.text }, id, props.history.push);
 		setValues({ term: '', text: '' });
 		setErrors({ term: '', text: '' });
 	};
@@ -144,9 +150,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		addTerm: answerObj => dispatch(actions.addTerm(answerObj)),
-		getTerm: id => dispatch(actions.getTerm(id)),
-		updateTerm: (obj, id) => dispatch(actions.updateTerm(obj, id))
+		addTerm: (answerObj, callBack) =>
+			dispatch(actions.addTerm(answerObj, callBack)),
+		getTerm: (id, callBack) => dispatch(actions.getTerm(id, callBack)),
+		updateTerm: (obj, id, callBack) => dispatch(actions.updateTerm(obj, id, callBack))
 	};
 };
 

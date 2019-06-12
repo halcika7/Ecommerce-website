@@ -1,9 +1,18 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
+import { logoutUser } from '../auth/login';
 
-export const getAllOrders = () => async dispatch => {
+export const getAllOrders = callBack => async dispatch => {
 	dispatch({ type: actionTypes.ORDER_START });
-	const response = await axios.get('/order/allorders');
+	const token = localStorage.jwtToken;
+	const response = await axios.get('/order/allorders', {
+		headers: { Authorization: token }
+	});
+
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
+
 	if (response.data.orders) {
 		dispatch({ type: actionTypes.ORDER_SUCCESS, orders: response.data.orders });
 	} else {
@@ -14,9 +23,15 @@ export const getAllOrders = () => async dispatch => {
 	}
 };
 
-export const getAllUserOrders = id => async dispatch => {
+export const getAllUserOrders = (id, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.ORDER_START });
-	const response = await axios.get('/order/userorders?id=' + id);
+	const token = localStorage.jwtToken;
+	const response = await axios.get(`/order/userorders?id=${id}`, {
+		headers: { Authorization: token }
+	});
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.orders) {
 		dispatch({
 			type: actionTypes.ORDER_SUCCESS,
@@ -30,8 +45,14 @@ export const getAllUserOrders = id => async dispatch => {
 	}
 };
 
-export const getOrder = id => async dispatch => {
-	const response = await axios.get('/order/order?id=' + id);
+export const getOrder = (id, callBack) => async dispatch => {
+	const token = localStorage.jwtToken;
+	const response = await axios.get(`/order/order?id=${id}`, {
+		headers: { Authorization: token }
+	});
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.order) {
 		dispatch({ type: actionTypes.ORDER_SUCCESS, order: response.data.order });
 	} else {
@@ -42,10 +63,17 @@ export const getOrder = id => async dispatch => {
 	}
 };
 
-export const deleteUserOrder = (id, userId) => async dispatch => {
+export const deleteUserOrder = (id, userId, callBack) => async dispatch => {
+	const token = localStorage.jwtToken;
 	const response = await axios.patch(
-		`/order/deleteuserorder?id=${id}&userId=${userId}`
+		`/order/deleteuserorder?id=${id}&userId=${userId}`,
+		{
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.orders) {
 		dispatch({
 			type: actionTypes.ORDER_SUCCESS,
@@ -60,8 +88,14 @@ export const deleteUserOrder = (id, userId) => async dispatch => {
 	}
 };
 
-export const deleteOrder = id => async dispatch => {
-	const response = await axios.delete(`/order/deleteorder?id=${id}`);
+export const deleteOrder = (id, callBack) => async dispatch => {
+	const token = localStorage.jwtToken;
+	const response = await axios.delete(`/order/deleteorder?id=${id}`, {
+		headers: { Authorization: token }
+	});
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.orders) {
 		dispatch({
 			type: actionTypes.ORDER_SUCCESS,
@@ -76,10 +110,18 @@ export const deleteOrder = id => async dispatch => {
 	}
 };
 
-export const updateOrder = (id, value) => async dispatch => {
+export const updateOrder = (id, value, callBack) => async dispatch => {
+	const token = localStorage.jwtToken;
 	const response = await axios.patch(
-		`/order/updateorder?id=${id}&value=${value}`
+		`/order/updateorder?id=${id}&value=${value}`,
+		null,
+		{
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.successMessage) {
 		dispatch({
 			type: actionTypes.ORDER_SUCCESS,

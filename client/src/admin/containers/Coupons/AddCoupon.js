@@ -7,9 +7,13 @@ import LoginRegisterInputs from '../../../users/components/UI/LoginRegisterInput
 import ResponseMessage from '../../../users/components/UI/ResponseMessages/ResponseMessages';
 
 const AddCoupon = props => {
+	const couponID = props.match.params.id
+		? props.match.params.id
+		: new URLSearchParams(props.location.search).get('id');
 	const [couponName, setCouponName] = useState('');
 	const [couponType, setCouponType] = useState('percent');
 	const [expiresIn, setExpiresIn] = useState('');
+	const [expiresDate, setExpiresDate] = useState('');
 	const [value, setValue] = useState('1');
 	const [errors, setErrors] = useState({
 		name: '',
@@ -19,10 +23,17 @@ const AddCoupon = props => {
 	});
 
 	useEffect(() => {
+		if(props.view || props.edit) {
+			props.getCoupon(couponID, props.history.push);
+		}
+	}, [])
+
+	useEffect(() => {
 		if (Object.keys(props.coupon.couponData).length > 0) {
 			setCouponName(props.coupon.couponData.name);
 			setCouponType(props.coupon.couponData.type);
-			setExpiresIn(props.coupon.couponData.expiresIn);
+			props.add && setExpiresIn(props.coupon.couponData.expiresIn);
+			!props.add && setExpiresDate(props.coupon.couponData.exparationDate);
 			setValue(props.coupon.couponData.value);
 		}
 	}, [props.coupon.couponData]);
@@ -36,13 +47,16 @@ const AddCoupon = props => {
 	const submitData = e => {
 		e.preventDefault();
 		const data = { name: couponName, type: couponType, expiresIn, value };
-		props.addCoupon(data);
+		props.add && props.addCoupon(data, props.history.push);
+		props.edit && props.updateCoupon(couponID, couponType, expiresIn, value, props.history.push);
 		setCouponName('');
 		setCouponType('');
 		setExpiresIn('');
 		setValue('');
 		setErrors({ name: '', type: '', expiresIn: '', value: '' });
 	};
+
+	console.log(props.coupon.couponData);
 
 	return (
 		<div className={'AdminProfile row'}>
@@ -58,7 +72,8 @@ const AddCoupon = props => {
 			<div className={'col-12 mb-30'}>
 				<div className="Card card text-white">
 					<div className="card-header">
-						<h4 className="text-white">Add Coupon Code</h4>
+						{props.add && <h4 className="text-white">Add Coupon Code</h4>}
+						{!props.add && <h4 className="text-white">Coupon: {couponID}</h4>}
 					</div>
 					<div className="card-body">
 						<div className="col-12">
@@ -73,15 +88,17 @@ const AddCoupon = props => {
 											invalidInput="invalid"
 											invalidFeedback="invalid-feedback"
 											value={couponName}
-											onChange={e => setCouponName(e.target.value)}
+											onChange={props.add ? e => setCouponName(e.target.value) : () =>{}}
 											error={errors.name ? errors.name : ''}
+											disabled={!props.add ? true : false}
 										/>
 									</div>
 									<div className="col-12">
 										<label className="text-white d-block">Coupon Type</label>
 										<select
 											className={errors.type ? 'select invalid' : 'select'}
-											onChange={e => setCouponType(e.target.value)}>
+											onChange={!props.view ? e => setCouponType(e.target.value) : () => {}}
+											disabled={props.view ? true : false}>
 											<option value="percent">Percentage</option>
 											<option value="value">Value</option>
 										</select>
@@ -89,11 +106,17 @@ const AddCoupon = props => {
 											<div className={'invalid-feedback'}>{errors.type}</div>
 										)}
 									</div>
+									{!props.add && 
+										<div className='col-12 mt-3'>
+											<label>Exparation Date: {new Date(expiresDate).toString().slice(0, 15)}</label>
+										</div>
+									}
 									<div className="col-12 mt-3">
 										<label className="text-white d-block">Expires In</label>
 										<select
 											className={errors.expiresIn ? 'select invalid' : 'select'}
-											onChange={e => setExpiresIn(e.target.value)}>
+											onChange={!props.view ? e => setExpiresIn(e.target.value) : () => {}}
+											disabled={props.view ? true : false}>
 											<option value="1">A day</option>
 											<option value="2">Two day's</option>
 											<option value="3">Three day's</option>
@@ -127,7 +150,8 @@ const AddCoupon = props => {
 												max="100"
 												placeholder="Enter percentage value"
 												value={value}
-												onChange={e => setValue(e.target.value)}
+												onChange={!props.view ? e => setValue(e.target.value) : () => {}}
+												disabled={props.view ? true : false}
 											/>
 										) : (
 											<input
@@ -139,7 +163,8 @@ const AddCoupon = props => {
 												min="1"
 												placeholder="Enter money value"
 												value={value}
-												onChange={e => setValue(e.target.value)}
+												onChange={!props.view ? e => setValue(e.target.value) : () => {}}
+												disabled={props.view ? true : false}
 											/>
 										)}
 										{errors.value && (
@@ -147,9 +172,11 @@ const AddCoupon = props => {
 										)}
 									</div>
 								</div>
-								<button className="btn btn-sm mt-20" onClick={submitData}>
-									Add New Coupon Code
-								</button>
+								{!props.view && 
+									<button className="btn btn-sm mt-20" onClick={submitData}>
+										{props.add ? 'Add New Coupon Code' : 'Update Coupon'}
+									</button>
+								}
 							</form>
 						</div>
 					</div>
@@ -167,7 +194,9 @@ const mapStateToProps = state => {
 
 const maDispatchToProps = dispatch => {
 	return {
-		addCoupon: data => dispatch(actions.addCoupon(data))
+		addCoupon: (data, callBack) => dispatch(actions.addCoupon(data, callBack)),
+		getCoupon: (id, callBack) => dispatch(actions.getCoupon(id, callBack)),
+		updateCoupon: (id, type, expiresIn, value, callBack) => dispatch(actions.updateCoupon(id, type, expiresIn, value, callBack))
 	};
 };
 

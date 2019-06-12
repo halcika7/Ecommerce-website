@@ -25,6 +25,7 @@ const reducer = (state = initialState, action) => {
 		[actionTypes.COUPON_SUCCESS]: updateObject(state, {
 			successMessage: action.successMessage ? action.successMessage : false,
 			coupons: action.coupons ? action.coupons : state.coupons,
+			couponData: action.couponData ? action.couponData : state.couponData,
 			loading: false
 		}),
 		default: state

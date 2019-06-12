@@ -60,7 +60,6 @@ const RegisterForm = props => {
 			password: register.password,
 			password2: register.password2
 		};
-
 		props.registerUser(registerUser);
 	};
 

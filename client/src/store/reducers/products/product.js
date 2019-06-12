@@ -11,6 +11,7 @@ const initialState = {
 	bannerProducts: [],
 	ourProducts: [],
 	singleProduct: {},
+	similarProducts: [],
 	searchedProducts: [],
 	products: [],
 	errors: false,
@@ -50,6 +51,7 @@ const reducer = (state = initialState, action) => {
 			singleProduct: action.singleProduct
 				? action.singleProduct
 				: state.singleProduct,
+			similarProducts: action.similarProducts ? action.similarProducts : [],
 			searchedProducts: action.searchedProducts
 				? action.searchedProducts
 				: state.searchedProducts,

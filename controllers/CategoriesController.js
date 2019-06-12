@@ -49,10 +49,11 @@ exports.editCategory = async (req, res) => {
 		if (req.body.data.subcategories.length < 1) {
 			return res.json({ error: 'At least one subcategory required!' });
 		}
-		await CategoryModel.updateOne(
+		const updateCategory = await CategoryModel.updateOne(
 			{ _id: new ObjectId(req.body.id) },
 			{ ...req.body.data }
 		);
+		if(updateCategory.nModified === 0) { return res.json({ failedMessage: 'Category not updated' }); }
 		return res.json({ successMessage: 'Category Added !' });
 	} catch (err) {
 		if (err.errmsg) return res.json({ error: err.errmsg });

@@ -1,5 +1,5 @@
-import React, { lazy, Suspense, useState, useEffect } from 'react';
-import { withRouter, Switch, Route } from 'react-router-dom';
+import React, { lazy, useState, useEffect } from 'react';
+import { withRouter, Switch } from 'react-router-dom';
 import { checkLoggedInUser, checkCart } from './helpers/checkLoggedInUser';
 import { connect } from 'react-redux';
 
@@ -10,7 +10,9 @@ import Spinner from './users/components/UI/Spinner/Spinner';
 import AdminNavigation from './admin/components/Navigation/Navigation';
 import NavBar from './admin/components/NavBar/Navbar';
 import AdminFooter from './admin/components/Footer/Footer';
-import SmallSpinner from './users/components/UI/SmallSpinner/SmallSpinner';
+import PrivateRoute from './helpers/PrivateRoute/PrivateRoute';
+import AdminRoute from './helpers/PrivateRoute/AdminRoute';
+import PublicRoute from './helpers/PrivateRoute/PublicRoute';
 
 const Home = lazy(() => import('./users/containers/Home/Home'));
 const Profile = lazy(() => import('./users/containers/Profile/Profile'));
@@ -83,6 +85,7 @@ const App = props => {
 
 	useEffect(() => {
 		storageChanged();
+		checkLoggedInUser(props.history.push);
 		setTimeout(() => {
 			setState({ ...state, show: !state.show });
 		}, 2000);
@@ -91,15 +94,17 @@ const App = props => {
 	}, []);
 
 	useEffect(() => {
-		storageChanged();
-	}, [props]);
-
-	const storageChanged = () => {
 		checkLoggedInUser(props.history.push);
-		checkCart();
-	};
+		console.log(props.location.pathname)
+	}, [props.location.search, props.match.params]);
 
-	if (props.isAdmin && props.location.pathname.includes('admindashboard')) {
+	const storageChanged = () => checkCart();
+
+	if (
+		props.isAdmin &&
+		props.isAuthenticated &&
+		props.location.pathname.includes('admindashboard')
+	) {
 		return (
 			<React.Fragment>
 				<section
@@ -110,632 +115,283 @@ const App = props => {
 						<NavBar />
 						<div className="content">
 							<Switch>
-								<Route
+								<AdminRoute
+									PageToLoad={Dashboard}
 									path="/admindashboard/dashboard"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<Dashboard />
-										</Suspense>
-									)}
 								/>
 								{/* user */}
-								<Route
+								<AdminRoute
+									PageToLoad={ViewUser}
+									componentProps={{ profile: true }}
 									path="/admindashboard/profile"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<ViewUser profile={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={AddUser}
 									path="/admindashboard/add-user"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<AddUser />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={ViewUser}
+									componentProps={{ view: true }}
 									path="/admindashboard/view-user"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<ViewUser view={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={ViewUser}
+									componentProps={{ edit: true }}
 									path="/admindashboard/edit-user"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<ViewUser edit={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={TableContainer}
+									componentProps={{ Users: true }}
 									path="/admindashboard/all-users"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<TableContainer Users={true} />
-										</Suspense>
-									)}
 								/>
 								{/* Orders */}
-								<Route
+								<AdminRoute
+									PageToLoad={TableContainer}
+									componentProps={{ Orders: true }}
 									path="/admindashboard/all-orders"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<TableContainer Orders={true} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={Order}
+									componentProps={{ view: true }}
 									path="/admindashboard/view-order"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<Order view {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={Order}
+									componentProps={{ edit: true }}
 									path="/admindashboard/edit-order"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<Order edit {...props} />
-										</Suspense>
-									)}
 								/>
 								{/* products */}
-								<Route
+								<AdminRoute
+									PageToLoad={TableContainer}
+									componentProps={{ Products: true }}
 									path="/admindashboard/all-products"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<TableContainer Products={true} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={AddProduct}
 									path="/admindashboard/add-product"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<AddProduct />
-										</Suspense>
-									)}
 								/>
 								{/* permissions */}
-								<Route
+								<AdminRoute
+									PageToLoad={Permission}
 									path="/admindashboard/add-permission"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<Permission {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={TableContainer}
+									componentProps={{ Permissions: true }}
 									path="/admindashboard/all-permissions"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<TableContainer Permissions={true} />
-										</Suspense>
-									)}
 								/>
 								{/* roles */}
-								<Route
+								<AdminRoute
+									PageToLoad={AddRole}
 									path="/admindashboard/add-role"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<AddRole {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={UpdateRole}
 									path="/admindashboard/edit-role"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<UpdateRole {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={UpdateRole}
+									componentProps={{ view: true }}
 									path="/admindashboard/view-role"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<UpdateRole view={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={TableContainer}
+									componentProps={{ Roles: true }}
 									path="/admindashboard/all-roles"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<TableContainer Roles={true} />
-										</Suspense>
-									)}
 								/>
 								{/* category icons */}
-								<Route
+								<AdminRoute
+									PageToLoad={AddCategory}
+									componentProps={{ addcategory: true }}
 									path="/admindashboard/add-category"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<AddCategory addcategory={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={AddCategory}
+									componentProps={{ editcategory: true }}
 									path="/admindashboard/edit-category"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<AddCategory editcategory={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={AddCategory}
+									componentProps={{ viewcategory: true }}
 									path="/admindashboard/view-category"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<AddCategory viewcategory={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={TableContainer}
+									componentProps={{ Categories: true }}
 									path="/admindashboard/all-categories"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<TableContainer Categories={true} />
-										</Suspense>
-									)}
 								/>
 								{/* Category Icon */}
-								<Route
+								<AdminRoute
+									PageToLoad={CategoryIcon}
+									componentProps={{ addicon: true }}
 									path="/admindashboard/add-category-icon"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<CategoryIcon addicon={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={CategoryIcon}
+									componentProps={{ viewicon: true }}
 									path="/admindashboard/view-category-icon"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<CategoryIcon viewicon={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={CategoryIcon}
+									componentProps={{ editicon: true }}
 									path="/admindashboard/edit-category-icon"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<CategoryIcon editicon={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={TableContainer}
+									componentProps={{ Icons: true }}
 									path="/admindashboard/all-category-icons"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<TableContainer Icons={true} />
-										</Suspense>
-									)}
 								/>
 								{/* Brand */}
-								<Route
+								<AdminRoute
+									PageToLoad={Brand}
+									componentProps={{ addbrand: true }}
 									path="/admindashboard/add-brand"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<Brand addbrand={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={Brand}
+									componentProps={{ viewbrand: true }}
 									path="/admindashboard/view-brand"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<Brand viewbrand={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={Brand}
+									componentProps={{ editbrand: true }}
 									path="/admindashboard/edit-brand"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<Brand editbrand={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={TableContainer}
+									componentProps={{ Brands: true }}
 									path="/admindashboard/all-brands"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<TableContainer Brands={true} />
-										</Suspense>
-									)}
 								/>
 								{/* Answers */}
-								<Route
+								<AdminRoute
+									PageToLoad={AnswersToQuestions}
+									componentProps={{ addanswer: true }}
 									path="/admindashboard/add-answer"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<AnswersToQuestions addanswer={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={AnswersToQuestions}
+									componentProps={{ view: true }}
 									path="/admindashboard/view-answer"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<AnswersToQuestions view={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={AnswersToQuestions}
+									componentProps={{ edit: true }}
 									path="/admindashboard/edit-answer"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<AnswersToQuestions edit={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={TableContainer}
+									componentProps={{ Answers: true }}
 									path="/admindashboard/all-answers"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<TableContainer Answers={true} />
-										</Suspense>
-									)}
 								/>
 								{/* Terms */}
-								<Route
+								<AdminRoute
+									PageToLoad={TermBack}
+									componentProps={{ addterm: true }}
 									path="/admindashboard/add-term"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<TermBack addterm={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={TermBack}
+									componentProps={{ view: true }}
 									path="/admindashboard/view-term"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<TermBack view={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={TermBack}
+									componentProps={{ edit: true }}
 									path="/admindashboard/edit-term"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<TermBack edit={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={TableContainer}
+									componentProps={{ Terms: true }}
 									path="/admindashboard/all-terms"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<TableContainer Terms={true} />
-										</Suspense>
-									)}
 								/>
 								{/* Coupons */}
-								<Route
+								<AdminRoute
+									PageToLoad={AddCoupon}
 									path="/admindashboard/add-coupon"
+									componentProps={{ add: true }}
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<AddCoupon />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={AddCoupon}
+									path="/admindashboard/view-coupon"
+									componentProps={{ view: true }}
+									exact
+								/>
+								<AdminRoute
+									PageToLoad={AddCoupon}
+									path="/admindashboard/edit-coupon"
+									componentProps={{ edit: true }}
+									exact
+								/>
+								<AdminRoute
+									PageToLoad={TableContainer}
+									componentProps={{ Coupons: true }}
 									path="/admindashboard/all-coupons"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<TableContainer Coupons={true} />
-										</Suspense>
-									)}
 								/>
 								{/* Stores */}
-								<Route
+								<AdminRoute
+									PageToLoad={Store}
+									componentProps={{ addstore: true }}
 									path="/admindashboard/add-store"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<Store addstore={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={Store}
+									componentProps={{ view: true }}
 									path="/admindashboard/view-store"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<Store view={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={Store}
+									componentProps={{ edit: true }}
 									path="/admindashboard/edit-store"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<Store edit={true} {...props} />
-										</Suspense>
-									)}
 								/>
-								<Route
+								<AdminRoute
+									PageToLoad={TableContainer}
+									componentProps={{ Stores: true }}
 									path="/admindashboard/all-stores"
 									exact
-									render={props => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<TableContainer Stores={true} />
-										</Suspense>
-									)}
 								/>
-								<Route
-									render={() => (
-										<Suspense
-											fallback={
-												<div className="Card bg-white">
-													<SmallSpinner />
-												</div>
-											}>
-											<PageNotFound />
-										</Suspense>
-									)}
-								/>
+								<AdminRoute PageToLoad={PageNotFound} />
 							</Switch>
 							<AdminFooter />
 						</div>
@@ -750,148 +406,45 @@ const App = props => {
 				<div className="App" style={state.show ? null : { display: 'none' }}>
 					<Navigation icons={state.companySocial} {...props} />
 					<Switch>
-						<Route
-							path="/"
-							exact
-							render={() => (
-								<Suspense fallback={<Spinner />}>
-									<Home />
-								</Suspense>
-							)}
-						/>
-						<Route
-							path="/profile"
-							exact
-							render={() => (
-								<Suspense fallback={<Spinner />}>
-									<Profile {...props} />
-								</Suspense>
-							)}
-						/>
-						<Route
+						<PublicRoute PageToLoad={Home} path="/" exact />
+						<PrivateRoute PageToLoad={Profile} path="/profile" exact />
+						<PublicRoute
+							PageToLoad={Product}
 							path="/product"
+							componentProp={{ show: state.show }}
 							exact
-							render={() => (
-								<Suspense fallback={<Spinner />}>
-									<Product {...props} show={state.show} />
-								</Suspense>
-							)}
 						/>
-						<Route
+						<PublicRoute
+							PageToLoad={Products}
 							path="/products"
+							componentProp={{ show: state.show }}
 							exact
-							render={() => (
-								<Suspense fallback={<Spinner />}>
-									<Products {...props} show={state.show} />
-								</Suspense>
-							)}
 						/>
-						<Route
+						<PublicRoute
+							PageToLoad={AuthPage}
 							path="/authentication"
+							componentProp={{ reset: false }}
 							exact
-							render={props => (
-								<Suspense fallback={<Spinner />}>
-									<AuthPage {...props} reset={false} />
-								</Suspense>
-							)}
 						/>
-						<Route
+						<PublicRoute
+							PageToLoad={AuthPage}
 							path="/authentication/reset"
+							componentProp={{ reset: true }}
 							exact
-							render={props => (
-								<Suspense fallback={<Spinner />}>
-									<AuthPage {...props} reset={true} />
-								</Suspense>
-							)}
 						/>
-						<Route
+						<PublicRoute
+							PageToLoad={AccountActivation}
 							path="/confirmationaccount"
 							exact
-							render={props => (
-								<Suspense fallback={<Spinner />}>
-									<AccountActivation {...props} />
-								</Suspense>
-							)}
 						/>
-						<Route
-							path="/about"
-							exact
-							render={() => (
-								<Suspense fallback={<Spinner />}>
-									<About />
-								</Suspense>
-							)}
-						/>
-						<Route
-							path="/terms"
-							exact
-							render={() => (
-								<Suspense fallback={<Spinner />}>
-									<Terms />
-								</Suspense>
-							)}
-						/>
-						<Route
-							path="/support"
-							exact
-							render={() => (
-								<Suspense fallback={<Spinner />}>
-									<Support />
-								</Suspense>
-							)}
-						/>
-						<Route
-							path="/cart"
-							exact
-							render={() => (
-								<Suspense fallback={<Spinner />}>
-									<Cart />
-								</Suspense>
-							)}
-						/>
-						<Route
-							path="/checkout"
-							exact
-							render={() => (
-								<Suspense fallback={<Spinner />}>
-									<Checkout {...props} />
-								</Suspense>
-							)}
-						/>
-						<Route
-							path="/contact"
-							exact
-							render={() => (
-								<Suspense fallback={<Spinner />}>
-									<Contact />
-								</Suspense>
-							)}
-						/>
-						<Route
-							path="/storelocator"
-							exact
-							render={() => (
-								<Suspense fallback={<Spinner />}>
-									<StoreLocator />
-								</Suspense>
-							)}
-						/>
-						<Route
-							path="/404"
-							exact
-							render={() => (
-								<Suspense fallback={<Spinner />}>
-									<PageNotFound />
-								</Suspense>
-							)}
-						/>
-						<Route
-							render={() => (
-								<Suspense fallback={<Spinner />}>
-									<PageNotFound />
-								</Suspense>
-							)}
-						/>
+						<PublicRoute PageToLoad={About} path="/about" exact />
+						<PublicRoute PageToLoad={Terms} path="/terms" exact />
+						<PublicRoute PageToLoad={Support} path="/support" exact />
+						<PublicRoute PageToLoad={Cart} path="/cart" exact />
+						<PrivateRoute PageToLoad={Checkout} path="/checkout" exact />
+						<PublicRoute PageToLoad={Contact} path="/contact" exact />
+						<PublicRoute PageToLoad={StoreLocator} path="/storelocator" exact />
+						<PublicRoute PageToLoad={PageNotFound} />
 					</Switch>
 					<Footer icons={state.companySocial} details={state.companyDetails} />
 				</div>
@@ -903,6 +456,7 @@ const App = props => {
 
 const mapStateToProps = state => {
 	return {
+		isAuthenticated: state.login.isAuthenticated,
 		isAdmin: state.login.User.role.isAdmin
 	};
 };

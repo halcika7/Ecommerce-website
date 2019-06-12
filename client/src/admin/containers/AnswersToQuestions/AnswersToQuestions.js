@@ -15,7 +15,7 @@ const AnswersToQuestions = props => {
 
 	useEffect(() => {
 		(props.view || props.edit) &&
-			props.getAnswer(new URLSearchParams(props.location.search).get('id'));
+			props.getAnswer(new URLSearchParams(props.location.search).get('id'), props.history.push);
 	}, []);
 
 	useEffect(() => {
@@ -30,11 +30,12 @@ const AnswersToQuestions = props => {
 		e.preventDefault();
 		const id = new URLSearchParams(props.location.search).get('id');
 		props.addanswer &&
-			props.addAnswer({ question: values.question, answer: values.answer });
+			props.addAnswer({ question: values.question, answer: values.answer }, props.history.push);
 		props.edit &&
 			props.updateAnswer(
 				{ question: values.question, answer: values.answer },
-				id
+				id,
+				props.history.push
 			);
 		setValues({ question: '', answer: '' });
 		setErrors({ question: '', answer: '' });
@@ -145,9 +146,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		addAnswer: answerObj => dispatch(actions.addAnswer(answerObj)),
-		getAnswer: id => dispatch(actions.getAnswer(id)),
-		updateAnswer: (obj, id) => dispatch(actions.updateAnswer(obj, id))
+		addAnswer: (answerObj, callBack) => dispatch(actions.addAnswer(answerObj, callBack)),
+		getAnswer: (id, callBack) => dispatch(actions.getAnswer(id, callBack)),
+		updateAnswer: (obj, id, callBack) => dispatch(actions.updateAnswer(obj, id, callBack))
 	};
 };
 

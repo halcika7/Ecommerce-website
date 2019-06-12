@@ -50,10 +50,6 @@ exports.deleteUserRole = async (req, res) => {
 				{ _id: new ObjectId(req.query.id) }
 			]
 		});
-		const updateUserRole = await UserModel.updateMany(
-			{ role: req.query.id },
-			{ role: new ObjectId('5cb8d94556f66a552ee55857') }
-		);
 		if (deleteRole.n === 0 && findRole) {
 			return res.json({
 				failedMessage: `Role with id = ${findRole._id} can't be deleted !`
@@ -61,6 +57,10 @@ exports.deleteUserRole = async (req, res) => {
 		}
 		if (deleteRole.n === 0)
 			return res.json({ failedMessage: 'No Roles deleted !' });
+		const updateUserRole = await UserModel.updateMany(
+			{ role: req.query.id },
+			{ role: new ObjectId('5cb8d94556f66a552ee55857') }
+		);
 		return res.json({ successMessage: 'Role deleted !' });
 	} catch (err) {
 		return res.json({ failedMessage: err.message });
@@ -126,9 +126,7 @@ exports.getRole = async (req, res) => {
 
 exports.updateRole = async (req, res) => {
 	const { failedMessage, isValid } = validateRole(req.body.name);
-	if (!isValid) {
-		return res.json(failedMessage);
-	}
+	if (!isValid) { return res.json(failedMessage); }
 	try {
 		const findByName = await UserRolesModel.findOne({ name: req.body.name });
 		const findById = await UserRolesModel.findById(req.body.id);

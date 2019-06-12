@@ -5,6 +5,7 @@ const router = express.Router();
 const UserController = require('../../controllers/UsersController');
 const EmailController = require('../../controllers/EmailController');
 const ActivateAccountController = require('../../controllers/ActivateAccountController');
+const auth = require('../../middleware/auth');
 
 const fileStorage = multer.diskStorage({
 	destination: (req, file, cb) => {
@@ -45,7 +46,7 @@ router.post('/register', UserController.registerUser);
 
 router.post('/login', UserController.loginUser);
 
-router.post('/adduser', UserController.addNewUser);
+router.post('/adduser',(req, res, next) => auth(req, res, next, 'Create Users'), UserController.addNewUser);
 
 router.post('/resetpasswordemail', EmailController.sendResetPasswordEmail);
 
@@ -60,20 +61,21 @@ router.post(
 
 router.put(
 	'/updateprofilepicture',
+	auth,
 	multerProfilePicture.single('profilePicture'),
 	UserController.updateProfilePicture
 );
 
 router.get('/getuserphoto', UserController.getProfilePicture);
 
-router.put('/updatepassword', UserController.updatePassword);
+router.put('/updatepassword', auth, UserController.updatePassword);
 
-router.patch('/updateuser', UserController.updateUser);
+router.patch('/updateuser', (req, res, next) => auth(req, res, next, 'Update Users'), UserController.updateUser);
 
-router.get('/allusers', UserController.getAllUsers);
+router.get('/allusers', auth, UserController.getAllUsers);
 
-router.get('/singleuser', UserController.getSingleUser);
+router.get('/singleuser',auth, UserController.getSingleUser);
 
-router.delete('/deleteuser', UserController.deleteUser);
+router.delete('/deleteuser',(req, res, next) => auth(req, res, next, 'Delete Users'), UserController.deleteUser);
 
 module.exports = router;

@@ -91,7 +91,7 @@ const TopNavigation = props => {
 								onClick={showNotificationsMenu}>
 								{props.profilePicture && (
 									<img
-										src={props.profilePicture}
+										src={'/'+props.profilePicture}
 										width="20"
 										height="20"
 										alt=""

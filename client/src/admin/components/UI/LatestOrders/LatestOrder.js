@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const LatestOrders = ({ orders }) => {
 	console.log(orders);
@@ -45,9 +46,9 @@ const LatestOrders = ({ orders }) => {
 										</td>
 										<td>
 											<div>
-												<a href="/" className="btn btn-primary btn-sm">
+												<Link to={`/admindashboard/edit-order?id=${order._id}`} className="btn btn-primary btn-sm">
 													Edit
-												</a>
+												</Link>
 											</div>
 										</td>
 									</tr>

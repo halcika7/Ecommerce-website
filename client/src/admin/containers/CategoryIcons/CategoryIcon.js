@@ -43,10 +43,10 @@ const CategoryIcon = props => {
 		setImgSrc(false);
 		setIconName('');
 		if (props.addicon) {
-			props.addIcon(iconName);
+			props.addIcon(iconName, props.history.push);
 		}
 		if (props.editicon) {
-			props.updateIcon(id, iconName);
+			props.updateIcon(id, iconName, props.history.push);
 		}
 	};
 
@@ -68,7 +68,7 @@ const CategoryIcon = props => {
 		if (!props.addicon) {
 			const id = new URLSearchParams(props.location.search).get('id');
 			setId(id);
-			props.getIcon(id);
+			props.getIcon(id, props.history.push);
 		}
 		if (props.addicon) {
 			props.clearState();
@@ -175,10 +175,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		addIcon: name => dispatch(actions.addCategoryIcon(name)),
+		addIcon: (name, callBack) => dispatch(actions.addCategoryIcon(name, callBack)),
 		clearState: () => dispatch(actions.clearStateIcons()),
-		getIcon: id => dispatch(actions.getCategoryIcon(id)),
-		updateIcon: (id, name) => dispatch(actions.editCategoryIcon(id, name))
+		getIcon: (id, callBack) => dispatch(actions.getCategoryIcon(id, callBack)),
+		updateIcon: (id, name, callBack) => dispatch(actions.editCategoryIcon(id, name, callBack))
 	};
 };
 

@@ -1,11 +1,23 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
 import { returnStoresDataOnError } from '../../../helpers/stores';
+import { logoutUser } from '../auth/login';
 
-export const addStore = (formData, config) => async dispatch => {
+export const addStore = (formData, config, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.STORE_START });
 	const storeData = returnStoresDataOnError(formData);
-	const response = await axios.post('/stores/addstore', formData, config);
+	const token = localStorage.jwtToken;
+	const configuration = {
+		headers: { Authorization: token, ...config.headers }
+	};
+	const response = await axios.post(
+		'/stores/addstore',
+		formData,
+		configuration
+	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.STORE_FAILED,
@@ -26,9 +38,15 @@ export const addStore = (formData, config) => async dispatch => {
 	}
 };
 
-export const getStores = () => async dispatch => {
+export const getStores = callBack => async dispatch => {
 	dispatch({ type: actionTypes.STORE_START });
-	const response = await axios.get('/stores/getstores');
+	const token = localStorage.jwtToken;
+	const response = await axios.get('/stores/getstores', {
+		headers: { Authorization: token }
+	});
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.STORE_FAILED,
@@ -60,10 +78,16 @@ export const getStoresFront = () => async dispatch => {
 	}
 };
 
-export const getStore = id => async dispatch => {
+export const getStore = (id, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.STORE_START });
-	const response = await axios.get('/stores/getstore?id=' + id);
+	const token = localStorage.jwtToken;
+	const response = await axios.get(`/stores/getstore?id=${id}`, {
+		headers: { Authorization: token }
+	});
 	const options = { ...response.data.store };
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.STORE_FAILED,
@@ -95,9 +119,15 @@ export const getStoreContact = () => async dispatch => {
 	}
 };
 
-export const deleteStore = id => async dispatch => {
+export const deleteStore = (id, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.STORE_START });
-	const response = await axios.delete('/stores/deletestore?id=' + id);
+	const token = localStorage.jwtToken;
+	const response = await axios.delete(`/stores/deletestore?id=${id}`, {
+		headers: { Authorization: token }
+	});
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.STORE_FAILED,
@@ -112,10 +142,17 @@ export const deleteStore = id => async dispatch => {
 	}
 };
 
-export const updateStore = (formData, config) => async dispatch => {
+export const updateStore = (formData, config, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.STORE_START });
+	const token = localStorage.jwtToken;
 	const storeData = returnStoresDataOnError(formData);
-	const response = await axios.patch('/stores/updatestore', formData, config);
+	const configuration = {
+		headers: { Authorization: token, ...config.headers }
+	};
+	const response = await axios.patch('/stores/updatestore', formData, configuration);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.STORE_FAILED,

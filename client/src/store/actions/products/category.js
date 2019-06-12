@@ -1,12 +1,19 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
+import { logoutUser } from '../auth/login';
 
-export const addCategory = categoryData => async dispatch => {
+export const addCategory = (categoryData, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.CATEGORY_START });
+	const token = localStorage.jwtToken;
 	const response = await axios.post(
 		'/products/category/addcategory',
-		categoryData
+		categoryData, {
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.error) {
 		dispatch({
 			type: actionTypes.CATEGORY_FAILED,
@@ -31,6 +38,7 @@ export const addCategory = categoryData => async dispatch => {
 export const getAllCategories = () => async dispatch => {
 	dispatch({ type: actionTypes.CATEGORY_START });
 	const response = await axios.get('/products/category/getallcategories');
+
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.CATEGORY_FAILED,
@@ -44,9 +52,15 @@ export const getAllCategories = () => async dispatch => {
 	}
 };
 
-export const getCategory = id => async dispatch => {
+export const getCategory = (id, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.CATEGORY_START });
-	const response = await axios.get('/products/category/getcategory?id=' + id);
+	const token = localStorage.jwtToken;
+	const response = await axios.get(`/products/category/getcategory?id=${id}`, {
+		headers: { Authorization: token }
+	});
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.error) {
 		dispatch({
 			type: actionTypes.CATEGORY_FAILED,
@@ -65,12 +79,18 @@ export const getCategory = id => async dispatch => {
 	}
 };
 
-export const editCategory = (id, data) => async dispatch => {
+export const editCategory = (id, data, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.CATEGORY_START });
+	const token = localStorage.jwtToken;
 	const response = await axios.put(`/products/category/editcategory`, {
 		id,
 		data
+	}, {
+		headers: { Authorization: token }
 	});
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.CATEGORY_FAILED,
@@ -93,11 +113,17 @@ export const editCategory = (id, data) => async dispatch => {
 	}
 };
 
-export const deleteCategory = id => async dispatch => {
+export const deleteCategory = (id, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.CATEGORY_START });
+	const token = localStorage.jwtToken;
 	const response = await axios.delete(
-		`/products/category/deletecategory?id=${id}`
+		`/products/category/deletecategory?id=${id}`, {
+			headers: { Authorization: token }
+		}
 	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.CATEGORY_FAILED,
@@ -114,13 +140,19 @@ export const deleteCategory = id => async dispatch => {
 	setTimeout(() => dispatch(getAllCategories()), 4000);
 };
 
-export const deleteManyCategories = ids => async dispatch => {
+export const deleteManyCategories = (ids, callBack) => async dispatch => {
+	const token = localStorage.jwtToken;
 	let queryString = '/products/category/deletemanycategories?';
 	ids.forEach((id, index) => {
 		queryString += `id${index}=${id}&`;
 	});
 	dispatch({ type: actionTypes.CATEGORY_START });
-	const response = await axios.delete(queryString);
+	const response = await axios.delete(queryString, {
+		headers: { Authorization: token }
+	});
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.CATEGORY_FAILED,

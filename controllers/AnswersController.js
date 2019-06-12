@@ -4,10 +4,7 @@ const validateAddAnswer = require('../validation/answers');
 
 exports.addAnswer = async (req, res) => {
 	const { errors, isValid } = validateAddAnswer(req.body);
-	if (!isValid) {
-		return res.json(errors);
-	}
-
+	if (!isValid) { return res.json(errors); }
 	const question = req.body.question,
 		answer = req.body.answer;
 
@@ -78,10 +75,12 @@ exports.updateAnswer = async (req, res) => {
 			return res.json({ failedMessage: 'Question already answered !' });
 		}
 
-		await AnswerModel.updateOne(
+		const updateAnswer = await AnswerModel.updateOne(
 			{ _id: new ObjectId(id) },
 			{ question, answer }
 		);
+
+		if(updateAnswer.nModified === 0) { return res.json({ failedMessage: 'Answer not updated' }); }
 
 		const updatedAnswer = await AnswerModel.findOne({ _id: new ObjectId(id) });
 

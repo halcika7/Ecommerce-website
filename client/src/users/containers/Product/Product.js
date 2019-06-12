@@ -13,6 +13,7 @@ import AboutProduct from './AboutProduct';
 import DescriptionAndReviews from './DescriptionAndReviews';
 import ResponseMessage from '../../components/UI/ResponseMessages/ResponseMessages';
 import SharingButtons from './SharingButtons';
+import ProductCarousel from '../../components/UI/ProductBox/ProductCarousel';
 
 const Product = props => {
 	const productID = props.match.params.id
@@ -90,7 +91,6 @@ const Product = props => {
 			setInStock(false);
 		}
 	}, [numberInStock]);
-
 	useEffect(() => {
 		if (Object.keys(product).length > 0) {
 			setSubCatName(product.subcategories[0].sub);
@@ -98,7 +98,6 @@ const Product = props => {
 			setOptions();
 		}
 	}, [product]);
-
 	useEffect(() => {
 		if (choosenLabeledBy) {
 			resets('choosenLabeledBy');
@@ -142,7 +141,6 @@ const Product = props => {
 			returnTimeouts(newSizes, setSizes, findLabeledByOptionIndex);
 		}
 	}, [choosenLabeledBy]);
-
 	useEffect(() => {
 		choosenSize &&
 			(product.category === 'Clothing' || product.category === 'Shoes') &&
@@ -171,7 +169,6 @@ const Product = props => {
 				setResolution
 			);
 	}, [choosenSize]);
-
 	useEffect(() => {
 		choosenGraphics &&
 			commonInUseEffects(
@@ -810,14 +807,18 @@ const Product = props => {
 								{inStock && sku && (
 									<ProductButtons inStock={inStock} sku={sku} />
 								)}
-								<SharingButtons link={`https://polar-earth-72216.herokuapp.com/product?id=${productID}`} />
+								<SharingButtons
+									link={`https://polar-earth-72216.herokuapp.com/product?id=${productID}`}
+								/>
 							</div>
 						</div>
 					</div>
+					<ProductCarousel products={props.product.similarProducts} />
 					<DescriptionAndReviews
 						product={product}
 						match={props.match}
 						location={props.location}
+						push={props.history.push}
 					/>
 				</React.Fragment>
 			)}

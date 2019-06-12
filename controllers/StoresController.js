@@ -16,10 +16,7 @@ exports.addStore = async (req, res) => {
 		links
 	} = JSON.parse(req.body.options);
 	const { errors, isValid } = await addStoreValidation(req.body, req.file);
-	if (!isValid) {
-		return res.json(errors);
-	}
-
+	if (!isValid) { return res.json(errors); }
 	try {
 		const addStore = new StoresModel({
 			address,
@@ -55,9 +52,7 @@ exports.updateStore = async (req, res) => {
 	} = JSON.parse(req.body.options);
 	const id = req.body.id;
 	let { errors, isValid } = await addStoreValidation(req.body, req.file, id);
-	if (!isValid) {
-		return res.json(errors);
-	}
+	if (!isValid) { return res.json(errors); }
 	try {
 		const updateObj = req.file
 			? {
@@ -148,7 +143,6 @@ exports.getStore = async (req, res) => {
 		const store = await StoresModel.findOne({
 			_id: new ObjectId(req.query.id)
 		});
-
 		return res.json({ store });
 	} catch (err) {
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
@@ -161,7 +155,6 @@ exports.getStoreContact = async (req, res) => {
 		const store = await StoresModel.findOne({}).select(
 			'address phone email links location -_id'
 		);
-
 		return res.json({ store });
 	} catch (err) {
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
@@ -182,7 +175,6 @@ exports.getAllStoresFront = async (req, res) => {
 			{ $group: { _id: '$_id.country', stores: { $push: '$$ROOT' } } },
 			{ $sort: { _id: 1 } }
 		]);
-
 		return res.json({ stores });
 	} catch (err) {
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });

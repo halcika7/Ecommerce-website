@@ -1,9 +1,17 @@
 import * as actionTypes from '../actionTypes';
 import axios from 'axios';
+import { logoutUser } from '../auth/login';
 
-export const addBrand = brandData => async dispatch => {
+export const addBrand = (brandData, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.BRAND_START });
-	const response = await axios.post('/products/brand/addbrand', brandData);
+	const token = localStorage.jwtToken;
+	const response = await axios.post('/products/brand/addbrand', brandData, {
+		headers: { Authorization: token }
+	});
+
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.error) {
 		dispatch({
 			type: actionTypes.BRAND_FAILED,
@@ -25,9 +33,15 @@ export const addBrand = brandData => async dispatch => {
 	}
 };
 
-export const getAllBrands = () => async dispatch => {
+export const getAllBrands = callBack => async dispatch => {
 	dispatch({ type: actionTypes.BRAND_START });
-	const response = await axios.get('/products/brand/getallbrands');
+	const token = localStorage.jwtToken;
+	const response = await axios.get('/products/brand/getallbrands', {
+		headers: { Authorization: token }
+	});
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.BRAND_FAILED,
@@ -38,9 +52,15 @@ export const getAllBrands = () => async dispatch => {
 	}
 };
 
-export const getBrand = id => async dispatch => {
+export const getBrand = (id, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.BRAND_START });
-	const response = await axios.get('/products/brand/getbrand?id=' + id);
+	const token = localStorage.jwtToken;
+	const response = await axios.get(`/products/brand/getbrand?id=${id}`, {
+		headers: { Authorization: token }
+	});
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.error) {
 		dispatch({ type: actionTypes.BRAND_FAILED, errorID: response.data.error });
 	} else if (response.data.failedMessage) {
@@ -56,7 +76,7 @@ export const getBrand = id => async dispatch => {
 export const getBrandByCategory = category => async dispatch => {
 	dispatch({ type: actionTypes.BRAND_START });
 	const response = await axios.get(
-		'/products/brand/getbrandsbycategory?category=' + category
+		`/products/brand/getbrandsbycategory?category=${category}`
 	);
 	if (response.data.failedMessage) {
 		dispatch({
@@ -68,9 +88,19 @@ export const getBrandByCategory = category => async dispatch => {
 	}
 };
 
-export const editBrand = (id, data) => async dispatch => {
+export const editBrand = (id, data, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.BRAND_START });
-	const response = await axios.put(`/products/brand/editbrand`, { id, data });
+	const token = localStorage.jwtToken;
+	const response = await axios.put(
+		`/products/brand/editbrand`,
+		{ id, data },
+		{
+			headers: { Authorization: token }
+		}
+	);
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.BRAND_FAILED,
@@ -86,9 +116,15 @@ export const editBrand = (id, data) => async dispatch => {
 	}
 };
 
-export const deleteBrand = id => async dispatch => {
+export const deleteBrand = (id, callBack) => async dispatch => {
 	dispatch({ type: actionTypes.BRAND_START });
-	const response = await axios.delete(`/products/brand/deletebrand?id=${id}`);
+	const token = localStorage.jwtToken;
+	const response = await axios.delete(`/products/brand/deletebrand?id=${id}`, {
+		headers: { Authorization: token }
+	});
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.BRAND_FAILED,
@@ -104,13 +140,19 @@ export const deleteBrand = id => async dispatch => {
 	setTimeout(() => dispatch(getAllBrands()), 4000);
 };
 
-export const deleteManyBrands = ids => async dispatch => {
+export const deleteManyBrands = (ids, callBack) => async dispatch => {
+	const token = localStorage.jwtToken;
 	let queryString = '/products/brand/deletemanybrands?';
 	ids.forEach((id, index) => {
 		queryString += `id${index}=${id}&`;
 	});
 	dispatch({ type: actionTypes.BRAND_START });
-	const response = await axios.delete(queryString);
+	const response = await axios.delete(queryString, {
+		headers: { Authorization: token }
+	});
+	if (response.data.authenticationFailed) {
+		dispatch(logoutUser(callBack));
+	}
 	if (response.data.failedMessage) {
 		dispatch({
 			type: actionTypes.BRAND_FAILED,

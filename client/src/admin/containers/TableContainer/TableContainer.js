@@ -28,7 +28,7 @@ const TableContainer = props => {
 	useEffect(() => {
 		if (props.Brands) {
 			setBrands(props.brand.allBrands);
-			props.getBrands();
+			props.getBrands(props.history.push);
 		}
 		if (props.Roles) {
 			setAllRoles(props.roles.Roles);
@@ -36,11 +36,11 @@ const TableContainer = props => {
 		}
 		if (props.Permissions) {
 			setAllPermissions(props.permissions.allPermissions);
-			props.getAllPermissions();
+			props.getAllPermissions(props.history.push);
 		}
 		if (props.Users) {
 			setAllUsers(props.users.Users);
-			props.getUsers();
+			props.getUsers(props.history.push);
 		}
 		if (props.Categories) {
 			setAllCategories(props.categories.allCategories);
@@ -48,11 +48,11 @@ const TableContainer = props => {
 		}
 		if (props.Icons) {
 			setAllCategoryIcons(props.icons.allCategoryIcons);
-			props.getAllCategoryIcons();
+			props.getAllCategoryIcons(props.history.push);
 		}
 		if (props.Coupons) {
 			setAllCoupons(props.coupon.coupons);
-			props.getAllCoupons();
+			props.getAllCoupons(props.history.push);
 		}
 		if (props.Answers) {
 			setAllAnswers(props.answers.answers);
@@ -64,7 +64,7 @@ const TableContainer = props => {
 		}
 		if (props.Stores) {
 			setAllStores(props.stores.stores);
-			props.getStores();
+			props.getStores(props.history.push);
 		}
 		if (props.Products) {
 			setAllProducts(props.products.products);
@@ -72,7 +72,7 @@ const TableContainer = props => {
 		}
 		if (props.Orders) {
 			setAllOrders(props.orders.orders);
-			props.getAllOrders();
+			props.getAllOrders(props.history.push);
 		}
 	}, [
 		props.Brands,
@@ -203,18 +203,18 @@ const TableContainer = props => {
 
 	const singleDelete = (e, id, name = null) => {
 		e.preventDefault();
-		props.Brands && props.deleteBrand(id);
-		props.Users && props.deleteUser(id);
-		props.Categories && props.deleteCategory(id);
-		props.Icons && props.deleteCategoryIcon(id);
-		props.Roles && props.deleteRole(id);
-		props.Permissions && props.deletePermission(id);
-		props.Coupons && props.deleteCoupon(id);
-		props.Answers && props.deleteAnswer(id);
-		props.Terms && props.deleteTerm(id);
-		props.Stores && props.deleteStore(id);
-		props.Products && props.deleteProduct(id, name);
-		props.Orders && props.deleteOrder(id);
+		props.Brands && props.deleteBrand(id, props.history.push);
+		props.Users && props.deleteUser(id, props.history.push);
+		props.Categories && props.deleteCategory(id, props.history.push);
+		props.Icons && props.deleteCategoryIcon(id, props.history.push);
+		props.Roles && props.deleteRole(id, props.history.push);
+		props.Permissions && props.deletePermission(id, props.history.push);
+		props.Coupons && props.deleteCoupon(id, props.history.push);
+		props.Answers && props.deleteAnswer(id, props.history.push);
+		props.Terms && props.deleteTerm(id, props.history.push);
+		props.Stores && props.deleteStore(id, props.history.push);
+		props.Products && props.deleteProduct(id, name, props.history.push);
+		props.Orders && props.deleteOrder(id, props.history.push);
 		setDeleteManyRecords([]);
 	};
 
@@ -223,11 +223,11 @@ const TableContainer = props => {
 		if (ids.length < 1) {
 			return alert('Nothing selected to delete');
 		}
-		props.Brands && props.deleteManyBrands(ids);
-		props.Categories && props.deleteManyCategories(ids);
-		props.Icons && props.deleteManyCategoryIcons(ids);
-		props.Roles && props.deleteManyRoles(ids);
-		props.Permissions && props.deleteManyPermissions(ids);
+		props.Brands && props.deleteManyBrands(ids, props.history.push);
+		props.Categories && props.deleteManyCategories(ids, props.history.push);
+		props.Icons && props.deleteManyCategoryIcons(ids, props.history.push);
+		props.Roles && props.deleteManyRoles(ids, props.history.push);
+		props.Permissions && props.deleteManyPermissions(ids, props.history.push);
 		setDeleteManyRecords([]);
 	};
 
@@ -391,38 +391,52 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		getBrands: () => dispatch(actions.getAllBrands()),
-		deleteBrand: id => dispatch(actions.deleteBrand(id)),
-		deleteManyBrands: ids => dispatch(actions.deleteManyBrands(ids)),
+		// uradjeno
+		getBrands: callBack => dispatch(actions.getAllBrands(callBack)),
+		deleteBrand: (id, callBack) => dispatch(actions.deleteBrand(id, callBack)),
+		deleteManyBrands: (ids, callBack) => dispatch(actions.deleteManyBrands(ids, callBack)),
+
+		// uradjeno
 		getAllCategories: () => dispatch(actions.getAllCategories()),
-		deleteCategory: id => dispatch(actions.deleteCategory(id)),
-		deleteManyCategories: ids => dispatch(actions.deleteManyCategories(ids)),
-		getAllCategoryIcons: () => dispatch(actions.getAllCategoryIcons()),
-		deleteCategoryIcon: id => dispatch(actions.deleteCategoryIcon(id)),
-		deleteManyCategoryIcons: ids =>
-			dispatch(actions.deleteManyCategoryIcons(ids)),
-		getUsers: () => dispatch(actions.getAllUsers()),
-		deleteUser: id => dispatch(actions.deleteUser(id)),
+		deleteCategory: (id, callBack) => dispatch(actions.deleteCategory(id, callBack)),
+		deleteManyCategories: (ids, callBack) => dispatch(actions.deleteManyCategories(ids, callBack)),
+
+		// uradjeno
+		getAllCategoryIcons: callBack => dispatch(actions.getAllCategoryIcons(callBack)),
+		deleteCategoryIcon: (id, callBack) => dispatch(actions.deleteCategoryIcon(id, callBack)),
+		deleteManyCategoryIcons: (ids, callBack) =>
+			dispatch(actions.deleteManyCategoryIcons(ids, callBack)),
+
+		getUsers: (callBack) => dispatch(actions.getAllUsers(callBack)),
+		deleteUser: (id, callBack) => dispatch(actions.deleteUser(id, callBack)),
+
 		getRoles: () => dispatch(actions.getRoles()),
-		deleteRole: id => dispatch(actions.deleteUserRole(id)),
-		deleteManyRoles: ids => dispatch(actions.deleteManyUserRoles(ids)),
-		getAllPermissions: () => dispatch(actions.getAllPermissions()),
-		deletePermission: permission =>
-			dispatch(actions.deletePermission(permission)),
-		deleteManyPermissions: permissions =>
-			dispatch(actions.deleteManyPermissions(permissions)),
-		getAllCoupons: () => dispatch(actions.getCoupons()),
-		deleteCoupon: id => dispatch(actions.deleteCoupon(id)),
+		deleteRole: (id, callBack) => dispatch(actions.deleteUserRole(id, callBack)),
+		deleteManyRoles: (ids, callBack) => dispatch(actions.deleteManyUserRoles(ids, callBack)),
+
+		getAllPermissions: callBack => dispatch(actions.getAllPermissions(callBack)),
+		deletePermission: (permission, callBack) =>
+			dispatch(actions.deletePermission(permission, callBack)),
+		deleteManyPermissions: (permissions, callBack) =>
+			dispatch(actions.deleteManyPermissions(permissions, callBack)),
+
+		getAllCoupons: callBack => dispatch(actions.getCoupons(callBack)),
+		deleteCoupon: (id, callBack) => dispatch(actions.deleteCoupon(id, callBack)),
+
 		getAllAnswers: () => dispatch(actions.getAllAnswers()),
-		deleteAnswer: id => dispatch(actions.deleteAnswer(id)),
+		deleteAnswer: (id, callBack) => dispatch(actions.deleteAnswer(id, callBack)),
+
 		getAllTerms: () => dispatch(actions.getAllTerms()),
-		deleteTerm: id => dispatch(actions.deleteTerm(id)),
-		getStores: () => dispatch(actions.getStores()),
-		deleteStore: id => dispatch(actions.deleteStore(id)),
+		deleteTerm: (id, callBack) => dispatch(actions.deleteTerm(id, callBack)),
+
+		getStores: callBack => dispatch(actions.getStores(callBack)),
+		deleteStore: (id, callBack) => dispatch(actions.deleteStore(id, callBack)),
+
 		getAllProducts: () => dispatch(actions.getAllProducts()),
-		deleteProduct: (id, name) => dispatch(actions.deleteProduct(id, name)),
-		getAllOrders: () => dispatch(actions.getAllOrders()),
-		deleteOrder: id => dispatch(actions.deleteOrder(id))
+		deleteProduct: (id, name, callBack) => dispatch(actions.deleteProduct(id, name, callBack)),
+
+		getAllOrders: callBack => dispatch(actions.getAllOrders(callBack)),
+		deleteOrder: (id, callBack) => dispatch(actions.deleteOrder(id, callBack))
 	};
 };
 

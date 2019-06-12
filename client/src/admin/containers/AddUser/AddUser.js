@@ -152,14 +152,20 @@ const AddUser = props => {
 				delete userData[data];
 			}
 		}
-		props.addUser(userData);
+		props.addUser(userData, props.history.push);
 	};
 
 	return (
 		<div className="AdminProfile row">
-			{props.addUserState.successMessage ? (
+			{props.addUserState.successMessage && (
 				<ResponseMessages message={props.addUserState.successMessage} />
-			) : null}
+			)}
+			{props.addUserState.failedMessage && (
+				<ResponseMessages
+					ClassName="Danger"
+					message={props.addUserState.failedMessage}
+				/>
+			)}
 			<div className="col-12 mb-30">
 				<form className="" onSubmit={onFormSubmit}>
 					{props.addUserState.loading ? (
@@ -230,7 +236,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return {
 		getRoles: () => dispatch(actions.getRoles()),
-		addUser: userData => dispatch(actions.addNewUser(userData))
+		addUser: (userData, callBack) =>
+			dispatch(actions.addNewUser(userData, callBack))
 	};
 };
 

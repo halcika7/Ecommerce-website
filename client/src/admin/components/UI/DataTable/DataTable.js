@@ -142,6 +142,10 @@ const DataTable = props => {
 		if (props.permissionsData) {
 			id = row.permission;
 		}
+		if (props.couponsData) {
+			view = 'view-coupon?id=';
+			edit += 'edit-coupon?id=';
+		}
 		if (props.answersData) {
 			view = 'view-answer?id=';
 			edit += 'edit-answer?id=';
@@ -164,12 +168,12 @@ const DataTable = props => {
 		}
 		return (
 			<React.Fragment>
-				{!props.permissionsData && !props.couponsData && (
+				{!props.permissionsData && (
 					<Link className="btn btn-warning" to={`${view}${id}`}>
 						<i className="far fa-eye" />
 					</Link>
 				)}
-				{!props.permissionsData && !props.couponsData && (
+				{!props.permissionsData && (
 					<Link className="btn btn-primary" to={`${edit}${id}`}>
 						<i className="far fa-edit" />
 					</Link>
@@ -266,7 +270,6 @@ const DataTable = props => {
 				Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())) /
 				(1000 * 60 * 60 * 24)
 		);
-		console.log(difference);
 		return difference > 0 ? (
 			<span>
 				Expires in {difference} {difference > 1 ? "day's" : 'day'}

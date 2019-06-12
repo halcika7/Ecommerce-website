@@ -190,7 +190,7 @@ const AddProduct = props => {
 		}
 		formData.append('options', JSON.stringify(newOptions));
 		const config = { headers: { 'content-type': 'multipart/form-data' } };
-		props.addProduct(formData, config);
+		props.addProduct(formData, config, props.history.push);
 		setInputs({
 			name: '',
 			price: '',
@@ -402,8 +402,8 @@ const mapDispatchToProps = dispatch => {
 		getCategories: () => dispatch(actions.getAllCategories()),
 		getBrandByCategory: category =>
 			dispatch(actions.getBrandByCategory(category)),
-		addProduct: (formData, config) =>
-			dispatch(actions.addProduct(formData, config))
+		addProduct: (formData, config, callBack) =>
+			dispatch(actions.addProduct(formData, config, callBack))
 	};
 };
 

@@ -110,7 +110,6 @@ exports.loginUser = async (req, res) => {
 			successMessage: `You are successfully logged in as ${user.username}`
 		});
 	} catch (err) {
-		console.log(err);
 		if (err.errmsg) return res.json({ failedMessage: err.errmsg });
 		return res.json({ failedMessage: err.message });
 	}
@@ -207,7 +206,6 @@ exports.getProfilePicture = async (req, res) => {
 };
 
 exports.updatePassword = async (req, res) => {
-	console.log(req.body);
 	const { errors, isValid } = validatePasswords(req.body);
 	if (!isValid) {
 		return res.json(errors);

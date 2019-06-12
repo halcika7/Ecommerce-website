@@ -30,11 +30,11 @@ const Profile = props => {
 	const [order, setOrder] = useState(false);
 
 	useEffect(() => {
-		props.getUser(userID, props.UserID, true);
+		props.getUser(userID, props.UserID, true, props.history.push);
 		setPasswords({ ...props.updatePasswordState });
 	}, []);
 	useEffect(() => {
-		props.getUser(userID, props.UserID, true);
+		props.getUser(userID, props.UserID, true, props.history.push);
 	}, [props.location.search, props.match.params]);
 	useEffect(() => {
 		if (props.errorID) {
@@ -77,7 +77,7 @@ const Profile = props => {
 				delete userData.userInfo[data];
 			}
 		}
-		props.updateUser(userData);
+		props.updateUser(userData, props.history.push);
 	};
 
 	const updatePassword = e => {
@@ -86,7 +86,7 @@ const Profile = props => {
 			password: passwords.password,
 			password2: passwords.password2,
 			username: props.User.username
-		});
+		},props.history.push);
 	};
 
 	const inputChange = e =>
@@ -98,7 +98,7 @@ const Profile = props => {
 	const showUserOrder = (e, id = null) => {
 		e.preventDefault();
 		if (id) {
-			props.getOrder(id);
+			props.getOrder(id, props.history.push);
 		} else {
 			setOrder({});
 		}
@@ -181,8 +181,9 @@ const Profile = props => {
 								id={props.User._id}
 								username={props.User.username}
 								updateProfilePicture={props.updateUserPicture}
+								push={props.history.push}
 							/>
-							<Orders userId={props.UserID} showOrder={showUserOrder} />
+							<Orders userId={props.UserID} showOrder={showUserOrder} pus={props.history.push} />
 						</div>
 					</div>
 				</div>
@@ -206,13 +207,13 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
 	getRoles: () => dispatch(actions.getRoles()),
-	getUser: (id, id2, profile) =>
-		dispatch(actions.getSingleUser(id, id2, profile)),
-	updateUser: userData => dispatch(actions.updateUser(userData)),
-	updateUserPicture: (formData, config, id) =>
-		dispatch(actions.userUpdateProfilePicture(formData, config, id)),
-	updatePassword: passwords => dispatch(actions.updatePassword(passwords)),
-	getOrder: id => dispatch(actions.getOrder(id))
+	getUser: (id, id2, profile, callBack) =>
+		dispatch(actions.getSingleUser(id, id2, profile, callBack)),
+	updateUser: (userData, callBack) => dispatch(actions.updateUser(userData, callBack)),
+	updateUserPicture: (formData, config, id, callBack) =>
+		dispatch(actions.userUpdateProfilePicture(formData, config, id, callBack)),
+	updatePassword: (passwords, callBack) => dispatch(actions.updatePassword(passwords, callBack)),
+	getOrder: (id, callBack) => dispatch(actions.getOrder(id, callBack))
 });
 
 export default connect(

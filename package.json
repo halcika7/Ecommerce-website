@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Haris Beslic Portfolio",
   "main": "server.js",
+  "proxy": "http://0.0.0.0:3000",
   "scripts": {
     "client-install": "npm install --prefix client",
     "start": "node server.js",

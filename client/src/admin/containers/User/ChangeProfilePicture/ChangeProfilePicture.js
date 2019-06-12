@@ -13,7 +13,7 @@ const ChangeProfilePicture = props => {
 
 		const config = { headers: { 'content-type': 'multipart/form-data' } };
 
-		props.submit(formData, config, props.id);
+		props.submit(formData, config, props.id, props.push);
 
 		document
 			.querySelector('#updloadPicture')

@@ -42,9 +42,9 @@ const Brand = props => {
 		const data = { name: brandName, categories: selectedCategories };
 		if (props.editbrand) {
 			const id = new URLSearchParams(props.location.search).get('id');
-			props.editBrand(id, data);
+			props.editBrand(id, data, props.history.push);
 		} else {
-			props.addBrand(data);
+			props.addBrand(data, props.history.push);
 		}
 		setBrandName('');
 		setSelectedCategories([]);
@@ -53,7 +53,7 @@ const Brand = props => {
 	const startFunction = () => {
 		if (!props.addbrand) {
 			const id = new URLSearchParams(props.location.search).get('id');
-			props.getBrand(id);
+			props.getBrand(id, props.history.push);
 		}
 		if (props.addbrand) {
 			props.clearState();
@@ -186,9 +186,9 @@ const mapStateToProps = state => {
 const maDispatchToProps = dispatch => {
 	return {
 		getAllCategories: () => dispatch(actions.getAllCategories()),
-		addBrand: brandData => dispatch(actions.addBrand(brandData)),
-		getBrand: id => dispatch(actions.getBrand(id)),
-		editBrand: (id, data) => dispatch(actions.editBrand(id, data)),
+		addBrand: (brandData, callBack) => dispatch(actions.addBrand(brandData, callBack)),
+		getBrand: (id, callBack) => dispatch(actions.getBrand(id, callBack)),
+		editBrand: (id, data, callBack) => dispatch(actions.editBrand(id, data, callBack)),
 		clearState: () => dispatch(actions.clearBrandState())
 	};
 };

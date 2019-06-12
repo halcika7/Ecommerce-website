@@ -21,7 +21,7 @@ const AddReview = props => {
 			userId: props.userId,
 			rating,
 			text: reviewText
-		});
+		}, props.push);
 		setRating(0);
 		setReviewText('');
 	};
@@ -149,7 +149,7 @@ const mapStateToProps = state => {
 
 const dispatchToProps = dispatch => {
 	return {
-		addReview: reviewObject => dispatch(addReview(reviewObject))
+		addReview: (reviewObject, callBack) => dispatch(addReview(reviewObject, callBack))
 	};
 };
 

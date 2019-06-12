@@ -13,7 +13,7 @@ const AddRole = props => {
 	const [choosenPermissions, setChoosenPermissions] = useState([]);
 	const [roleName, setRoleName] = useState('');
 	useEffect(() => {
-		props.getAllPermissions();
+		props.getAllPermissions(props.history.push);
 		setAllPermissions(props.allPermissions);
 	}, []);
 	useEffect(() => {
@@ -30,7 +30,7 @@ const AddRole = props => {
 	const onFormSubmit = e => {
 		e.preventDefault();
 		const role = { name: roleName, isAdmin, permissions: choosenPermissions };
-		props.addNewRole(role);
+		props.addNewRole(role, props.history.push);
 	};
 
 	return (
@@ -108,8 +108,8 @@ const mapStateToProps = state => {
 
 const dispatchMapToProps = dispatch => {
 	return {
-		getAllPermissions: () => dispatch(actions.getAllPermissions()),
-		addNewRole: role => dispatch(actions.addRole(role))
+		getAllPermissions: callBack => dispatch(actions.getAllPermissions(callBack)),
+		addNewRole: (role, callBack) => dispatch(actions.addRole(role, callBack))
 	};
 };
 

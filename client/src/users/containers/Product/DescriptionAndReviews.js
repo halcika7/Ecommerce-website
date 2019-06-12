@@ -14,7 +14,8 @@ const DescriptionAndReviews = props => {
 
 	useEffect(() => {
 		props.getReviews(props.product._id);
-		const socket = openSocket('https://polar-earth-72216.herokuapp.com');
+		const socket = openSocket('http://localhost:5000');
+		// const socket = openSocket('https://polar-earth-72216.herokuapp.com');
 		socket.on('review', data => {
 			if (data.action === 'create') {
 				props.updateAddReview(data.review);
@@ -97,7 +98,7 @@ const DescriptionAndReviews = props => {
 					role="tabpanel"
 					aria-labelledby="contact-tab">
 					<div className="container">
-						<AddReview productId={props.product._id} />
+						<AddReview productId={props.product._id} push={props.push} />
 						<div className="row comments" style={{ margin: '0px' }}>
 							<div className="blog-post-comments">
 								<ol className="blog-comment">
@@ -111,6 +112,7 @@ const DescriptionAndReviews = props => {
 											deleteReply={props.deleteReply}
 											editReview={props.editReview}
 											editReply={props.editReply}
+											push={props.push}
 										/>
 									))}
 								</ol>
@@ -134,26 +136,21 @@ const mapDispatchToProps = dispatch => {
 	return {
 		getReviews: id => dispatch(actions.getReviews(id)),
 
-		addReply: replyObject => dispatch(actions.addReply(replyObject)),
+		addReply: (replyObject, callBack) => dispatch(actions.addReply(replyObject, callBack)),
 
-		editReview: reviewObject => dispatch(actions.editReview(reviewObject)),
+		editReview: (reviewObject, callBack) => dispatch(actions.editReview(reviewObject, callBack)),
 
-		editReply: reviewObject => dispatch(actions.editReply(reviewObject)),
+		editReply: (reviewObject, callBack) => dispatch(actions.editReply(reviewObject, callBack)),
 
-		deleteReview: id => dispatch(actions.deleteReview(id)),
+		deleteReview: (id, callBack) => dispatch(actions.deleteReview(id, callBack)),
 
-		deleteReply: id => dispatch(actions.deleteReply(id)),
+		deleteReply: (id, callBack) => dispatch(actions.deleteReply(id, callBack)),
 
 		clearReviews: () => dispatch(actions.clearReviews()),
-
 		updateAddReview: data => dispatch(actions.updateAddReview(data)),
-
 		updateEditReview: data => dispatch(actions.updateEditReview(data)),
-
 		updateDeleteReview: id => dispatch(actions.updateDeleteReview(id)),
-
 		updateDeleteReply: id => dispatch(actions.updateDeleteReply(id)),
-
 		updateAddReply: data => dispatch(actions.updateAddReply(data))
 	};
 };
