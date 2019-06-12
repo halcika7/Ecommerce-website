@@ -808,7 +808,7 @@ const Product = props => {
 									<ProductButtons inStock={inStock} sku={sku} />
 								)}
 								<SharingButtons
-									link={`https://polar-earth-72216.herokuapp.com/product?id=${productID}`}
+									link={`https://halcstore.space/product?id=${productID}`}
 								/>
 							</div>
 						</div>
