@@ -203,7 +203,7 @@ td.beforeHeading > h1 {
 <body style="background-color: #e9ecef;">
 
 <div class="navigation">
-    <a href="http://localhost:3000" >
+    <a href="https://halcstore.space >
       Halc Store
     </a>
 
@@ -218,7 +218,7 @@ td.beforeHeading > h1 {
             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
             <tr>
                 <td align="center" valign="top" style="padding: 36px 24px;">
-                <a href="https://sendgrid.com" target="_blank" style="display: inline-block;">
+                <a href="https://halcstore.space" target="_blank" style="display: inline-block;">
                   Halc Store
                 </a>
                 </td>
@@ -280,7 +280,7 @@ td.beforeHeading > h1 {
                         <table border="0" cellpadding="0" cellspacing="0">
                         <tr>
                             <td align="center" bgcolor="#1a82e2" class="td3">
-                            <a style="color: #fff" class="reset-open" href="http://localhost:3000/confirmationaccount?token=${token}">Click here to confirm account!!!</a>
+                            <a style="color: #fff" class="reset-open" href="https://halcstore.space/confirmationaccount?token=${token}">Click here to confirm account!!!</a>
                             </td>
                         </tr>
                         </table>
