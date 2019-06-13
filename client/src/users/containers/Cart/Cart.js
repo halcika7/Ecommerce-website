@@ -295,7 +295,7 @@ const Cart = props => {
 								<p className="price-total">$ {props.cart.totals.total}</p>
 							</div>
 							<div className={c.checkoutcart}>
-								<a href="/">Proceed to Checkout</a>
+								<Link to="/checkout">Proceed to Checkout</Link>
 							</div>
 						</div>
 					</div>
