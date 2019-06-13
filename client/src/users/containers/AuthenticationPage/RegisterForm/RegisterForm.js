@@ -8,7 +8,7 @@ import LoginRegisterInputs from '../../../components/UI/LoginRegisterInputs/Logi
 import ResponseMessage from '../../../components/UI/ResponseMessages/ResponseMessages';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 
-const RegisterForm = props => {
+const RegisterForm = (props) => {
 	const [register, setRegister] = useState({});
 
 	const [inputs] = useState([
