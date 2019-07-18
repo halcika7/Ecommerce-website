@@ -1,6 +1,6 @@
 # SoftwareProject
 
-##Client Side == Client-server pattern
+##Client Side == Client-server patter
 
 ```
 This pattern consists of two parties; a server and multiple clients. 

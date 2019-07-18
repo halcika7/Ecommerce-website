@@ -95,13 +95,14 @@ const App = props => {
 
 	useEffect(() => {
 		checkLoggedInUser(props.history.push);
-		console.log(props.location.pathname)
 	}, [props.location.search, props.match.params]);
 
 	const storageChanged = () => checkCart();
 
+	console.log(props.login)
+
 	if (
-		props.isAdmin &&
+		props.isAdmin.role.isAdmin &&
 		props.isAuthenticated &&
 		props.location.pathname.includes('admindashboard')
 	) {
@@ -457,7 +458,8 @@ const App = props => {
 const mapStateToProps = state => {
 	return {
 		isAuthenticated: state.login.isAuthenticated,
-		isAdmin: state.login.User.role.isAdmin
+		isAdmin: state.login.User,
+		login: state.login
 	};
 };
 

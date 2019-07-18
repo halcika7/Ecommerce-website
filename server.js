@@ -9,24 +9,6 @@ const socketio = require('socket.io');
 
 const server = http.createServer(app);
 const io = socketio(server);
-// routes
-const users = require('./routes/api/users');
-const permissions = require('./routes/roles&permissions/permissions');
-const roles = require('./routes/roles&permissions/roles');
-const productsCategory = require('./routes/products/category');
-const categoryIcon = require('./routes/products/categoryIcon');
-const brand = require('./routes/products/brand');
-const product = require('./routes/products/product');
-const filterproducts = require('./routes/products/filterproducts');
-const productreview = require('./routes/products/productreview')(io);
-const answers = require('./routes/answers/answers');
-const terms = require('./routes/answers/terms');
-const cart = require('./routes/cart/cart');
-const coupon = require('./routes/cart/coupon');
-const checkout = require('./routes/cart/checkout');
-const stores = require('./routes/stores/stores');
-const orders = require('./routes/orders/orders');
-const dashboard = require('./routes/dashboard/dashboard');
 // cron jobs
 const dailyWeeklyOffer = require('./cronJobs/product').dailyWeeklyOffer;
 
@@ -41,23 +23,24 @@ app.use(passport.initialize());
 // Passport Config
 require('./config/passport')(passport);
 
-app.use('/api/users', users);
-app.use('/rolespermissions/permissions', permissions);
-app.use('/rolespermissions/roles', roles);
-app.use('/products/category', productsCategory);
-app.use('/products/categoryicon', categoryIcon);
-app.use('/products/brand', brand);
-app.use('/products/product', product);
-app.use('/products/product/filter', filterproducts);
-app.use('/products/product', productreview);
-app.use('/answers/', answers);
-app.use('/terms/', terms);
-app.use('/cart/', cart);
-app.use('/cart/coupon/', coupon);
-app.use('/cart/checkout/', checkout);
-app.use('/stores/', stores);
-app.use('/order/', orders);
-app.use('/dashboard/', dashboard);
+// routes
+app.use('/api/users', require('./routes/api/users'));
+app.use('/rolespermissions/permissions', require('./routes/roles&permissions/permissions'));
+app.use('/rolespermissions/roles', require('./routes/roles&permissions/roles'));
+app.use('/products/category', require('./routes/products/category'));
+app.use('/products/categoryicon', require('./routes/products/categoryIcon'));
+app.use('/products/brand', require('./routes/products/brand'));
+app.use('/products/product', require('./routes/products/product'));
+app.use('/products/product/filter', require('./routes/products/filterproducts'));
+app.use('/products/product', require('./routes/products/productreview')(io));
+app.use('/answers/', require('./routes/answers/answers'));
+app.use('/terms/', require('./routes/answers/terms'));
+app.use('/cart/', require('./routes/cart/cart'));
+app.use('/cart/coupon/', require('./routes/cart/coupon'));
+app.use('/cart/checkout/', require('./routes/cart/checkout'));
+app.use('/stores/', require('./routes/stores/stores'));
+app.use('/order/', require('./routes/orders/orders'));
+app.use('/dashboard/', require('./routes/dashboard/dashboard'));
 
 // Serve static assets in production
 if(process.env.NODE_ENV === 'production') {

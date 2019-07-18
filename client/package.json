@@ -10,7 +10,8 @@
     "google-maps-react": "^2.0.2",
     "install": "^0.12.2",
     "jwt-decode": "^2.2.0",
-    "npm": "^6.9.0",
+    "npm": "^6.10.1",
+    "pdfjs-dist": "^2.0.943",
     "react": "^16.8.2",
     "react-bootstrap-table-next": "^3.1.1",
     "react-bootstrap-table2-filter": "^1.1.9",
@@ -46,5 +47,6 @@
     "not ie <= 11",
     "not op_mini all"
   ],
+  "proxy": "http://localhost:5000",
   "devDependencies": {}
 }
