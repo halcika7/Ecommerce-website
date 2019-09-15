@@ -58,4 +58,4 @@ const question = props => {
 	);
 };
 
-export default question;
+export default React.memo(question);

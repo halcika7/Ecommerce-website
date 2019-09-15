@@ -216,7 +216,7 @@ const mapDispatchToProps = dispatch => ({
 	getOrder: (id, callBack) => dispatch(actions.getOrder(id, callBack))
 });
 
-export default connect(
+export default React.memo(connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(Profile);
+)(Profile));

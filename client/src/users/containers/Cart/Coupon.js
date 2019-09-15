@@ -21,4 +21,4 @@ const Coupon = props => {
 	);
 };
 
-export default Coupon;
+export default React.memo(Coupon);

@@ -23,4 +23,4 @@ const ResponseMessage = props => {
 	);
 };
 
-export default ResponseMessage;
+export default React.memo(ResponseMessage);

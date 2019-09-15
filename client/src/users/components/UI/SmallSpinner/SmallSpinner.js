@@ -12,4 +12,4 @@ const SmallSpinner = props => {
 	}
 };
 
-export default SmallSpinner;
+export default React.memo(SmallSpinner);

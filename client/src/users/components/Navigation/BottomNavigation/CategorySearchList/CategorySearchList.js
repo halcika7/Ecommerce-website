@@ -10,4 +10,4 @@ class CategorySearchList extends Component {
 	}
 }
 
-export default CategorySearchList;
+export default React.memo(CategorySearchList);

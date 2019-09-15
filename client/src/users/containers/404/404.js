@@ -41,4 +41,4 @@ const PageNotFound = props => {
 	);
 };
 
-export default PageNotFound;
+export default React.memo(PageNotFound);

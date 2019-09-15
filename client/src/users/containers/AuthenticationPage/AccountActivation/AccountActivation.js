@@ -111,7 +111,7 @@ const mapDispatchToProps = dispatch => {
 	};
 };
 
-export default connect(
+export default React.memo(connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(AccountActivation);
+)(AccountActivation));

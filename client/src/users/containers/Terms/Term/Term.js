@@ -10,4 +10,4 @@ const term = props => {
 	);
 };
 
-export default term;
+export default React.memo(term);

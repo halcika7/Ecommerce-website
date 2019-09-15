@@ -15,4 +15,4 @@ const storeActivity = props => (
 	</div>
 );
 
-export default storeActivity;
+export default React.memo(storeActivity);

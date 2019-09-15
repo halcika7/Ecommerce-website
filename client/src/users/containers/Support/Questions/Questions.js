@@ -24,4 +24,4 @@ const questions = props => {
 	);
 };
 
-export default questions;
+export default React.memo(questions);

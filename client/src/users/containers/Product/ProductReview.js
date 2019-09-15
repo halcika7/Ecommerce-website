@@ -34,4 +34,4 @@ const ProductReview = ({ inStock, numberInStock, rating }) => {
 	);
 };
 
-export default ProductReview;
+export default React.memo(ProductReview);

@@ -79,4 +79,4 @@ const ProductBoxHorizontal = props => {
 	);
 };
 
-export default ProductBoxHorizontal;
+export default React.memo(ProductBoxHorizontal);

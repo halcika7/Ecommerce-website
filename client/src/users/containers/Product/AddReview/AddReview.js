@@ -153,7 +153,7 @@ const dispatchToProps = dispatch => {
 	};
 };
 
-export default connect(
+export default React.memo(connect(
 	mapStateToProps,
 	dispatchToProps
-)(AddReview);
+)(AddReview));

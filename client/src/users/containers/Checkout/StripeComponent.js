@@ -301,7 +301,7 @@ const mapDispatchToProps = dispatch => ({
 		dispatch(processPayment(token, userData, callBack))
 });
 
-export default connect(
+export default React.memo(connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(injectStripe(StripeComponent));
+)(injectStripe(StripeComponent)));

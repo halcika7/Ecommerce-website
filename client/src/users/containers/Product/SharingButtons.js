@@ -67,4 +67,4 @@ const SharingButtons = ({ link }) => {
 	);
 };
 
-export default SharingButtons;
+export default React.memo(SharingButtons);

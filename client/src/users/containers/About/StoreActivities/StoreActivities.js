@@ -18,4 +18,4 @@ const storeActivities = props => {
 	);
 };
 
-export default storeActivities;
+export default React.memo(storeActivities);

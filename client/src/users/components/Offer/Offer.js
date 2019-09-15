@@ -30,4 +30,4 @@ const Offer = props => {
 	);
 };
 
-export default Offer;
+export default React.memo(Offer);

@@ -8,4 +8,4 @@ const footerSocialIcon = props => {
 	);
 };
 
-export default footerSocialIcon;
+export default React.memo(footerSocialIcon);

@@ -74,4 +74,4 @@ LoginRegisterInputs.propTypes = {
 	invalidInput: PropTypes.string
 };
 
-export default LoginRegisterInputs;
+export default React.memo(LoginRegisterInputs);

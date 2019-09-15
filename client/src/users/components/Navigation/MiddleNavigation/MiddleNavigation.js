@@ -126,7 +126,7 @@ const dispatchMapToProps = dispatch => {
 	};
 };
 
-export default connect(
+export default React.memo(connect(
 	mapStateToProps,
 	dispatchMapToProps
-)(MiddleNavigation);
+)(MiddleNavigation));

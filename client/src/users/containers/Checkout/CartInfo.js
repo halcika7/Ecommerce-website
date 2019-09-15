@@ -141,4 +141,4 @@ const CartInfo = props => (
 	</div>
 );
 
-export default CartInfo;
+export default React.memo(CartInfo);

@@ -9,4 +9,4 @@ const footerList = props => {
 	return <ul className={c.list}>{items}</ul>;
 };
 
-export default footerList;
+export default React.memo(footerList);

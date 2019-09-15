@@ -58,4 +58,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default connect(mapStateToProps)(AuthPage);
+export default React.memo(connect(mapStateToProps)(AuthPage));

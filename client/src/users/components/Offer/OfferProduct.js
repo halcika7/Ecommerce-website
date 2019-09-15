@@ -94,4 +94,4 @@ const OfferProduct = ({ product, weekly }) => {
 	);
 };
 
-export default OfferProduct;
+export default React.memo(OfferProduct);

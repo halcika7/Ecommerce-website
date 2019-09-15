@@ -44,11 +44,6 @@ const Navbar = props => {
 		e.currentTarget.classList.toggle('' + classes.Open);
 	};
 
-	const toggleDropdown = e => {
-		e.preventDefault();
-		e.currentTarget.parentElement.classList.toggle('show');
-	};
-
 	return (
 		<React.Fragment>
 			<nav

@@ -11,4 +11,4 @@ const leftLinks = props => {
 	);
 };
 
-export default leftLinks;
+export default React.memo(leftLinks);

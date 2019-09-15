@@ -41,4 +41,4 @@ const searchResults = props => {
 	);
 };
 
-export default searchResults;
+export default React.memo(searchResults);

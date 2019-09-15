@@ -154,4 +154,4 @@ const LightboxModal = ({ images, setShow, i }) => {
 	);
 };
 
-export default LightboxModal;
+export default React.memo(LightboxModal);

@@ -11,4 +11,4 @@ class Img extends Component {
 		);
 	}
 }
-export default Img;
+export default React.memo(Img);

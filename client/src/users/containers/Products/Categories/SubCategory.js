@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 const SubCategory = ({ category, subcategory }) => {
@@ -36,11 +35,5 @@ const SubCategory = ({ category, subcategory }) => {
 	);
 };
 
-const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => ({});
-
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(SubCategory);
+export default React.memo(SubCategory);

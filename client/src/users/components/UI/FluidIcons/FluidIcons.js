@@ -31,4 +31,4 @@ const FluidIcons = () => (
 	</div>
 );
 
-export default FluidIcons;
+export default React.memo(FluidIcons);

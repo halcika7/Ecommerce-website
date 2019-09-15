@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
 import Subcategories from './Subcategories';
 
 const Categories = ({ categories }) => {
@@ -31,11 +30,5 @@ const Categories = ({ categories }) => {
 	);
 };
 
-const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => ({});
-
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(Categories);
+export default React.memo(Categories);

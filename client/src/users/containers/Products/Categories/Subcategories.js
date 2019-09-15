@@ -12,4 +12,4 @@ const Subcategories = ({ categories }) => {
 	);
 };
 
-export default Subcategories;
+export default React.memo(Subcategories);

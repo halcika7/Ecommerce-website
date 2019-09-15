@@ -17,4 +17,4 @@ const footerSocialIcons = props => {
 	return <div className={classes.join(' ')}>{icons}</div>;
 };
 
-export default footerSocialIcons;
+export default React.memo(footerSocialIcons);

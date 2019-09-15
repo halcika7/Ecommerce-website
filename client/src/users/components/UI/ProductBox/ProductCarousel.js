@@ -75,4 +75,4 @@ const ProductCarousel = ({ products }) => {
 	);
 };
 
-export default ProductCarousel;
+export default React.memo(ProductCarousel);

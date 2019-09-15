@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import './App.css';
 import Navigation from './users/components/Navigation/Navigation';
 import Footer from './users/components/Footer/Footer';
-import Spinner from './users/components/UI/Spinner/Spinner';
 import AdminNavigation from './admin/components/Navigation/Navigation';
 import NavBar from './admin/components/NavBar/Navbar';
 import AdminFooter from './admin/components/Footer/Footer';
@@ -79,16 +78,12 @@ const App = props => {
 		companyDetails: {
 			phone: '023-123-345',
 			address: 'Semira Fraste 5, Sarajevo 7100, BiH'
-		},
-		show: false
+		}
 	});
 
 	useEffect(() => {
 		storageChanged();
 		checkLoggedInUser(props.history.push);
-		setTimeout(() => {
-			setState({ ...state, show: !state.show });
-		}, 2000);
 		window.addEventListener('storage', storageChanged);
 		return () => setState({ ...state, show: false });
 	}, []);
@@ -99,8 +94,6 @@ const App = props => {
 
 	const storageChanged = () => checkCart();
 
-	console.log(props.login)
-
 	if (
 		props.isAdmin.role.isAdmin &&
 		props.isAuthenticated &&
@@ -109,8 +102,7 @@ const App = props => {
 		return (
 			<React.Fragment>
 				<section
-					className="AdminWrapper"
-					style={state.show ? null : { display: 'none' }}>
+					className="AdminWrapper">
 					<AdminNavigation />
 					<div className="main-panel">
 						<NavBar />
@@ -398,13 +390,12 @@ const App = props => {
 						</div>
 					</div>
 				</section>
-				<Spinner show={state.show} />
 			</React.Fragment>
 		);
 	} else {
 		return (
 			<React.Fragment>
-				<div className="App" style={state.show ? null : { display: 'none' }}>
+				<div className="App">
 					<Navigation icons={state.companySocial} {...props} />
 					<Switch>
 						<PublicRoute PageToLoad={Home} path="/" exact />
@@ -449,7 +440,6 @@ const App = props => {
 					</Switch>
 					<Footer icons={state.companySocial} details={state.companyDetails} />
 				</div>
-				<Spinner show={state.show} />
 			</React.Fragment>
 		);
 	}
@@ -463,4 +453,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default withRouter(connect(mapStateToProps)(App));
+export default withRouter(React.memo(connect(mapStateToProps)(App)));

@@ -26,4 +26,4 @@ const dropdownMenu = ({ data, category }) => (
 	</div>
 );
 
-export default dropdownMenu;
+export default React.memo(dropdownMenu);

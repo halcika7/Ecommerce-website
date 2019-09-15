@@ -116,4 +116,4 @@ const AboutProduct = ({
 	);
 };
 
-export default AboutProduct;
+export default React.memo(AboutProduct);

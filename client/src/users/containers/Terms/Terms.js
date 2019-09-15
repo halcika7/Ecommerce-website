@@ -48,7 +48,7 @@ const dispatchToProps = dispatch => ({
 	getAllTerms: () => dispatch(actions.getAllTerms())
 });
 
-export default connect(
+export default React.memo(connect(
 	mapStateToProps,
 	dispatchToProps
-)(Terms);
+)(Terms));

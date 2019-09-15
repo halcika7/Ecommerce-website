@@ -230,4 +230,4 @@ const About = props => {
 	);
 };
 
-export default About;
+export default React.memo(About);

@@ -29,4 +29,4 @@ const mobileApps = props => {
 	);
 };
 
-export default mobileApps;
+export default React.memo(mobileApps);

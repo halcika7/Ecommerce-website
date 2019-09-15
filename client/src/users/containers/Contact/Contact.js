@@ -119,7 +119,7 @@ const dispatchMapToProps = dispatch => ({
 	getStore: () => dispatch(actions.getStoreContact())
 });
 
-export default connect(
+export default React.memo(connect(
 	mapSatateToProps,
 	dispatchMapToProps
-)(Contact);
+)(Contact));

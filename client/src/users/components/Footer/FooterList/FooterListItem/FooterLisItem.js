@@ -9,4 +9,4 @@ const footerListItem = props => {
 	);
 };
 
-export default footerListItem;
+export default React.memo(footerListItem);

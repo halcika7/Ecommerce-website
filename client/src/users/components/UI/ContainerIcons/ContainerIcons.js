@@ -64,4 +64,4 @@ const containerIcons = () => {
 	);
 };
 
-export default containerIcons;
+export default React.memo(containerIcons);

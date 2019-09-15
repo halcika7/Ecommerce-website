@@ -32,4 +32,4 @@ const subSubCategory = ({ categ, categoryName }) => {
 	);
 };
 
-export default subSubCategory;
+export default React.memo(subSubCategory);

@@ -39,6 +39,6 @@ const Mapp = props => {
 	);
 };
 
-export default GoogleApiWrapper({
+export default React.memo(GoogleApiWrapper({
 	apiKey: process.env.REACT_APP_GOOGLE_MAP_KEY
-})(Mapp);
+})(Mapp));

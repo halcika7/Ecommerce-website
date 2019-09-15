@@ -57,4 +57,4 @@ const Checkout = props => {
 	);
 };
 
-export default Checkout;
+export default React.memo(Checkout);

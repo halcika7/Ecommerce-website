@@ -91,4 +91,4 @@ const ReplyComment = props => {
 	);
 };
 
-export default ReplyComment;
+export default React.memo(ReplyComment);

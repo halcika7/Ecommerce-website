@@ -26,4 +26,4 @@ const CategoryLi = ({ category }) => {
 	);
 };
 
-export default CategoryLi;
+export default React.memo(CategoryLi);

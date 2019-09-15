@@ -28,4 +28,4 @@ const subCategory = ({ category }) => {
 	);
 };
 
-export default subCategory;
+export default React.memo(subCategory);

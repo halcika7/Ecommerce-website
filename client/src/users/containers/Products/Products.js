@@ -254,7 +254,7 @@ const name = props => {
 		if (e.currentTarget.checked) {
 			const value = boolean
 				? JSON.parse(name)
-				: parseInt(name)
+				: parseInt(name) == name
 				? parseInt(name)
 				: name;
 			newChoosenValues.push(value);
@@ -655,7 +655,7 @@ const mapDispatchToProps = dispatch => ({
 	getBannerProducts: () => dispatch(actions.getBannerProducts())
 });
 
-export default connect(
+export default React.memo(connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(name);
+)(name));

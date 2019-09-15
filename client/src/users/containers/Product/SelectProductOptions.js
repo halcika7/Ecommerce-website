@@ -137,4 +137,4 @@ const SelectProductOptions = props => {
 	);
 };
 
-export default SelectProductOptions;
+export default React.memo(SelectProductOptions);

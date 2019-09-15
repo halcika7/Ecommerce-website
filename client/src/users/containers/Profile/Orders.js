@@ -162,7 +162,7 @@ const mapDispatchToProps = dispatch => ({
 	deleteOrder: (id, userId, callBack) => dispatch(deleteUserOrder(id, userId, callBack))
 });
 
-export default connect(
+export default React.memo(connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(Orders);
+)(Orders));

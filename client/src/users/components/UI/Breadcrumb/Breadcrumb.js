@@ -24,4 +24,4 @@ const Breadcrumb = ({ links }) => {
 	);
 };
 
-export default Breadcrumb;
+export default React.memo(Breadcrumb);

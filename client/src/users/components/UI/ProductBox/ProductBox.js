@@ -91,4 +91,4 @@ const ProductBox = ({ products, home, larger }) => {
 	);
 };
 
-export default ProductBox;
+export default React.memo(ProductBox);
