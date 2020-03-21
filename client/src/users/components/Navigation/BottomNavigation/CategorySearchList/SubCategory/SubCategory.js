@@ -3,7 +3,7 @@ import SubSubCategory from './SubSubCategory';
 
 import c from '../../../Navigation.module.css';
 
-const subCategory = ({ category }) => {
+const SubCategory = ({ category }) => {
 	const [showCategories, setShowCategories] = useState(false);
 	return (
 		<li className="dropdownLi d-block">
@@ -28,4 +28,4 @@ const subCategory = ({ category }) => {
 	);
 };
 
-export default React.memo(subCategory);
+export default React.memo(SubCategory);

@@ -493,6 +493,7 @@ const SelectOptions = props => {
 				{ label: 'Nintendo DS', value: 'Nintendo DS' }
 			]);
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

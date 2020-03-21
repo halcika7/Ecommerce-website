@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AdminFooter = props => {
+const AdminFooter = () => {
 	return (
 		<footer className="custome-dark p-4 custom-shadow">
 			<div className="row">

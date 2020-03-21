@@ -12,6 +12,7 @@ import UsersWidget from '../../components/UI/UsersWidget/UsersWidget';
 const Dashboard = props => {
 	useEffect(() => {
 		props.getDashboard(props.history.push);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

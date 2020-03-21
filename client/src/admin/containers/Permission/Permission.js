@@ -11,6 +11,7 @@ const Permission = props => {
 		props.getAllModelNames(props.history.push);
 		setPermission(props.permissions.permission);
 		setModelNames(props.permissions.modelNames);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	useEffect(() => {
 		setPermission(props.permissions.permission);

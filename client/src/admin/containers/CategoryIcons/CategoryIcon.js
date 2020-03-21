@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
@@ -26,7 +27,7 @@ const CategoryIcon = props => {
 	}, [props.addicon, props.viewicon, props.editicon]);
 	useEffect(() => {
 		if (props.iconState.errorID) {
-			setTimeout(() => props.history.goBack(), 6000);
+			props.history.goBack()
 		}
 	}, [props.iconState.errorID]);
 

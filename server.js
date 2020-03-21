@@ -9,38 +9,39 @@ const socketio = require('socket.io');
 
 const server = http.createServer(app);
 const io = socketio(server);
+
 // cron jobs
-const dailyWeeklyOffer = require('./cronJobs/product').dailyWeeklyOffer;
+require('./backend/cronJobs/product').dailyWeeklyOffer;
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(path.join(__dirname, 'backend/public')));
 app.use(bodyParser.json());
 
-const db = require('./config/keys').mongoURI;
+const db = require('./backend/config/keys').mongoURI;
 
 app.use(passport.initialize());
 
 // Passport Config
-require('./config/passport')(passport);
+require('./backend/config/passport')(passport);
 
 // routes
-app.use('/api/users', require('./routes/api/users'));
-app.use('/rolespermissions/permissions', require('./routes/roles&permissions/permissions'));
-app.use('/rolespermissions/roles', require('./routes/roles&permissions/roles'));
-app.use('/products/category', require('./routes/products/category'));
-app.use('/products/categoryicon', require('./routes/products/categoryIcon'));
-app.use('/products/brand', require('./routes/products/brand'));
-app.use('/products/product', require('./routes/products/product'));
-app.use('/products/product/filter', require('./routes/products/filterproducts'));
-app.use('/products/product', require('./routes/products/productreview')(io));
-app.use('/answers/', require('./routes/answers/answers'));
-app.use('/terms/', require('./routes/answers/terms'));
-app.use('/cart/', require('./routes/cart/cart'));
-app.use('/cart/coupon/', require('./routes/cart/coupon'));
-app.use('/cart/checkout/', require('./routes/cart/checkout'));
-app.use('/stores/', require('./routes/stores/stores'));
-app.use('/order/', require('./routes/orders/orders'));
-app.use('/dashboard/', require('./routes/dashboard/dashboard'));
+app.use('/api/users', require('./backend/routes/api/users'));
+app.use('/rolespermissions/permissions', require('./backend/routes/roles&permissions/permissions'));
+app.use('/rolespermissions/roles', require('./backend/routes/roles&permissions/roles'));
+app.use('/products/category', require('./backend/routes/products/category'));
+app.use('/products/categoryicon', require('./backend/routes/products/categoryIcon'));
+app.use('/products/brand', require('./backend/routes/products/brand'));
+app.use('/products/product', require('./backend/routes/products/product'));
+app.use('/products/product/filter', require('./backend/routes/products/filterproducts'));
+app.use('/products/product', require('./backend/routes/products/productreview')(io));
+app.use('/answers/', require('./backend/routes/answers/answers'));
+app.use('/terms/', require('./backend/routes/answers/terms'));
+app.use('/cart/', require('./backend/routes/cart/cart'));
+app.use('/cart/coupon/', require('./backend/routes/cart/coupon'));
+app.use('/cart/checkout/', require('./backend/routes/cart/checkout'));
+app.use('/stores/', require('./backend/routes/stores/stores'));
+app.use('/order/', require('./backend/routes/orders/orders'));
+app.use('/dashboard/', require('./backend/routes/dashboard/dashboard'));
 
 // Serve static assets in production
 if(process.env.NODE_ENV === 'production') {
@@ -58,7 +59,8 @@ mongoose
 	.connect(db, {
 		useNewUrlParser: true,
 		useCreateIndex: true,
-		useFindAndModify: false
+		useFindAndModify: false,
+		useUnifiedTopology: true
 	})
 	.then(() => {
 		console.log('MongoDB connected !');

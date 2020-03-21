@@ -5,7 +5,7 @@ const OfferProduct = ({ product, weekly }) => {
 	const [time, setTime] = useState({ d: '', h: '', m: '', s: '' });
 
 	useEffect(() => {
-		const loop = setInterval(countdown, 1000);
+		const loop = setInterval(countdown(), 1000)
 		return () => {
 			clearInterval(loop);
 		};

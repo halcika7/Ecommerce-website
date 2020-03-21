@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const LatestOrders = ({ orders }) => {
-	console.log(orders);
 	return (
 		<div className="col-xl-8 mb-30">
 			<div className="card">

@@ -28,6 +28,7 @@ const Navbar = props => {
 		setQueryString(newQueryString);
 		setName(str);
 		setLinkName(str.split(' ').join('-'));
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.location.pathname]);
 
 	const logout = e => {

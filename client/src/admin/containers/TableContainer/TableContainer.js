@@ -74,6 +74,7 @@ const TableContainer = props => {
 			setAllOrders(props.orders.orders);
 			props.getAllOrders(props.history.push);
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		props.Brands,
 		props.Roles,

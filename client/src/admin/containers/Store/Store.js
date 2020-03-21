@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, lazy } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';

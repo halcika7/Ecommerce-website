@@ -48,7 +48,7 @@ export const getSingleUser = (
 	} else {
 		dispatch({ type: actionTypes.USER_SUCCESS, User: response.data.user });
 	}
-	setTimeout(() => dispatch(getLoggedInUserPhoto(id2)), 200);
+	dispatch(getLoggedInUserPhoto(id2))
 };
 
 export const deleteUser = (id, callBack) => async dispatch => {
@@ -73,7 +73,7 @@ export const deleteUser = (id, callBack) => async dispatch => {
 			loading: true
 		});
 	}
-	setTimeout(() => dispatch(getAllUsers(callBack)), 4000);
+	dispatch(getAllUsers(callBack))
 };
 
 export const getLoggedInUserPhoto = id => async dispatch => {

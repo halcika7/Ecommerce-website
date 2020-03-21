@@ -33,7 +33,7 @@ const UpdateRole = props => {
 	}, [props.allPermissions]);
 	useEffect(() => {
 		if (props.errorId) {
-			setTimeout(() => props.history.goBack(), 6000);
+			props.history.goBack()
 		}
 	}, [props.errorId]);
 

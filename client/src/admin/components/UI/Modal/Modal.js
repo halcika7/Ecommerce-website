@@ -16,6 +16,7 @@ const Modal = props => {
 		setPermission(props.permissions.permission);
 		setModelNames(props.permissions.modelNames);
 		return () => document.body.classList.remove(classes.NoScroll);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	useEffect(() => {
 		setPermission(props.permissions.permission);

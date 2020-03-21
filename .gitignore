@@ -1,5 +1,7 @@
-# config/keys.js
-config/keysproduction.js
+backend/config/keys.js
+backend/config/keysproduction.js
 client/node_modules
 node_modules
 .vscode
+
+frontend

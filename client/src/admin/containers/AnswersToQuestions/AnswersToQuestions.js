@@ -16,6 +16,7 @@ const AnswersToQuestions = props => {
 	useEffect(() => {
 		(props.view || props.edit) &&
 			props.getAnswer(new URLSearchParams(props.location.search).get('id'), props.history.push);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {

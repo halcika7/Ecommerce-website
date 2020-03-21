@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -17,7 +18,7 @@ import ProductBoxHorizontal from '../../components/UI/ProductBox/ProductBoxHoriz
 import FluidIcons from '../../components/UI/FluidIcons/FluidIcons';
 import SmallSpinner from '../../components/UI/SmallSpinner/SmallSpinner';
 
-const name = props => {
+const Name = props => {
 	const [subcategoryName, setSubcategoryName] = useState('');
 	const [category, setCategory] = useState('');
 	const [subcategory, setSubcategory] = useState('');
@@ -254,6 +255,7 @@ const name = props => {
 		if (e.currentTarget.checked) {
 			const value = boolean
 				? JSON.parse(name)
+				// eslint-disable-next-line eqeqeq
 				: parseInt(name) == name
 				? parseInt(name)
 				: name;
@@ -658,4 +660,4 @@ const mapDispatchToProps = dispatch => ({
 export default React.memo(connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(name));
+)(Name));

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import c from '../../../Navigation.module.css';
 
-const subSubCategory = ({ categ, categoryName }) => {
+const SubSubCategory = ({ categ, categoryName }) => {
 	const [showCategories, setShowCategories] = useState(false);
 	return (
 		<React.Fragment>
@@ -32,4 +32,4 @@ const subSubCategory = ({ categ, categoryName }) => {
 	);
 };
 
-export default React.memo(subSubCategory);
+export default React.memo(SubSubCategory);

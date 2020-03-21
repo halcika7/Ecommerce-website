@@ -15,6 +15,7 @@ const AddRole = props => {
 	useEffect(() => {
 		props.getAllPermissions(props.history.push);
 		setAllPermissions(props.allPermissions);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	useEffect(() => {
 		setAllPermissions(props.allPermissions);
