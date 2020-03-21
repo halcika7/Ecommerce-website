@@ -1,143 +1,147 @@
-const ObjectId = require('mongoose').Types.ObjectId;
-const CategoryIconModel = require('../models/CategoryIcon');
-const CategoryModel = require('../models/Category');
+const BaseController = require('./BaseController');
+const IconService = require('../services/CategoryIconService');
+const CategoryService = require('../services/CategoryService');
 const validateIcon = require('../helpers/iconshelper').validateicon;
 
-exports.addCategoryIcon = async (req, res) => {
-	const resValidation = validateIcon(req.body.name);
-	if (resValidation) { return res.json(resValidation); }
-	try {
-		const categoryIcon = new CategoryIconModel({ name: req.body.name });
-		await categoryIcon.save();
-		return res.json({ successMessage: 'Category Icon Added !' });
-	} catch (err) {
-		if (err.errmsg) return res.json({ error: err.errmsg });
-		return res.json({ failedMessage: err.message });
-	}
-};
+class CategoryIcon extends BaseController {
+  constructor() {
+    super(CategoryIcon);
+  }
 
-exports.getAllCategoryIcons = async (req, res) => {
-	try {
-		const categoryIcons = await CategoryIconModel.find({});
-		return res.json({ categoryIcons });
-	} catch (err) {
-		return res.json({ failedMessage: err.message });
-	}
-};
+  async addCategoryIcon(req, res) {
+    try {
+      const { name } = req.body.name;
+      const resValidation = validateIcon(name);
 
-exports.getCategoryIcon = async (req, res) => {
-	try {
-		const icon = await CategoryIconModel.findOne({
-			_id: new ObjectId(req.query.id)
-		}).select('name -_id');
-		if (!icon) {
-			return res.json({
-				error: `Category Icon with id = ${req.query.id} was not found`
-			});
-		}
-		return res.json({ icon });
-	} catch (err) {
-		return res.json({ failedMessage: err.message });
-	}
-};
+      if (resValidation) return res.json(resValidation);
 
-exports.editCategoryIcon = async (req, res) => {
-	const resValidation = validateIcon(req.body.name);
-	if (resValidation) {
-		return res.json(resValidation);
-	}
-	try {
-		const findIcon = await CategoryIconModel.findOne({
-			_id: new ObjectId(req.body.id)
-		});
-		const iconUpdate = await CategoryIconModel.updateOne(
-			{ _id: new ObjectId(req.body.id) },
-			{ name: req.body.name }
-		);
-		if (iconUpdate.nModified === 0) {
-			return res.json({ failedMessage: 'You provided same icon !' });
-		}
-		await CategoryModel.updateOne(
-			{ icon: findIcon.name },
-			{ icon: req.body.name }
-		);
-		return res.json({ successMessage: 'Category Icon Updated !' });
-	} catch (err) {
-		if (err.errmsg) return res.json({ error: err.errmsg });
-		return res.json({ failedMessage: err.message });
-	}
-};
+      await IconService.create(name);
 
-exports.deleteCategoryIcon = async (req, res) => {
-	try {
-		const findIcon = await CategoryIconModel.findOne({
-			_id: new ObjectId(req.query.id)
-		});
-		const categoryWithIcon = await CategoryModel.findOne({
-			icon: findIcon.name
-		});
-		if (categoryWithIcon) {
-			return res.json({
-				failedMessage: `Icon can't be deleted because it is in use in category with id= ${
-					categoryWithIcon._id
-				}`
-			});
-		}
-		const deletedCategoryIcon = await CategoryIconModel.deleteOne({
-			_id: new ObjectId(req.query.id)
-		});
-		if (deletedCategoryIcon.n !== 1) {
-			return res.json({
-				failedMessage: 'Something happened and category was not deleted'
-			});
-		}
-		return res.json({ successMessage: 'Icon successfully deleted !' });
-	} catch (err) {
-		if (err.errmsg) return res.json({ error: err.errmsg });
-		return res.json({ failedMessage: err.message });
-	}
-};
+      return res.json({ successMessage: 'Category Icon Added !' });
+    } catch (err) {
+      if (err.errmsg) return res.json({ error: err.errmsg });
+      return res.json({ failedMessage: err.message });
+    }
+  }
 
-exports.deleteManyCategoryIcons = async (req, res) => {
-	const ids = Object.keys(req.query).map(id => req.query[id]);
-	try {
-		let responseMessage = '';
-		const findIcons = await CategoryIconModel.find({ _id: { $in: ids } });
-		const iconNames = findIcons.map(icon => icon.name);
-		const categoryWithIcon = await CategoryModel.find({
-			icon: { $in: iconNames }
-		});
-		const notDeletedIconNames = categoryWithIcon.map(cat => cat.icon);
-		if (categoryWithIcon.length === 1) {
-			responseMessage += `Icon with name = ${
-				notDeletedIconNames[0].icon
-			} is not deleted.`;
-		}
-		if (categoryWithIcon.length > 1) {
-			responseMessage += `Icons with names = ${notDeletedIconNames} are not deleted.`;
-		}
-		const categoryIcons = await CategoryIconModel.deleteMany({
-			_id: { $in: ids },
-			name: { $nin: notDeletedIconNames }
-		});
-		if (categoryIcons.n === 0) {
-			return res.json({
-				failedMessage: responseMessage + 'No category icons deleted !'
-			});
-		}
-		if (categoryIcons.n === 1) {
-			return res.json({
-				successMessage: responseMessage + 'One category icon deleted !'
-			});
-		}
-		if (categoryIcons.n > 1) {
-			return res.json({
-				successMessage:
-					responseMessage + `${categoryIcons.n} category icons deleted !`
-			});
-		}
-	} catch (err) {
-		if (err.errmsg) return res.json({ error: err.errmsg });
-		return res.json({ failedMessage: err.message });
-	}
-};
+  async getAllCategoryIcons(req, res) {
+    try {
+      const categoryIcons = await IconService.getAll();
+
+      return res.json({ categoryIcons });
+    } catch (err) {
+      return res.json({ failedMessage: err.message });
+    }
+  }
+
+  async getCategoryIcon(req, res) {
+    try {
+      const { id } = req.query;
+      const icon = await IconService.getSelectOne(id);
+
+      if (!icon) {
+        return res.json({
+          error: `Category Icon with id = ${id} was not found`
+        });
+      }
+
+      return res.json({ icon });
+    } catch (err) {
+      return res.json({ failedMessage: err.message });
+    }
+  }
+
+  async editCategoryIcon(req, res) {
+    try {
+      const { name, id } = req.bodyl;
+      const resValidation = validateIcon(name);
+
+      if (resValidation) return res.json(resValidation);
+
+      const findIcon = await IconService.getOne(id);
+
+      const iconUpdate = await IconService.updateOne(id, name);
+
+      if (iconUpdate.nModified === 0) {
+        return res.json({ failedMessage: 'You provided same icon !' });
+      }
+
+      await CategoryService.updateByIcon(findIcon.name, name);
+
+      return res.json({ successMessage: 'Category Icon Updated !' });
+    } catch (err) {
+      if (err.errmsg) return res.json({ error: err.errmsg });
+      return res.json({ failedMessage: err.message });
+    }
+  }
+
+  async deleteCategoryIcon(req, res) {
+    try {
+      const { id } = req.query;
+      const findIcon = await IconService.getOne(id);
+
+      const categoryWithIcon = await CategoryService.getByIcon(findIcon.name);
+
+      if (categoryWithIcon) {
+        return res.json({
+          failedMessage: `Icon can't be deleted because it is in use in category with id= ${categoryWithIcon._id}`
+        });
+      }
+
+      const deletedCategoryIcon = await IconService.delete(id);
+
+      if (deletedCategoryIcon.n !== 1) {
+        return res.json({
+          failedMessage: 'Something happened and category was not deleted'
+        });
+      }
+
+      return res.json({ successMessage: 'Icon successfully deleted !' });
+    } catch (err) {
+      if (err.errmsg) return res.json({ error: err.errmsg });
+      return res.json({ failedMessage: err.message });
+    }
+  }
+
+  async deleteManyCategoryIcons(req, res) {
+    const ids = Object.keys(req.query).map(id => req.query[id]);
+    try {
+      let responseMessage = '';
+      const findIcons = await IconService.getManyIds(ids);
+      const iconNames = findIcons.map(icon => icon.name);
+      const categoryWithIcon = await CategoryService.getManyByIcon(iconNames);
+      // not deleted icon names
+      const names = categoryWithIcon.map(cat => cat.icon);
+
+      if (categoryWithIcon.length === 1) {
+        responseMessage += `Icon with name = ${names[0].icon} is not deleted.`;
+      } else if (categoryWithIcon.length > 1) {
+        responseMessage += `Icons with names = ${names} are not deleted.`;
+      }
+
+      const categoryIcons = await IconService.deleteMany(ids, names);
+
+      if (categoryIcons.n === 0) {
+        return res.json({
+          failedMessage: responseMessage + 'No category icons deleted !'
+        });
+      } else if (categoryIcons.n === 1) {
+        return res.json({
+          successMessage: responseMessage + 'One category icon deleted !'
+        });
+      }
+
+      return res.json({
+        successMessage:
+          responseMessage + `${categoryIcons.n} category icons deleted !`
+      });
+    } catch (err) {
+      if (err.errmsg) return res.json({ error: err.errmsg });
+      return res.json({ failedMessage: err.message });
+    }
+  }
+}
+
+const CategoryIconInstance = new CategoryIcon();
+
+module.exports = CategoryIconInstance;

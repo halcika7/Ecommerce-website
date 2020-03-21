@@ -1,6 +1,3 @@
-const jwt = require('jsonwebtoken');
-const secret = require('../config/keys').secretOrKey;
-
 const BaseController = require('./BaseController');
 const UserService = require('../services/UserService');
 const EmailService = require('../services/EmailService');
