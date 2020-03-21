@@ -8,6 +8,7 @@ class DashboardController extends BaseController {
   constructor() {
     super(DashboardController);
   }
+
   async dashboard(req, res) {
     try {
       const numberOfProducts = await ProductModel.find({}).countDocuments();

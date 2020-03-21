@@ -12,7 +12,7 @@ class CheckutController extends BaseController {
   constructor() {
     super(CheckutController);
   }
-  // dodana funkcionalnost kupona
+
   async payment(req, res) {
     const {
       errors,

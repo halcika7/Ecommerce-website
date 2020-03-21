@@ -72,8 +72,8 @@ exports.getReviews = async (req, res) => {
         populate: {
           path: 'userId'
         }
-	  });
-	  
+      });
+
     const productRatings = await numberOfReviewsHelper(productId);
 
     return res.json({ findReviews, productRatings });
@@ -289,8 +289,8 @@ const numberOfReviewsHelper = async productId => {
     const elem = await ProductReviewModel.aggregate([
       { $match: { productId: productId } },
       { $group: { _id: '$rating', count: { $sum: 1 } } }
-	]);
-	
+    ]);
+
     if (elem.findIndex(elem => elem._id === 5) === -1) {
       elem.push({ _id: 5, count: 0 });
     }

@@ -9,8 +9,7 @@ const validateRegisterInput = require('../validation/register');
 const validateLoginInput = require('../validation/login');
 const addUserValidation = require('../validation/addUserValidation');
 const validatePasswords = require('../validation/checkpassword');
-const sendActivationEmail = require('../controllers/EmailController')
-  .sendActivationEmail;
+const sendActivationEmail = require('./EmailController').sendActivationEmail;
 const getTokenEXP = require('../helpers/getTokenEXP').getDecodedTokenEXP;
 const generatePassword = require('../helpers/generatePassword')
   .generatePassword;
